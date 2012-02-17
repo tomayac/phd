@@ -4,7 +4,37 @@
 
 %\begin{abstractslong}    %uncommenting this line, gives a different abstract heading
 \begin{abstracts}        %this creates the heading for the abstract page
-\todo{write abstract}
+Mobile devices like smartphones and digital cameras together with social networks enable people to generate,
+share, and consume enormous amounts of media items, both \textit{en route} or at home.
+Common search operations, for example searching for a single music video based on artist name
+and song title on video platforms such as YouTube,
+can be achieved both based on potentially shallow human-generated metadata,
+or based on more profound content analysis,
+driven by Optical Character Recognition (OCR) or Automatic Speech Recognition (ASR).
+However, more advanced use cases, such as \emph{summaries} or \emph{compilations} of \emph{several} media items
+covering a certain event, are hard, if not impossible to fulfill at large scale.
+Example events can be a keynote speech at a conference,
+a music concert in a stadium, or a natural catastrophe in a country.
+At such events, given a stable network connection,
+media items are published on social networks as the event happens.
+The main research question can thus be formulated as\\
+
+\noindent \textit{``Can user-customizable media galleries that summarize given events
+be created solely based on textual and multimedia data from social networks?''}\\
+
+In this thesis, we develop an interactive Web application for media item enrichment,
+leveraging social networks, utilizing the Web of Data,
+Content-based Image and Video Retrieval (CBIR, CBVR) techniques,
+and fine-grained media item addressing schemes like Media Fragments URIs,
+to provide a scalable and near realtime solution to realize the above use cases.
+We detail and evaluate our approach:
+first, we recognize and disambiguate named entities in relevant microposts
+from social networks that contain links to media items, or to pages that host media items.
+Second, we extract the raw media item data from social networks and relate them to the originating micropost.
+Third, we deduplicate media items using CBIR and CBVR techniques.
+Fourth, we rank the deduplicated list of media items according to specified ranking criteria,
+and finally compile the top-$n$ ranked media items to a user-customizable media gallery.
+
 \end{abstracts}
 %\end{abstractlongs}
 
