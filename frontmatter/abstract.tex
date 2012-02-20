@@ -4,37 +4,49 @@
 
 %\begin{abstractslong}    %uncommenting this line, gives a different abstract heading
 \begin{abstracts}        %this creates the heading for the abstract page
-Mobile devices like smartphones and digital cameras together with social networks enable people to generate,
-share, and consume enormous amounts of media items, both \textit{en route} or at home.
-Common search operations, for example searching for a single music video based on artist
-and title on video platforms such as YouTube,
+Mobile devices such as smartphones or digital cameras together with social networks
+enable people to create, share, and consume enormous amounts of media items like videos or photos,
+both \textit{en route} or at home.
+Such mobile devices---by pure definition---accompany their owners almost wherever they may go.
+In consequence, mobile devices are omnipresent at all sorts of events
+like keynote speeches at conferences, music concerts in stadiums,
+or even natural catastrophes affecting whole areas or countries.
+At such events---given a stable network connection---media items are published
+on social networks both as the event happens and afterwards.
+
+Common media item search operations, for example searching for a single music video
+based on artist name and song title on video platforms such as YouTube,
 can be achieved both based on potentially shallow human-generated metadata,
 or based on more profound content analysis,
 driven by Optical Character Recognition (OCR) or Automatic Speech Recognition (ASR).
-However, more advanced use cases, such as \emph{summaries} or \emph{compilations} of \emph{several} media items
-covering a certain event, are hard, if not impossible to fulfill at large scale.
-Example events can be a keynote speech at a conference,
-a music concert in a stadium, or a natural catastrophe in a country.
-At such events, given a stable network connection,
-media items are published on social networks as the event happens.
-The main research question can thus be formulated as\\
+More advanced scenarios, however, like retrieving (all or just representative) media items
+that were created at a given event with the objective of creating \emph{event summaries} or
+\emph{media item compilations} covering the event in question, are hard,
+if not impossible, to fulfill at large scale.
+The main research question can thus be formulated as:
 
-\noindent \textit{``Can user-customizable media galleries that summarize given events
-be\linebreak created solely based on textual and multimedia data from social networks?''}\\
+\textit{``Can user-customizable media galleries that summarize given events
+be\linebreak created solely based on textual and multimedia data from social networks?''}
 
-In this thesis, we develop a novel interactive Web application for media item enrichment,
-leveraging social networks, utilizing the Web of Data,
-Content-based Image and Video Retrieval (CBIR, CBVR) techniques,
+In this thesis, we develop and evaluate a novel interactive application
+for media item enrichment, leveraging social networks, utilizing the Web of Data,
+techniques known from Content-based Image and Video Retrieval (CBIR, CBVR),
 and fine-grained media item addressing schemes like Media Fragments URIs,
-to provide a scalable and near realtime solution to realize the above use cases.
-We detail and evaluate our approach:
-first, we recognize and disambiguate named entities in relevant microposts
-from social networks that contain links to media items, or to pages that host media items.
-Second, we extract the raw media item data from social networks and relate them to the originating micropost.
-Third, we deduplicate media items using CBIR and CBVR techniques.
-Fourth, we rank the deduplicated list of media items according to specified ranking criteria,
-and finally compile the top-$n$ ranked media items to a user-customizable media gallery.
+to provide a scalable and near realtime solution to realize the abovementioned scenarios.
 
+For a given event, our approach can be divided in the following six steps.
+First, via the search functionality of different social networks,
+we retrieve a list of potentially event-relevant microposts
+that either contain media items directly,
+or that provide links to media items on external media item hosting platforms.
+Second, using third party Natural Language Processing (NLP) tools,
+we recognize and disambiguate named entities in the microposts to predetermine their relevancy.
+Third, we extract the raw binary media item data from social networks or media item hosting platforms
+and relate it to the originating microposts.
+Fourth, we deduplicate media items using CBIR and CBVR techniques.
+Fifth, we rank the deduplicated list of media items according to certain ranking criteria.
+Finally, we arrange the top-$n$ ranked media items to generate
+interactively user-customizable media galleries that visually and audibly summarize the given event.
 \end{abstracts}
 %\end{abstractlongs}
 
