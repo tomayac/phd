@@ -3,7 +3,7 @@
 % content in this file will be fed into the main document
 
 %: ----------------------- introduction file header -----------------------
-\chapter{Background}
+\chapter{Background} \label{cha:background}
 
 % the code below specifies where the figures are stored
 \ifpdf
@@ -15,6 +15,47 @@
 % ----------------------------------------------------------------------
 %: ------------------------------- content ----------------------------- 
 % ----------------------------------------------------------------------
+
+The main contributions of this thesis are methods for the automatic generation of
+user-customizable media galleries for the visual and audial summarization of events.
+To provide context for the approaches proposed in the later parts of the thesis,
+we start with an introduction of related background technologies.
+The current \autoref{cha:background} covers the Semantic Web, Linked Data,
+and the Resource Description Framework (RDF).
+The following \autoref{cha:social-networks} will cover social networks
+by first providing a~definition and classification of social networks,
+and then introducing popular social networks and some of their core features.
+
+The lexical database WordNet~\cite{Fellbaum1998} by the Cognitive Science Laboratory
+of Princeton University defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=semantic}}
+the term ``semantic'' as ``of or relating to meaning or the study of meaning''.
+The same source defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=world+wide+web}}
+the term ``Web'', which is a~common form for the complete term ``World Wide Web'' (or just ``WWW'') as
+``computer network consisting of a~collection of internet sites that offer text and graphics and
+sound and animation resources through the hypertext transfer protocol''.
+Finally WordNet defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=meaning}}
+the term ``meaning'' as ``the message that is intended or expressed or signified'', or
+``the idea that is intended''.
+
+The combined term ``Semantic Web'' has been coined by Sir Tim Berners-Lee,
+the inventor of the World Wide Web and Director of the World Wide Web Consortium,
+in a~May 2001 article co-published with James Hendler and Ora Lassila
+in the Scientific American~\cite{BernersLee2001}.
+Therein, the authors write: 
+
+\begin{quotation}
+``The Semantic Web will bring structure to the meaningful content of Web pages,
+creating an environment where software agents roaming from page to page
+can readily carry out sophisticated tasks for users. [\ldots]
+The Semantic Web is not a~separate Web but an extension of the current one,
+in which information is given well-defined meaning, better enabling computers and people
+to work in cooperation.
+The first steps in weaving the Semantic Web into the structure of the existing Web
+are already under way.
+In the near future, these developments will usher in significant new functionality
+as machines become much better able to process and ``understand'' the data
+that they merely display at present.''
+\end{quotation}
 
 \section{Semantic Web}
 

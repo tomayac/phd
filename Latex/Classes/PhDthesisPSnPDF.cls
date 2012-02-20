@@ -126,7 +126,12 @@
                  hyperindex = true,
                  hyperfigures
                  ]{hyperref} 
-
+     \def\figureautorefname{Figure}
+     \def\tableautorefname{Table}
+     \def\appendixautorefname{Appendix}
+     \def\chapterautorefname{Chapter}
+     \def\sectionautorefname{Section}
+    
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
     \usepackage[pdftex]{graphicx}
     \pdfcompresslevel=9
@@ -153,7 +158,6 @@
     \usepackage{graphicx}
     \graphicspath{{frontmatter/figures/EPS/}{frontmatter/figures/}}
 \fi
-
 
 %:-------------------------- page layout -----------------------
 

@@ -14,7 +14,6 @@
 % In this template package, it can be found in ./Latex/Classes/
 \documentclass[twoside,11pt]{Latex/Classes/PhDthesisPSnPDF}
 
-
 %: Macro file for Latex
 % Macros help you summarise frequently repeated Latex commands.
 % Here, they are placed in an external file /Latex/Macros/MacroFile1.tex
@@ -179,7 +178,7 @@ Day of the defense: \todo{add date of the defense}
 \mainmatter
 
 \renewcommand{\chaptername}{} % uncomment to print only "1" not "Chapter 1"
-
+\renewcommand\chapterautorefname{Chapter}
 
 %: ----------------------- subdocuments ------------------------
 
@@ -218,13 +217,6 @@ Day of the defense: \todo{add date of the defense}
 \begin{tiny} % tiny(5) < scriptsize(7) < footnotesize(8) < small (9)
 
 \bibliographystyle{Latex/Classes/PhDbiblio-url2} % Title is link if provided
-\renewcommand{\bibname}{References} % changes the header; default: Bibliography
-
-\bibliography{backmatter/references} % adjust this to fit your BibTex file
-
-\end{tiny}
-\end{multicols}
-
 % --------------------------------------------------------------
 % Various bibliography styles exit. Replace above style as desired.
 
@@ -242,10 +234,16 @@ Day of the defense: \todo{add date of the defense}
 % in-text refs: author (year) without brackets
 % (this works with package natbib)
 
+\renewcommand{\bibname}{References} % changes the header; default: Bibliography
+
+\bibliography{backmatter/references} % adjust this to fit your BibTex file
+
+\end{tiny}
+\end{multicols}
 
 % --------------------------------------------------------------
 
 %: Declaration of originality
-\include{backmatter/backmatter}
+\include{backmatter/declaration}
 
 \end{document}
