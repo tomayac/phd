@@ -26,6 +26,7 @@ The following \autoref{cha:social-networks} will cover social networks
 by first providing a~definition and classification of social networks,
 and then introducing popular social networks and some of their core features.
 
+\section{Semantic Web}
 The lexical database WordNet~\cite{Fellbaum1998} by the Cognitive Science Laboratory
 of Princeton University defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=semantic}}
 the term ``semantic'' as ``of or relating to meaning or the study of meaning''.
@@ -57,7 +58,100 @@ as machines become much better able to process and ``understand'' the data
 that they merely display at present.''
 \end{quotation}
 
-\section{Semantic Web}
+We are currently experiencing a~fundamental shift from the World Wide Web (WWW) to the Semantic Web,
+a~shift from moving bits to moving bits with a~meaning.
+This can have a~huge impact, which might not be as drastic as Tim Berners-Lee describes
+in his Scientific American article, but which might introduce many small improvements,
+like more accurate search results, or more intelligent price comparison services etc.
+\autoref{fig:fundamental-shift} illustrates this idea.
+
+\begin{figure}[htbp!]
+\begin{center}
+  \subfloat[Bits without meaning.]{\label{fig:fundamental-shift-1}\includegraphics[width=0.3\textwidth]{fundamental-shift-1.png}}                
+  \subfloat[Bits with a~meaning.]{\label{fig:fundamental-shift-2}\includegraphics[width=0.468\textwidth]{fundamental-shift-2.png}}
+  \caption{Fundamental shift from moving bits to moving bits with a~meaning.}
+  \label{fig:fundamental-shift}  
+\end{center}    
+\end{figure}
+
+\subsection{The Non-Semantic Web}
+To differentiate the Semantic Web from the non-semantic Web, it helps to step back one step and
+see why the non-semantic Web is not semantic.
+The Web is a~system of interlinked hypertext documents accessed through the Internet.
+These documents are typically marked up in HTML, a~language that defines a~syntax
+understandable to user agents like Web browsers, however,
+not one that provides meaning beyond the level of text layout.
+This means that an HTML snippet like
+\begin{verbatim}
+<h1>The Catcher in the Rye</h1>
+<h2>J. D. Salinger</h2>
+\end{verbatim}
+reveals that ``The Catcher in the Rye'' is a~level one header element and
+that ``J. D. Salinger'' a~level two header element,
+but to a~machine it is not evident that the prior is the title of a~book,
+and that the latter is (i), an author, and (ii), the author of ``The Catcher in the Rye''.
+
+\subsection{Structured Data on the Web}
+A very first step to add semantics to the Web is using tabular data.
+\autoref{tab:sample-table-structured-data} shows an example for such tabular data.
+To human beings (interested in sports), the meaning of the columns is clear:
+
+\begin{table}[b]
+ \begin{center}
+  \begin{tabular}{l*{6}{c}r}
+Team              & P & W & D & L & F  & A & Pts \\
+\hline
+Manchester United & 6 & 4 & 0 & 2 & 10 & 5 & 12  \\
+Celtic            & 6 & 3 & 0 & 3 &  8 & 9 &  9  \\
+Benfica           & 6 & 2 & 1 & 3 &  7 & 8 &  7  \\
+FC Copenhagen     & 6 & 2 & 1 & 2 &  5 & 8 &  7  \\
+  \end{tabular}
+\caption{Sample table with structured data for sports results.}
+\label{tab:sample-table-structured-data}
+ \end{center}
+\end{table}
+
+\begin{itemize}
+\item P = matches \textbf{P}layed
+\item W = \textbf{W}on 
+\item D = \textbf{D}rew
+\item L = \textbf{L}oss
+\item F = Goals \textbf{F}or
+\item A = Goals \textbf{A}gainst
+\item Pts = \textbf{P}oin\textbf{ts}
+\end{itemize}
+
+The problem, however, is for machines to understand the structure of the table.
+Let us imagine one wanted to automate the task of retrieving sports results.
+While it is a~relatively straightforward job to implement a~scraper bot that
+searches for column titles like ``P'', ``W'', ``D'' etc.,
+it would require the same work over and over again for different languages
+(for example German for: ``Sp.'', ``g.'', ``u.'', ``v.'', ``Tore'', ``Pkte.'').
+The German-speaking reader might have noticed that the exemplary German system listed here
+does not differentiate between ``goals for'' and ``goals against'', but only has a~list of ``Goals''.
+Tiny differences like this make the scraping approach so brittle.
+If data providers were to use unique column identifiers like URIs, the problem would be mostly gone.
+In the concrete example, rather than using ``D'' or ``u.'', which both mean that the result was a~tie,
+the machine-readable column name could be identified by the URI
+\url{http://dbpedia.org/page/Tie_%28draw%29}.
+In the next Section we therefore introduce the structured knowledge base DBpedia.
+
+\subsection{The Structured Knowledge Base DBpedia}
+An often reoccurring (however not binding) pattern in the Semantic Web world
+is the use of DBpedia~\cite{Bizer2007} URIs as a~hub for identifying concepts by URIs.
+DBpedia is a~Semantic Web knowledge base with the objective of
+automatically extracting structured data from the human-generated information from
+the online encyclopedia Wikipedia~\footnote{\url{http://en.wikipedia.org/wiki/Main_Page}}.
+This structured information is then made available on the World Wide Web in many variations,
+for example as JSON~\cite{Crockford2006}, HTML~\cite{LeHors1999}, XML~\cite{Bray1998},
+and many RDF~\cite{Klyne2004} serializations.
+DBpedia allows for querying relationships and properties associated with Wikipedia resources,
+including links to other related datasets.
+As outlined before, the concept of a~tie draw in the sense of sports
+could thus be uniquely identified by the DBpedia URI \url{http://dbpedia.org/page/Tie_%28draw%29},
+free of all ambiguity.
+Similar knowledge bases are among others Freebase~\cite{Markoff2007},
+YAGO~\cite{Suchanek2007}, or Cyc~\cite{Wilkins1997}.
 
 \section{Linked Data}
 

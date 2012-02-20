@@ -44,6 +44,7 @@
 
 \usepackage{amssymb}
 \usepackage{graphicx} % for improved inclusion of graphics
+\usepackage{subfig}
 %\usepackage{wrapfig} % to include figure with text wrapping around it
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption} % for improved layout of figure captions with extra margin, smaller font than text
 \usepackage{fancyhdr} % for better header layout
@@ -51,7 +52,7 @@
 \usepackage[english]{babel}
 \usepackage[usenames, dvipsnames]{color}
 \usepackage[perpage]{footmisc}
-\usepackage[round, sort, numbers]{natbib}
+\usepackage[sort, numbers]{natbib}
 \usepackage{ifthen}
 \usepackage{multicol} % for pages with multiple text columns, e.g. References
 \setlength{\columnsep}{20pt} % space between columns; default 10pt quite narrow
