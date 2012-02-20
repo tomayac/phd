@@ -74,7 +74,7 @@ like more accurate search results, or more intelligent price comparison services
 \end{center}    
 \end{figure}
 
-\subsection{The Non-Semantic Web}
+\subsection{The Non-Semantic Web} \label{sec:non-semantic-web}
 To differentiate the Semantic Web from the non-semantic Web, it helps to step back one step and
 see why the non-semantic Web is not semantic.
 The Web is a~system of interlinked hypertext documents accessed through the Internet.
@@ -152,6 +152,90 @@ could thus be uniquely identified by the DBpedia URI \url{http://dbpedia.org/pag
 free of all ambiguity.
 Similar knowledge bases are among others Freebase~\cite{Markoff2007},
 YAGO~\cite{Suchanek2007}, or Cyc~\cite{Wilkins1997}.
+
+\subsection{Semantics in HTML Version 4 and 5}
+As outlined in \autoref{sec:non-semantic-web}, HTML versions 4~\cite{LeHors1999} and 5~\cite{Hickson2011}
+contain a~basic level of semantics.
+The main focus, however, is on the separation of semantics from presentation.
+For example the \texttt{<b>} and the \texttt{<strong>} tags both have the same visual effect:
+they make the node value appear in a~bold face \textbf{like so}.
+Visually, there is no way to differentiate between the two, however,
+semantically the difference exists and is well-defined:
+\texttt{<strong>} should be used when one wants to give special emphasis on something,
+screenreaders will typically read out such text with a~more emphasized voice.
+In contrast \texttt{<b>} should be used if only visually one wants to create a~bold face look.
+In the following, we present a~list of semantic HTML tags and attributes and their meaning.
+The list is inspired by an
+extension\footnote{\url{https://addons.mozilla.org/en-us/firefox/addon/semantic-checker/}}
+for the Web browser Firefox.
+
+\paragraph{Semantic HTML4 Elements}
+\begin{itemize}
+\item \texttt{abbr} specifies an abbreviation, \texttt{acronym} specifies an acronym.
+\item \texttt{h1-h6} specify level 1-6 headers, \texttt{caption} specifies a~caption for a~table.
+\item \texttt{blockquote} specifies a~block-level quotation
+(a source in form of a~URI may be specified via the \texttt{@cite} attribute),
+\texttt{cite} specifies a~citation.
+\item \texttt{dl} specifies a~definition list, \texttt{dt} specifies a~definition term in a~definition list,
+\texttt{dd} specifies the definition of a~term in a~definition list.
+\item \texttt{em} specifies an emphasis, \texttt{strong} specifies a~strong emphasis.
+\item \texttt{code} specifies a~code snippet, \texttt{dfn} specifies an inline definition of a~single term,
+\texttt{address} specifies contact information for the document author,
+\texttt{legend} specifies a~legend for \texttt{fieldset} containers for adding structure to forms,
+\texttt{samp} specifies sample output from a~script or program.
+\end{itemize}
+
+\paragraph{Semantic HTML5 Elements}
+\begin{itemize}
+\item \texttt{article} specifies an independent item section of content,
+\texttt{aside} specifies a~section of a~page that consists of content that is tangentially related
+to the content around the \texttt{aside} element, and which could be considered separate from that content,
+\texttt{header} specifies a~group of introductory or navigational aids,
+\texttt{footer} specifies a~footer for its nearest ancestor sectioning content or sectioning root element,
+\texttt{nav} specifies a~section with navigation links.
+\item \texttt{figure} specifies some flow content,
+\texttt{mark} specifies a~run of text in one document marked or highlighted for reference purposes
+due to its relevance in another context, \texttt{meter} specifies a~scalar measurement within
+a~known range, or a~fractional value.
+\item \texttt{audio} specifies a~sound or an audio stream, \texttt{video} specifies a~video or movie.
+\item \texttt{progress} specifies the completion progress of a~task,
+\texttt{time} specifies either a~time on a~24 hour clock,
+or a~precise date in the calendar (optionally with a~time and a~time-zone offset),
+\texttt{command} specifies a~command that the user can invoke.
+\item \texttt{details} specifies a~disclosure widget
+from which the user can obtain additional information or controls,
+\texttt{datalist} specifies the list that represent predefined options for input elements.
+\item \texttt{keygen} specifies a~key pair generator control,
+\texttt{output} specifies the result of a~calculation,
+\texttt{ruby} allows one or more spans of phrasing content to be marked with ruby annotations.
+\end{itemize}
+
+\paragraph{HTML5 Input Attributes}
+\begin{itemize}
+\item \texttt{datetime} specifies a~control for setting the element's value
+to a~string representing a~global date and time (with timezone information).
+\item \texttt{datetime-local} specifies a~control for setting the element's value
+to a~string representing a~local date and time (with no timezone information).
+\item \texttt{date} specifies a~control for setting the element's value
+to a~string representing a~date, \texttt{month} specifies a~control
+for setting the element's value to a~string
+representing a~month, \texttt{week} specifies a~control for setting the element's value
+to a~string representing a~week.
+\item \texttt{time} specifies a~control for setting the element's value
+to a~string representing a~time (with no timezone information.
+\item \texttt{number} specifies a~control for setting the element's value
+to a~string representing a~number.
+\item \texttt{range}  represents an imprecise control for setting the element's value
+to a~string representing a~number.
+\item \texttt{email} specifies a~control for editing a~list of email addresses
+given in the element's value.
+\item \texttt{url} specifies a~control for editing an absolute URL
+given in the element's value.
+\item \texttt{search} specifies a~one-line plain-text edit control
+for entering one or more search terms.
+\item \texttt{color} specifies a~color-well control for setting the element's value
+to a~string representing a~simple color.
+\end{itemize}
 
 \section{Linked Data}
 
