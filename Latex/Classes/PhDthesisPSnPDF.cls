@@ -36,6 +36,20 @@
    \LoadClass[pdftex, a4paper]{book}
 \fi
 
+% listings and Verbatim environment
+\usepackage{fancyvrb}
+\usepackage{relsize}
+\usepackage{listings}
+\usepackage{verbatim}
+\newcommand{\defaultlistingsize}{\fontsize{8pt}{9.5pt}}
+\newcommand{\inlinelistingsize}{\fontsize{8pt}{11pt}}
+\newcommand{\smalllistingsize}{\fontsize{7.5pt}{9.5pt}}
+\newcommand{\listingsize}{\defaultlistingsize}
+\RecustomVerbatimCommand{\Verb}{Verb}{fontsize=\inlinelistingsize}
+\RecustomVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\defaultlistingsize}
+\lstset{frame=lines,captionpos=b,numberbychapter=false,escapechar=§,
+        aboveskip=2em,belowskip=1em,abovecaptionskip=0.5em,belowcaptionskip=0.5em,
+        framexbottommargin=-1em,basicstyle=\ttfamily\listingsize\selectfont}
 
 %:-------------------------- packages for fancy things -----------------------
 
@@ -43,10 +57,10 @@
 \usepackage[T1]{fontenc}
 
 \usepackage{amssymb}
-\usepackage{graphicx} % for improved inclusion of graphics
-\usepackage{subfig}
+\usepackage[pdftex]{graphicx} % for improved inclusion of graphics
 %\usepackage{wrapfig} % to include figure with text wrapping around it
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption} % for improved layout of figure captions with extra margin, smaller font than text
+\usepackage{subfig}
 \usepackage{fancyhdr} % for better header layout
 \usepackage{eucal}
 \usepackage[english]{babel}
@@ -134,7 +148,7 @@
      \def\sectionautorefname{Section}
     
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
-    \usepackage[pdftex]{graphicx}
+    %\usepackage[pdftex]{graphicx}
     \pdfcompresslevel=9
     \graphicspath{{frontmatter/figures/PNG/}{frontmatter/figures/PDF/}{frontmatter/figures/}}
 \else

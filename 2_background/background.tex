@@ -29,16 +29,16 @@ and then introducing popular social networks and some of their core features.
 \section{Semantic Web}
 The lexical database WordNet~\cite{Fellbaum1998} by the Cognitive Science Laboratory
 of Princeton University defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=semantic}}
-the term ``semantic'' as ``of or relating to meaning or the study of meaning''.
+the term \emph{semantic} as \emph{of or relating to meaning or the study of meaning}.
 The same source defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=world+wide+web}}
-the term ``Web'', which is a~common form for the complete term ``World Wide Web'' (or just ``WWW'') as
-``computer network consisting of a~collection of internet sites that offer text and graphics and
-sound and animation resources through the hypertext transfer protocol''.
+the term \emph{Web}, which is a~common form for the complete term \emph{World Wide Web} (or just \emph{WWW}) as
+\emph{computer network consisting of a~collection of internet sites that offer text and graphics and
+sound and animation resources through the hypertext transfer protocol}.
 Finally WordNet defines\footnote{\url{http://wordnetweb.princeton.edu/perl/webwn?s=meaning}}
-the term ``meaning'' as ``the message that is intended or expressed or signified'', or
-``the idea that is intended''.
+the term \emph{meaning} as \emph{the message that is intended or expressed or signified}, or
+\emph{the idea that is intended}.
 
-The combined term ``Semantic Web'' has been coined by Sir Tim Berners-Lee,
+The combined term \emph{Semantic Web} has been coined by Sir Tim Berners-Lee,
 the inventor of the World Wide Web and Director of the World Wide Web Consortium,
 in a~May 2001 article co-published with James Hendler and Ora Lassila
 in the Scientific American~\cite{BernersLee2001}.
@@ -54,7 +54,7 @@ to work in cooperation.
 The first steps in weaving the Semantic Web into the structure of the existing Web
 are already under way.
 In the near future, these developments will usher in significant new functionality
-as machines become much better able to process and ``understand'' the data
+as machines become much better able to process and \emph{understand} the data
 that they merely display at present.''
 \end{quotation}
 
@@ -86,10 +86,10 @@ This means that an HTML snippet like
 <h1>The Catcher in the Rye</h1>
 <h2>J. D. Salinger</h2>
 \end{verbatim}
-reveals that ``The Catcher in the Rye'' is a~level one header element and
-that ``J. D. Salinger'' a~level two header element,
+reveals that \emph{The Catcher in the Rye} is a~level one header element and
+that \emph{J. D. Salinger} a~level two header element,
 but to a~machine it is not evident that the prior is the title of a~book,
-and that the latter is (i), an author, and (ii), the author of ``The Catcher in the Rye''.
+and that the latter is (i), an author, and (ii), the author of \emph{The Catcher in the Rye}.
 
 \subsection{Structured Data on the Web}
 A very first step to add semantics to the Web is using tabular data.
@@ -128,7 +128,7 @@ searches for column titles like ``P'', ``W'', ``D'' etc.,
 it would require the same work over and over again for different languages
 (for example German for: ``Sp.'', ``g.'', ``u.'', ``v.'', ``Tore'', ``Pkte.'').
 The German-speaking reader might have noticed that the exemplary German system listed here
-does not differentiate between ``goals for'' and ``goals against'', but only has a~list of ``Goals''.
+does not differentiate between \emph{goals for} and \emph{goals against}, but only has a~list of \emph{Goals}.
 Tiny differences like this make the scraping approach so brittle.
 If data providers were to use unique column identifiers like URIs, the problem would be mostly gone.
 In the concrete example, rather than using ``D'' or ``u.'', which both mean that the result was a~tie,
@@ -138,7 +138,7 @@ In the next Section we therefore introduce the structured knowledge base DBpedia
 
 \subsection{The Structured Knowledge Base DBpedia}
 An often reoccurring (however not binding) pattern in the Semantic Web world
-is the use of DBpedia~\cite{Bizer2007} URIs as a~hub for identifying concepts by URIs.
+is the use of DBpedia~\cite{Auer2007} URIs as a~hub for identifying concepts by URIs.
 DBpedia is a~Semantic Web knowledge base with the objective of
 automatically extracting structured data from the human-generated information from
 the online encyclopedia Wikipedia~\footnote{\url{http://en.wikipedia.org/wiki/Main_Page}}.
@@ -237,8 +237,60 @@ for entering one or more search terms.
 to a~string representing a~simple color.
 \end{itemize}
 
-\section{Linked Data}
-
 \section{Resource Description Framework}
+
+\section{Linked Data}
+Linked Data~\cite{BernersLee2006} defines a~set of agreed-on best practices and
+principles for interconnecting and publishing structured data on the Web.
+It uses Web technologies like HTTP~\cite{Fielding1999} and URIs~\cite{BernersLee2005}
+to create typed links between different sources.
+The portal LinkedData.org defines Linked Data as being
+\textit{``about using the Web to connect related data that wasn't previously linked,
+or using the Web to lower the barriers to linking data currently linked using other methods''}. 
+
+\subsection{The Linked Data Principles}
+Tim Berners-Lee defines the four rules for Linked Data in a~W3C Design Issue~\cite{BernersLee2006} as follows:
+\begin{enumerate}
+\item Use URIs as names for things.
+\item Use HTTP URIs so that people can look up those names.
+\item When someone looks up a~URI, provide useful information, using the standards (RDF*, SPARQL).
+\item Include links to other URIs, so that they can discover more things.
+\end{enumerate}
+
+Linked Data uses RDF~\cite{Klyne2004} to create typed links between things in the world,
+the result is oftentimes referred to as the Web of Data.
+As outlined before, RDF encodes statements about things in the form of
+subject, predicate, object triples.
+If subject and object have URIs from different namespaces,
+Bizer \emph{et al.} speak of \emph{RDF links} in~\cite{Bizer2007}.
+An examplary RDF link taken from~\cite{Bizer2009} stating that a~description of the movie Pulp Fiction
+from the Linked Movie Database~\cite{Hassanzadeh2009} and from DBpedia are in fact talking about the same movie
+can be seen in \autoref{code:rdflink}.
+
+\begin{lstlisting}[caption={[Exemplary RDF link.]{Exemplary RDF link stating that a~description of the movie Pulp Fiction from the Linked Movie Database~\cite{Hassanzadeh2009} and from DBpedia are in fact talking about the same movie.}},label={code:rdflink}]
+http://data.linkedmdb.org/resource/film/77
+http://www.w3.org/2002/07/owl\#sameAs
+http://dbpedia.org/resource/Pulp_Fiction_%28film%29
+\end{lstlisting}
+
+\subsubsection{The Linked Open Data Cloud}\label{sec:lodcloud}
+The Linking Open Data (LOD) project~\cite{Bizer2011} is the most visible Linked Data effort.
+The project's objective is to identify existing datasets with open licenses,
+convert them to RDF whilst obeying the Linked Data principles, and finally publish them on the Web.
+Due to its open structure everyone can contribute to the project by publishing a~dataset and
+interlinking it to existing datasets.
+Today, the project includes datasets of big names such as the BBC, Thomson Reuters,
+or the Library of Congress to name just a~few.
+The current state of the Linking Open Data project can be seen in the so-called Linked Open Data cloud,
+a~diagram that depicts the interconnectedness of each dataset.
+The state of the LOD cloud as of September 2010 can be seen in \autoref{fig:lod-cloud}.
+
+\begin{figure}[htbp!]
+\begin{center}
+  \includegraphics[width=1.0\textwidth]{lod-cloud.png}    
+  \caption[The Linked Open Data cloud as of September 2010.]{The Linked Open Data cloud as of September 2010, by Richard Cyganiak and Anja Jentzsch. Source: \url{http://lod-cloud.net/}}    
+  \label{fig:lod-cloud}
+  \end{center}  
+\end{figure}
 
 \section{Conclusion}
