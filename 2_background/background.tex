@@ -237,7 +237,233 @@ for entering one or more search terms.
 to a~string representing a~simple color.
 \end{itemize}
 
-\section{Resource Description Framework}
+\section{Resource Description Framework (RDF)} \label{sec:rdf}
+The Resource Description Framework (RDF)~\cite{Klyne2004} defines
+a~set of W3C standards for the formal description of resources that are identified by URIs.
+RDF is a~core component of the Semantic Web.
+Initially it was designed to describe metadata on the World Wide Web (WWW) such as authors,
+copyrights, etc. of documents, however, using a~definition of the term \emph{resource}
+beyond the WWW context, RDF is now also used to describe metadata of any URI-identifiable entity.
+
+\subsection{Triples as a~Data Structure}
+As outlined before, one of the main purposes of the Semantic Web is to give information
+a~well-defined meaning.
+Using an example from Berners-Lee's article~\cite{BernersLee2001},
+meaning can be to differentiate between the concepts of a~shipping and a~billing address,
+or the concept of an address in the sense of delivering a~formal spoken communication to an audience.
+In order to assure the differences in meaning,
+things are identified by a~Unique Resource Identifier (URI).
+The majority of the data processed by machines can be described by elementary sentences like
+\emph{A cat is a~mammal}, \emph{Thomas Steiner is author of this document}, or
+\emph{Prince William is married to Kate Middleton}.
+Each of these sentences has a~subject (\emph{A cat}), a~predicate (\emph{is a}),
+and an object (\emph{mammal}).
+Every subject, predicate, and object can be identified by a~URI.
+This concept turns out to be very powerful, as it allows to express the same concept,
+represented by a~URI (like for example mammal by \url{http://dbpedia.org/resource/Mammal})
+with different terms in different languages (like for example Säugetier, mammal, or nisäkkäät). 
+Everyone can extend the set of concepts, simply by creating a~URI on the Web.
+This form of knowledge representation is used by the Resource Description Framework, or short RDF.
+
+\subsection{Important RDF Serialization Syntaxes}
+The knowledge represented in the RDF triple data structure needs to be serialized
+in order to be stored or transmitted over the Internet.
+Several serialization formats exist, each of which has its particular advantages
+and disadvantages, mostly around readability for human beings and parsability for machines.
+Most people prefer the Turtle~\cite{Prudhommeaux2011} format for its readability,
+whereas for machines N-Triples~\cite{Grant2004} is the easiest to parse.
+
+\subsubsection{RDF Sample Graph}
+In the following, we will illustrate the various RDF serialization formats
+with an RDF sample graph, which is introduced here.
+It contains data about a~FOAF~\cite{Brickley2010} person named \emph{John X. Foobar},
+and an email address with an SHA1 checksum of \emph{cef817456278b70cee8e5a1611539\-ef9d928810e}.
+The actual email address is obscured to avoid spam emails.
+\autoref{fig:sample-rdf-graph} shows the graphical representation of this sample graph.
+
+\begin{figure}[htbp!]
+\begin{center}
+ \includegraphics[width=\linewidth]{sample-rdf-graph.png} 
+ \caption{A sample RDF graph visualized.}
+ \label{fig:sample-rdf-graph}
+ \end{center}  
+\end{figure}
+
+\subsubsection{The Notation3 Syntax} \label{sec:notation3}
+Notation3~\cite{BernersLee2011} was introduced by Tim Berners-Lee.
+Notation3 has some features that go beyond the pure expressiveness of RDF, like rules.
+Its media type is \texttt{text/n3;\-charset=utf-8},
+the recommended file extension is \texttt{.n3}, the encoding is always UTF-8.
+~\autoref{code:notation3-syntax} shows the previously introduced sample graph serialized in Notation3.
+
+\begin{lstlisting}[caption={A sample graph in Notation3 syntax.},label={code:notation3-syntax}]
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:node15urahancx74223 a foaf:Person ;
+  foaf:name "John X. Foobar" ;
+  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
+\subsubsection{The Turtle Syntax} \label{sec:turtle}
+Turtle~\cite{Prudhommeaux2011} was developed by Dave Beckett and Tim Berners-Lee
+It is a~superset of N-Triples (see \autoref{sec:n-triples}) and
+a subset of Notation3 (see \autoref{sec:notation3}).
+It has reached a~\emph{de facto} standard status.
+Its media type is \texttt{text/turtle}
+(the sometimes still observable media type \texttt{application/x-turtle} is deprecated),
+the recommended file extension is \texttt{.ttl}, the encoding is UTF-8.
+\autoref{code:turtle-syntax} shows the previously introduced sample graph serialized in Turtle.
+
+\begin{lstlisting}[caption={A sample graph in Turtle syntax.},label={code:turtle-syntax}]
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:node15urahancx74223 a foaf:Person ;
+  foaf:name "John X. Foobar" ;
+  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
+\subsubsection{The N-Triples Syntax} \label{sec:n-triples}
+The N-Triples~\cite{Grant2004} syntax was primarily developed by Dave Beckett and Art Barstow.
+N-Triples is a~subset of Turtle (see \autoref{sec:turtle}),
+which in turn is a~subset of Notation3 (see \autoref{sec:notation3}).
+There are very few variations to express a~graph in N-Triples,
+which makes it an ideal syntax for testing purposes, however,
+as it is missing some shortcuts of Turtle, it is quite verbose.
+Its media type is \texttt{text/plain}, the recommended file extension is \texttt{.nt},
+and the encoding is 7-bit US-ASCII.
+\autoref{code:ntriples-syntax} shows the previously introduced sample graph serialized in N-Triples.
+
+\begin{lstlisting}[caption={A sample graph in N-Triples syntax.},label={code:ntriples-syntax}]
+\_:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
+    <http://xmlns.com/foaf/0.1/Person> .
+\_:1 <http://xmlns.com/foaf/0.1/name>
+    "John X. Foobar" .
+\_:1 <http://xmlns.com/foaf/0.1/mbox_sha1sum>
+    "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
+\subsubsection{The RDF/XML Syntax}
+RDF/XML~\cite{Beckett2004} was introduced by the W3C as the first RDF serialization syntax.
+Albeit more human-friendly serialization formats such as Turtle are gaining more and more traction,
+RDF/XML is still very wide-spread.
+Its media type is \texttt{application/rdf+xml}, the recommended file extension is \texttt{.rdf},
+the encoding is UTF-8.
+\autoref{code:rdfxml-syntax} shows the previously introduced sample graph serialized in RDF/XML.
+
+\begin{lstlisting}[caption={A sample graph in RDF/XML syntax.},label={code:rdfxml-syntax}]
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:nodeID="node15urahancx74224">
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    <foaf:name>John X. Foobar</foaf:name>
+    <foaf:mbox_sha1sum>
+      cef817456278b70cee8e5a1611539ef9d928810e
+    </foaf:mbox_sha1sum>
+  </rdf:Description>
+</rdf:RDF>
+\end{lstlisting}
+
+\subsubsection{The RDFa Syntax}
+RDFa has a~special role in that it is a~specification for attributes to express structured data
+in XHTML~\cite{Adida2008} (but also standard HTML).
+It uses the rendered hypertext content of XHTML for the RDFa markup,
+so that data publishers can use the same document for human- and machine-readable content.
+There is also a~specification for RDFa 1.1 in HTML4 and HTML5~\cite{Sporny2011}.
+The contained RDF triples can be extracted with distillers,
+in consequence RDFa can be considered as another serialization syntax for RDF,
+with the same expressive power as RDF/XML or Turtle.
+Its media type is \texttt{application/xhtml+xml}, the recommended file extension is \texttt{.html}.
+\autoref{code:rdfa-syntax} shows the previously introduced sample graph serialized in RDFa.
+
+\begin{lstlisting}[caption={A sample graph in RDFa syntax.},label={code:rdfa-syntax}]
+<div about="_:1" typeof="http://xmlns.com/foaf/0.1/Person">           
+  <span property="http://xmlns.com/foaf/0.1/mbox_sha1sum">
+    cef817456278b70cee8e5a1611539ef9d928810e
+  </span> 
+  <span property="http://xmlns.com/foaf/0.1/name">
+    John X. Foobar
+  </span>
+</div> 
+\end{lstlisting}
+
+\begin{comment}
+\section{SPARQL - Semantic Web Query Language}
+SPARQL is a~recursive acronym that stands for SPARQL Protocol and RDF Query Language. The SPARQL specification~\cite{sparql} defines the syntax and semantics of the SPARQL query language for RDF. RDF~\cite{RDF} is a~directed, labeled graph data format for representing information in the Web. SPARQL can be used to express queries across diverse data sources, whether the data is stored natively as RDF, or viewed as RDF via middleware. SPARQL allows for querying required and optional graph patterns along with their conjunctions and disjunctions. SPARQL also supports extensible value testing and constraining queries by source RDF graph. The results of SPARQL queries can be results sets or RDF graphs.
+
+SPARQL became an official World Wide Web Consortium (W3C) Recommendation in the year 2008. It was standardized by the RDF Data Access Working Group (DAWG).
+
+\subsection{The Vision of the Web as a~Giant, Single Database}
+The Web as we know it today is a~\emph{network of documents} interconnected by hyperlinks that everyone can participate in by placing links to existing documents. The vision of the Semantic Web, however, is
+a~\emph{network of facts} about entities, interconnected in form of graphs of data. Where the Web of today is a~graph of documents, the Semantic Web is envisioned to be a~huge global graph, formed by many, many individual graphs. If one party publishes facts about an entity, and a~different party publishes different facts about the same entity, then the overall knowledge about that entity is represented in a~decentralized way, accessible to all, and open for everyone to enrich. This obviously requires strong globally unique identifiers, or at least ways to map one identifier to another.
+
+Given the (visionary) huge global graph, a~SPARQL query like the one in Figure~\ref{code:sparql} could be used to get results from the graph, like the email addresses of every person in the world.
+
+\begin{figure}[htbp!]
+\begin{center}
+{\footnotesize
+\begin{code}
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+SELECT ?name ?email
+WHERE {
+  ?person a foaf:Person.
+  ?person foaf:name ?name.
+  ?person foaf:mbox ?email.
+}
+\end{code}}
+  \caption[SPARQL query returning the names and email addresses of every person in the world.]{SPARQL query returning the names and email addresses of every person in the world. Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}} 
+  \label{code:sparql}
+  \end{center}  
+\end{figure}
+
+This query selects the names and email addresses from all persons who have facts about them in the global graph. The query starts with a~prefix definition, and then constrains the results to be of type \texttt{foaf:Person}, whose name and email address are the values of the triples with the predicates \texttt{foaf:name} and \texttt{foaf:mbox} respectively. While this sounds like a~very powerful idea, for performance reasons in practice SPARQL endpoints like the DBpedia SPARQL endpoint~\cite{dbpedia:sparql} typically only allow for querying the local graph.
+
+\subsection{Different SPARQL Query Variations}
+The SPARQL Query Language currently specifies four different query variants, which we list in the following. 
+
+\subsubsection{SELECT}
+The \texttt{SELECT} query variant is used to extract raw values from a~SPARQL endpoint. The results are returned in a~table format. A~sample query is given in Figure~\ref{code:sparql}.
+
+\subsubsection{DESCRIBE}
+The \texttt{DESCRIBE} query variant is used to extract an RDF graph from the SPARQL endpoint, the contents of which is left to the endpoint to decide based on what the maintainer deems as useful information. An example query is given below:\\
+
+\texttt{DESCRIBE <http://example.org/sparql>}
+
+\subsubsection{ASK}
+The \texttt{ASK} query variant is used to provide a~simple True/False result for a~query on a~SPARQL endpoint. No information is returned about the possible query solutions, just whether or not a~solution exists. An example query with a~sample response is given below:\\
+
+\noindent Given the following SPARQL \texttt{ASK} query:\\
+
+\texttt{PREFIX foaf: <http://xmlns.com/foaf/0.1/>\\
+\indent ASK \{ ?x foaf:name  "Alice" \}}\\
+
+\noindent Creates the following response (given there is a~person named Alice):\\
+
+\texttt{yes}
+
+\subsubsection{CONSTRUCT}
+The \texttt{CONSTRUCT} query variant is used to extract information from the SPARQL endpoint and transform the results into valid RDF specified by a~graph template. The result is an RDF graph formed by taking each query solution in the solution sequence, substituting for the variables in the graph template, and combining the triples into a~single RDF graph by set union. An example query is given below:\\
+
+\noindent Given the following RDF graph:\\
+
+\texttt{@prefix foaf: <http://xmlns.com/foaf/0.1/> .}\\
+\texttt{\indent \_:a foaf:name "Alice" .}\\
+\texttt{\indent \_:a foaf:mbox <mailto:alice@example.org> .}\\
+
+\noindent And given the following SPARQL \texttt{CONSTRUCT} query:\\
+
+\texttt{PREFIX foaf: <http://xmlns.com/foaf/0.1/>}\\
+\texttt{\indent PREFIX vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#>}\\
+\texttt{\indent CONSTRUCT \{ <http://example.org/person\#Alice> vcard:FN ?name \}}\\
+\texttt{\indent WHERE { ?x foaf:name ?name }}\\
+
+\noindent This creates the following \texttt{vcard} properties from the FOAF information:\\
+
+\texttt{@prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#> .}\\ 
+\texttt{\indent <http://example.org/person\#Alice> vcard:FN "Alice" .}
+
+\end{comment}
 
 \section{Linked Data}
 Linked Data~\cite{BernersLee2006} defines a~set of agreed-on best practices and
