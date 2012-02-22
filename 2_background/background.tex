@@ -172,7 +172,7 @@ for the Web browser Firefox.
 \paragraph{Semantic HTML4 Elements}
 \begin{itemize}
 \item \texttt{abbr} specifies an abbreviation, \texttt{acronym} specifies an acronym.
-\item \texttt{h1-h6} specify level 1-6 headers, \texttt{caption} specifies a~caption for a~table.
+\item \texttt{h1-h6} specify level 1–6 headers, \texttt{caption} specifies a~caption for a~table.
 \item \texttt{blockquote} specifies a~block-level quotation
 (a source in form of a~URI may be specified via the \texttt{@cite} attribute),
 \texttt{cite} specifies a~citation.
@@ -212,28 +212,28 @@ from which the user can obtain additional information or controls,
 
 \paragraph{HTML5 Input Attributes}
 \begin{itemize}
-\item \texttt{datetime} specifies a~control for setting the element's value
+\item \texttt{datetime} specifies a~control for setting the element’s value
 to a~string representing a~global date and time (with timezone information).
-\item \texttt{datetime-local} specifies a~control for setting the element's value
+\item \texttt{datetime-local} specifies a~control for setting the element’s value
 to a~string representing a~local date and time (with no timezone information).
-\item \texttt{date} specifies a~control for setting the element's value
+\item \texttt{date} specifies a~control for setting the element’s value
 to a~string representing a~date, \texttt{month} specifies a~control
-for setting the element's value to a~string
-representing a~month, \texttt{week} specifies a~control for setting the element's value
+for setting the element’s value to a~string
+representing a~month, \texttt{week} specifies a~control for setting the element’s value
 to a~string representing a~week.
-\item \texttt{time} specifies a~control for setting the element's value
+\item \texttt{time} specifies a~control for setting the element’s value
 to a~string representing a~time (with no timezone information.
-\item \texttt{number} specifies a~control for setting the element's value
+\item \texttt{number} specifies a~control for setting the element’s value
 to a~string representing a~number.
-\item \texttt{range}  represents an imprecise control for setting the element's value
+\item \texttt{range}  represents an imprecise control for setting the element’s value
 to a~string representing a~number.
 \item \texttt{email} specifies a~control for editing a~list of email addresses
-given in the element's value.
+given in the element’s value.
 \item \texttt{url} specifies a~control for editing an absolute URL
-given in the element's value.
+given in the element’s value.
 \item \texttt{search} specifies a~one-line plain-text edit control
 for entering one or more search terms.
-\item \texttt{color} specifies a~color-well control for setting the element's value
+\item \texttt{color} specifies a~color-well control for setting the element’s value
 to a~string representing a~simple color.
 \end{itemize}
 
@@ -248,7 +248,7 @@ beyond the WWW context, RDF is now also used to describe metadata of any URI-ide
 \subsection{Triples as a~Data Structure}
 As outlined before, one of the main purposes of the Semantic Web is to give information
 a~well-defined meaning.
-Using an example from Berners-Lee's article~\cite{BernersLee2001},
+Using an example from Berners-Lee’s article~\cite{BernersLee2001},
 meaning can be to differentiate between the concepts of a~shipping and a~billing address,
 or the concept of an address in the sense of delivering a~formal spoken communication to an audience.
 In order to assure the differences in meaning,
@@ -294,7 +294,7 @@ Notation3~\cite{BernersLee2011} was introduced by Tim Berners-Lee.
 Notation3 has some features that go beyond the pure expressiveness of RDF, like rules.
 Its media type is \texttt{text/n3;\-charset=utf-8},
 the recommended file extension is \texttt{.n3}, the encoding is always UTF-8.
-~\autoref{code:notation3-syntax} shows the previously introduced sample graph serialized in Notation3.
+\autoref{code:notation3-syntax} shows the previously introduced sample graph serialized in Notation3.
 
 \begin{lstlisting}[caption={A sample graph in Notation3 syntax.},label={code:notation3-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -388,22 +388,38 @@ Its media type is \texttt{application/xhtml+xml}, the recommended file extension
 </div> 
 \end{lstlisting}
 
-\begin{comment}
-\section{SPARQL - Semantic Web Query Language}
-SPARQL is a~recursive acronym that stands for SPARQL Protocol and RDF Query Language. The SPARQL specification~\cite{sparql} defines the syntax and semantics of the SPARQL query language for RDF. RDF~\cite{RDF} is a~directed, labeled graph data format for representing information in the Web. SPARQL can be used to express queries across diverse data sources, whether the data is stored natively as RDF, or viewed as RDF via middleware. SPARQL allows for querying required and optional graph patterns along with their conjunctions and disjunctions. SPARQL also supports extensible value testing and constraining queries by source RDF graph. The results of SPARQL queries can be results sets or RDF graphs.
-
-SPARQL became an official World Wide Web Consortium (W3C) Recommendation in the year 2008. It was standardized by the RDF Data Access Working Group (DAWG).
+\section{SPARQL -- Semantic Web Query Language}
+SPARQL is a~recursive acronym that stands for SPARQL Protocol and RDF Query Language.
+The SPARQL specification~\cite{Prudhommeaux2008} defines the syntax and semantics
+of the SPARQL query language for RDF.
+RDF~\cite{Klyne2004} is a~directed, labeled graph data format for representing information in the Web.
+SPARQL can be used to express queries across diverse data sources,
+whether the data is stored natively as RDF, or viewed as RDF via middleware.
+SPARQL allows for querying required and optional graph patterns
+along with their conjunctions and disjunctions.
+SPARQL also supports extensible value testing and constraining queries by source RDF graph.
+The results of SPARQL queries can be results sets or RDF graphs.
+SPARQL became an official World Wide Web Consortium (W3C) Recommendation in the year 2008.
+It was standardized by the RDF Data Access Working Group (DAWG).
 
 \subsection{The Vision of the Web as a~Giant, Single Database}
-The Web as we know it today is a~\emph{network of documents} interconnected by hyperlinks that everyone can participate in by placing links to existing documents. The vision of the Semantic Web, however, is
-a~\emph{network of facts} about entities, interconnected in form of graphs of data. Where the Web of today is a~graph of documents, the Semantic Web is envisioned to be a~huge global graph, formed by many, many individual graphs. If one party publishes facts about an entity, and a~different party publishes different facts about the same entity, then the overall knowledge about that entity is represented in a~decentralized way, accessible to all, and open for everyone to enrich. This obviously requires strong globally unique identifiers, or at least ways to map one identifier to another.
+The Web as we know it today is a~\emph{network of documents} interconnected by hyperlinks
+that everyone can participate in by placing links to existing documents.
+The vision of the Semantic Web, however, is a~\emph{network of facts} about entities,
+interconnected in form of graphs of data.
+Where the Web of today is a~graph of documents, the Semantic Web is envisioned to be a~huge global graph,
+formed by many, many individual graphs.
+If one party publishes facts about an entity, and a~different party publishes different facts
+about the same entity, then the overall knowledge about that entity is represented in a~decentralized way,
+accessible to all, and open for everyone to enrich.
+This obviously requires strong globally unique identifiers,
+or at least ways to map one identifier to another.
 
-Given the (visionary) huge global graph, a~SPARQL query like the one in Figure~\ref{code:sparql} could be used to get results from the graph, like the email addresses of every person in the world.
+Given the (visionary) huge global graph, a~SPARQL query like the one in \autoref{code:sparql}
+could be used to get results from the graph,
+like the email addresses of every person in the world.
 
-\begin{figure}[htbp!]
-\begin{center}
-{\footnotesize
-\begin{code}
+\begin{lstlisting}[caption={[SPARQL query returning the names and email addresses of every person in the world.]{SPARQL query returning the names and email addresses of every person in the world. Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}}},label={code:sparql}]
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT ?name ?email
 WHERE {
@@ -411,27 +427,38 @@ WHERE {
   ?person foaf:name ?name.
   ?person foaf:mbox ?email.
 }
-\end{code}}
-  \caption[SPARQL query returning the names and email addresses of every person in the world.]{SPARQL query returning the names and email addresses of every person in the world. Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}} 
-  \label{code:sparql}
-  \end{center}  
-\end{figure}
+\end{lstlisting}
 
-This query selects the names and email addresses from all persons who have facts about them in the global graph. The query starts with a~prefix definition, and then constrains the results to be of type \texttt{foaf:Person}, whose name and email address are the values of the triples with the predicates \texttt{foaf:name} and \texttt{foaf:mbox} respectively. While this sounds like a~very powerful idea, for performance reasons in practice SPARQL endpoints like the DBpedia SPARQL endpoint~\cite{dbpedia:sparql} typically only allow for querying the local graph.
+This query selects the names and email addresses from all persons
+who have facts about them in the global graph.
+The query starts with a~prefix definition, and then constrains the results
+to be of type \texttt{foaf:Person}, whose name and email address are the values
+of the triples with the predicates \texttt{foaf:name} and \texttt{foaf:mbox} respectively.
+While this sounds like a~very powerful idea,
+for performance reasons in practice SPARQL endpoints
+like the DBpedia SPARQL endpoint\footnote{\url{http://dbpedia.org/sparql}}
+typically only allow for querying the local graph.
 
 \subsection{Different SPARQL Query Variations}
 The SPARQL Query Language currently specifies four different query variants, which we list in the following. 
 
 \subsubsection{SELECT}
-The \texttt{SELECT} query variant is used to extract raw values from a~SPARQL endpoint. The results are returned in a~table format. A~sample query is given in Figure~\ref{code:sparql}.
+The \texttt{SELECT} query variant is used to extract raw values from a~SPARQL endpoint.
+The results are returned in a~table format. A~sample query is given in \autoref{code:sparql}.
 
 \subsubsection{DESCRIBE}
-The \texttt{DESCRIBE} query variant is used to extract an RDF graph from the SPARQL endpoint, the contents of which is left to the endpoint to decide based on what the maintainer deems as useful information. An example query is given below:\\
+The \texttt{DESCRIBE} query variant is used to extract an RDF graph from the SPARQL endpoint,
+the contents of which is left to the endpoint to decide
+based on what the maintainer deems as useful information. An example query is given below:\\
 
 \texttt{DESCRIBE <http://example.org/sparql>}
 
 \subsubsection{ASK}
-The \texttt{ASK} query variant is used to provide a~simple True/False result for a~query on a~SPARQL endpoint. No information is returned about the possible query solutions, just whether or not a~solution exists. An example query with a~sample response is given below:\\
+The \texttt{ASK} query variant is used to provide a~simple True/False result
+for a~query on a~SPARQL endpoint.
+No information is returned about the possible query solutions,
+just whether or not a~solution exists.
+An example query with a~sample response is given below:\\
 
 \noindent Given the following SPARQL \texttt{ASK} query:\\
 
@@ -443,7 +470,12 @@ The \texttt{ASK} query variant is used to provide a~simple True/False result for
 \texttt{yes}
 
 \subsubsection{CONSTRUCT}
-The \texttt{CONSTRUCT} query variant is used to extract information from the SPARQL endpoint and transform the results into valid RDF specified by a~graph template. The result is an RDF graph formed by taking each query solution in the solution sequence, substituting for the variables in the graph template, and combining the triples into a~single RDF graph by set union. An example query is given below:\\
+The \texttt{CONSTRUCT} query variant is used to extract information from the SPARQL endpoint
+and transform the results into valid RDF specified by a~graph template.
+The result is an RDF graph formed by taking each query solution in the solution sequence,
+substituting for the variables in the graph template,
+and combining the triples into a~single RDF graph by set union.
+An example query is given below:\\
 
 \noindent Given the following RDF graph:\\
 
@@ -463,15 +495,13 @@ The \texttt{CONSTRUCT} query variant is used to extract information from the SPA
 \texttt{@prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#> .}\\ 
 \texttt{\indent <http://example.org/person\#Alice> vcard:FN "Alice" .}
 
-\end{comment}
-
 \section{Linked Data}
 Linked Data~\cite{BernersLee2006} defines a~set of agreed-on best practices and
 principles for interconnecting and publishing structured data on the Web.
 It uses Web technologies like HTTP~\cite{Fielding1999} and URIs~\cite{BernersLee2005}
 to create typed links between different sources.
 The portal LinkedData.org defines Linked Data as being
-\textit{``about using the Web to connect related data that wasn't previously linked,
+\textit{``about using the Web to connect related data that wasn’t previously linked,
 or using the Web to lower the barriers to linking data currently linked using other methods''}. 
 
 \subsection{The Linked Data Principles}
@@ -501,7 +531,7 @@ http://dbpedia.org/resource/Pulp_Fiction_%28film%29
 
 \subsubsection{The Linked Open Data Cloud}\label{sec:lodcloud}
 The Linking Open Data (LOD) project~\cite{Bizer2011} is the most visible Linked Data effort.
-The project's objective is to identify existing datasets with open licenses,
+The project’s objective is to identify existing datasets with open licenses,
 convert them to RDF whilst obeying the Linked Data principles, and finally publish them on the Web.
 Due to its open structure everyone can contribute to the project by publishing a~dataset and
 interlinking it to existing datasets.
