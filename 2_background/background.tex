@@ -237,6 +237,87 @@ for entering one or more search terms.
 to a~string representing a~simple color.
 \end{itemize}
 
+\subsection{Structured Data Beyond Pure HTML}
+In this Subsection, we describe how structured data can be included in HTML documents
+by either overloading existing HTML attributes, or by adding new HTML attributes.
+
+\subsubsection{Microformats}
+Microformats~\cite{Celik2006} are a~set of open data mark-up formats developed
+and defined by the Microformats community\footnote{\url{http://microformats.org/discuss}}.
+Microformats are not an official standard, but rather a~widely adopted grass-roots-driven movement
+with origins in the blogging scene.
+It is to be noted that Microformats do not require a~new language,
+but reuse building blocks from widely adopted standards such as the \texttt{@class},
+\texttt{@rel}, and \texttt{@title} attributes in HTML.
+Their main design goal is to focus first on humans, then on machines.
+A concrete example of Microformat mark-up in HTML can be seen in \autoref{code:microformats}.
+There are currently nine stable
+Microformats\footnote{\url{http://microformats.org/wiki/Main_Page\#Specifications}},
+as listed below:
+
+\begin{itemize}
+\item \texttt{hCalendar} is a~distributed calendaring and events format, using a~1:1 representation of the standard \texttt{iCalendar} format (RFC2445,~\cite{Dawson-1-1998}).
+\item \texttt{hCard} is a~format for representing people, companies, organizations, and places, using a~1:1 representation of the standard \texttt{vCard} format (RFC2426,~\cite{Dawson-2-1998}).
+\item \texttt{rel-license} is a~format for indicating content licenses, which is embeddable in HTML~\cite{LeHors1999} or XHTML~\cite{Pemberton2000}, Atom~\cite{Nottingham2005}, RSS~\cite{Cadenhead2006}, and arbitrary XML~\cite{Bray1998}.
+\item \texttt{rel-nofollow} is a~format for hyperlinks indicating that the destination of that hyperlink should not be afforded any additional weight or ranking by user agents such as search engines, which perform link analysis upon Web pages.
+\item \texttt{rel-tag} format for hyperlinks indicating that the destination of that hyperlink is an author-designated keyword for the current page.
+\item \texttt{VoteLinks} is a~format for adding the idea of agreement, abstention or indifference, and disagreement to hyperlinks.
+\item \texttt{XFN} is a~format for representing human relationships using hyperlinks, which enables Web authors to indicate their relationships to people.
+\item \texttt{XMDP} is a~format for defining metadata profile documents (XHTML Meta Data Profile), which enables Web authors to well-define custom meta tags.
+\item \texttt{XOXO} is a~format for defining a~new XHTML document type for subsetting and extending XHTML, which serves as the basis for XHTML-friendly outlines for processing by XML engines, and for easy interactive rendering by browsers.
+\end{itemize}
+
+\begin{lstlisting}[caption={[Sample code snippet with embedded hCard Microformat mark-up.]{Sample code snippet with embedded \texttt{hCard} \uwave{Microformat} mark-up. Source: \url{http://microformats.org/wiki/hcard}}},label={code:microformats}]
+<div class="\uwave{vcard}">
+  <a class="\uwave{fn org url}" href="http://www.commerce.net/">CommerceNet</a>
+  <div class="\uwave{adr}">
+    <span class="\uwave{type}">Work</span>:
+    <div class="\uwave{street-address}">169 University Avenue</div>
+    <span class="\uwave{locality}">Palo Alto</span>,  
+    <abbr class="\uwave{region}" title="California">CA</abbr>&nbsp;&nbsp;
+    <span class="\uwave{postal-code}">94301</span>
+    <div class="\uwave{country-name}">USA</div>
+  </div>
+  <div class="\uwave{tel}">
+   <span class="\uwave{type}">Work</span> +1-650-289-4040
+  </div>
+  <div class="\uwave{tel}">
+    <span class="\uwave{type}">Fax</span> +1-650-289-4041
+  </div>
+  <div>Email: 
+   <span class="\uwave{email}">info@commerce.net</span>
+  </div>
+</div>
+\end{lstlisting}
+
+\subsubsection{Microdata}
+Microdata~\cite{Hickson2010} defines a~way to annotate content (or items) with specific machine-readable labels,
+for example to allow scripts to provide services that are customized to a~website.
+Microdata allows nested groups of name-value pairs to be added to documents,
+in parallel with the existing content.
+The Microdata specification introduces a~set of new attributes to HTML:
+
+\begin{itemize}
+\item \texttt{itemscope}: creates an item (or thing) and indicates that descendants of this element contain information about it. This attribute precedes the \texttt{itemtype} attribute in the HTML element's tag.
+\item \texttt{itemtype}: a~valid URL of a~vocabulary that describes the item and its properties context.
+\item \texttt{itemid}: indicates a~unique identifier of the item in the vocabulary.
+\item \texttt{itemprop}: indicates that its containing tag holds the value of the specified item property. The properties name and value context are described by the items vocabulary. Properties values usually consist of string values, but can also use URLs using the \texttt{a} element and its \texttt{href} attribute, the \texttt{img} element and its \texttt{src} attribute, or other elements that link to or embed external resources.
+\item \texttt{itemref}: properties that are not descendants of the element with the \texttt{itemscope} attribute can be associated with the item using this attribute. Provides a~list of elements to web crawlers to find additional property values of the item elsewhere in the document.
+\end{itemize}
+
+An example of Microdata in HTML can be seen in Figure~\ref{code:microdata}
+
+\begin{lstlisting}[caption={[Sample code snippet with \uwave{Microdata} mark-up.]{Sample code snippet with Microdata mark-up. Source: \url{http://www.w3.org/TR/microdata/}}},label={code:microdata}]
+<div \uwave{itemscope}>
+  <p>My name is <span \uwave{itemprop}="name">Neil</span>.</p>
+  <p>
+    My band is called
+    <span \uwave{itemprop}="band">Four Parts Water</span>.
+  </p>
+  <p>I am <span \uwave{itemprop}="nationality">British</span>.</p>
+</div>
+\end{lstlisting}
+
 \section{Resource Description Framework (RDF)} \label{sec:rdf}
 The Resource Description Framework (RDF)~\cite{Klyne2004} defines
 a~set of W3C standards for the formal description of resources that are identified by URIs.
@@ -375,6 +456,25 @@ The contained RDF triples can be extracted with distillers,
 in consequence RDFa can be considered as another serialization syntax for RDF,
 with the same expressive power as RDF/XML or Turtle.
 Its media type is \texttt{application/xhtml+xml}, the recommended file extension is \texttt{.html}.
+RDFa shares some design goals with Microformats~\cite{Celik2006}
+Where Microformats specify both a~syntax for embedding structured data into HTML
+\emph{and} a~vocabulary of specific terms for each Microformat,
+RDFa in contrast \emph{only} specifies a~syntax.
+RDFa relies on independent external specifications of vocabularies.
+The essence of RDFa is a~set of attributes that contain metadata about things,
+and that can be embedded in mark-up languages, for example in XHTML or HTML.
+The concrete attributes are:
+
+\begin{itemize}
+\item \texttt{about} and \texttt{src}: a~URI or CURIE (compact URI expressions) specifying the resource the metadata is about.
+\item \texttt{rel}: specifying a~relationship with another resource.
+\item \texttt{href} and \texttt{resource}: specifying the partner resource.
+\item \texttt{property}: specifying a~property for the content of an element.
+\item \texttt{content}: optional attribute that overrides the content of the element when using the property attribute.
+\item \texttt{datatype}: optional attribute that specifies the datatype of text specified for use with the property attribute.
+\item \texttt{typeof}: optional attribute that specifies the RDF type(s) of the subject (the resource that the metadata is about).
+\end{itemize}
+
 \autoref{code:rdfa-syntax} shows the previously introduced sample graph serialized in RDFa.
 
 \begin{lstlisting}[caption={A sample graph in RDFa syntax.},label={code:rdfa-syntax}]
@@ -529,7 +629,7 @@ http://www.w3.org/2002/07/owl\#sameAs
 http://dbpedia.org/resource/Pulp_Fiction_%28film%29
 \end{lstlisting}
 
-\subsubsection{The Linked Open Data Cloud}\label{sec:lodcloud}
+\subsection{The Linked Open Data Cloud}\label{sec:lodcloud}
 The Linking Open Data (LOD) project~\cite{Bizer2011} is the most visible Linked Data effort.
 The project’s objective is to identify existing datasets with open licenses,
 convert them to RDF whilst obeying the Linked Data principles, and finally publish them on the Web.
