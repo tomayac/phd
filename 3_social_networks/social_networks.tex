@@ -16,10 +16,133 @@
 %: ------------------------------- content ----------------------------- 
 % ----------------------------------------------------------------------
 
-\section{Definition of Social Network}
+From the first ever email to video calls on the go,
+the Internet has always been about social communication.
+Historically, communities formed around Usenet mailing lists or Bulletin Board Systems,
+starting from the early eighties, often around all sorts of topics like fine arts,
+literature, and philosophy (\emph{e.g.}, \texttt{humanities.classics}
+or \texttt{humanities.design.misc}).
+Then, starting from the late eighties, Internet Relay Chats (IRC)
+allowed people to communicate interactively and in realtime, organized in channels
+(\emph{e.g.}, \texttt{\#linux}).
+Starting from the nineties, blogs began to spree,
+reaching mainstream popularity somewhere in mid-2000.
+While the early social communities where created entirely \emph{ad-hoc} whenever someone logged in to a system,
+the first social networks, among them SixDegrees.com in 1997,
+allowed people to maintain a public profile
+with a list of connections (``friends'') that others could browse.
+In~\cite{Ellison2007}, Boyd and Ellison define the term \emph{social network site (SNS)}:
+\begin{quotation}
+\textit{``We define social network sites as web-based services that allow individuals to
+(1) construct a public or semi-public profile within a bounded system,
+(2) articulate a list of other users with whom they share a connection, and
+(3) view and traverse their list of connections and those made by others within the system.
+The nature and nomenclature of these connections may vary from site to site.''}
+\end{quotation}
 
-\section{Classification of Social Networks}
+Literature on social networks in general oftentimes uses the term SNS,
+however, in order to differentiate ourselves from the therein defined idea of social network,
+we decided to avoid the term altogether in favor of a more open definition of social network,
+which we detail in the following. 
+
+\section{Definition of Social Network} \label{sec:definition}
+In this Section, we define the terms that we will use throughout this thesis
+in order to avoid any ambiguity.
+In particular, we show that social networks have
+different levels of support for media items.
+
+\begin{description}
+  \item[Media Item:] A media item is defined as an image or video file
+that gets distributed via a social network.
+An example can be a photo of a baby that
+a parent shares on Instagram\footnote{http://instagram.com/}.
+
+  \item[Micropost:]
+A micropost is defined as a textual status message that can optionally accompany a media item.
+An example can be the status update
+\emph{``life is full of wonders, and you are one of them''}
+posted on Facebook that contains the previously shared photo of the baby.
+
+  \item[Social Network:]
+A social network is an online service or media platform
+that focuses on building and reflecting social relationships among
+people who share interests and/or activities.
+\end{description}
+
+The boundary between social networks and media platforms is blurred.
+Several media sharing platforms~(\emph{e.g.}, YouTube\footnote{http://youtube.com/})
+enable people to upload content and optionally allow other people to react
+to this content in the form of comments, likes or dislikes.
+On other social networks~(\emph{e.g.}, Facebook\footnote{http://facebook.com/}),
+users can update their status, post links to stories, upload media content
+and also give readers the option to react.
+Finally, there are hybrid clients~(\emph{e.g.}, TweetDeck\footnote{http://www.tweetdeck.com/}
+by Twitter together with Twitpic\footnote{http://twitpic.com/}), where social networks integrate with media platforms, typically via third party applications.
 
 \section{Description of Popular Social Networks}
+
+\subsection{Google+}
+
+\subsection{MySpace}
+
+\subsection{Facebook}
+
+\subsection{Twitter}
+
+\subsection{Instagram}
+
+\subsection{YouTube}
+
+\subsection{Flickr}
+
+\subsection{MobyPicture}
+
+\subsection{Twitpic}
+
+\subsection{img.ly}
+
+\subsection{yfrog}
+
+\section{Classification of Social Networks}
+As motivated in \autoref{sec:definition}, different social networks have varying support
+for media items, ranging from native in media-centric social networks
+to optional in micropost-centric social networks.
+In order to differentiate social networks by their support level for media items,
+we introduce the following classification:
+
+\begin{itemize}
+  \item \emph{First-order support}: The social network is centered on media items and posting requires the inclusion of a media item (\emph{e.g.}, YouTube, Flickr);
+  \item \emph{Second-order support}: The social network lets users upload media items but it is also possible to post only textual messages (\emph{e.g.}, Facebook);
+  \item \emph{Third-order support}: The social network has no direct support for media items but relies on third party application to host media items,
+which are linked to the status update (\emph{e.g.}, Twitter before the introduction of native photo support).
+\end{itemize}
+
+In our thesis, we consider 11 different social networks that represent all together most of the market share.
+The criteria for inclusion follow a study performed by the company Sysomos, specialized in social media monitoring and analytics~\cite{Levine2011}.
+\autoref{tab:platforms} lists these social networks according to the categorization defined above.
+
+\begin{table}[htbp]
+  {\small
+  \begin{tabular}{|l|l|l|p{8cm}|}
+    \hline
+    \textbf{Social Network} & \textbf{URL} & \textbf{Category} & \textbf{Comment}\\
+    \hline
+	Google+ & \url{http://google.com/+} & second-order & Links to media items are returned via the Google+ API.\\
+	MySpace & \url{http://myspace.com} & second-order & Links to media items are returned via the MySpace API.\\
+	Facebook & \url{http://facebook.com} & second-order & Links to media items are returned via the Facebook API.\\
+	Twitter & \url{http://twitter.com} & second-/third-order & In second order mode, links to media items are returned via the Twitter API. In third order mode, Web scraping or media platform API usage are necessary to retrieve links to media items. Many people use Twitter in third order mode with other media platforms.\\\hline
+	Instagram & \url{http://instagram.com} & first-order & Links to media items are returned via the Instagram API.\\
+	YouTube & \url{http://youtube.com} & first-order & Links to media items are returned via the YouTube API.\\
+	Flickr & \url{http://flickr.com} & first-order & Links to media items are returned via the Flickr API.\\
+	MobyPicture & \url{http://mobypicture.com} & first-order & Media platform for Twitter. Links to media items are returned via the MobyPicture API.\\
+	Twitpic & \url{http://twitpic.com} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
+	img.ly & \url{http://img.ly} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
+	yfrog & \url{http://yfrog.com} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
+	\hline
+  \end{tabular}
+  }
+  \caption[11 social networks with different level of support for media items]{11 social networks with different level of support for media items and techniques needed to retrieve them}
+  \label{tab:platforms}  
+\end{table}
 
 \section{Conclusion}

@@ -267,25 +267,25 @@ as listed below:
 \item \texttt{XOXO} is a~format for defining a~new XHTML document type for subsetting and extending XHTML, which serves as the basis for XHTML-friendly outlines for processing by XML engines, and for easy interactive rendering by browsers.
 \end{itemize}
 
-\begin{lstlisting}[caption={[Sample code snippet with embedded hCard Microformat mark-up.]{Sample code snippet with embedded \texttt{hCard} \uwave{Microformat} mark-up. Source: \url{http://microformats.org/wiki/hcard}}},label={code:microformats}]
-<div class="\uwave{vcard}">
-  <a class="\uwave{fn org url}" href="http://www.commerce.net/">CommerceNet</a>
-  <div class="\uwave{adr}">
-    <span class="\uwave{type}">Work</span>:
-    <div class="\uwave{street-address}">169 University Avenue</div>
-    <span class="\uwave{locality}">Palo Alto</span>,  
-    <abbr class="\uwave{region}" title="California">CA</abbr>&nbsp;&nbsp;
-    <span class="\uwave{postal-code}">94301</span>
-    <div class="\uwave{country-name}">USA</div>
+\begin{lstlisting}[caption={[Sample code snippet with embedded hCard Microformat mark-up.]{Sample code snippet with embedded \texttt{hCard} Microformat mark-up. Source: \url{http://microformats.org/wiki/hcard}}},label={code:microformats}]
+<div class="vcard">
+  <a class="fn org url" href="http://www.commerce.net/">CommerceNet</a>
+  <div class="adr">
+    <span class="type">Work</span>:
+    <div class="street-address">169 University Avenue</div>
+    <span class="locality">Palo Alto</span>,  
+    <abbr class="region" title="California">CA</abbr>&nbsp;&nbsp;
+    <span class="postal-code">94301</span>
+    <div class="country-name">USA</div>
   </div>
-  <div class="\uwave{tel}">
-   <span class="\uwave{type}">Work</span> +1-650-289-4040
+  <div class="tel">
+   <span class="type">Work</span> +1-650-289-4040
   </div>
-  <div class="\uwave{tel}">
-    <span class="\uwave{type}">Fax</span> +1-650-289-4041
+  <div class="tel">
+    <span class="type">Fax</span> +1-650-289-4041
   </div>
   <div>Email: 
-   <span class="\uwave{email}">info@commerce.net</span>
+   <span class="email">info@commerce.net</span>
   </div>
 </div>
 \end{lstlisting}
@@ -307,14 +307,14 @@ The Microdata specification introduces a~set of new attributes to HTML:
 
 An example of Microdata in HTML can be seen in Figure~\ref{code:microdata}
 
-\begin{lstlisting}[caption={[Sample code snippet with \uwave{Microdata} mark-up.]{Sample code snippet with Microdata mark-up. Source: \url{http://www.w3.org/TR/microdata/}}},label={code:microdata}]
-<div \uwave{itemscope}>
-  <p>My name is <span \uwave{itemprop}="name">Neil</span>.</p>
+\begin{lstlisting}[caption={[Sample code snippet with Microdata mark-up.]{Sample code snippet with Microdata mark-up. Source: \url{http://www.w3.org/TR/microdata/}}},label={code:microdata}]
+<div itemscope>
+  <p>My name is <span itemprop="name">Neil</span>.</p>
   <p>
     My band is called
-    <span \uwave{itemprop}="band">Four Parts Water</span>.
+    <span itemprop="band">Four Parts Water</span>.
   </p>
-  <p>I am <span \uwave{itemprop}="nationality">British</span>.</p>
+  <p>I am <span itemprop="nationality">British</span>.</p>
 </div>
 \end{lstlisting}
 
@@ -415,11 +415,11 @@ and the encoding is 7-bit US-ASCII.
 \autoref{code:ntriples-syntax} shows the previously introduced sample graph serialized in N-Triples.
 
 \begin{lstlisting}[caption={A sample graph in N-Triples syntax.},label={code:ntriples-syntax}]
-\_:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
+_:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
     <http://xmlns.com/foaf/0.1/Person> .
-\_:1 <http://xmlns.com/foaf/0.1/name>
+_:1 <http://xmlns.com/foaf/0.1/name>
     "John X. Foobar" .
-\_:1 <http://xmlns.com/foaf/0.1/mbox_sha1sum>
+_:1 <http://xmlns.com/foaf/0.1/mbox_sha1sum>
     "cef817456278b70cee8e5a1611539ef9d928810e" .
 \end{lstlisting}
 

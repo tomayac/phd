@@ -57,7 +57,6 @@
 \usepackage[T1]{fontenc}
 
 \usepackage{amssymb}
-\usepackage{ulem}
 \usepackage[pdftex]{graphicx} % for improved inclusion of graphics
 %\usepackage{wrapfig} % to include figure with text wrapping around it
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption} % for improved layout of figure captions with extra margin, smaller font than text
