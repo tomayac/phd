@@ -30,7 +30,7 @@ reaching mainstream popularity somewhere in mid-2000.
 While the early social communities where created entirely \emph{ad-hoc} whenever someone logged in to a system,
 the first social networks, among them SixDegrees.com in 1997,
 allowed people to maintain a public profile
-with a list of connections (``friends'') that others could browse.
+with a list of connections (\emph{friends}) that others could browse.
 In~\cite{Ellison2007}, Boyd and Ellison define the term \emph{social network site (SNS)}:
 \begin{quotation}
 \textit{``We define social network sites as web-based services that allow individuals to
@@ -80,29 +80,71 @@ Finally, there are hybrid clients~(\emph{e.g.}, TweetDeck\footnote{http://www.tw
 by Twitter together with Twitpic\footnote{http://twitpic.com/}), where social networks integrate with media platforms, typically via third party applications.
 
 \section{Description of Popular Social Networks}
-In this Section, we introduce several social networks and their key features.
+In this Section, we introduce several social networks
+and their for our approach relevant key features.
 
 \subsection{Google+}
 Google+, sometimes transcribed as Google Plus and abbreviated as G+, is Google's social network.
 It was opened to the general public on September 20, 2011.
-The social network's main feature are so-called \emph{circles},
-which allow users to organize contacts into groups for sharing.
-Circles can be managed through a drag-and-drop interface that
-replaces the typical friends list function used by other social networks.
-Circles can also be shared, \emph{e.g.}, for the distribution of curated lists of
-people that are active in a certain field.
 Google+ has native image support.
 Images can either be manually uploaded when authoring a new micropost,
 or automatically via the Google+ mobile application.
-Videos are displayed in an inline view so that they can be viewed directly on the website,
-however, the network does not allow for videos to be uploaded directly.
+External videos, for example from the also Google-owned YouTube website,
+but also from other services, are displayed in an inline view
+so that they can be viewed directly on the website,
+however, the network also allows for videos to be uploaded directly,
+or be recorded via webcam.
+People can \emph{+1} content they like via a designated +1 button
+that can also be embedded on other websites.
+Individual microposts can also be shared.
+Google+ has a unidirectional relationship model (follow model).
 
-\subsection{MySpace}
-
+\subsection{Myspace}
+Myspace, formerly MySpace and My\_\_\_\_\_ (\emph{sic}), is a social networking service owned by Specific Media LLC and pop star Justin Timberlake.
+The social network launched in August 2003.
+Once in June 2006 the most visited website in the United States, the network's importance
+is steadily declining since.
+Instead of as a social networking website,
+Myspace has attempted to redefine itself as a social entertainment website,
+putting more focus on music, movies, celebrities, and TV.
+As such, Myspace has native image, video, and, via special musician profiles, audio support.
+Videos can either be uploaded, or be recorded via webcam.
+In January 2012 in collaboration with Panasonic, a rebranding strategy to Myspace TV was unveiled
+with an exclusive focus on social TV that would allow people  to watch and comment on videos.
+People can \emph{Like} certain content they like via a designated Like link.
+Myspace has a bidirectional relationship model (friend model),
+with an optional unidirectional relationship model (follow model),
+typically for following celebrities etc.
 
 \subsection{Facebook}
+Facebook is a social networking service launched in February 2004,
+operated and privately owned by Facebook Inc.
+At time of writing, Facebook is the most popular social network
+and the second-most visited website (after Google).
+Facebook has native image and video support,
+allowing people to upload an unlimited amount of media items.
+Images and videos can also be recorded via webcam.
+People can \emph{Like} content they like via a designated Like button
+that can also be embedded on other websites.
+Individual microposts can also be shared.
+Facebook has a bidirectional relationship model (friend model),
+with an optional unidirectional relationship model (follow model),
+typically for following celebrities etc.
 
 \subsection{Twitter}
+Twitter is an online social networking service and microblogging service
+that enables its users to send and read microposts of up to 140 characters.
+These microposts are referred to as \emph{tweets}.
+Twitter was founded in March 2006 by Jack Dorsey and launched to the public in July 2006.
+As of August 2011, Twitter has native image support,
+which allows users to upload images to the service, however, at time of writing,
+webcams are not supported.
+Videos are not supported natively, however, as with images before (and partly still today),
+an ecosystem of media platforms takes care of that need.
+People can \emph{ReTweet} content they like either via a designated ReTweet button,
+or---following the prior, but still widely popular, manual ReTweet convention---by
+quoting a Twitter user by prepending ``RT @username:'' in front of the original tweet.
+Twitter has a unidirectional relationship model (follow model).
 
 \subsection{Instagram}
 
@@ -143,7 +185,7 @@ The criteria for inclusion follow a study performed by the company Sysomos, spec
     \textbf{Social Network} & \textbf{URL} & \textbf{Category} & \textbf{Comment}\\
     \hline
 	Google+ & \url{http://google.com/+} & second-order & Links to media items are returned via the Google+ API.\\
-	MySpace & \url{http://myspace.com} & second-order & Links to media items are returned via the MySpace API.\\
+	Myspace & \url{http://myspace.com} & second-order & Links to media items are returned via the Myspace API.\\
 	Facebook & \url{http://facebook.com} & second-order & Links to media items are returned via the Facebook API.\\
 	Twitter & \url{http://twitter.com} & second-/third-order & In second order mode, links to media items are returned via the Twitter API. In third order mode, Web scraping or media platform API usage are necessary to retrieve links to media items. Many people use Twitter in third order mode with other media platforms.\\\hline
 	Instagram & \url{http://instagram.com} & first-order & Links to media items are returned via the Instagram API.\\
