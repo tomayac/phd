@@ -183,7 +183,7 @@ the other party having to confirm.
 \subsection{MobyPicture}
 MobyPicture is a~mobile messaging service owned by entrepreneur Mathys van Abbe.
 Users of the service can upload an unlimited number of images and videos to the service.
-MobyPicture integrates with a number of third party social networks.
+MobyPicture integrates with a~number of third party social networks.
 The service natively supports videos and images,
 which can either be uploaded, or be recorded via webcam.
 People can \emph{Favorite} content they like via a~designated button,
@@ -192,17 +192,25 @@ Twitters \emph{Tweet} button.
 MobyPicture has a~unidirectional relationship model (follower model).
 
 \subsection{Twitpic}
-Twitpic is a service that allows users to upload images and videos and
+Twitpic is a~service that allows users to upload images and videos and
 optionally integrates with Twitter.
 TwitPic was launched in 2008 by Noah Everett.
 While TwitPic can be used independent from Twitter, the integration is made easy
 with TwitPic usernames and passwords being the same as the ones on Twitter.
 Twitpic integrates with Twitter via the \emph{Tweet} button.
-The service has no own relationship model, but outsources following users to Twitter.
+The service has no own relationship model, but uses a~user's social graph on Twitter.
 
-\subsection{img.ly}
+\subsection{Img.ly}
+Img.ly is an image hosting service operated by 9elements GmbH.
+It integrates deeply with Twitter, however, can also be used independently.
+Img.ly integrates with Twitter's \emph{Tweet} button. 
+The service has no own relationship model, but uses a~user's social graph on Twitter.
 
-\subsection{yfrog}
+\subsection{Yfrog}
+Yfrog is an image and video hosting service run by ImageShack that was launched in February 2009.
+While the service is deeply integrated with Twitter, it can be used independently as well.
+Yfrog integrates with Twitter's \emph{Tweet} button.
+The service has no own relationship model, but uses a~user's social graph on Twitter.
 
 \section{Classification of Social Networks}
 As motivated in \autoref{sec:definition}, different social networks have varying support
@@ -237,8 +245,8 @@ The criteria for inclusion follow a~study performed by the company Sysomos, spec
 	Flickr & \url{http://flickr.com} & first-order & Links to media items are returned via the Flickr API.\\
 	MobyPicture & \url{http://mobypicture.com} & first-order & Media platform for Twitter. Links to media items are returned via the MobyPicture API.\\
 	Twitpic & \url{http://twitpic.com} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
-	img.ly & \url{http://img.ly} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
-	yfrog & \url{http://yfrog.com} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
+	Img.ly & \url{http://img.ly} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
+	Yfrog & \url{http://yfrog.com} & first-order & Media platform for Twitter. Links to media items must be retrieved via Web scraping.\\
 	\hline
   \end{tabular}
   }
