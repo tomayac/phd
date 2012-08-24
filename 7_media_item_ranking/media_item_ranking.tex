@@ -42,8 +42,6 @@ Based on this set of features,
 additional \textbf{aesthetic} features
 can be defined and exploited to obtain appealing
 and harmonic media galleries.
-% RV: How to extract aesthetic features? Aren't aesthetics part of the visual, audial, and textual components?
-% TS: Added an additional sentence to clarify.
 
 \begin{figure}[htb]
 \centering
@@ -117,9 +115,6 @@ view counts, expressions of (dis)likes, user diversity, \emph{etc}.
 Prior work~\cite{Khrouf2012} allows us to not only examine these effects
 on a~\emph{single} social network,
 but in a~\emph{network-agnostic} way across multiple social networks.
-% RV: Damn, I'd want a reference for "previous work", but we're running out of space.
-% An option is to typeset references in small (and to undo the vspace fix I did that currently shortens the paper length).
-% TS: The problem is that the ICMR paper was rejected. 
 
 \noindent \textbf{Aesthetic}
 This category regards the desired outcome after the ranking, \emph{i.e.},
@@ -130,8 +125,6 @@ photo aesthetics \emph{per se}~\cite{Photo2012},
 video and music playlist generation~\cite{YouTube2010,Playlist2006},
 however media gallery composition requires mixing video
 \emph{and} image media items.
-% RV: Now it becomes indeed clear that aesthetics is not an extracted feature, but a post-factum criterium, right?
-% TS: Hopefully.
 
 \section{Media Gallery Aesthetics}
 
@@ -181,6 +174,168 @@ In the coming months, we will apply those principles
 to a large collection of media items related to events,
 and, via multivariate tests, measure user engagement
 for different feature configurations.
+
+\section{Evaluating Subjective Data}
+Evaluating subjective data, like \emph{the} correct ranking
+for a~set of media items, is a~challenging task.
+For different users, there may be different optimal settings.
+In order to get familiar with subjective evaluation techniques,
+we have worked on a~side project with subjective data.
+
+In May 2012, the Web search engine Google has introduced the so-called Knowledge Graph,
+a~graph that understands real-world entities and their relationships to one another.
+With the introduction of the Knowledge Graph, the search engine Google
+has made a~significant paradigm shift towards \textit{``things, not strings''}~\cite{singhal2012},
+as a~post on the official Google blog states.
+Entities covered by the Knowledge Graph include landmarks, celebrities, cities, sports
+teams, buildings, movies, celestial objects, works of art, and more.
+The graph enhances Google search in three main ways:
+by disambiguation of search queries,
+by search log-based summarization of key facts,
+and by explorative search suggestions.
+With this work, we suggest a~fourth way of enhancing Web search:
+through the addition of realtime coverage
+of what people say about real-world entities on social networks.
+We report on a~browser extension that seamlessly adds relevant microposts
+from the social networking sites \googleplus, Facebook, and Twitter
+in form of a~panel to Knowledge Graph entities.
+In a~true Linked Data fashion, we interlink detected concepts in microposts
+with Freebase entities, and evaluate our approach for both relevancy and usefulness.
+The extension is freely available,
+we invite the reader to reconstruct the examples of this work
+to see how realtime opinions may have changed since time of writing.
+
+Google News is a~news aggregator portal provided and operated by Google.
+Earlier this year, a~new feature called \emph{realtime coverage}
+was added to the portal~\cite{zuccarino2012}, providing signed in US \googleplus users
+with the latest relevant posts from the \googleplus community for news stories.
+
+We have implemented a~social network-agnostic approach
+to add realtime coverage to Knowledge Graph results via a~browser extension.
+The extension is freely available on the Chrome Web
+Store\footnote{Knowledge Graph Socializer extension (\url{http://goo.gl/rzdVK})};
+an also free Google API key is required.
+
+\section{Methodology}
+Chrome extensions are small software programs that users can install
+to enrich their browsing experience.
+Via so-called \emph{content scripts}, extensions can inject and modify the contents of Web pages.
+We have implemented an extension that gets activated when a~user uses Google to search the Web.
+If the extension detects that the current search engine results page
+has an associated real-world entity in the Knowledge Graph,
+first, it extracts the entity's name and Wikipedia URL.
+Second, the extension performs full-text searches via the search APIs of
+the popular social networking sites \googleplus, Twitter, and Facebook
+and returns the top $n$ results (configurable) of each network.
+Third, all microposts get analyzed and annotated via part-of-speech tagging.
+For each (pair of) nouns, the Freebase search API is used
+to link these strings with entities,
+a~task commonly known as \emph{entity linking}~\cite{spitkovsky2012}.
+We follow a~context-free, most frequent sense approach,
+which, according to Agirre and Edmonds~\cite{agirre2007},
+serves as a~surprisingly strong baseline,
+an observation that we can confirm in our evaluation of micropost \emph{relevancy}
+in \autoref{sec:relevancy}.
+In a~final step, the resulting set of microposts is ordered chronologically
+and attached in form of a~separate panel to the Knowledge Graph result.
+A~screenshot with exemplary extension output for the entity
+\emph{``Isabella Stewart Gardner Museum''} in Boston, MA,
+is online\footnote{Screenshot of the extension (\url{http://twitpic.com/a8zgiq/full})}. 
+
+\section{Evaluation}
+For the evaluation, we have considered 100 microposts from 94 unique users,
+out of which 72 microposts contained outbound links to overall 94 Web pages.
+We have evaluated the extension on 21 real-world entities starting from the concept
+\emph{``Boston,~MA''}, and then recursively following graph links to related concepts.
+Our evaluation criteria were \emph{usefulness} of the information
+contained in both the microposts and the potentially linked-to Web pages,
+and the \emph{relevancy} of the microposts to the real-world entities in question.
+We have calculated the Mean~Opinion Score (MOS)~\cite{mos1998} for both criteria.
+
+Traditionally, MOS is used for conducting subjective evaluations
+of telephony network transmission quality,
+however, more recently, MOS has also found wider usage in the multimedia community
+for evaluating \emph{per se} subjective things
+like perceived quality from the users' perspective. 
+Therefore, a~set of standard, subjective tests are conducted,
+where a~number of users rate the quality of test samples
+with scores ranging from 1 (worst) to 5 (best).
+The actual MOS is then the arithmetic mean of all individual scores.
+Given our intrinsically subjective evaluation criteria,
+namely \emph{usefulness} and \emph{relevancy},
+MOS provides a~meaningful way to judge the overall quality of our approach.
+
+For \emph{relevancy}, the MOS was 4.38 out of 5.
+For \emph{usefulness}, we have calculated a~MOS of 3.75 out of 5.
+Our complete evaluation is available online\footnote{Evaluation (\url{http://goo.gl/dbvr4})}.
+In the following, we provide an interpretation of the MOS results for both criteria.
+
+\paragraph{Usefulness:}
+The MOS of 3.75 suggests potential for improvement,
+albeit the information from the microposts and linked-to Web pages
+was overall still considered useful.
+Positively rated revealed insights were, among others, recommended restaurants,
+suggested things to do, scheduled future or past events,
+special (not necessarily advertisement-like) offers, user-generated photos,
+news articles, travel tips, or stories of everyday life.
+On closer inspection, the microposts that teared down the \emph{usefulness} MOS
+were in the majority of cases still rated relatively high for \emph{relevancy}.
+We could track down the relevant but not useful microposts to three categories:
+(i) long microposts (\googleplus, Facebook) that mentioned the concept somewhere,
+but that were too long to skim,
+(ii) so-called
+@Replies\footnote{``What are @Replies and Mentions?'' (\url{http://goo.gl/Ge2RG})}
+on Twitter that are messages to other Twitter users,
+but that lack the context of the conversation, and finally
+(iii) so-called native check-in messages on \googleplus,
+together with shared Foursquare check-in messages on Twitter and Facebook
+via connected user profiles\footnote{``Connecting/sharing to Facebook and Twitter'' (\url{http://goo.gl/NBuCr})}
+that are geotagged (and thus relevant), however,
+provide no other information besides the fact that a~user was at a~certain place.
+By disregarding all three types of microposts, the MOS could be increased to 3.94.
+
+\paragraph{Relevancy:} \label{sec:relevancy}
+The high MOS of 4.38 shows that the microposts
+were in the majority of cases considered very relevant.
+On the one hand, this is due to the well-chosen titles of concepts in the graph,
+which oftentimes are either unique enough (\emph{e.g.}, \emph{``\underline{Faneuil} Hall''}),
+or on the other hand, include some sort of disambiguation aid
+(\emph{e.g.}, \emph{``Museum of Science, \underline{Boston}''}).
+In~\cite{spitkovsky2012}, Spitkovsky and Chang have collected
+an extensive set of link titles for Wikipedia concepts
+and shown that an entirely context-free approach
+to linking strings with concepts does consistently well.
+Together with the observation above, this justifies
+our concept title-based full-text search approach on social networking sites,
+reflected by the MOS.
+
+\section{Future Work and Conclusion}
+Each concept in the Knowledge Graph has a~unique identifier~\cite{thalhammer2012}.
+Exploiting this fact and considering that Knowledge Graph results
+have already been interlinked via \texttt{owl:sameAs}
+with Freebase entities~\cite{glaser2012},
+we can imagine a~comments archive of things people said about real-world entities.
+The SIOC Ontology~\cite{breslin2005} by Breslin \emph{et al.}
+provides an ideal vocabulary for such archive,
+as both the context of the comments and their provenance can be described.
+Taking it one step further, we can think of not only archiving user comments,
+but also adding meaning to them~\cite{steiner2013},
+which would allow for interesting use cases
+like searching for places that are frequented by celebrities.
+
+Concluding, in this work we have shown how realtime coverage
+can be added to Knowledge Graph results via a~browser extension.
+We have evaluated both the \emph{usefulness} and \emph{relevancy}
+of the returned microposts and linked-to Web pages,
+and have given an outlook on how via a~potentially enriched comments archive
+about real-world entities, further use cases can be covered.
+Through this work, we have demonstrated how the rather static, structured world
+of real-world facts from the Knowledge Graph
+(with facts like foundation date, opening hours, spouse, etc.),
+can be successfully combined for fun and profit
+with the rather dynamic, \emph{a~priori} unstructured world
+of social network microposts.
+ficken
 
 \section{Ranking Formula}
 
