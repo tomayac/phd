@@ -16,7 +16,7 @@
 %: ------------------------------- content ----------------------------- 
 % ----------------------------------------------------------------------
 
-\section{Introduction}
+\section{Aesthetic Principles for the Automatic Generation of Media Galleries}
 In this section, we present and define aesthetic principles
 for the automatic generation of media galleries
 based on media items retrieved from social networks
@@ -50,7 +50,7 @@ and harmonic media galleries.
 \label{fig:media-gallery}
 \end{figure}
 
-\section{Related Work}
+\subsection{Related Work}
 While enormous efforts have been made to extract those features
 from media items and microposts on social networks in \emph{isolation},
 to the best knowledge of the authors, remarkably less initiatives 
@@ -77,7 +77,7 @@ Finally, social networks present images and videos
 often in grid-like galleries\footnote{\url{http://twitpic.com/904yka/full}}, sometimes scaled
 based on the amount of comments.
 
-\section{Media Item Ranking Criteria}
+\subsection{Media Item Ranking Criteria}
 In this section, we describe several feature categories that can serve to rank
 media items retrieved from social networks. 
 We assume (and are working on) media item extractors that,
@@ -126,7 +126,7 @@ video and music playlist generation~\cite{YouTube2010,Playlist2006},
 however media gallery composition requires mixing video
 \emph{and} image media items.
 
-\section{Media Gallery Aesthetics}
+\subsection{Media Gallery Aesthetics}
 
 \noindent \textbf{Definition}
 A media gallery in our context is a compilation of images or videos
@@ -167,7 +167,7 @@ at a time should be limited.
 Depending on the event, a consistent or a contrasty overall
 appearance of items may be desired, also for transitions.
 
-\section{Conclusion}
+\subsection{Conclusion}
 We have introduced media item ranking criteria, and
 aesthetic audial and visual principles for media galleries.
 In the coming months, we will apply those principles
@@ -216,7 +216,7 @@ The extension is freely available on the Chrome Web
 Store\footnote{Knowledge Graph Socializer extension (\url{http://goo.gl/rzdVK})};
 an also free Google API key is required.
 
-\section{Methodology}
+\subsection{Methodology}
 Chrome extensions are small software programs that users can install
 to enrich their browsing experience.
 Via so-called \emph{content scripts}, extensions can inject and modify the contents of Web pages.
@@ -242,7 +242,7 @@ A~screenshot with exemplary extension output for the entity
 \emph{``Isabella Stewart Gardner Museum''} in Boston, MA,
 is online\footnote{Screenshot of the extension (\url{http://twitpic.com/a8zgiq/full})}. 
 
-\section{Evaluation}
+\subsection{Evaluation}
 For the evaluation, we have considered 100 microposts from 94 unique users,
 out of which 72 microposts contained outbound links to overall 94 Web pages.
 We have evaluated the extension on 21 real-world entities starting from the concept
@@ -309,7 +309,7 @@ Together with the observation above, this justifies
 our concept title-based full-text search approach on social networking sites,
 reflected by the MOS.
 
-\section{Future Work and Conclusion}
+\subsection{Future Work and Conclusion}
 Each concept in the Knowledge Graph has a~unique identifier~\cite{thalhammer2012}.
 Exploiting this fact and considering that Knowledge Graph results
 have already been interlinked via \texttt{owl:sameAs}
