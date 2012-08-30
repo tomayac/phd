@@ -1,0 +1,92 @@
+BODY {
+  font-size: 12pt;
+  font-family: sans-serif;
+  
+}
+
+H1 {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: darkblue;
+}
+
+H2 {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: blue;
+}
+
+DIV.item {
+  padding-top: 2em;
+  width: 100%;
+}
+
+TD.legend {
+  vertical-align: top;
+  background-color: lightgray;
+  width: 30em !important;
+}
+
+TD.asset {
+  background-color: orange;  
+  width: 60em !important;  
+}
+
+IMG.photo {
+  height: 100px !important;
+  margin: 0.2em;
+}
+
+TD.asset > VIDEO {
+  height: 100px !important;
+}
+
+TD.mediaurl {
+  background-color: orange;    
+  width: 60em !important;    
+}
+
+TD.type {
+  background-color: orange;    
+  width: 60em !important;    
+}
+
+TD.storyurl {
+  background-color: orange;    
+  width: 60em !important;    
+}
+
+TD.message {
+  background-color: orange;    
+  width: 60em !important;  
+}
+
+TD.clean {
+  background-color: orange;    
+  width: 60em !important;    
+}
+
+TD.translation {
+  background-color: orange;
+  width: 60em !important;        
+}
+
+TD.entities {
+  background-color: orange;
+  width: 60em !important;        
+}
+
+TD.message {
+  background-color: orange;
+  width: 60em !important;        
+}
+
+TD.user {
+  background-color: orange;    
+  width: 60em !important;    
+}
+
+TD.published {
+  background-color: orange;
+  width: 60em !important;      
+}

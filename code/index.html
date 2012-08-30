@@ -1,0 +1,130 @@
+<html>
+  <head>    
+    <meta charset="utf-8"/>
+    <title>Social Media Illustrator</title>
+    <link rel="stylesheet" href="main.css" />
+    <script src="histogram.js"></script>
+  </head>
+  <body>
+    <h1>Social Media Illustrator</h1>
+    <form method="get" id="search_form" onsubmit="return false;">
+      <input name="query" id="query" />
+      <label for="query">Query<label>
+      <input type="submit" value="OK" />
+    </form>
+    <div id="results"></div>
+    <script type="application/javascript">
+      (function() {
+        var illustrator = {        
+          DEBUG: false,
+          MEDIA_SERVER: 'http://localhost:8001/search',
+          loaded: {},
+          /**
+           * Initialzes the application
+           */
+          init: function() {
+            if (illustrator.DEBUG) console.log('init');
+            illustrator.reset();
+            
+            var searchForm = document.getElementById('search_form');
+            searchForm.addEventListener('submit', function(e) {
+              if (e.target.nodeName.toLowerCase() !== 'form') {
+                return;
+              }
+              illustrator.reset();
+              var query = document.getElementById('query').value;
+              illustrator.search(query);
+              return false;
+            }, false);
+          },
+          /**
+           * Resets all GUI elements
+           */
+           reset: function reset() {             
+             if (illustrator.DEBUG) console.log('reset');
+             var resultsDiv = document.getElementById('results');
+             resultsDiv.innerHTML = '';
+             var query = document.getElementById('query').value;
+             query.value = '';      
+             illustrator.loaded = {};       
+           },
+          /**
+           * Searches for a term on a plethora of social media platforms
+           */
+          search: function(query) {
+            if (illustrator.DEBUG) console.log('search ' + query);
+            if (!illustrator.DEBUG) {
+              var xhr = new XMLHttpRequest();
+              xhr.onreadystatechange = function (e) {
+                if (xhr.readyState == 4) {
+                  if (xhr.status == 200) {
+                    var results = JSON.parse(xhr.responseText);
+                    illustrator.render(results);
+                  }        
+                }
+              }
+              var url = illustrator.DEBUG ?
+                  './output.json' :
+                  illustrator.MEDIA_SERVER + '/combined/' + encodeURIComponent(query);
+              xhr.open("GET", url, true);
+              xhr.send(null);            
+            } else {
+              var results =
+                  typeof output === 'string' ? JSON.parse(output) : output;
+              illustrator.render(results);
+            }
+            return false;
+          },
+          /**
+           * Renders the results
+           */
+          render: function(results) {
+            var resultsDiv = document.getElementById('results');
+            Object.keys(results).forEach(function(service) {              
+              results[service].forEach(function(item) {                
+                // media asset
+                if (item.type === 'photo') {
+                  var image = new Image();
+                  image.setAttribute('class', 'photo');
+                  image.onload = function() {
+                    image.onerror = function() {                      
+                      image.parentNode.removeChild(image);
+                      delete illustrator.loaded[image.src];
+                      console.log('Removed ' + image.src);
+                    };
+                    illustrator.histogram(image);
+                  };
+                  resultsDiv.appendChild(image);
+                  image.src = item.mediaurl;
+                  // make sure the load event fires for cached images too
+                  if (image.complete || image.complete === undefined ) {
+                    image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+                    image.src = src;
+                  } 
+                  illustrator.loaded[item.mediaurl] = false;
+                }
+              });
+            });
+          },
+          histogram: function(img) {
+            if (img == null) {
+              return;
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext('2d');       
+            img.parentNode.insertBefore(canvas, img);              
+            img.parentNode.removeChild(img);
+            img.crossOrigin = "Anonymous";
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            console.log(Histogram.getHistogram(ctx));            
+          }
+        };
+        
+        // init
+        illustrator.init();     
+      })();
+    </script>
+  </body>
+</html>
