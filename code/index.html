@@ -17,7 +17,8 @@
       (function() {
         var illustrator = {        
           DEBUG: false,
-          MEDIA_SERVER: 'http://localhost:8001/search',
+          MEDIA_SERVER: 'http://localhost:8001/search/',
+          PROXY_SERVER: 'http://localhost:8001/proxy/',
           loaded: {},
           /**
            * Initialzes the application
@@ -65,7 +66,7 @@
               }
               var url = illustrator.DEBUG ?
                   './output.json' :
-                  illustrator.MEDIA_SERVER + '/combined/' + encodeURIComponent(query);
+                  illustrator.MEDIA_SERVER + 'combined/' + encodeURIComponent(query);
               xhr.open("GET", url, true);
               xhr.send(null);            
             } else {
@@ -95,12 +96,13 @@
                     illustrator.histogram(image);
                   };
                   resultsDiv.appendChild(image);
-                  image.src = item.mediaurl;
+                  var source = illustrator.PROXY_SERVER + item.mediaurl;
+                  image.src = source;
                   // make sure the load event fires for cached images too
                   if (image.complete || image.complete === undefined ) {
                     image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-                    image.src = src;
-                  } 
+                    image.src = source;
+                  }
                   illustrator.loaded[item.mediaurl] = false;
                 }
               });
@@ -114,11 +116,39 @@
             canvas.width = img.width;
             canvas.height = img.height;
             var ctx = canvas.getContext('2d');       
-            img.parentNode.insertBefore(canvas, img);              
-            img.parentNode.removeChild(img);
-            img.crossOrigin = "Anonymous";
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            console.log(Histogram.getHistogram(ctx));            
+            
+            var similarityCanvas = document.createElement('canvas');
+            similarityCanvas.width = img.width;
+            similarityCanvas.height = img.height;
+            var similarityCtx = similarityCanvas.getContext('2d');       
+            
+            img.parentNode.insertBefore(canvas, img);
+            img.parentNode.insertBefore(similarityCanvas, canvas);
+            img.parentNode.removeChild(img);
+
+            var GLOBAL_rows_x_cols = 20;
+            var GLOBAL_cols = 5;
+            var GLOBAL_rows = 4;
+            var sw = ~~(img.width / GLOBAL_cols);
+            var sh = ~~(img.height / GLOBAL_rows);
+            var dw = ~~(canvas.width / GLOBAL_cols);
+            var dh = ~~(canvas.height / GLOBAL_rows);
+
+            for (var i = 0; i < GLOBAL_rows_x_cols; i++) {
+              // calculate the boundaries for the current tile from the
+              // image and translate it to boundaries on the main canvas
+              var mod = (i % GLOBAL_cols);
+              var div = ~~(i / GLOBAL_cols);
+              var sx = mod * sw;
+              var sy = div * sh;
+              var dx = mod * dw;
+              var dy = div * dh;
+              // calculate the histogram of the current tile
+              var histogram = Histogram.getHistogram(ctx, dx, dy, dw, dh, false);
+              similarityCtx.fillStyle = histogram.css;
+              similarityCtx.fillRect(dx, dy, dw, dh);
+            }
           }
         };
         
