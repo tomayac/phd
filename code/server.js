@@ -87,13 +87,13 @@ app.get("/", function(req, res) {
 
 app.get(/^\/search\/(.+)\/(.+)$/, search);
 
-app.get(/^\/proxy\/(.+)\/(.+)$/, proxy);
+app.get(/^\/proxy\/(.+)$/, proxy);
 
 function proxy(req, res, next) {
   var path = /^\/proxy\/(.+)$/;
   var pathname = require('url').parse(req.url).pathname;
   var url = decodeURIComponent(pathname.replace(path, '$1'));
-  console.log('Proxy request for ' + url);
+  if (GLOBAL_config.DEBUG) console.log('Proxy request for ' + url);
   request.get(url).pipe(res);
 }
 
@@ -652,7 +652,7 @@ function search(req, res, next) {
                     return;
                   }
                   // the message can consist of different parts, dependent on the
-                  // item type
+                  // item type 
                   var message = cleanMessage(
                       (item.object.content ?
                           item.object.content : '') +
@@ -662,19 +662,26 @@ function search(req, res, next) {
                           ' ' + item.annotation : '') +
                       (attachment.displayName ?
                           ' ' + attachment.displayName : ''));
-                  if (message) {        
-                    results.push({
-                      mediaurl: (attachment.fullImage ?
-                          attachment.fullImage.url :
-                          (attachment.embed ? 
-                              attachment.embed : attachment.url)),
-                      storyurl: item.url,                      
-                      message: message,
-                      user: item.actor.url,
-                      type: attachment.objectType,
-                      timestamp: (new Date(item.published)).getTime(),
-                      published: item.published
-                    });                    
+                  if (message) {
+                    var mediaurl = '';
+                    if (attachment.embed) {
+                      mediaurl = attachment.embed.url;
+                    } else if (attachment.image) {
+                      mediaurl = attachment.image.url;
+                    }
+                    cleanVideoUrl(mediaurl, function(cleanedMediaUrl) {
+                      if (cleanedMediaUrl) {
+                        results.push({
+                          mediaurl: cleanedMediaUrl,
+                          storyurl: item.url,                      
+                          message: message,
+                          user: item.actor.url,
+                          type: attachment.objectType,
+                          timestamp: (new Date(item.published)).getTime(),
+                          published: item.published
+                        }); 
+                      }
+                    });
                   }
                 });
               }
