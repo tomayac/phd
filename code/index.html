@@ -9,7 +9,7 @@
     <h1>Social Media Illustrator</h1>
     <form method="get" id="search_form" onsubmit="return false;">
       <input name="query" id="query" />
-      <label for="query">Query<label>
+      <label for="query">Query</label>
       <input type="submit" value="OK" />
     </form>
     <div id="results"></div>
@@ -19,6 +19,9 @@
           DEBUG: false,
           MEDIA_SERVER: 'http://localhost:8001/search/',
           PROXY_SERVER: 'http://localhost:8001/proxy/',
+          THRESHOLD: 5,
+          GLOBAL_cols: 10,
+          GLOBAL_rows: 10,          
           loaded: {},
           histograms: {},
           // checks if all media items are of the given status
@@ -99,23 +102,31 @@
                   image.setAttribute('class', 'photo');
                   var source = illustrator.PROXY_SERVER +
                       encodeURIComponent(item.mediaurl);
-                  image.onload = function() {
-                    image.onerror = function() {                      
-                      image.parentNode.removeChild(image);
-                      delete illustrator.loaded[source];
-                      console.log('Removed ' + image.src);
+                  if (source !== 'http://localhost:8001/proxy/https%3A%2F%2Fimages0-focus-opensocial.googleusercontent.com%2Fgadgets%2Fproxy%3Fcontainer%3Dfocus%26gadget%3Da%26resize_h%3D100%26url%3Dhttp%253A%252F%252Fwww.london2012.com%252Fmm%252FPhoto%252Fsport%252FGeneral%252F01%252F42%252F67%252F62%252F1426762_M04.jpg')    {
+                  
+                    image.onload = function() {
+                      image.style.border = 'solid 4px yellow';
+                      image.onerror = function() {                      
+                        image.parentNode.removeChild(image);
+                        delete illustrator.loaded[source];
+                        console.log('Removed ' + image.src);
+                      };
+                      illustrator.loaded[source] = true;
+                      illustrator.histogram(image);                    
                     };
-                    illustrator.loaded[source] = true;
-                    illustrator.histogram(image);                    
-                  };
-                  // resultsDiv.appendChild(image);                  
-                  image.src = source;
-                  illustrator.loaded[source] = false;                  
-                  // make sure the load event fires for cached images too
-                  if (image.complete || image.complete === undefined) {
-                    image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+                    resultsDiv.appendChild(image);
+                    resultsDiv.appendChild(document.createTextNode(source));
+                    resultsDiv.appendChild(document.createElement('br'));
+                  
                     image.src = source;
-                  }                  
+                    illustrator.loaded[source] = false;                  
+                    // make sure the load event fires for cached images too
+                    if (image.complete || image.complete === undefined) {
+                      image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+                      image.src = source;
+                      image.style.border = 'solid 4px green';
+                    }  
+                    } // ficken                
                 }
               });
             }
@@ -130,24 +141,30 @@
             
             // calculate the histograms tile-wise 
             var similarityCanvas = document.createElement('canvas');
+            /*
             similarityCanvas.width = img.width;
             similarityCanvas.height = img.height;
+            */
+            similarityCanvas.width = 100;
+            similarityCanvas.height = 100;
+            
             var similarityCtx = similarityCanvas.getContext('2d');
 
-            var GLOBAL_cols = 10;
-            var GLOBAL_rows = 10;
-            var GLOBAL_rows_x_cols = GLOBAL_cols * GLOBAL_rows;
-            var sw = ~~(img.width / GLOBAL_cols);
-            var sh = ~~(img.height / GLOBAL_rows);
-            var dw = ~~(canvas.width / GLOBAL_cols);
-            var dh = ~~(canvas.height / GLOBAL_rows);
+            var sw = ~~(img.width / illustrator.GLOBAL_cols);
+            var sh = ~~(img.height / illustrator.GLOBAL_rows);
+            var dw = ~~(similarityCanvas.width / illustrator.GLOBAL_cols);
+            var dh = ~~(similarityCanvas.height / illustrator.GLOBAL_rows);
 
-            illustrator.histograms[img.src] = 0;
-            for (var i = 0; i < GLOBAL_rows_x_cols; i++) {
+            illustrator.histograms[img.src] = {
+              r: 0,
+              g: 0,
+              b: 0
+            };
+            for (var i = 0; i < illustrator.GLOBAL_rows_x_cols; i++) {
               // calculate the boundaries for the current tile from the
               // image and translate it to boundaries on the main canvas
-              var mod = (i % GLOBAL_cols);
-              var div = ~~(i / GLOBAL_cols);
+              var mod = (i % illustrator.GLOBAL_cols);
+              var div = ~~(i / illustrator.GLOBAL_cols);
               var sx = mod * sw;
               var sy = div * sh;
               var dx = mod * dw;
@@ -155,19 +172,23 @@
               // calculate the histogram of the current tile
               var histogram =
                   Histogram.getHistogram(ctx, dx, dy, dw, dh, false);
-              illustrator.histograms[img.src] += histogram.average;
+              illustrator.histograms[img.src].r += histogram.pixel.r;
+              illustrator.histograms[img.src].g += histogram.pixel.g;
+              illustrator.histograms[img.src].b += histogram.pixel.b;              
               similarityCtx.fillStyle = histogram.css;
               similarityCtx.fillRect(dx, dy, dw, dh);
             }
-            illustrator.histograms[img.src] =
-                ~~(illustrator.histograms[img.src] / GLOBAL_rows_x_cols);
+
+            for (var channel in illustrator.histograms[img.src]) {
+              illustrator.histograms[img.src][channel] =
+                  ~~(illustrator.histograms[img.src][channel] / illustrator.GLOBAL_rows_x_cols);
+            }
             illustrator.loaded[img.src] = 'histogram';            
             
-            /*
+            
             img.parentNode.insertBefore(canvas, img);
             img.parentNode.insertBefore(similarityCanvas, canvas);            
-            img.parentNode.removeChild(img);
-            */
+            //img.parentNode.removeChild(img);
             
             if (illustrator.checkIfAllMediaItems('histogram')) {
               illustrator.sort();
@@ -182,21 +203,41 @@
               });
             }
             var sortFunction = function(a, b) {
-              return a.histogram - b.histogram;
+              var rDist = 0.3 * (a.histogram.r - b.histogram.r);
+              var gDist = 0.59 * (a.histogram.g - b.histogram.g);
+              var bDist = 0.11 * (a.histogram.b - b.histogram.b);
+              return rDist + gDist + bDist;
             };            
             averageHistograms.sort(sortFunction);
             var resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<hr><hr>';
             var html = [];
             averageHistograms.forEach(function(image, i) {
               var img = document.createElement('img');
               html[i] = '<img class="photo" src="' + image.src + '"/>' +
-                  image.histogram;
+                  'rgb(' + image.histogram.r + ', ' + image.histogram.g + ', ' + image.histogram.b + ')';              
+              if (i > 0) {
+
+                var histogramDifferenceR =
+                    0.3 * (image.histogram.r - averageHistograms[i - 1].histogram.r);
+                var histogramDifferenceG =                    
+                    0.59 * (image.histogram.g - averageHistograms[i - 1].histogram.g);
+                var histogramDifferenceB =                    
+                    0.11 * (image.histogram.b - averageHistograms[i - 1].histogram.b);
+
+                if (histogramDifferenceR <= illustrator.THRESHOLD && histogramDifferenceG <= illustrator.THRESHOLD && histogramDifferenceB <= illustrator.THRESHOLD) {                  
+                  // noop
+                } else {
+                  html[i] = '<hr/>' + html[i];
+                }               
+              }                                
             });
-            resultsDiv.innerHTML = html.join('');
+            resultsDiv.innerHTML += html.join('');
           }
         };
             
         // init
+        illustrator.GLOBAL_rows_x_cols = illustrator.GLOBAL_cols * illustrator.GLOBAL_rows;        
         illustrator.init();
       })();
     </script>

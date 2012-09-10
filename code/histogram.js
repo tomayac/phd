@@ -33,7 +33,7 @@ var Histogram = (function(window) {
         avg.g += g;
         avg.b += b;
         if (returnValues) {        
-          values[round(r * 0.3 + g * 0.59 + b * 0.11)]++;
+          values[round((r * 0.3 + g * 0.59 + b * 0.11) / 3)]++;
         }
       }
       var r = ~~(avg.r / q);
@@ -47,7 +47,7 @@ var Histogram = (function(window) {
             g: g,
             b: b
           },
-          average: r + g + b,
+          average: round((r + g + b) / 3),
           css: 'rgb(' + r + ',' + g + ',' + b + ')'
         };
       } else {
@@ -57,7 +57,7 @@ var Histogram = (function(window) {
             g: g,
             b: b
           },
-          average: r + g + b,
+          average: round((r + g + b) / 3),
           css: 'rgb(' + r + ',' + g + ',' + b + ')'
         };        
       }

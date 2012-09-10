@@ -94,7 +94,15 @@ function proxy(req, res, next) {
   var pathname = require('url').parse(req.url).pathname;
   var url = decodeURIComponent(pathname.replace(path, '$1'));
   if (GLOBAL_config.DEBUG) console.log('Proxy request for ' + url);
-  request.get(url).pipe(res);
+  //request.get(url).pipe(res);
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      res.send(body);
+    } else {
+      res.statusCode = 404;
+      res.send('Error 404. File not found.');
+    }
+  }); 
 }
 
 function search(req, res, next) { 
