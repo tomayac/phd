@@ -19,7 +19,7 @@
           DEBUG: false,
           MEDIA_SERVER: 'http://localhost:8001/search/',
           PROXY_SERVER: 'http://localhost:8001/proxy/',
-          THRESHOLD: 5,
+          THRESHOLD: 2,
           GLOBAL_cols: 10,
           GLOBAL_rows: 10,          
           loaded: {},
@@ -102,31 +102,29 @@
                   image.setAttribute('class', 'photo');
                   var source = illustrator.PROXY_SERVER +
                       encodeURIComponent(item.mediaurl);
-                  if (source !== 'http://localhost:8001/proxy/https%3A%2F%2Fimages0-focus-opensocial.googleusercontent.com%2Fgadgets%2Fproxy%3Fcontainer%3Dfocus%26gadget%3Da%26resize_h%3D100%26url%3Dhttp%253A%252F%252Fwww.london2012.com%252Fmm%252FPhoto%252Fsport%252FGeneral%252F01%252F42%252F67%252F62%252F1426762_M04.jpg')    {
                   
-                    image.onload = function() {
-                      image.style.border = 'solid 4px yellow';
-                      image.onerror = function() {                      
-                        image.parentNode.removeChild(image);
-                        delete illustrator.loaded[source];
-                        console.log('Removed ' + image.src);
-                      };
-                      illustrator.loaded[source] = true;
-                      illustrator.histogram(image);                    
+                  image.onload = function() {
+                    image.style.border = 'solid 4px yellow';
+                    image.onerror = function() {                      
+                      image.parentNode.removeChild(image);
+                      delete illustrator.loaded[source];
+                      console.log('Removed ' + image.src);
                     };
-                    resultsDiv.appendChild(image);
-                    resultsDiv.appendChild(document.createTextNode(source));
-                    resultsDiv.appendChild(document.createElement('br'));
-                  
+                    illustrator.loaded[source] = true;
+                    illustrator.histogram(image);                    
+                  };
+                  //resultsDiv.appendChild(image);
+                  //resultsDiv.appendChild(document.createTextNode(source));
+                  //resultsDiv.appendChild(document.createElement('br'));
+                
+                  image.src = source;
+                  illustrator.loaded[source] = false;                  
+                  // make sure the load event fires for cached images too
+                  if (image.complete || image.complete === undefined) {
+                    image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
                     image.src = source;
-                    illustrator.loaded[source] = false;                  
-                    // make sure the load event fires for cached images too
-                    if (image.complete || image.complete === undefined) {
-                      image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-                      image.src = source;
-                      image.style.border = 'solid 4px green';
-                    }  
-                    } // ficken                
+                    image.style.border = 'solid 4px green';
+                  }
                 }
               });
             }
@@ -141,12 +139,12 @@
             
             // calculate the histograms tile-wise 
             var similarityCanvas = document.createElement('canvas');
-            /*
+            ///*
             similarityCanvas.width = img.width;
             similarityCanvas.height = img.height;
-            */
-            similarityCanvas.width = 100;
-            similarityCanvas.height = 100;
+            //*/
+            //similarityCanvas.width = 100;
+            //similarityCanvas.height = 100;
             
             var similarityCtx = similarityCanvas.getContext('2d');
 
@@ -186,8 +184,8 @@
             illustrator.loaded[img.src] = 'histogram';            
             
             
-            img.parentNode.insertBefore(canvas, img);
-            img.parentNode.insertBefore(similarityCanvas, canvas);            
+            //img.parentNode.insertBefore(canvas, img);
+            //img.parentNode.insertBefore(similarityCanvas, canvas);            
             //img.parentNode.removeChild(img);
             
             if (illustrator.checkIfAllMediaItems('histogram')) {
