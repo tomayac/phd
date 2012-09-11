@@ -19,7 +19,8 @@
           DEBUG: false,
           MEDIA_SERVER: 'http://localhost:8001/search/',
           PROXY_SERVER: 'http://localhost:8001/proxy/',
-          THRESHOLD: 2,
+          THRESHOLD: 5,
+          ACCOUNT_FOR_LUMINANCE: true,
           GLOBAL_cols: 10,
           GLOBAL_rows: 10,          
           loaded: {},
@@ -179,7 +180,8 @@
 
             for (var channel in illustrator.histograms[img.src]) {
               illustrator.histograms[img.src][channel] =
-                  ~~(illustrator.histograms[img.src][channel] / illustrator.GLOBAL_rows_x_cols);
+                  ~~(illustrator.histograms[img.src][channel] /
+                      illustrator.GLOBAL_rows_x_cols);
             }
             illustrator.loaded[img.src] = 'histogram';            
             
@@ -201,29 +203,43 @@
               });
             }
             var sortFunction = function(a, b) {
-              var rDist = 0.3 * (a.histogram.r - b.histogram.r);
-              var gDist = 0.59 * (a.histogram.g - b.histogram.g);
-              var bDist = 0.11 * (a.histogram.b - b.histogram.b);
+              if (illustrator.ACCOUNT_FOR_LUMINANCE) {
+                var rFactor = 0.3;
+                var gFactor = 0.59;
+                var bFactor = 0.11;
+              } else {
+                var rFactor = 1;
+                var gFactor = 1;
+                var bFactor = 1;                
+              }
+              var rDist = rFactor * (a.histogram.r - b.histogram.r);
+              var gDist = gFactor * (a.histogram.g - b.histogram.g);
+              var bDist = bFactor * (a.histogram.b - b.histogram.b);
               return rDist + gDist + bDist;
             };            
             averageHistograms.sort(sortFunction);
+            // console.log(averageHistograms);
             var resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML += '<hr><hr>';
+            // resultsDiv.innerHTML += '<hr><hr>';
             var html = [];
             averageHistograms.forEach(function(image, i) {
               var img = document.createElement('img');
               html[i] = '<img class="photo" src="' + image.src + '"/>' +
-                  'rgb(' + image.histogram.r + ', ' + image.histogram.g + ', ' + image.histogram.b + ')';              
+                  'rgb(' +
+                      image.histogram.r + ', ' +
+                      image.histogram.g + ', ' +
+                      image.histogram.b + ')';              
               if (i > 0) {
-
                 var histogramDifferenceR =
-                    0.3 * (image.histogram.r - averageHistograms[i - 1].histogram.r);
+                    (image.histogram.r - averageHistograms[i - 1].histogram.r);
                 var histogramDifferenceG =                    
-                    0.59 * (image.histogram.g - averageHistograms[i - 1].histogram.g);
+                    (image.histogram.g - averageHistograms[i - 1].histogram.g);
                 var histogramDifferenceB =                    
-                    0.11 * (image.histogram.b - averageHistograms[i - 1].histogram.b);
+                    (image.histogram.b - averageHistograms[i - 1].histogram.b);
 
-                if (histogramDifferenceR <= illustrator.THRESHOLD && histogramDifferenceG <= illustrator.THRESHOLD && histogramDifferenceB <= illustrator.THRESHOLD) {                  
+                if ((histogramDifferenceR <= illustrator.THRESHOLD) &&
+                    (histogramDifferenceG <= illustrator.THRESHOLD) &&
+                    (histogramDifferenceB <= illustrator.THRESHOLD)) {                  
                   // noop
                 } else {
                   html[i] = '<hr/>' + html[i];
@@ -235,7 +251,8 @@
         };
             
         // init
-        illustrator.GLOBAL_rows_x_cols = illustrator.GLOBAL_cols * illustrator.GLOBAL_rows;        
+        illustrator.GLOBAL_rows_x_cols =
+            illustrator.GLOBAL_cols * illustrator.GLOBAL_rows;        
         illustrator.init();
       })();
     </script>

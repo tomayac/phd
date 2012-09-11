@@ -94,7 +94,12 @@ function proxy(req, res, next) {
   var pathname = require('url').parse(req.url).pathname;
   var url = decodeURIComponent(pathname.replace(path, '$1'));
   if (GLOBAL_config.DEBUG) console.log('Proxy request for ' + url);
-  request.get(url).pipe(res);
+  try {
+    request.get(url).pipe(res);
+  } catch(e) {
+    res.statusCode = 404;
+    res.send('Error 404 File not found.');
+  }
   /*
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -868,17 +873,75 @@ function search(req, res, next) {
         }          
       });
     },
+    TwitterNative: function(pendingRequests) {
+      var currentService = 'TwitterNative';  
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);              
+      var params = {
+        q: query + ' -"RT "',
+        result_type: 'recent',
+        include_entities: true,
+        rpp: 100
+      };
+      params = querystring.stringify(params);
+      var options = {
+        url: 'http://search.twitter.com/search.json?' + params,
+        headers: GLOBAL_config.HEADERS
+      };      
+      request.get(options, function(err, reply, body) { 
+        try {
+          body = JSON.parse(body);
+          var results = [];
+          if ((body.results) && (body.results.length)) {
+            var items = body.results;
+            for (var i = 0, len = items.length; i < len; i++) {
+              var item = items[i];
+              //item.entities.media.forEach(function(media) {
+              var mediaurl = '';
+              if (item.entities && item.entities.media &&
+                  item.entities.media.length > 0) {  
+                mediaurl = item.entities.media[0]['media_url'] ?
+                    item.entities.media[0]['media_url'] :
+                    item.entities.media[0]['media_url_https'];
+              } else {
+                continue;
+              }
+              var timestamp = Date.parse(item.created_at);                  
+              var published = getIsoDateString(timestamp)
+              var message = cleanMessage(item.text);
+              var user = 'http://twitter.com/' + item.from_user;
+              var storyurl = 'http://twitter.com/' +
+                  item.from_user + '/status/' + item.id_str;                                
+              results.push({
+                mediaurl: mediaurl,
+                storyurl: storyurl,
+                message: message,
+                user: user,
+                type: 'photo',
+                timestamp: timestamp,
+                published: published
+              });
+            }
+          }
+        } catch(e) {          
+          collectResults([], currentService, pendingRequests);
+        }
+        collectResults(results, currentService, pendingRequests);
+      });
+    },
     Twitter: function(pendingRequests) {
       var currentService = 'Twitter';  
       if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);              
       var params = {
-        q: query + ' ' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ' -"RT "'
+        q: query + ' ' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ' -"RT "',
+        rpp: 100,
+        result_type: 'recent'
       };
       params = querystring.stringify(params);
       var options = {
         url: 'http://search.twitter.com/search.json?' + params,
         headers: GLOBAL_config.HEADERS
       };
+      console.log(options.url);
       request.get(options, function(err, reply, body) { 
         try {
           body = JSON.parse(body);
@@ -1509,7 +1572,7 @@ function search(req, res, next) {
 
     var length = serviceNames.length;
     var intervalTimeout = 500;
-    var timeout = 40 * intervalTimeout;
+    var timeout = 60 * intervalTimeout;
     var passedTime = 0;
     var interval = setInterval(function() {
       passedTime += intervalTimeout;
