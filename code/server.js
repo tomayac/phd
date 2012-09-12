@@ -95,6 +95,7 @@ function proxy(req, res, next) {
   var url = decodeURIComponent(pathname.replace(path, '$1'));
   if (GLOBAL_config.DEBUG) console.log('Proxy request for ' + url);
   try {
+    res.setHeader('Cache-Control', 'max-age=7200, must-revalidate');
     request.get(url).pipe(res);
   } catch(e) {
     res.statusCode = 404;
@@ -809,7 +810,8 @@ function search(req, res, next) {
       var currentService = 'Facebook';  
       if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
       var params = {
-        q: query
+        q: query,
+        limit: 100
       };
       params = querystring.stringify(params);
       var options = {
@@ -1307,7 +1309,7 @@ function search(req, res, next) {
         nojsoncallback: 1,
         min_taken_date: now - sixDays,
         media: (videoSearch ? 'videos' : 'photos'),
-        per_page: 10
+        per_page: 20
       };
       params = querystring.stringify(params);
       var options = {

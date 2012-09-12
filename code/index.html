@@ -21,10 +21,11 @@
           PROXY_SERVER: 'http://localhost:8001/proxy/',
           THRESHOLD: 5,
           ACCOUNT_FOR_LUMINANCE: true,
-          GLOBAL_cols: 10,
-          GLOBAL_rows: 10,          
+          GLOBAL_cols: 4,
+          GLOBAL_rows: 4,          
           loaded: {},
           histograms: {},
+          tileHistograms: {},
           // checks if all media items are of the given status
           checkIfAllMediaItems: function(status) {
             for (var key in illustrator.loaded) {
@@ -63,6 +64,7 @@
              query.value = '';      
              illustrator.loaded = {};       
              illustrator.histograms = {};
+             illustrator.tileHistograms = {};
            },
           /**
            * Searches for a term on a plethora of social media platforms
@@ -103,14 +105,19 @@
                   image.setAttribute('class', 'photo');
                   var source = illustrator.PROXY_SERVER +
                       encodeURIComponent(item.mediaurl);
+                      
+                  image.onerror = function() {                      
+                    try{
+                      image.parentNode.removeChild(image);
+                    } catch(e) {
+                      // noop
+                    }
+                    delete illustrator.loaded[source];
+                    console.log('Removed ' + image.src);
+                  };                  
                   
                   image.onload = function() {
-                    image.style.border = 'solid 4px yellow';
-                    image.onerror = function() {                      
-                      image.parentNode.removeChild(image);
-                      delete illustrator.loaded[source];
-                      console.log('Removed ' + image.src);
-                    };
+                    image.style.border = 'solid 4px yellow';                    
                     illustrator.loaded[source] = true;
                     illustrator.histogram(image);                    
                   };
@@ -159,6 +166,7 @@
               g: 0,
               b: 0
             };
+            illustrator.tileHistograms[img.src] = {};
             for (var i = 0; i < illustrator.GLOBAL_rows_x_cols; i++) {
               // calculate the boundaries for the current tile from the
               // image and translate it to boundaries on the main canvas
@@ -176,6 +184,13 @@
               illustrator.histograms[img.src].b += histogram.pixel.b;              
               similarityCtx.fillStyle = histogram.css;
               similarityCtx.fillRect(dx, dy, dw, dh);
+              
+              illustrator.tileHistograms[img.src][i] = {
+                r: histogram.pixel.r,
+                g: histogram.pixel.g,
+                b: histogram.pixel.b
+              };
+              
             }
 
             for (var channel in illustrator.histograms[img.src]) {
@@ -218,17 +233,18 @@
               return rDist + gDist + bDist;
             };            
             averageHistograms.sort(sortFunction);
-            // console.log(averageHistograms);
+
             var resultsDiv = document.getElementById('results');
             // resultsDiv.innerHTML += '<hr><hr>';
             var html = [];
             averageHistograms.forEach(function(image, i) {
               var img = document.createElement('img');
               html[i] = '<img class="photo" src="' + image.src + '"/>' +
+                  '<div style="display:inline; background-color:' +
                   'rgb(' +
-                      image.histogram.r + ', ' +
-                      image.histogram.g + ', ' +
-                      image.histogram.b + ')';              
+                      image.histogram.r + ',' +
+                      image.histogram.g + ',' +
+                      image.histogram.b + ');width:100px;height:100px;!important">&nbsp;</div>';              
               if (i > 0) {
                 var histogramDifferenceR =
                     (image.histogram.r - averageHistograms[i - 1].histogram.r);
@@ -246,7 +262,84 @@
                 }               
               }                                
             });
+            //resultsDiv.innerHTML += html.join('');
+            resultsDiv.innerHTML += '<hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/>';
+            html = [];
+            var distances = {};
+
+            var abs = Math.abs;
+            var keys = Object.keys(illustrator.tileHistograms);
+            var len = keys.length;
+            var i = 0;
+            var burnt = {};
+            var halfOfTiles = ~~(illustrator.GLOBAL_rows_x_cols / 2);
+            if (illustrator.ACCOUNT_FOR_LUMINANCE) {
+              var rFactor = 0.3;
+              var gFactor = 0.59;
+              var bFactor = 0.11;
+            } else {
+              var rFactor = 1;
+              var gFactor = 1;
+              var bFactor = 1;                
+            }            
+            for (var outerKey in illustrator.tileHistograms) {                            
+              i++;
+              if (burnt[outerKey]) {
+                continue;
+              }
+              distances[outerKey] = {};
+              var outerHistograms = illustrator.tileHistograms[outerKey];
+              html.push('<hr/><img style="border:solid 2px red;" class="photo" src="' + outerKey + '"/>');
+              var startAt = 0;
+              for (var j = i; j < len; j++) {
+                var innerKey = keys[j];
+                var innerHistograms = illustrator.tileHistograms[innerKey];
+                var rSum = 0;
+                var gSum = 0;
+                var bSum = 0;
+                distances[outerKey][innerKey] = {};
+                for (var tile in innerHistograms) {
+                  var rDist = rFactor * (innerHistograms[tile].r - outerHistograms[tile].r);
+                  var gDist = gFactor * (innerHistograms[tile].g - outerHistograms[tile].g);
+                  var bDist = bFactor * (innerHistograms[tile].b - outerHistograms[tile].b);
+                  distances[outerKey][innerKey][tile] = {
+                    r: rDist,
+                    g: gDist,
+                    b: bDist
+                  };
+                  rSum += rDist;
+                  gSum += gDist;
+                  bSum += bDist;
+                }                
+                distances[outerKey][innerKey].average = {
+                  r: ~~(rSum / illustrator.GLOBAL_rows_x_cols),
+                  g: ~~(gSum / illustrator.GLOBAL_rows_x_cols),
+                  b: ~~(bSum / illustrator.GLOBAL_rows_x_cols)
+                };
+                var similarTiles = 0;
+                for (var tile in distances[outerKey][innerKey]) {
+                  /*
+                  if ((distances[outerKey][innerKey].average.r <= illustrator.THRESHOLD) &&
+                      (distances[outerKey][innerKey].average.g <= illustrator.THRESHOLD) &&
+                      (distances[outerKey][innerKey].average.b <= illustrator.THRESHOLD)) {
+                    html.push('<img class="photo" src="' + innerKey + '"/>');
+                    //resultsDiv.innerHTML += innerKey;                      
+                  }
+                  */
+                  if ((abs(distances[outerKey][innerKey][tile].r) <= illustrator.THRESHOLD) &&
+                      (abs(distances[outerKey][innerKey][tile].g) <= illustrator.THRESHOLD) &&
+                      (abs(distances[outerKey][innerKey][tile].b) <= illustrator.THRESHOLD)) {
+                    similarTiles++;
+                  }
+                }
+                if (similarTiles > halfOfTiles) {
+                  burnt[innerKey] = true;
+                  html.push('<img class="photo" src="' + innerKey + '"/>');
+                }
+              }
+            }
             resultsDiv.innerHTML += html.join('');
+            console.log(distances);            
           }
         };
             
@@ -254,7 +347,7 @@
         illustrator.GLOBAL_rows_x_cols =
             illustrator.GLOBAL_cols * illustrator.GLOBAL_rows;        
         illustrator.init();
-      })();
+      })();      
     </script>
   </body>
 </html>
