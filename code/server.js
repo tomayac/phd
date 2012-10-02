@@ -1477,77 +1477,50 @@ function search(req, res, next) {
       var currentService = 'TwitPic';   
       if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);             
       var params = {
-        page: 1,
-        q: query
+        tag: query
       };
       params = querystring.stringify(params);
       var headers = GLOBAL_config.HEADERS;
-      headers['X-Requested-With'] = 'XMLHttpRequest';
       var options = {
-        url: 'http://twitpic.com/search/show?' + params,
+        url: 'http://api.twitpic.com/2/tags/show.json?' + params,
         headers: headers
-      };
-      request.get(options, function(err, reply, body) {                
+      };      
+      request.get(options, function(err, reply, body) {
         var results = [];
         try {
           body = JSON.parse(body);
-          if (body.length) {            
+          if (body.images && body.images.length > 0) {
             Step(
               function() {
-                var group = this.group();
-                for (var i = 0, len = body.length; i < len; i++) {
-                  var item = body[i];
-                  var id = item.link.replace(/.*?\/(\w+)$/, '$1');
-                  var params = {
-                    id: id
-                  };
-                  params = querystring.stringify(params);
-                  var options = {
-                    url: 'http://api.twitpic.com/2/media/show.json?' + params,
-                    headers: GLOBAL_config.HEADERS
-                  };
-                  var cb = group();                  
-                  request.get(options, function(err2, reply2, body2) {        
-                    if (body2) {
-                      try {
-                        body2 = JSON.parse(body2);                  
-                      } catch(e) {
-                        return cb();
-                      }
-                    } else {
-                      return cb();
-                    }
-                    if (!body2.errors) {                      
-                      var timestamp = Date.parse(body2.timestamp);
-                      var options = {
-                        url: 'http://twitpic.com/' +
-                            body2.short_id + '/full',
-                        headers: GLOBAL_config.HEADERS                          
-                      };
-                      request.get(options, function(err3, res3, body3) {          
-                        scrapeTwitPic(body3, function(mediaUrl) {
-                          if (mediaUrl) {
-                            results.push({
-                              mediaurl: mediaUrl,
-                              storyurl: 'http://twitpic.com/' +
-                                  body2.short_id,
-                              message: cleanMessage(body2.message), 
-                              user: 'http://twitter.com/' +
-                                  (body2.user? body2.user.username : ''),
-                              type: 'photo',
-                              timestamp: timestamp,
-                              published: getIsoDateString(timestamp)
-                            });
-                          }
-                          cb();                            
-                        });
+                var group = this.group();            
+                for (var i = 0, len = body.images.length; i < len; i++) {                
+                  var image = body.images[i];
+                  var user = 'http://twitpic.com/photos/' + image.user.username;
+                  var type = 'photo';
+                  var message = image.message;
+                  var timestamp = (new Date(image.timestamp)).getTime();
+                  var published = getIsoDateString(timestamp); 
+                  var storyurl = 'http://twitpic.com/' + image.short_id;
+                  var cb = group();
+                  request.get(storyurl + '/full', function(err2, reply2, body2) {
+                    scrapeTwitPic(body2, function(mediaurl) {
+                      results.push({
+                        mediaurl: mediaurl,
+                        storyurl: storyurl,
+                        message: {
+                          text: message,
+                          clean: cleanMessage(message)
+                        },
+                        user: user,
+                        type: type,
+                        timestamp: timestamp,
+                        published: published
                       });
-                    } else {
                       cb();
-                    }
+                    });
                   });
                 }
-              },
+              },            
               function() {
                 collectResults(results, currentService, pendingRequests);
               }
