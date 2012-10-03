@@ -3,33 +3,27 @@ var https = require('https');
 var querystring = require('querystring');
 var request = require('request');
 var jsdom = require('jsdom');
-
 var Step = require('./step.js');
 var Uri = require('./uris.js');
 
 // jspos, Part of Speech tagging
 var Lexer = require('./jspos/lexer.js');
 var POSTagger = require('./jspos/POSTagger.js');
-
 var express = require('express');
 var app = express.createServer();
-
 app.configure(function() {
   app.use(express.methodOverride());
   app.use(express.static(__dirname + '/'));
 });
-
 app.configure('development', function() {
   app.use(express.errorHandler({
     dumpExceptions: true,
     showStack: true
   }));
 });
-
 app.configure('production', function() {
   app.use(express.errorHandler());
 });
-
 var GLOBAL_config = {
   DEBUG: true,
   TRANSLATE: false,
@@ -50,7 +44,7 @@ var GLOBAL_config = {
     "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
     "Accept-Language": "en-US,en;q=0.8,fr-FR;q=0.6,fr;q=0.4,de;q=0.2,de-DE;q=0.2,es;q=0.2,ca;q=0.2",
     "Connection": "keep-alive",
-    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",    
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     "Referer": "http://www.google.com/",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.854.0 Safari/535.2",
   },
@@ -80,15 +74,11 @@ var GLOBAL_config = {
   PLUS_REGEX: /(^|\W)\+([a-zA-Z0-9_]+)/g,
   TAG_REGEX: /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi
 };
-
 app.get("/", function(req, res) {
   res.redirect("/index.html");
 });
-
 app.get(/^\/search\/(.+)\/(.+)$/, search);
-
 app.get(/^\/proxy\/(.+)$/, proxy);
-
 function proxy(req, res, next) {
   var path = /^\/proxy\/(.+)$/;
   var pathname = require('url').parse(req.url).pathname;
@@ -106,7 +96,7 @@ function proxy(req, res, next) {
     if (!error && response.statusCode == 200) {
       res.setHeader('Content-Length', response.headers['content-length']);
       res.setHeader('Content-Type', response.headers['content-type']);
-      
+
       var data = '';
       response.on('data', function(chunk) {
         data += chunk;
@@ -122,14 +112,13 @@ function proxy(req, res, next) {
   }); 
   */
 }
-
 function search(req, res, next) { 
-   
+
   /** 
    * Stolen from https://developer.mozilla.org/en/JavaScript/Reference/Global_-
    * Objects/Date#Example:_ISO_8601_formatted_dates
    */
-  function getIsoDateString(d) {  
+  function getIsoDateString(d) {
    function pad(n) { return n < 10 ? '0' + n : n }
    d = new Date(d);
    return d.getUTCFullYear() + '-' +
@@ -139,7 +128,7 @@ function search(req, res, next) {
         pad(d.getUTCMinutes()) + ':' +
         pad(d.getUTCSeconds()) + 'Z';
   }
-  
+
   /**
    * Cleans video URLs, tries to convert YouTube URLS to HTML5 versions
    */
@@ -151,22 +140,22 @@ function search(req, res, next) {
         var urlObj = new Uri(url);
         var host = urlObj.heirpart().authority().host();
         var path = urlObj.heirpart().path();
-        var pathComponents = path.split(/\//gi);    
+        var pathComponents = path.split(/\//gi);
         var videoId;
         if (pathComponents[1] === 'v') {
           // URL of 'v' type:
           // http://www.youtube.com/v/WnszesKUXp8
           videoId = pathComponents[2];
-        } else if (pathComponents[1] === 'watch') {   
+        } else if (pathComponents[1] === 'watch') {
           // URL of "watch" type:
           // http://www.youtube.com/watch?v=EVBsypHzF3U
           var query = urlObj.querystring();
           query.substring(1).split(/&/gi).forEach(function(param) {
             var keyValue = param.split(/=/gi);
             if (keyValue[0] === 'v') {
-              videoId = keyValue[1];            
+              videoId = keyValue[1];
             }
-          });        
+          });
         }
         // Translate to HTML5 video URL, try at least
         Step(
@@ -180,10 +169,10 @@ function search(req, res, next) {
               that(null, body);
             });
           },
-          function(err, body) {            
+          function(err, body) {
             var html5Url = false;
             try {
-              var response = JSON.parse(body);              
+              var response = JSON.parse(body);
               for (var i = 0, len = response.length; i < len; i++) {
                 var data = response[i];
                 if (data.type.indexOf('video/webm') === 0) {
@@ -201,59 +190,59 @@ function search(req, res, next) {
               callback(html5Url);
             }
           }
-        );        
+        );
       } catch(e) {
         callback(url);
       }
     } else {
-      callback(url);      
+      callback(url);
     }
   }
-  
+
   /**
    * Replaces HTML entities
    */
   function replaceHtmlEntities(message) {
-    message = message.replace(/&quot;/gi, '\"');      
-    message = message.replace(/&apos;/gi, '\'');      
-    message = message.replace(/&#39;/gi, '\'');      
-    message = message.replace(/&amp;/gi, '&');  
-    message = message.replace(/&gt;/gi, '>');  
-    message = message.replace(/&lt;/gi, '<');  
-    return message;    
+    message = message.replace(/&quot;/gi, '\"');
+    message = message.replace(/&apos;/gi, '\'');
+    message = message.replace(/&#39;/gi, '\'');
+    message = message.replace(/&amp;/gi, '&');
+    message = message.replace(/&gt;/gi, '>');
+    message = message.replace(/&lt;/gi, '<');
+    return message;
   }
 
   /**
    * Removes line breaks, double spaces, HTML tags, HTML entities, etc.
    */
   function cleanMessage(message) {
-    if (message) {      
+    if (message) {
       // replace HTML entities
       message = replaceHtmlEntities(message);
-      // remove HTML tags. regular expression stolen from 
+      // remove HTML tags. regular expression stolen from
       // https://raw.github.com/kvz/phpjs/master/functions/strings/strip_tags.js
       var cleanMessage = message.replace(GLOBAL_config.TAG_REGEX, '');
       // replace line feeds and duplicate spaces
-      message = message.replace(/[\n\r\t]/gi, ' ').replace(/\s+/g, ' ');            
+      message = message.replace(/[\n\r\t]/gi, ' ').replace(/\s+/g, ' ');
       //all regular expressions below stolen from
       // https://raw.github.com/cramforce/streamie/master/public/lib/stream/-
       // streamplugins.js
       //
       // remove urls
-      cleanMessage = cleanMessage.replace(GLOBAL_config.URL_REGEX, ' ');      
+      cleanMessage = cleanMessage.replace(GLOBAL_config.URL_REGEX, ' ');
       // simplify #hashtags to hashtags
       cleanMessage = cleanMessage.replace(GLOBAL_config.HASHTAG_REGEX, ' $2');
       // simplify @username to username
-      cleanMessage = cleanMessage.replace(GLOBAL_config.USER_REGEX, ' $2');      
+      cleanMessage = cleanMessage.replace(GLOBAL_config.USER_REGEX, ' $2');
       // simplify +username to username
-      cleanMessage = cleanMessage.replace(GLOBAL_config.PLUS_REGEX, ' $2');            
+      cleanMessage = cleanMessage.replace(GLOBAL_config.PLUS_REGEX, ' $2');
       return {
         text: message.replace(/^\s+|\s+$/, ''), // trim
         clean: cleanMessage.replace(/^\s+|\s+$/, '') // trim
-      };          
+      };
     }
   }
-  
+
   /**
    * Scrapes Yfrog
    */
@@ -263,26 +252,26 @@ function search(req, res, next) {
       var scraperTag2 = '</image_link>';
       var scraperTagLength = scraperTag1.length;
       var start = body.indexOf(scraperTag1) + scraperTagLength;
-      var end = body.indexOf(scraperTag2);                          
+      var end = body.indexOf(scraperTag2);
       return body.substring(start, end);
     } catch(e) {
-      throw('ERROR: Yfrog screen scraper broken');      
+      throw('ERROR: Yfrog screen scraper broken');
       return false;
     }
   }
-  
+
   /**
    * Scrapes TwitPic
    */
   function scrapeTwitPic(body, callback) {
     var mediaurl = false;
     jsdom.env(body, function(errors, window) {
-      var $ = window.document; 
+      var $ = window.document;
       try {
         mediaurl = $.getElementsByTagName('IMG')[1].src;
         callback(mediaurl);
-      } catch(e) { 
-        if (body.indexOf('error') === -1) {        
+      } catch(e) {
+        if (body.indexOf('error') === -1) {
           throw('ERROR: TwitPic screen scraper broken');          
         }
         callback(false);          
@@ -360,8 +349,8 @@ function search(req, res, next) {
       headers: {
         "Accept": 'application/json'
       },
-      body: ''     
-    };  
+      body: ''
+    };
     var collector = {};
     var httpMethod = 'POST' // 'GET';
     options.method = httpMethod;
@@ -369,20 +358,20 @@ function search(req, res, next) {
       function() {
         var group = this.group();
         var services = typeof json === 'object' ? Object.keys(json) : [];
-        services.forEach(function(serviceName) {                    
+        services.forEach(function(serviceName) {
           var service = json[serviceName] || [];
           collector[serviceName] = [];
-          service.forEach(function(item, i) {              
+          service.forEach(function(item, i) {
             var text;
             if ((item.message.translation) &&
                 (item.message.translation.text) &&
-                (item.message.translation.language !== 'en')) {            
+                (item.message.translation.language !== 'en')) {
               // for non-English texts, use the translation if it exists
-              text = item.message.translation.text;        
+              text = item.message.translation.text;
             } else {
               // use the original version
               text = item.message.clean;
-            } 
+            }
             if (httpMethod === 'POST') {        
               options.headers['Content-Type'] =
                   'application/x-www-form-urlencoded; charset=UTF-8';        
@@ -393,11 +382,11 @@ function search(req, res, next) {
                   '&confidence=0.2&support=20';            
             } else {
               // non-testing env: 'http://spotlight.dbpedia.org/rest/annotate' +
-              options.url = 'http://spotlight.dbpedia.org/dev/rest/annotate' + 
-                  '?text=' + encodeURIComponent(text) + 
-                  '&confidence=0.2&support=20';                          
+              options.url = 'http://spotlight.dbpedia.org/dev/rest/annotate' +
+                  '?text=' + encodeURIComponent(text) +
+                  '&confidence=0.2&support=20';
             }
-            var cb = group();  
+            var cb = group();
             request(options, function(err, res, body) {
               if (!err && res.statusCode === 200) {
                 var response;
@@ -1299,8 +1288,8 @@ function search(req, res, next) {
     Flickr: function(pendingRequests, videoSearch) {     
       var currentService = videoSearch ? 'FlickrVideos' : 'Flickr';         
       if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
-      var now = new Date().getTime();
-      var sixDays = 86400000 * 6;
+      var now = ~~(new Date().getTime() / 1000);
+      var sixDays = 86400 * 6;
       var params = {
         method: 'flickr.photos.search',
         api_key: GLOBAL_config.FLICKR_KEY,
@@ -1507,10 +1496,7 @@ function search(req, res, next) {
                       results.push({
                         mediaurl: mediaurl,
                         storyurl: storyurl,
-                        message: {
-                          text: message,
-                          clean: cleanMessage(message)
-                        },
+                        message: cleanMessage(message),
                         user: user,
                         type: type,
                         timestamp: timestamp,
@@ -1567,7 +1553,6 @@ function search(req, res, next) {
     }, intervalTimeout);    
   } 
 }
-
 var port = process.env.PORT || 8001;
 app.listen(port);
 console.log('node.JS running on ' + port);

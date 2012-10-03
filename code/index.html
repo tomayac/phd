@@ -289,7 +289,7 @@
               }
               distances[outerKey] = {};
               var outerHistograms = illustrator.tileHistograms[outerKey];
-              html.push('<hr/><img style="border:solid 2px red;" class="photo" src="' + outerKey + '"/>');
+              html.push('<hr/><a href="' + outerKey + '"><img class="photo" src="' + outerKey + '"/></a>');
               var startAt = 0;
               for (var j = i; j < len; j++) {
                 var innerKey = keys[j];
