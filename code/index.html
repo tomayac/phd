@@ -147,12 +147,8 @@
             
             // calculate the histograms tile-wise 
             var similarityCanvas = document.createElement('canvas');
-            ///*
             similarityCanvas.width = img.width;
             similarityCanvas.height = img.height;
-            //*/
-            //similarityCanvas.width = 100;
-            //similarityCanvas.height = 100;
             
             var similarityCtx = similarityCanvas.getContext('2d');
 
@@ -235,7 +231,6 @@
             averageHistograms.sort(sortFunction);
 
             var resultsDiv = document.getElementById('results');
-            // resultsDiv.innerHTML += '<hr><hr>';
             var html = [];
             averageHistograms.forEach(function(image, i) {
               var img = document.createElement('img');
@@ -258,12 +253,11 @@
                     (histogramDifferenceB <= illustrator.THRESHOLD)) {                  
                   // noop
                 } else {
-                  html[i] = '<hr/>' + html[i];
+                  // html[i] = '<hr/>' + html[i];
                 }               
               }                                
             });
             //resultsDiv.innerHTML += html.join('');
-            resultsDiv.innerHTML += '<hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/>';
             html = [];
             var distances = {};
 
@@ -289,7 +283,7 @@
               }
               distances[outerKey] = {};
               var outerHistograms = illustrator.tileHistograms[outerKey];
-              html.push('<hr/><a href="' + outerKey + '"><img class="photo" src="' + outerKey + '"/></a>');
+              html.push('<a href="' + outerKey + '"><img class="photo" src="' + outerKey + '"/></a>');
               var startAt = 0;
               for (var j = i; j < len; j++) {
                 var innerKey = keys[j];
