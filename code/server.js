@@ -109,12 +109,12 @@ function proxy(req, res, next) {
       res.statusCode = 404;
       res.send('Error 404. File not found.');
     }
-  }); 
+  });
   */
 }
-function search(req, res, next) { 
+function search(req, res, next) {
 
-  /** 
+  /**
    * Stolen from https://developer.mozilla.org/en/JavaScript/Reference/Global_-
    * Objects/Date#Example:_ISO_8601_formatted_dates
    */
@@ -134,7 +134,7 @@ function search(req, res, next) {
    */
   function cleanVideoUrl(url, callback) {
     // if is YouTube URL
-    if ((url.indexOf('http://www.youtube.com') === 0) || 
+    if ((url.indexOf('http://www.youtube.com') === 0) ||
         (url.indexOf('https://www.youtube.com') === 0)) {
       try {
         var urlObj = new Uri(url);
@@ -272,12 +272,12 @@ function search(req, res, next) {
         callback(mediaurl);
       } catch(e) {
         if (body.indexOf('error') === -1) {
-          throw('ERROR: TwitPic screen scraper broken');          
+          throw('ERROR: TwitPic screen scraper broken');
         }
-        callback(false);          
-      }  
-    });    
-  } 
+        callback(false);
+      }
+    });
+  }
 
   /**
    * Scrapes img.ly
@@ -285,17 +285,17 @@ function search(req, res, next) {
   function scrapeImgLy(body, callback) {
     var mediaurl = false;
     jsdom.env(body, function(errors, window) {
-      var $ = window.document; 
+      var $ = window.document;
       var match = 'the-image';
       try {
         mediaurl = $.getElementById(match).src;
         callback(mediaurl);
-      } catch(e) { 
-        throw('ERROR: img.ly screen scraper broken');          
-        callback(false);          
-      }  
-    });    
-  } 
+      } catch(e) {
+        throw('ERROR: img.ly screen scraper broken');
+        callback(false);
+      }
+    });
+  }
 
   /**
    * Scrapes MySpace
@@ -307,15 +307,15 @@ function search(req, res, next) {
       callback({
         caption: false,
         timestamp: false
-      });      
+      });
     }
     jsdom.env(body, function(errors, window) {
-      var $ = window.document; 
+      var $ = window.document;
       try {
         caption = $.getElementById('photoCaption').textContent;
         body =
             $.getElementsByTagName('body')[0].textContent.replace(/\s+/g, ' ');
-        var match = '"unixTime":';        
+        var match = '"unixTime":';
         var timeStart = (body.indexOf(match) + match.length);
         var timeEnd = body.substring(timeStart).indexOf(',') + timeStart;
         timestamp = parseInt(body.substring(timeStart, timeEnd) + '000', 10);
@@ -325,7 +325,7 @@ function search(req, res, next) {
         });
       } catch(e) {
         // private profiles are not the fault of the scraper, everything else is
-        if (body.indexOf('Sorry, ') === -1) {        
+        if (body.indexOf('Sorry, ') === -1) {
           throw('ERROR: MySpace screen scraper broken');
         }
         callback({
@@ -333,17 +333,17 @@ function search(req, res, next) {
           timestamp: false
         });
       }
-    });    
-  } 
-  
+    });
+  }
+
   /**
    * Annotates messages with DBpedia Spotlight
-   */  
-  function spotlight(json) {    
+   */
+  function spotlight(json) {
     if (!GLOBAL_config.NAMED_ENTITY_EXTRACTION) {
       return sendResults(json);
     }
-    if (GLOBAL_config.DEBUG) console.log('spotlight');    
+    if (GLOBAL_config.DEBUG) console.log('spotlight');
     var currentService = 'DBpediaSpotlight';
     var options = {
       headers: {
@@ -372,14 +372,14 @@ function search(req, res, next) {
               // use the original version
               text = item.message.clean;
             }
-            if (httpMethod === 'POST') {        
+            if (httpMethod === 'POST') {
               options.headers['Content-Type'] =
-                  'application/x-www-form-urlencoded; charset=UTF-8';        
-              // non-testing env: 'http://spotlight.dbpedia.org/rest/annotate';                        
-              options.url = 'http://spotlight.dbpedia.org/dev/rest/annotate';              
+                  'application/x-www-form-urlencoded; charset=UTF-8';
+              // non-testing env: 'http://spotlight.dbpedia.org/rest/annotate';
+              options.url = 'http://spotlight.dbpedia.org/dev/rest/annotate';
               options.body =
-                  'text=' + encodeURIComponent(text) + 
-                  '&confidence=0.2&support=20';            
+                  'text=' + encodeURIComponent(text) +
+                  '&confidence=0.2&support=20';
             } else {
               // non-testing env: 'http://spotlight.dbpedia.org/rest/annotate' +
               options.url = 'http://spotlight.dbpedia.org/dev/rest/annotate' +
@@ -394,20 +394,20 @@ function search(req, res, next) {
                   response = JSON.parse(body);
                 } catch(e) {
                   // error
-                  collector[serviceName][i] = [];   
-                  return cb(null);                  
-                }                    
-                if (response.Error || !response.Resources) {
-                  // error            
                   collector[serviceName][i] = [];
                   return cb(null);
                 }
-                var entities = [];      	              
-                if (response.Resources) {                
+                if (response.Error || !response.Resources) {
+                  // error
+                  collector[serviceName][i] = [];
+                  return cb(null);
+                }
+                var entities = [];
+                if (response.Resources) {
                   var uris = {};
                   var resources = response.Resources;
                   for (var j = 0, len = resources.length; j < len; j++) {
-                    var entity = resources[j];              
+                    var entity = resources[j];
                     // the value of entity['@URI'] is not unique, but we only
                     // need it once, we simply don't care about the other
                     // occurrences
@@ -422,39 +422,39 @@ function search(req, res, next) {
                           source: currentService
                         }],
                         source: currentService
-                      });                                        
+                      });
                     }
-                  }                            
-                }   
+                  }
+                }
                 // success
                 collector[serviceName][i] = entities;
               } else {
                 // error
                 collector[serviceName][i] = [];
               }
-              cb(null);            
-            });          
-          });   
-        });         
+              cb(null);
+            });
+          });
+        });
       },
-      function(err) {     
+      function(err) {
         var services = typeof json === 'object' ? Object.keys(json) : [];
-        services.forEach(function(serviceName) {          
+        services.forEach(function(serviceName) {
           var service = json[serviceName] || [];
-          service.forEach(function(item, i) {  
-            item.message.entities = collector[serviceName][i];     
+          service.forEach(function(item, i) {
+            item.message.entities = collector[serviceName][i];
             // part of speech tagging, PoS
-            if (GLOBAL_config.PART_OF_SPEECH) {            
+            if (GLOBAL_config.PART_OF_SPEECH) {
               var words;
               if ((item.message.translation) &&
                   (item.message.translation.text) &&
-                  (item.message.translation.language !== 'en')) {            
-                // for non-English texts, use the translation if it exists    
+                  (item.message.translation.language !== 'en')) {
+                // for non-English texts, use the translation if it exists
                 words = new Lexer().lex(item.message.translation.text);
               } else {
-                words = new Lexer().lex(item.message.clean);              
-              }  
-              var taggedWords = new POSTagger().tag(words);                        
+                words = new Lexer().lex(item.message.clean);
+              }
+              var taggedWords = new POSTagger().tag(words);
               var result = [];
               for (var j = 0, len = taggedWords.length; j < len; j++) {
                 var taggedWord = taggedWords[j];
@@ -469,21 +469,21 @@ function search(req, res, next) {
                     tag: tag
                   });
                 }
-                item.message.nouns = result;            
+                item.message.nouns = result;
               }
             }
           });
         });
         sendResults(json);
-      }  
-    );        
+      }
+    );
   }
 
   /**
    * Translates messages one by one
    */
   function translate(json) {
-    if (GLOBAL_config.DEBUG) console.log('translate');    
+    if (GLOBAL_config.DEBUG) console.log('translate');
     var options;
     if (GLOBAL_config.USE_GOOGLE_RESEARCH_API) {
       /*
@@ -492,25 +492,25 @@ function search(req, res, next) {
           "X-HTTP-Method-Override": 'GET',
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
           "Authorization": "GoogleLogin auth=" +
-              GLOBAL_config.GOOGLE_RESEARCH_API_KEY 
+              GLOBAL_config.GOOGLE_RESEARCH_API_KEY
         },
         method: 'POST',
         url: 'http://translate.google.com/researchapi/translate',
         body: 'tl=en'
       };
-      */  
+      */
       options = {
         headers: {
           "X-HTTP-Method-Override": 'GET',
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
           "Authorization": "GoogleLogin auth=" +
-              GLOBAL_config.GOOGLE_RESEARCH_API_KEY 
+              GLOBAL_config.GOOGLE_RESEARCH_API_KEY
         },
         method: 'POST',
         url: 'https://www.googleapis.com/language/translate/v2',
         body: 'key=' + GLOBAL_config.GOOGLE_RESEARCH_API_KEY + '&target=en'
       };
-      
+
     } else {
       options = {
         headers: {
@@ -520,19 +520,19 @@ function search(req, res, next) {
         method: 'POST',
         url: 'https://www.googleapis.com/language/translate/v2',
         body: 'key=' + GLOBAL_config.GOOGLE_KEY + '&target=en'
-      };        
+      };
     }
     var collector = {};
     Step(
       function() {
         var group = this.group();
         var services = typeof json === 'object' ? Object.keys(json) : [];
-        services.forEach(function(serviceName) {          
-          var cb = group();                    
+        services.forEach(function(serviceName) {
+          var cb = group();
           var service = json[serviceName] || [];
           collector[serviceName] = [];
-          service.forEach(function(item, i) {  
-            var text = item.message.clean;        
+          service.forEach(function(item, i) {
+            var text = item.message.clean;
             if (GLOBAL_config.USE_GOOGLE_RESEARCH_API) {
               //options.body = 'tl=en&q=' + encodeURIComponent(text);
               options.body += '&q=' + encodeURIComponent(text);
@@ -542,59 +542,59 @@ function search(req, res, next) {
             collector[serviceName][i] = {
               text: '',
               language: ''
-            };               
+            };
           });
-          request(options, function(err1, res1, body) {    
+          request(options, function(err1, res1, body) {
 //  FixMe console.log(JSON.stringify(options))
               var response;
               if (GLOBAL_config.USE_GOOGLE_RESEARCH_API) {
 // FixMe console.log('hello')
 // FixMe res.send(body);
               } else {
-                if (!err1 && res1.statusCode === 200) {                
+                if (!err1 && res1.statusCode === 200) {
                   try {
                     response = JSON.parse(body);
                   } catch(e) {
                     // error
-                    return cb(null);                
-                  }                    
+                    return cb(null);
+                  }
                   if ((response.data) &&
                       (response.data.translations) &&
-                      (Array.isArray(response.data.translations))) {                
-                    response.data.translations.forEach(function(translation, j) {                    
+                      (Array.isArray(response.data.translations))) {
+                    response.data.translations.forEach(function(translation, j) {
                       collector[serviceName][j] = {
                         text: replaceHtmlEntities(translation.translatedText),
                         language: translation.detectedSourceLanguage
                       };
                     });
-                  }                
+                  }
                 } else {
                   // error
-                  return cb(null);              
-                }                  
+                  return cb(null);
+                }
               }
-              cb(null);            
-          });                              
-        });         
+              cb(null);
+          });
+        });
       },
-      function(err) {   
+      function(err) {
         var services = typeof json === 'object' ? Object.keys(json) : [];
-        services.forEach(function(serviceName) {          
+        services.forEach(function(serviceName) {
           var service = json[serviceName] || [];
-          service.forEach(function(item, i) {  
+          service.forEach(function(item, i) {
             item.message.translation = collector[serviceName][i];
           });
         });
         spotlight(json);
-      }  
-    );   
-  } 
-  
+      }
+    );
+  }
+
   /**
    * Collects results to be sent back to the client
    */
   function collectResults(json, service, pendingRequests) {
-    if (GLOBAL_config.DEBUG) console.log('collectResults for ' + service);    
+    if (GLOBAL_config.DEBUG) console.log('collectResults for ' + service);
     if (!pendingRequests) {
       if (service !== 'combined') {
         var temp = json;
@@ -604,13 +604,13 @@ function search(req, res, next) {
       // make sure that after a timeout, where a service's result can still be
       // the initial value of boolean false, we set the value to empty array
       var services = typeof json === 'object' ? Object.keys(json) : [];
-      services.forEach(function(serviceName) {          
+      services.forEach(function(serviceName) {
         if (json[serviceName] === false) {
           json[serviceName] = [];
         }
       });
       if (GLOBAL_config.TRANSLATE) {
-        translate(json);      
+        translate(json);
       } else {
         spotlight(json);
       }
@@ -618,32 +618,32 @@ function search(req, res, next) {
       pendingRequests[service] = json;
     }
   }
-  
+
   /**
    * Sends results back to the client
    */
   function sendResults(json) {
-    if (GLOBAL_config.DEBUG) console.log('sendResults');    
+    if (GLOBAL_config.DEBUG) console.log('sendResults');
     res.setHeader('Content-Type', 'application/json; charset=UTF-8');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');    
-    if (req.query.callback) {      
-      res.send(req.query.callback + '(' + JSON.stringify(json) + ')');      
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+    if (req.query.callback) {
+      res.send(req.query.callback + '(' + JSON.stringify(json) + ')');
     } else {
       res.send(json);
-    }    
+    }
   }
-    
+
   // actual code begins, up to here we only had helper functions
   var path = /^\/search\/(.+)\/(.+)$/;
   var pathname = require('url').parse(req.url).pathname;
   var service = pathname.replace(path, '$1');
-  var query = decodeURIComponent(pathname.replace(path, '$2'));  
+  var query = decodeURIComponent(pathname.replace(path, '$2'));
 
-  var services = {   
+  var services = {
     GooglePlus: function(pendingRequests) {
       var currentService = 'GooglePlus';
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var options = {
         url: 'https://www.googleapis.com/plus/v1/activities?query=' +
             encodeURIComponent(query) +
@@ -653,26 +653,26 @@ function search(req, res, next) {
       request.get(options, function(err, reply, body) {
         var results = [];
         try {
-          body = JSON.parse(body);          
+          body = JSON.parse(body);
           if (body.items && Array.isArray(body.items)) {
             body.items.forEach(function(item) {
               // only treat posts and shares, no check-ins
               if (((item.verb === 'share') || (item.verb === 'post')) &&
                   (item.object.attachments) &&
                   (Array.isArray(item.object.attachments))) {
-                item.object.attachments.forEach(function(attachment) {    
+                item.object.attachments.forEach(function(attachment) {
                   // only treat photos and videos, skip articles
                   if ((attachment.objectType !== 'photo') &&
                       (attachment.objectType !== 'video')) {
                     return;
                   }
                   // the message can consist of different parts, dependent on the
-                  // item type 
+                  // item type
                   var message = cleanMessage(
                       (item.object.content ?
                           item.object.content : '') +
                       (item.title ?
-                          ' ' + item.title : '') +    
+                          ' ' + item.title : '') +
                       (item.annotation ?
                           ' ' + item.annotation : '') +
                       (attachment.displayName ?
@@ -688,35 +688,35 @@ function search(req, res, next) {
                       if (cleanedMediaUrl) {
                         results.push({
                           mediaurl: cleanedMediaUrl,
-                          storyurl: item.url,                      
+                          storyurl: item.url,
                           message: message,
                           user: item.actor.url,
                           type: attachment.objectType,
                           timestamp: (new Date(item.published)).getTime(),
                           published: item.published
-                        }); 
+                        });
                       }
                     });
                   }
                 });
               }
             });
-            collectResults(results, currentService, pendingRequests);                                    
+            collectResults(results, currentService, pendingRequests);
           } else {
-            collectResults(results, currentService, pendingRequests);                          
+            collectResults(results, currentService, pendingRequests);
           }
         } catch(e) {
-          collectResults(results, currentService, pendingRequests);                                    
+          collectResults(results, currentService, pendingRequests);
         }
-      });       
+      });
     },
     MySpace: function(pendingRequests) {
-      var currentService = 'MySpace';  
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
+      var currentService = 'MySpace';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         searchTerms: query,
         count: 10,
-        sortBy: 'recent'        
+        sortBy: 'recent'
       };
       params = querystring.stringify(params);
       var options = {
@@ -736,7 +736,7 @@ function search(req, res, next) {
             var items = body.entry;
             Step(
               function() {
-                var group = this.group();                          
+                var group = this.group();
                 items.forEach(function(item) {
                   var cb = group();
                   var user = item.profileUrl;
@@ -747,17 +747,17 @@ function search(req, res, next) {
                     headers: GLOBAL_config.HEADERS
                   };
                   request.get(options, function(err, reply, body) {
-                    scrapeMySpace(body, function(scrapeResult) {                  
+                    scrapeMySpace(body, function(scrapeResult) {
                       if (scrapeResult.timestamp && scrapeResult.caption) {
                         results.push({
                           mediaurl: mediaurl,
-                          storyurl: storyurl,                      
+                          storyurl: storyurl,
                           message: cleanMessage(scrapeResult.caption),
                           user: user,
                           type: 'photo',
                           timestamp: scrapeResult.timestamp,
                           published: getIsoDateString(scrapeResult.timestamp)
-                        });                    
+                        });
                       }
                       cb(null);
                     });
@@ -765,25 +765,25 @@ function search(req, res, next) {
                 });
               },
               function(err) {
-                collectResults(results, currentService, pendingRequests);                
+                collectResults(results, currentService, pendingRequests);
               }
-            );            
+            );
           } else {
-            collectResults(results, currentService, pendingRequests);                          
-          }        
+            collectResults(results, currentService, pendingRequests);
+          }
         } catch(e) {
-          collectResults(results, currentService, pendingRequests);                                    
+          collectResults(results, currentService, pendingRequests);
         }
-      });       
+      });
     },
     /*
     MySpaceVideos: function(pendingRequests) {
-      var currentService = 'MySpaceVideos';  
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
+      var currentService = 'MySpaceVideos';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         searchTerms: query,
         count: 10,
-        sortBy: 'recent'        
+        sortBy: 'recent'
       };
       params = querystring.stringify(params);
       var options = {
@@ -792,12 +792,12 @@ function search(req, res, next) {
       };
       request.get(options, function(err, reply, body) {
         res.send(body);
-      });       
+      });
     },
     */
-    Facebook: function(pendingRequests) {      
-      var currentService = 'Facebook';  
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
+    Facebook: function(pendingRequests) {
+      var currentService = 'Facebook';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         q: query,
         limit: 100
@@ -807,7 +807,7 @@ function search(req, res, next) {
         url: 'https://graph.facebook.com/search?' + params + '&type=post',
         headers: GLOBAL_config.HEADERS
       };
-      request.get(options, function(err, reply, body) { 
+      request.get(options, function(err, reply, body) {
         try {
           body = JSON.parse(body);
           var results = [];
@@ -815,7 +815,7 @@ function search(req, res, next) {
             var items = body.data;
             Step(
               function() {
-                var group = this.group();            
+                var group = this.group();
                 items.forEach(function(item) {
                   if (item.type !== 'photo' && item.type !== 'video') {
                     return;
@@ -829,7 +829,7 @@ function search(req, res, next) {
                   message += (item.description ?
                       (message.length ? '. ' : '') + item.description : '');
                   message += (item.message ?
-                      (message.length ? '. ' : '') + item.message : '');                            
+                      (message.length ? '. ' : '') + item.message : '');
                   var mediaUrl = item.type === 'video' ?
                       item.source : item.picture;
                   cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
@@ -837,8 +837,8 @@ function search(req, res, next) {
                       results.push({
                         mediaurl: cleanedMediaUrl.replace(/s\.jpg$/gi, 'n.jpg'),
                         storyurl:
-                            'https://www.facebook.com/permalink.php?story_fbid=' + 
-                            item.id.split(/_/)[1] + '&id=' + item.from.id,                      
+                            'https://www.facebook.com/permalink.php?story_fbid=' +
+                            item.id.split(/_/)[1] + '&id=' + item.from.id,
                         message: cleanMessage(message),
                         user:
                             'https://www.facebook.com/profile.php?id=' +
@@ -853,20 +853,20 @@ function search(req, res, next) {
                 });
               },
               function(err) {
-                collectResults(results, currentService, pendingRequests);                
+                collectResults(results, currentService, pendingRequests);
               }
-            );              
+            );
           } else {
-            collectResults(results, currentService, pendingRequests);                            
+            collectResults(results, currentService, pendingRequests);
           }
         } catch(e) {
-          collectResults(results, currentService, pendingRequests);                                      
-        }          
+          collectResults(results, currentService, pendingRequests);
+        }
       });
     },
     TwitterNative: function(pendingRequests) {
-      var currentService = 'TwitterNative';  
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);              
+      var currentService = 'TwitterNative';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         q: query + ' -"RT "',
         result_type: 'recent',
@@ -877,8 +877,8 @@ function search(req, res, next) {
       var options = {
         url: 'http://search.twitter.com/search.json?' + params,
         headers: GLOBAL_config.HEADERS
-      };      
-      request.get(options, function(err, reply, body) { 
+      };
+      request.get(options, function(err, reply, body) {
         try {
           body = JSON.parse(body);
           var results = [];
@@ -889,19 +889,19 @@ function search(req, res, next) {
               //item.entities.media.forEach(function(media) {
               var mediaurl = '';
               if (item.entities && item.entities.media &&
-                  item.entities.media.length > 0) {  
+                  item.entities.media.length > 0) {
                 mediaurl = item.entities.media[0]['media_url'] ?
                     item.entities.media[0]['media_url'] :
                     item.entities.media[0]['media_url_https'];
               } else {
                 continue;
               }
-              var timestamp = Date.parse(item.created_at);                  
+              var timestamp = Date.parse(item.created_at);
               var published = getIsoDateString(timestamp)
               var message = cleanMessage(item.text);
               var user = 'http://twitter.com/' + item.from_user;
               var storyurl = 'http://twitter.com/' +
-                  item.from_user + '/status/' + item.id_str;                                
+                  item.from_user + '/status/' + item.id_str;
               results.push({
                 mediaurl: mediaurl,
                 storyurl: storyurl,
@@ -913,15 +913,15 @@ function search(req, res, next) {
               });
             }
           }
-        } catch(e) {          
+        } catch(e) {
           collectResults([], currentService, pendingRequests);
         }
         collectResults(results, currentService, pendingRequests);
       });
     },
     Twitter: function(pendingRequests) {
-      var currentService = 'Twitter';  
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);              
+      var currentService = 'Twitter';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         q: query + ' ' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ' -"RT "',
         rpp: 100,
@@ -933,13 +933,13 @@ function search(req, res, next) {
         headers: GLOBAL_config.HEADERS
       };
       console.log(options.url);
-      request.get(options, function(err, reply, body) { 
+      request.get(options, function(err, reply, body) {
         try {
           body = JSON.parse(body);
           var results = [];
           if ((body.results) && (body.results.length)) {
             var items = body.results;
-            var itemStack = [];            
+            var itemStack = [];
             for (var i = 0, len = items.length; i < len; i++) {
               var item = items[i];
               // extract all URLs form a tweet
@@ -947,9 +947,9 @@ function search(req, res, next) {
               text = item.text.replace(GLOBAL_config.URL_REGEX, function(url) {
                 var targetURL = (/^\w+\:\//.test(url) ? '' : 'http://') + url;
                 urls.push(targetURL);
-              });              
+              });
               // for each URL prepare the options object
-              var optionsStack = [];                    
+              var optionsStack = [];
               for (var j = 0, len2 = urls.length; j < len2; j++) {
                 var options = {
                   url: urls[j],
@@ -957,21 +957,21 @@ function search(req, res, next) {
                   headers: GLOBAL_config.HEADERS
                 };
                 optionsStack[j] = options;
-              }              
+              }
               itemStack[i] = {
                 urls: urls,
                 options: optionsStack,
-                item: item                
+                item: item
               };
             }
             // for each tweet retrieve all URLs and try to expand shortend URLs
-            Step(                     
-              function() {                            
+            Step(
+              function() {
                 var group = this.group();
                 itemStack.forEach(function (obj) {
                   obj.options.forEach(function(options) {
                     var cb = group();
-                    request.get(options, function(err, reply2) {                                    
+                    request.get(options, function(err, reply2) {
                       if (reply2 && reply2.statusCode) {
                         cb(null, {
                           req: {
@@ -988,13 +988,13 @@ function search(req, res, next) {
                             location: ''
                           },
                           url: options.url
-                        });                      
+                        });
                       }
                     })
                   });
-                });       
-              },     
-              function(err, replies) { 
+                });
+              },
+              function(err, replies) {
                 /**
                  * Checks if a URL is one of the media platform URLs
                  */
@@ -1005,31 +1005,31 @@ function search(req, res, next) {
                 var locations = [];
                 replies.forEach(function(thing, i) {
                   if ((thing.req.statusCode === 301) ||
-                      (thing.req.statusCode === 302)) {    
-                    if (checkForValidUrl(thing.req.location)) {    
+                      (thing.req.statusCode === 302)) {
+                    if (checkForValidUrl(thing.req.location)) {
                       locations.push(thing.req.location);
                     } else {
                       locations.push(false);
                     }
                   } else {
-                    if (checkForValidUrl(thing.url)) {    
+                    if (checkForValidUrl(thing.url)) {
                       locations.push(thing.url);
                     } else {
                       locations.push(false);
                     }
                   }
-                });        
+                });
                 var locationIndex = 0;
                 var numberOfUrls = 0;
                 var pendingUrls = 0;
                 for (var i = 0, len = itemStack.length; i < len; i++) {
-                  itemStack[i].urls.forEach(function() {                  
+                  itemStack[i].urls.forEach(function() {
                     numberOfUrls++;
                   });
                 }
                 for (var i = 0, len = itemStack.length; i < len; i++) {
                   var item = itemStack[i].item;
-                  var timestamp = Date.parse(item.created_at);                  
+                  var timestamp = Date.parse(item.created_at);
                   var published = getIsoDateString(timestamp)
                   var message = cleanMessage(item.text);
                   var user = 'http://twitter.com/' + item.from_user;
@@ -1037,8 +1037,8 @@ function search(req, res, next) {
                     if (locations[locationIndex]) {
                       var mediaurl = locations[locationIndex];
                       var storyurl = 'http://twitter.com/' +
-                          item.from_user + '/status/' + item.id_str;                  
-                      // yfrog                                                    
+                          item.from_user + '/status/' + item.id_str;
+                      // yfrog
                       if (mediaurl.indexOf('http://yfrog.com') === 0) {
                         var id = mediaurl.replace('http://yfrog.com/', '');
                         var options = {
@@ -1056,22 +1056,22 @@ function search(req, res, next) {
                                 type: 'photo',
                                 timestamp: timestamp,
                                 published: published
-                              });  
+                              });
                             }
-                            pendingUrls++;           
-                            if (pendingUrls === numberOfUrls) {                                                
+                            pendingUrls++;
+                            if (pendingUrls === numberOfUrls) {
                               collectResults(
                                   results, currentService, pendingRequests);
                             }
                           });
                         })(message, user, timestamp, published);
-                      // TwitPic  
-                      } else if (mediaurl.indexOf('http://twitpic.com') === 0) {                        
+                      // TwitPic
+                      } else if (mediaurl.indexOf('http://twitpic.com') === 0) {
                         var id = mediaurl.replace('http://twitpic.com/', '');
                         var options = {
                           url: 'http://twitpic.com/' + id + '/full'
                         };
-                        (function(message, user, timestamp, published) {                        
+                        (function(message, user, timestamp, published) {
                           request.get(options, function(err, res, body) {
                             scrapeTwitPic(body, function(mediaurl) {
                               if (mediaurl) {
@@ -1083,23 +1083,23 @@ function search(req, res, next) {
                                   type: 'photo',
                                   timestamp: timestamp,
                                   published: published
-                                });  
+                                });
                               }
-                              pendingUrls++;           
-                              if (pendingUrls === numberOfUrls) {                                                
+                              pendingUrls++;
+                              if (pendingUrls === numberOfUrls) {
                                 collectResults(
                                     results, currentService, pendingRequests);
-                              }                              
-                            });                            
+                              }
+                            });
                           });
-                        })(message, user, timestamp, published);    
-                      // img.ly                                            
-                      } else if (mediaurl.indexOf('http://img.ly') === 0) {                                                                        
+                        })(message, user, timestamp, published);
+                      // img.ly
+                      } else if (mediaurl.indexOf('http://img.ly') === 0) {
                         var id = mediaurl.replace('http://img.ly/', '');
                         var options = {
                           url: 'http://img.ly/' + id
                         };
-                        (function(message, user, timestamp, published) {                        
+                        (function(message, user, timestamp, published) {
                           request.get(options, function(err, res, body) {
                             scrapeImgLy(body, function(mediaurl) {
                               if (mediaurl) {
@@ -1111,28 +1111,28 @@ function search(req, res, next) {
                                   type: 'photo',
                                   timestamp: timestamp,
                                   published: published
-                                });  
+                                });
                               }
-                              pendingUrls++;           
-                              if (pendingUrls === numberOfUrls) {                                                
+                              pendingUrls++;
+                              if (pendingUrls === numberOfUrls) {
                                 collectResults(
                                     results, currentService, pendingRequests);
-                              }                              
-                            });                            
+                              }
+                            });
                           });
-                        })(message, user, timestamp, published);                                              
-                      // Instagram  
-                      } else if (mediaurl.indexOf('http://instagr.am') === 0) {                        
+                        })(message, user, timestamp, published);
+                      // Instagram
+                      } else if (mediaurl.indexOf('http://instagr.am') === 0) {
                         var id = mediaurl.replace('http://instagr.am/p/', '');
                         var options = {
-                          url: 'https://api.instagram.com/v1/media/' + id + 
+                          url: 'https://api.instagram.com/v1/media/' + id +
                               '?access_token=' + GLOBAL_config.INSTAGRAM_KEY
                         };
-                        (function(message, user, timestamp, published) {                        
+                        (function(message, user, timestamp, published) {
                           request.get(options, function(err, result, body) {
                             try {
                               body = JSON.parse(body);
-                              if ((body.data) && (body.data.images) &&    
+                              if ((body.data) && (body.data.images) &&
                                   (body.data.images.standard_resolution ) &&
                                   (body.data.images.standard_resolution.url)) {
                                 results.push({
@@ -1144,19 +1144,19 @@ function search(req, res, next) {
                                   type: 'photo',
                                   timestamp: timestamp,
                                   published: published
-                                });                                           
+                                });
                               }
                             } catch(e) {
                               // noop
                             }
                             pendingUrls++;
-                            if (pendingUrls === numberOfUrls) {                                                
+                            if (pendingUrls === numberOfUrls) {
                               collectResults(
                                   results, currentService, pendingRequests);
-                            }                              
+                            }
                           });
-                        })(message, user, timestamp, published);                                                
-                      // URL from unsupported media platform, don't consider it  
+                        })(message, user, timestamp, published);
+                      // URL from unsupported media platform, don't consider it
                       } else {
                         numberOfUrls--;
                       }
@@ -1165,20 +1165,20 @@ function search(req, res, next) {
                     }
                     locationIndex++;
                   });
-                }                
+                }
               }
-            );            
+            );
           } else {
             collectResults([], currentService, pendingRequests);
           }
         } catch(e) {
-          collectResults([], currentService, pendingRequests);          
-        }          
-      });               
+          collectResults([], currentService, pendingRequests);
+        }
+      });
     },
     Instagram: function(pendingRequests) {
-      var currentService = 'Instagram';     
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);           
+      var currentService = 'Instagram';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         client_id: GLOBAL_config.INSTAGRAM_KEY
       };
@@ -1189,7 +1189,7 @@ function search(req, res, next) {
             '/media/recent?' + params,
         headers: GLOBAL_config.HEADERS
       };
-      request.get(options, function(err, reply, body) { 
+      request.get(options, function(err, reply, body) {
         try {
           body = JSON.parse(body);
           var results = [];
@@ -1201,11 +1201,11 @@ function search(req, res, next) {
               var message = '';
               message += (item.caption && item.caption.text ?
                   item.caption.text : '');
-              message += (message.length ? '. ' : '') + 
+              message += (message.length ? '. ' : '') +
                   (item.tags && Array.isArray(item.tags) ?
                       item.tags.join(', ') : '');
               results.push({
-                mediaurl: item.images.standard_resolution.url, 
+                mediaurl: item.images.standard_resolution.url,
                 storyurl: item.link,
                 message: cleanMessage(message),
                 user: 'https://api.instagram.com/v1/users/' + item.user.id,
@@ -1220,10 +1220,10 @@ function search(req, res, next) {
         }
         collectResults(results, currentService, pendingRequests);
       });
-    },    
+    },
     YouTube: function(pendingRequests) {
-      var currentService = 'YouTube';   
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);             
+      var currentService = 'YouTube';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         v: 2,
         format: 5,
@@ -1232,22 +1232,22 @@ function search(req, res, next) {
         alt: 'jsonc',
         'max-results': 10,
         'start-index': 1,
-        time: 'this_week'        
+        time: 'this_week'
       };
       params = querystring.stringify(params);
       var options = {
         url: 'http://gdata.youtube.com/feeds/api/videos?' + params,
         headers: GLOBAL_config.HEADERS
       };
-      request.get(options, function(err, reply, body) {        
+      request.get(options, function(err, reply, body) {
         try {
-          body = JSON.parse(body);          
+          body = JSON.parse(body);
           var results = [];
           if ((body.data) && (body.data.items)) {
             var items = body.data.items;
             Step(
               function() {
-                var group = this.group();            
+                var group = this.group();
                 items.forEach(function(item) {
                   if (item.accessControl.embed !== 'allowed') {
                     return;
@@ -1265,29 +1265,29 @@ function search(req, res, next) {
                       type: 'video',
                       timestamp: timestamp,
                       published: getIsoDateString(timestamp)
-                    });                    
+                    });
                     cb(null);
                   });
                 });
               },
               function(err) {
-                collectResults(results, currentService, pendingRequests);                
+                collectResults(results, currentService, pendingRequests);
               }
-            );              
+            );
           } else {
-            collectResults(results, currentService, pendingRequests);                            
+            collectResults(results, currentService, pendingRequests);
           }
         } catch(e) {
-          collectResults(results, currentService, pendingRequests);                                      
+          collectResults(results, currentService, pendingRequests);
         }
       });
     },
     FlickrVideos: function(pendingRequests) {
       services.Flickr(pendingRequests, true);
     },
-    Flickr: function(pendingRequests, videoSearch) {     
-      var currentService = videoSearch ? 'FlickrVideos' : 'Flickr';         
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
+    Flickr: function(pendingRequests, videoSearch) {
+      var currentService = videoSearch ? 'FlickrVideos' : 'Flickr';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var now = ~~(new Date().getTime() / 1000);
       var sixDays = 86400 * 6;
       var params = {
@@ -1305,18 +1305,18 @@ function search(req, res, next) {
         url: 'http://api.flickr.com/services/rest/?' + params,
         headers: GLOBAL_config.HEADERS
       };
-      request.get(options, function(err, reply, body) {        
+      request.get(options, function(err, reply, body) {
         try {
           body = JSON.parse(body);
           var results = [];
           if ((body.photos) && (body.photos.photo)) {
             var photos = body.photos.photo;
-            Step(     
-              function() {              
+            Step(
+              function() {
                 var group = this.group();
                 for (var i = 0, len = photos.length; i < len; i++) {
                   var photo = photos[i];
-                  if (photo.ispublic) {                
+                  if (photo.ispublic) {
                     var params = {
                       method: 'flickr.photos.getInfo',
                       api_key: GLOBAL_config.FLICKR_KEY,
@@ -1329,17 +1329,17 @@ function search(req, res, next) {
                       url: 'http://api.flickr.com/services/rest/?' + params,
                       headers: GLOBAL_config.HEADERS
                     };
-                    var cb = group();                
-                    request.get(options, function(err2, reply2, body2) {        
+                    var cb = group();
+                    request.get(options, function(err2, reply2, body2) {
                       try {
-                        body2 = JSON.parse(body2);                
+                        body2 = JSON.parse(body2);
                         var tags = [];
                         if ((body2.photo) &&
-                            (body2.photo.tags) && 
+                            (body2.photo.tags) &&
                             (body2.photo.tags.tag) &&
                             (Array.isArray(body2.photo.tags.tag))) {
                           body2.photo.tags.tag.forEach(function(tag) {
-                            tags.push(tag._content);                          
+                            tags.push(tag._content);
                           });
                         }
                         var photo2 = body2.photo;
@@ -1358,11 +1358,11 @@ function search(req, res, next) {
                         };
                         request.get(options, function(err, res2, body) {
                           try {
-                            body = JSON.parse(body); 
+                            body = JSON.parse(body);
                             if ((body.sizes) && (body.sizes.size) &&
                                 (Array.isArray(body.sizes.size))) {
-                              var mediaurl = false;                                
-                              body.sizes.size.forEach(function(size) {                              
+                              var mediaurl = false;
+                              body.sizes.size.forEach(function(size) {
                                 // take the picture in the best-possible
                                 // resolution
                                 if ((!videoSearch) &&
@@ -1397,14 +1397,14 @@ function search(req, res, next) {
                                 published: getIsoDateString(timestamp)
                               });
                             }
-                            cb();                                                    
+                            cb();
                           } catch(e) {
-                            cb();                              
+                            cb();
                           }
                         });
                       } catch(e) {
                         cb();
-                      }                    
+                      }
                     })
                   }
                 }
@@ -1422,8 +1422,8 @@ function search(req, res, next) {
       });
     },
     MobyPicture: function(pendingRequests) {
-      var currentService = 'MobyPicture';         
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);       
+      var currentService = 'MobyPicture';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         key: GLOBAL_config.MOBYPICTURE_KEY,
         action: 'searchPosts',
@@ -1435,15 +1435,15 @@ function search(req, res, next) {
         url: 'http://api.mobypicture.com/?' + params,
         headers: GLOBAL_config.HEADERS
       };
-      request.get(options, function(err, reply, body) {        
+      request.get(options, function(err, reply, body) {
         var results = [];
         try {
-          body = JSON.parse(body);          
+          body = JSON.parse(body);
           if ((body.results) && (body.results.length)) {
-            var items = body.results;            
+            var items = body.results;
             for (var i = 0, len = items.length; i < len; i++) {
               var item = items[i];
-              var timestamp = item.post.created_on_epoch;
+              var timestamp = item.post.created_on_epoch * 1000;
               results.push({
                 mediaurl: item.post.media.url_full,
                 storyurl: item.post.link,
@@ -1462,9 +1462,9 @@ function search(req, res, next) {
         }
       });
     },
-    TwitPic: function(pendingRequests) {   
-      var currentService = 'TwitPic';   
-      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);             
+    TwitPic: function(pendingRequests) {
+      var currentService = 'TwitPic';
+      if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
       var params = {
         tag: query
       };
@@ -1473,7 +1473,7 @@ function search(req, res, next) {
       var options = {
         url: 'http://api.twitpic.com/2/tags/show.json?' + params,
         headers: headers
-      };      
+      };
       request.get(options, function(err, reply, body) {
         var results = [];
         try {
@@ -1481,14 +1481,14 @@ function search(req, res, next) {
           if (body.images && body.images.length > 0) {
             Step(
               function() {
-                var group = this.group();            
-                for (var i = 0, len = body.images.length; i < len; i++) {                
+                var group = this.group();
+                for (var i = 0, len = body.images.length; i < len; i++) {
                   var image = body.images[i];
                   var user = 'http://twitpic.com/photos/' + image.user.username;
                   var type = 'photo';
                   var message = image.message;
                   var timestamp = (new Date(image.timestamp)).getTime();
-                  var published = getIsoDateString(timestamp); 
+                  var published = getIsoDateString(timestamp);
                   var storyurl = 'http://twitpic.com/' + image.short_id;
                   var cb = group();
                   request.get(storyurl + '/full', function(err2, reply2, body2) {
@@ -1506,7 +1506,7 @@ function search(req, res, next) {
                     });
                   });
                 }
-              },            
+              },
               function() {
                 collectResults(results, currentService, pendingRequests);
               }
@@ -1515,20 +1515,20 @@ function search(req, res, next) {
             collectResults(results, currentService, pendingRequests);
           }
         } catch(e) {
-          collectResults(results, currentService, pendingRequests);          
+          collectResults(results, currentService, pendingRequests);
         }
       });
     }
   };
   if (services[service]) {
     services[service]();
-  } 
+  }
   if (service === 'combined') {
     var serviceNames = Object.keys(services);
     var pendingRequests = {}
     serviceNames.forEach(function(serviceName) {
       pendingRequests[serviceName] = false;
-      services[serviceName](pendingRequests); 
+      services[serviceName](pendingRequests);
     });
 
     var length = serviceNames.length;
@@ -1539,7 +1539,7 @@ function search(req, res, next) {
       passedTime += intervalTimeout;
       for (var i = 0; i < length; i++) {
         if (passedTime >= timeout) {
-          if (GLOBAL_config.DEBUG) console.log('Timeout');    
+          if (GLOBAL_config.DEBUG) console.log('Timeout');
           break;
         }
         if (pendingRequests[serviceNames[i]] === false) {
@@ -1550,8 +1550,8 @@ function search(req, res, next) {
       var results = pendingRequests;
       collectResults(results, 'combined', false);
       pendingRequests = {};
-    }, intervalTimeout);    
-  } 
+    }, intervalTimeout);
+  }
 }
 var port = process.env.PORT || 8001;
 app.listen(port);
