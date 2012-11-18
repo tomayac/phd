@@ -1,8 +1,3 @@
-
-% this file is called up by thesis.tex
-% content in this file will be fed into the main document
-
-%: ----------------------- introduction file header -----------------------
 \chapter{Introduction}
 
 % the code below specifies where the figures are stored
@@ -12,68 +7,100 @@
     \graphicspath{{1_introduction/figures/EPS/}{1_introduction/figures/}}
 \fi
 
-% ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
-% ----------------------------------------------------------------------
-
 \section{Motivation and Problem Statement}
+
 A~very open definition of the word \emph{event}
 given by WordNet~\cite{Princeton:WordNet} is
-\emph{something that happens at a given place and time}.
-We are indeed surrounded by events, most of them are of little to no interest for us.
-A~concert somewhere in the world of a~band that we do not like may be a~good example.
+\emph{``something that happens at a given place and time''}.
+Following this definition,
+we are indeed surrounded by events, most of them
+are of little to no interest for us.
+A~concert somewhere in the world of a~band
+that we do not even know may be a~good example.
 For some events, however, we may care more, for example,
-a~concert of a~band that we do like, even if it takes place at a far away location.
-Finally, very few events, we actually may attend,
-like a~concert of our favorite if it takes place in our city.
-
-A~well-known German saying goes that one cannot dance at two weddings at the same time.
-If two events we are interested in take place at overlapping times,
-we need to take a decision to attend the one, and to skip the other.
+a~concert of a~band that we know and like,
+even if it takes place at a~location far away from us.
+Finally, for very few events, we may care a~lot,
+maybe even enough to physically attend the event,
+like a~concert of our favorite band
+if it takes place in our city, is not sold out,
+and not too expensive.
 
 All this motivates the need for \emph{event summarization}.
-If there is an event that we could not attend, but that we are interested in,
-a~good event summarization can help us get a~feeling for the event's atmosphere.
+If there is an event that we could not attend
+for a~reason whatsoever,
+but that we are interested in,
+a~good event summarization can help us get a~feeling
+for the event's atmosphere.
 Similarly, if there is an event that we attended,
-we can revive the event's most fascinating moments based on the event summarization.
+we can revive the event's most fascinating moments
+based on the event summarization.
 
-Event summarization covers textual, as well as multimedia content.
-For bigger events, official TV or newspaper journalists report on site,
-and oftentimes the event organizers themselves share official media material,
+A~\emph{media gallery} in the context of
+our event summarization task is
+a~compilation of images, videos,
+and microposts retrieved from social networks
+that are related to a~given event.
+High quality media galleries have the following properties:
+
+\begin{enumerate}
+  \item \textit{Conciseness:}
+        they convey a~lot of information clearly
+        and in few media items.
+  \item \textit{Comprehensiveness:}
+        they are complete, including all representative
+        elements or aspects of an event.
+  \item \textit{Authenticity:}
+        they are of undisputed origin and genuine.
+  \item \textit{Diversity:}
+        they show a~great deal of variety.
+  \item \textit{Interestingness:}
+        they catch and hold the attention of the viewer.     
+\end{enumerate}
+
+Event summarization covers textual,
+as well as multimedia content.
+For bigger events, official TV or newspaper journalists
+report on site, and oftentimes the event organizers themselves
+share official media material,
 or even an official press package with event reports and images.
 
-We argue that by leveraging content that gets shared on social networks,
-a~more \emph{authentic}, \emph{concise}, \emph{divers}, and also more \emph{interesting}
-view on events is possible than by limiting oneself to official media content.
-We validate these subjective criteria with experiments for events of different categories
-such as sports, politics, culture, music, conferences, etc.
-In addition to the subjective criteria mentioned before,
-we also compare objective criteria such as \emph{creation time} and \emph{efficiency}
-of our approach to event summary generation with officially produced summaries.
-
-\todo{media galleries definition}
-
-\todo{define: authentic, diverse, etc.}
-
-\todo{1.1 some duplicate content in 1.2}
-
 \section{Research Question and Hypothesis}
-Our leading research question for this thesis can be formulated as follows:
+The main research question for this thesis
+can be formulated as follows.
  
-\textit{``Can user-customizable media galleries that summarize given events
-be created just based on textual and multimedia data from social networks''?}
+\noindent \textit{``Can user-customizable
+media galleries that summarize given events be
+created solely based on textual and multimedia data
+from social networks?''}
 
-\noindent Our hypothesis that we will test in this thesis is the following:
+\noindent The hypothesis that we test in this thesis
+can be formulated as follows.
 
-\textit{User-customizable media galleries that summarize given events and
-that are created solely based on textual and multimedia data from social networks
-provide a~subjectively more \emph{authentic}, \emph{concise}, \emph{divers},
-and more \emph{interesting} view on events than media galleries that summarize events
-and that are created solely based on official media content,
-and do so in an objectively \emph{shorter} creation time and more \emph{efficiently}.}
+\noindent \textit{We argue that
+through media galleries that leverage content
+shared on social networks
+a~more \emph{authentic}, more \emph{concise},
+more \emph{comprehensive}, more \emph{diverse},
+and also more \emph{interesting}
+view on events gets possible than by limiting oneself
+to officially produced media content;
+and that further such media galleries can be generated
+more \emph{efficiently} and \emph{in shorter time}
+than the officially produced ones.}
+
+\noindent We validate these subjective and objective
+criteria with experiments for events of different categories
+such as sports, politics, culture, leisure,
+music, conferences, \emph{etc.}
 
 \section{Approach}
-\todo{add diagram from thesis proposal}
+\begin{figure}[htb!]
+  \centering
+  \includegraphics[width=0.45\textwidth]{thesis-diagram.png}
+  \caption{Event summarization generation based on deduplicated, clustered, and ranked media items for an exemplary event, depicted in a~schematic manner.}     
+  \label{fig:thesis-diagram}
+\end{figure}
 
 \section{Contributions}
 \todo{add contributions as prose, "bragging rights"}
