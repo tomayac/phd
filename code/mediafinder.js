@@ -17,6 +17,7 @@ var GLOBAL_config = {
   FLICKR_SECRET: 'a4a150addb7d59f1',
   FLICKR_KEY: 'b0f2a04baa5dd667fb181701408db162',
   YFROG_KEY: '89ABGHIX5300cc8f06b447103e19a201c7599962',
+  LOCKERZ_KEY: 'f42ed850-c341-46ca-8360-dc47c049b73a',
   INSTAGRAM_KEY: '82fe3d0649e04c2da8e38736547f9170',
   INSTAGRAM_SECRET: 'b0b5316d40a74dffab16bfe3b0dfd5b6',
   GOOGLE_KEY: 'AIzaSyC5GxhDFxBHTKCLNMYtYm6o1tiagi65Ufc',
@@ -1711,6 +1712,49 @@ var mediaFinder = {
             } else {
               collectResults(results, currentService, pendingRequests);
             }
+          } catch(e) {
+            collectResults(results, currentService, pendingRequests);
+          }
+        });
+      },
+      Lockerz: function(pendingRequests) {
+        var currentService = 'Lockerz';
+        if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
+        var params = {
+          search: query
+        };
+        params = querystring.stringify(params);
+        var headers = GLOBAL_config.HEADERS;
+        var options = {
+          url: 'http://api.plixi.com/api/tpapi.svc/json/photos?' + params,
+          headers: headers
+        };
+        if (GLOBAL_config.DEBUG) console.log(currentService + ' ' + options.url);
+        request.get(options, function(err, reply, body) {
+          var results = [];
+          try {
+            body = JSON.parse(body);
+            if (body.List) {
+              body.List.forEach(function(item) {
+                results.push({
+                  mediaUrl: item.BigImageUrl,
+                  posterUrl: item.ThumbnailUrl,
+                  micropostUrl: 'http://lockerz.com/s/' + item.TinyAlias,
+                  micropost: cleanMicropost(item.Message),
+                  userProfileUrl: 'http://pics.lockerz.com/gallery/' + item.UserId,
+                  type: 'photo',
+                  timestamp: item.UploadDate * 1000,
+                  publicationDate: new Date(item.UploadDate * 1000),
+                  socialInteractions: {
+                    likes: item.LikedVotes,
+                    shares: item.Grabs,
+                    comments: item.CommentCount,
+                    views: item.Views
+                  }
+                });
+              });
+            }
+            collectResults(results, currentService, pendingRequests);
           } catch(e) {
             collectResults(results, currentService, pendingRequests);
           }

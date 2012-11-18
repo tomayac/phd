@@ -4,6 +4,11 @@
 *.log
 *.out
 *.pdf
+*.brf
+*.lof
+*.lot
+*.nlo
+*.toc
 *.synctex.gz
 .texpadtmp
 .git

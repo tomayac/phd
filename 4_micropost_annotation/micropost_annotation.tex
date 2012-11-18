@@ -267,11 +267,11 @@ These results come from a request to our wrapper API via \texttt{GET} \textit{/e
 and the particular services' results can be obtained via \texttt{GET} \textit{/entity-extraction/\{service\_name\}/Google\%20Translate\%20is\%20a\\\%20service\%20by\%20Google}.
 While AlchemyAPI and Zemanta return results from DBpedia and other interlinked LOD cloud resources, OpenCalais returns
 only results in its own namespace
-(\emph{e.g.}, \nofootnote{\textit{http://d.opencalais.com/er/company/ralg-tr1r/ce181d44-1915-3387-83da-0dc4ec01c6da.rdf}} for the
+(\emph{e.g.}, \textit{http://d.opencalais.com/er/company/ralg-tr1r/ce181d44-1915-3387-83da-0dc4ec01c6da.rdf} for the
 company Google). In this particular case, retrieving the resource RDF representation and parsing for
 \texttt{owl:sameAs} return links to DBpedia. However, in the general case, we found OpenCalais URIs sometimes pointing
 to non-existent resources or to not very rich resources such
-as\nofootnote{\textit{http://d.opencalais.com/pershash-1/cfcf1aa2-de05-3939-a7d5-10c9c7b3e87b.html}}, a URI identifying
+as \textit{http://d.opencalais.com/pershash-1/cfcf1aa2-de05-3939-a7d5-10c9c7b3e87b.html}, a URI identifying
 the current US President Barack Obama where the only information is that Barack Obama is of type person. In order to
 consolidate extracted entities, we use the following approach: we have a look at each of the extracted entities from
 service one and compare each entity's URIs with each URIs from each extracted entity from service two, illustrated below.
@@ -364,16 +364,16 @@ Finally, we consider the merged results from both Zemanta and AlchemyAPI. Note t
 \end{lstlisting}
 
 In this example, the entity names mismatch (``google inc.'' vs. ``google''). However, going down the list of URIs for
-the entity, one can note a match via\nofootnote{\textit{http://dbpedia.org/resource/Google}}. Additionally, there can also
-be seen two would-be matches: \nofootnote{\textit{http://cb.semsol.org/company/google.rdf}}
-vs.\nofootnote{\textit{http://cb.semsol.org/company/google\#self}} and
-\nofootnote{\textit{http://rdf.freebase.com/ns/en/google}} vs.
-\nofootnote{\textit{http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000\\0042acea}}. However, the inconsistent use of
+the entity, one can note a match via \textit{http://dbpedia.org/resource/Google}. Additionally, there can also
+be seen two would-be matches: \textit{http://cb.semsol.org/company/google.rdf}
+vs. \textit{http://cb.semsol.org/company/google\#self} and
+\textit{http://rdf.freebase.com/ns/en/google} vs.
+\textit{http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000\\0042acea}. However, the inconsistent use of
 URIs when there are more than one URIs available for the same entity hinders the match from being made. An additional
 retrieval of the resources would be necessary to detect that in the latter case
-\nofootnote{\textit{http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000\\0042acea}} redirects to
-\nofootnote{\textit{http://rdf.freebase.com/ns/en/google}}, whereas the first example seems to be broken
-(\nofootnote{\textit{http://cb.semsol.org/company/google\#self}} returns the status code 404). The good thing, however, is
+\textit{http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000\\0042acea} redirects to
+\textit{http://rdf.freebase.com/ns/en/google}, whereas the first example seems to be broken
+(\textit{http://cb.semsol.org/company/google\#self} returns the status code 404). The good thing, however, is
 that as soon as \emph{one} match has been detected, one can consolidate the entities from both services.
 
 Given the mismatching two entity names (``google inc.'' vs. ``google''), the consolidated name is then an array of all
