@@ -95,34 +95,120 @@ such as sports, politics, culture, leisure,
 music, conferences, \emph{etc.}
 
 \section{Approach}
-\begin{figure}[htb!]
+
+The objective of this thesis is the development
+of methods for the automatic summarization of events
+based on media items shared on social networks.
+A~schematic overview of the approach can be seen
+in~\autoref{fig:thesis-diagram}.
+As an event takes places and shortly thereafter
+(symbolized by the timeline marked with \emph{2h Event}),
+people share media items related to the event
+on multiple social networks
+(symbolized by the photo and video pictograms
+above the event timeline).
+Via the textual search functionality of those
+different social networks,
+we retrieve a~list of potentially event-relevant
+microposts that either contain media items directly,
+or that provide links to media items
+on external media item hosting platforms.
+Using third party NLP tools,
+we recognize and disambiguate named entities
+in the microposts to predetermine their relevancy.
+We extract the binary media item data
+from social networks or media item hosting platforms
+and relate it to the originating microposts
+(symbolized by the central cloud).
+Using CBIR and CBVR techniques, we first deduplicate
+exact and near duplicate media items,
+and then cluster similar media items
+(symbolized by the green, red, and orange markers).
+We rank the deduplicated and clustered list
+of media items and their related microposts
+according to well-defined ranking criteria.
+In order to to generate interactively user-customizable
+media galleries that visually and audibly summarize the
+event in question, we compile the top-$n$ ranked
+media items and microposts in an aesthetic way
+(symbolized by the timeline marked with \emph{5min Summary}).
+
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=0.45\textwidth]{thesis-diagram.png}
-  \caption{Event summarization generation based on deduplicated, clustered, and ranked media items for an exemplary event, depicted in a~schematic manner.}     
+  \includegraphics[width=0.5\textwidth]{thesis-diagram.png}
+  \caption{Schematic depiction of event summary generation
+    based on deduplicated, clustered, and ranked media items
+    for an exemplary event.}
   \label{fig:thesis-diagram}
 \end{figure}
 
 \section{Contributions}
-\todo{add contributions as prose, "bragging rights"}
+In this thesis, we report on methods for the automatic generation
+of event summaries. Contributions include the following methods.
 
-\section{The Web and Semantics}
-Tim Berners Lee, inventor of the World-Wide Web (W3, WWW), or simply, the \emph{Web}, \emph{et al.}
-write in~\cite{BernersLee1994}: \textit{``The World-Wide Web was developed
-to be a pool of human knowledge, which would allow collaborators
-in remote sites to share their ideas
-and all aspects of a common project''}.
-Since the earliest days at CERN,
-the European Particle Physics Laboratory in Geneva, Switzerland,
-the Web has scaled to a truly global system of interlinked hypertext documents
-accessed via the Internet.
-
-\emph{Semantics} is the study of meaning.
-It focuses on the relation between signifiers, such as words, phrases, signs, and symbols,
-and what they stand for, \emph{i.e.}, their denotata.
-Michel Bréal is often identified as a~founder of modern semantics with his 1897
-\emph{Essai de sémantique}~\cite{Breal1897}.
-The \emph{Semantic Web} brings these two worlds together.
-
-\section{Boundaries of this Work}
+\begin{itemize}
+  \item Methods for named entity extraction and disambiguation
+        for online videos based on closed captions.
+        \todo{SemWebVid citation}
+  \item An examination of Linked Data usage and visualization
+        techniques of a~major commercial search engine.
+        \todo{How Google is using citation}
+  \item The development of a~W3C specification of media
+        fragment addressing schemes for audio and video items.
+        \todo{Media Fragments citation}
+  \item Methods for the semantic description of Web APIs,
+        their discovery, consumption, interlinking,
+        and social aspects.
+        \todo{RESTdesc citations}
+  \item A~study of the feasibility of truly RESTful behavior
+        for Web APIs in the sense of Dr. Roy Fielding.
+        \todo{Fulfilling the hypermedia constraint citation}
+  \item The definition of a unified framework for the description
+        of multimedia content objects.
+        \todo{Introducing a unified framework citation}
+  \item Methods for the aggregation of social media contents
+        for the enhancement of conference experiences.
+        \todo{Confomaton citations}
+  \item A~study on the usefulness and relevancy of social network
+        updates added to the search engine results pages of a~major
+        commercial search engine.
+        \todo{Adding realtime coverage citation}
+  \item An examination of context-aware querying for multimodal
+        search engines.
+        \todo{Context-aware querying citation}
+  \item Methods for the consumer-oriented detection of trending
+        microposts on a~major commercial social network.
+        \todo{A tweet consumers' look citation}
+  \item Methods for the crowdsourced detection of events in
+        online videos.
+        \todo{Crowdsourcing event detection citation}
+  \item Methods for the definition of aesthetic principles
+        for automatic media gallery layout for visual
+        and audial event summarization based on social networks.
+        \todo{Defining aesthetic principles citation}
+  \item An examination of user interface feasibility on
+        mobile and desktop devices for a~multimodal search engine.
+        \todo{One size does not fit all citation}
+  \item Methods for the crowdsourced extraction of knowledge items
+        from arbitrary Web pages.
+        \todo{SEKI@home citations}
+  \item Methods for adding meaning to social network microposts
+        via multiple named entity disambiguation APIs and
+        tracking their data provenance.
+        \todo{Adding Meaning to Social Network citations}
+  \item Methods for the automatic extraction of media items from
+        multiple social networks.
+        \todo{What fresh media citation}
+  \item Methods for on-the-fly shot boundary detection of
+        online videos.
+        \todo{Enabling on-the-fly citation}
+   \item Methods for unobtrusively fixing common annoyances on
+         arbitrary Web pages.
+         \todo{xkcd citation}
+   \item A~white paper on future media Internet architecture.
+         \todo{FMIA citation}
+\end{itemize}
 
 \section{Thesis Structure}
+The remainder of this thesis is structured as follows. 
+\todo{Add thesis structure}
