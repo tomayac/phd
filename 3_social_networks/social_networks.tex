@@ -1,8 +1,3 @@
-
-% this file is called up by thesis.tex
-% content in this file will be fed into the main document
-
-%: ----------------------- introduction file header -----------------------
 \chapter{Social Networks} \label{cha:social-networks}
 
 % the code below specifies where the figures are stored
@@ -12,94 +7,123 @@
     \graphicspath{{3_social_networks/figures/EPS/}{3_social_networks/figures/}}
 \fi
 
-% ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
-% ----------------------------------------------------------------------
-
 From the first ever email to video calls on the go,
 the Internet has always been about social communication.
-Historically, communities formed around Usenet mailing lists or Bulletin Board Systems,
-starting from the early eighties, often around all sorts of topics like fine arts,
-literature, and philosophy (\emph{e.g.}, \texttt{humanities.classics}
+Historically, communities formed around Usenet mailing lists or Bulletin Board Systems, starting from the early eighties,
+often around all sorts of topics like fine arts,
+literature, and philosophy (\emph{e.g.},\texttt{humanities.classics}
 or \texttt{humanities.\-design.misc}).
 Then, starting from the late eighties, Internet Relay Chats (IRC)
-allowed people to communicate interactively and in realtime, organized in channels
-(\emph{e.g.}, \texttt{\#linux}).
+allowed people to communicate interactively and in realtime,
+organized in channels (\emph{e.g.}, \texttt{\#linux}).
 Starting from the nineties, blogs began to spree,
 reaching mainstream popularity somewhere in mid-2000.
-While the early social communities where created entirely \emph{ad-hoc} whenever someone logged in to a~system,
-the first social networks, among them SixDegrees.com in 1997,
+While the early social communities
+where created entirely \emph{ad-hoc}
+whenever someone logged in to a~system,
+the first social networks,
+among them \url{http://sixdegrees.com/} in 1997,
 allowed people to maintain a~public profile
-with a~list of connections (\emph{friends}) that others could browse.
-In~\cite{Ellison2007}, Boyd and Ellison define the term \emph{social network site (SNS)}:
+with a~list of connections (\emph{friends})
+that others could browse.
+In~\cite{boyd2007socialnetworksites}, boyd
+(\emph{sic}\footnote{http://www.danah.org/name.html})
+and Ellison define the term
+\emph{social network site (SNS)} as follows.
+
 \begin{quotation}
-\textit{``We define social network sites as web-based services that allow individuals to
-(1) construct a~public or semi-public profile within a~bounded system,
-(2) articulate a~list of other users with whom they share a~connection, and
-(3) view and traverse their list of connections and those made by others within the system.
-The nature and nomenclature of these connections may vary from site to site.''}
+  \textit{``We define social network sites as web-based services
+  that allow individuals to
+  (1) construct a~public or
+  semi-public profile within a~bounded system,
+  (2) articulate a~list of other users
+  with whom they share a~connection, and
+  (3) view and traverse their list of connections
+  and those made by others within the system.
+  The nature and nomenclature of these connections
+  may vary from site to site.''}
 \end{quotation}
 
-Literature on social networks in general oftentimes uses the term SNS,
-however, in order to differentiate ourselves from the therein defined idea of social network,
-we decided to avoid the term altogether in favor of a~more open definition of social network,
+Literature on social networks oftentimes uses the term SNS,
+however, in order to differentiate ourselves
+from the therein defined idea of social network,
+we decided to avoid the term altogether in favor of a~more open
+definition of social network,
 which we detail in the following. 
 
-\section{Definition of Social Network} \label{sec:definition}
-In this Section, we define the terms that we will use throughout this thesis
+\section{Definition of Terms Used in this Thesis}
+\label{sec:definition}
+
+In this section, we define the terms
+that we will use throughout this thesis
 in order to avoid any ambiguity.
-In particular, we show that social networks have
+In particular, we highlight that social networks have
 different levels of support for media items.
 
 \begin{description}
-  \item[Media Item:] A~media item is defined as an image or video file
-that gets distributed via a~social network.
-An example can be a~photo of a~baby that
-a parent shares on Instagram\footnote{http://instagram.com/}.
-
-  \item[Micropost:]
-A~micropost is defined as a~textual status message that can optionally accompany a~media item.
-An example can be the status update
-\emph{``life is full of wonders, and you are one of them''}
-posted on Facebook that contains the previously shared photo of the baby.
-
   \item[Social Network:]
-A~social network is an online service or media platform
-that focuses on building and reflecting social relationships among
-people who share interests and/or activities.
+       A~social network is an online service or media platform
+       that focuses on building and reflecting
+       social relationships among people
+       who share interests and/or activities.
+  \item[Media Item:]
+       A~media item is defined as an image or video
+       file that gets distributed via a~social network.
+  \item[Micropost:]
+       A~micropost is defined as a~textual status message
+       that can optionally be accompanied by a~media item.
 \end{description}
 
-The boundary between social networks and media platforms is blurred.
-Several media sharing platforms~(\emph{e.g.}, YouTube\footnote{http://youtube.com/})
-enable people to upload content and optionally allow other people to react
+The boundary between \emph{social networks} and
+\emph{media platforms} is blurred.
+Several media sharing platforms, \emph{e.g.},
+YouTube\footnote{http://youtube.com/},
+enable people to upload content
+and optionally allow other people to react
 to this content in the form of comments, likes or dislikes.
-On other social networks~(\emph{e.g.}, Facebook\footnote{http://facebook.com/}),
-users can update their status, post links to stories, upload media content
-and also give readers the option to react.
-Finally, there are hybrid clients~(\emph{e.g.}, TweetDeck\footnote{http://www.tweetdeck.com/}
-by Twitter together with Twitpic\footnote{http://twitpic.com/}), where social networks integrate with media platforms, typically via third party applications.
+On other social networks, \emph{e.g.},
+on Facebook\footnote{http://facebook.com/},
+users can update their status, post links to stories,
+upload media content, and also give readers the option to react.
+Finally, there are hybrid clients, \emph{e.g.},
+TweetDeck\footnote{http://www.tweetdeck.com/}
+by Twitter together with
+Twitpic\footnote{http://twitpic.com/},
+where social networks integrate with media platforms,
+typically via third party applications.
 
 \section{Description of Popular Social Networks}
-In this Section, we introduce several social networks
-and their for our approach relevant key features.
-For active participation, all social networks require users to be logged in.
+
+In this section, we introduce several social networks
+and some of their key features
+that are relevant for our approach.
+For active participation,
+all social networks require users to be logged in.
 In the description below, we thus assume a~logged in user.
 
 \subsection{Google+}
-Google+, sometimes transcribed as Google Plus and abbreviated as G+, is Google's social network.
+
+\googleplus, sometimes transcribed as Google Plus
+and abbreviated as G+, is Google's social network.
 It was opened to the general public on September 20, 2011.
-Google+ has native image support.
-Images can either be manually uploaded when authoring a~new micropost,
-or automatically via the Google+ mobile application.
-External videos, for example from the also Google-owned YouTube website,
-but also from other services, are displayed in an inline view
-so that they can be viewed directly on the website,
-however, the network also allows for videos to be uploaded directly,
-or be recorded via webcam.
+\googleplus has native image support.
+Images can either be manually uploaded
+when authoring a~new micropost,
+or be automatically uploaded via the \googleplus
+mobile application.
+External videos, for example, from
+the also Google-owned online video platform YouTube,
+but also from other services,
+get displayed in an inline view
+so that they can be viewed directly on the website.
+However, the network also allows for
+videos to be uploaded directly,
+or to be recorded \emph{ad hoc} via a~webcam.
 People can \emph{+1} content they like via a~designated +1 button
 that can also be embedded on other websites.
 Individual microposts can also be shared.
-Google+ has a~unidirectional relationship model (follow model).
+\googleplus has a~unidirectional relationship model
+(follow model).
 
 \subsection{Myspace}
 Myspace, formerly MySpace and My\_\_\_\_\_ (\emph{sic}), is a~social networking service owned by Specific Media LLC and pop star Justin Timberlake.
@@ -276,4 +300,7 @@ first annotating microposts,
 then extracting media items from microposts,
 over to media item deduplication and ranking,
 and finally close the core part with media item compilation.
- 
+
+\section*{Chapter Notes}
+This chapter is partly based on the following publications:
+\todo{Add publications} 
