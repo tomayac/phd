@@ -762,39 +762,59 @@ sample graph serialized in RDFa.
 </div> 
 \end{lstlisting}
 
-\section{SPARQL -- Semantic Web Query Language}
+\section{SPARQL: Semantic Web Query Language}
 
-SPARQL is a~recursive acronym that stands for SPARQL Protocol and RDF Query Language.
-The SPARQL specification~\cite{Prudhommeaux2008} defines the syntax and semantics
+SPARQL is a~recursive acronym that stands for
+SPARQL Protocol and RDF Query Language.
+The SPARQL specification~\cite{prudhommeaux2008sparql}
+defines the syntax and semantics
 of the SPARQL query language for RDF.
-RDF~\cite{Klyne2004} is a~directed, labeled graph data format for representing information in the Web.
-SPARQL can be used to express queries across diverse data sources,
-whether the data is stored natively as RDF, or viewed as RDF via middleware.
-SPARQL allows for querying required and optional graph patterns
+RDF~\cite{klyne2004rdf} is a~directed, labeled
+graph data format for representing information on the Web.
+SPARQL can be used to express queries
+across diverse data sources,
+whether the data is stored natively as RDF,
+or viewed as RDF via middleware.
+SPARQL allows for querying required
+and optional graph patterns
 along with their conjunctions and disjunctions.
-SPARQL also supports extensible value testing and constraining queries by source RDF graph.
-The results of SPARQL queries can be results sets or RDF graphs.
-SPARQL became an official World Wide Web Consortium (W3C) Recommendation in the year 2008.
+SPARQL also supports extensible value testing
+and constraining queries by source RDF graph.
+The results of SPARQL queries can be result sets or RDF graphs.
+SPARQL became an official W3C Recommendation in 2008.
 It was standardized by the RDF Data Access Working Group (DAWG).
 
 \subsection{The Vision of the Web as a~Giant, Single Database}
-The Web as we know it today is a~\emph{network of documents} interconnected by hyperlinks
-that everyone can participate in by placing links to existing documents.
-The vision of the Semantic Web, however, is a~\emph{network of facts} about entities,
-interconnected in form of graphs of data.
-Where the Web of today is a~graph of documents, the Semantic Web is envisioned to be a~huge global graph,
-formed by many, many individual graphs.
-If one party publishes facts about an entity, and a~different party publishes different facts
-about the same entity, then the overall knowledge about that entity is represented in a~decentralized way,
+
+The Web as we know it today is a~\emph{network of documents},
+interconnected by hyperlinks that everyone can participate in
+by placing links to existing documents.
+The vision of the Semantic Web, however,
+is a~\emph{network of facts} about entities,
+interconnected by means of graphs of data.
+Where the Web of today is a~graph of documents,
+the Semantic Web is envisioned to be a~huge global graph,
+formed by many individual graphs.
+If one party publishes facts about an entity,
+and a~different party publishes different facts
+about the same entity,
+then the overall knowledge about that entity
+is represented in a~decentralized way,
 accessible to all, and open for everyone to enrich.
 This obviously requires strong globally unique identifiers,
 or at least ways to map one identifier to another.
 
-Given the (visionary) huge global graph, a~SPARQL query like the one in \autoref{code:sparql}
+Given the (visionary) huge global graph, a~fictive
+SPARQL query like the one in \autoref{code:sparql}
 could be used to get results from the graph,
 like the email addresses of every person in the world.
 
-\begin{lstlisting}[caption={[SPARQL query returning the names and email addresses of every person in the world.]{SPARQL query returning the names and email addresses of every person in the world. Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}}},label={code:sparql}]
+\begin{lstlisting}[caption={[SPARQL query returning the names and
+  email addresses of every person in the world.]
+  {SPARQL query returning the names and email addresses of every
+  person in the world.
+  Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}.}},
+  label={code:sparql}]
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT ?name ?email
 WHERE {
@@ -806,50 +826,71 @@ WHERE {
 
 This query selects the names and email addresses from all persons
 who have facts about them in the global graph.
-The query starts with a~prefix definition, and then constrains the results
-to be of type \texttt{foaf:Person}, whose name and email address are the values
-of the triples with the predicates \texttt{foaf:name} and \texttt{foaf:mbox} respectively.
+The query starts with a~prefix definition,
+and then constrains the results
+to be of type \texttt{foaf:Person}~\cite{brickley2010foaf},
+whose name and email address are the values
+of the triples with the predicates \texttt{foaf:name}
+and \texttt{foaf:mbox} respectively.
 While this sounds like a~very powerful idea,
 for performance reasons in practice SPARQL endpoints
-like the DBpedia SPARQL endpoint\footnote{\url{http://dbpedia.org/sparql}}
-typically only allow for querying the local graph.
+like the DBpedia SPARQL
+endpoint\footnote{\url{http://dbpedia.org/sparql}}
+typically only allow for querying a~local graph.
 
 \subsection{Different SPARQL Query Variations}
+
 The SPARQL Query Language currently specifies four different query variants, which we list in the following. 
 
 \subsubsection{SELECT}
-The \texttt{SELECT} query variant is used to extract raw values from a~SPARQL endpoint.
-The results are returned in a~table format. A~sample query is given in \autoref{code:sparql}.
+
+The \texttt{SELECT} query variant is used to extract
+raw values from a~SPARQL endpoint.
+The results are returned in a~table format.
+A~sample query is given in \autoref{code:sparql}.
 
 \subsubsection{DESCRIBE}
-The \texttt{DESCRIBE} query variant is used to extract an RDF graph from the SPARQL endpoint,
+
+The \texttt{DESCRIBE} query variant is used to extract
+an RDF graph from the SPARQL endpoint,
 the contents of which is left to the endpoint to decide
-based on what the maintainer deems as useful information. An example query is given below:\\
+based on what the maintainer deems as useful information.
+An example query is given below:\\
 
 \texttt{DESCRIBE <http://example.org/sparql>}
 
 \subsubsection{ASK}
-The \texttt{ASK} query variant is used to provide a~simple True/False result
+
+The \texttt{ASK} query variant is used to provide
+a~simple \texttt{true} or \texttt{false} result
 for a~query on a~SPARQL endpoint.
 No information is returned about the possible query solutions,
 just whether or not a~solution exists.
 An example query with a~sample response is given below:\\
 
-\noindent Given the following SPARQL \texttt{ASK} query:\\
+\noindent Given the RDF graph in \autoref{fig:sample-rdf-graph}
+and the following SPARQL \texttt{ASK} query:\\
 
 \texttt{PREFIX foaf: <http://xmlns.com/foaf/0.1/>\\
 \indent ASK \{ ?x foaf:name  "Alice" \}}\\
 
-\noindent Creates the following response (given there is a~person named Alice):\\
+\noindent This query creates the following response
+(as there is no person named Alice in the graph,
+but only a~person named John X. Foobar):\\
 
-\texttt{yes}
+\texttt{no}
 
 \subsubsection{CONSTRUCT}
-The \texttt{CONSTRUCT} query variant is used to extract information from the SPARQL endpoint
-and transform the results into valid RDF specified by a~graph template.
-The result is an RDF graph formed by taking each query solution in the solution sequence,
+
+The \texttt{CONSTRUCT} query variant is used to extract
+information from the SPARQL endpoint
+and transform the results into valid RDF
+specified by a~graph template.
+The result is an RDF graph formed by taking
+each query solution in the solution sequence,
 substituting for the variables in the graph template,
-and combining the triples into a~single RDF graph by set union.
+and combining the triples into
+a~single RDF graph by set union.
 An example query is given below:\\
 
 \noindent Given the following RDF graph:\\
@@ -858,68 +899,105 @@ An example query is given below:\\
 \texttt{\indent \_:a foaf:name "Alice" .}\\
 \texttt{\indent \_:a foaf:mbox <mailto:alice@example.org> .}\\
 
-\noindent And given the following SPARQL \texttt{CONSTRUCT} query:\\
+\noindent Given the following SPARQL \texttt{CONSTRUCT} query:\\
 
 \texttt{PREFIX foaf: <http://xmlns.com/foaf/0.1/>}\\
 \texttt{\indent PREFIX vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#>}\\
 \texttt{\indent CONSTRUCT \{ <http://example.org/person\#Alice> vcard:FN ?name \}}\\
 \texttt{\indent WHERE { ?x foaf:name ?name }}\\
 
-\noindent This creates the following \texttt{vcard} properties from the FOAF information:\\
+\noindent This query creates the following
+\texttt{vcard}~\cite{dawson1998vcard}
+properties from the FOAF information:\\
 
 \texttt{@prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#> .}\\ 
 \texttt{\indent <http://example.org/person\#Alice> vcard:FN "Alice" .}
 
 \section{Linked Data}
-Linked Data~\cite{BernersLee2006} defines a~set of agreed-on best practices and
-principles for interconnecting and publishing structured data on the Web.
-It uses Web technologies like HTTP~\cite{Fielding1999} and URIs~\cite{BernersLee2005}
+
+Linked Data~\cite{bernerslee2006linkeddata}
+defines a~set of agreed-on best practices and
+principles for interconnecting and publishing
+structured data on the Web.
+It uses Web technologies like HTTP~\cite{fielding1999http}
+and URIs~\cite{bernerslee2005uri}
 to create typed links between different sources.
-The portal LinkedData.org defines Linked Data as being
-\textit{``about using the Web to connect related data that wasn’t previously linked,
-or using the Web to lower the barriers to linking data currently linked using other methods''}. 
+The portal \url{http://linkeddata.org/}
+defines\footnote{Accessed: November 19, 2012}
+Linked Data as being
+\textit{``about using the Web to connect related data that
+wasn’t previously linked, or using the Web
+to lower the barriers to linking data
+currently linked using other methods''}.
 
 \subsection{The Linked Data Principles}
-Tim Berners-Lee defines the four rules for Linked Data in a~W3C Design Issue~\cite{BernersLee2006} as follows:
+
+Tim Berners-Lee defines the four rules for Linked Data in a~W3C Design Issue~\cite{bernerslee2006linkeddata} as follows:
+
 \begin{enumerate}
-\item Use URIs as names for things.
-\item Use HTTP URIs so that people can look up those names.
-\item When someone looks up a~URI, provide useful information, using the standards (RDF*, SPARQL).
-\item Include links to other URIs, so that they can discover more things.
+  \item Use URIs as names for things.
+  \item Use HTTP URIs so that people can look up those names.
+  \item When someone looks up a~URI, provide useful information,
+        using the standards (RDF*, SPARQL).
+  \item Include links to other URIs,
+        so that they can discover more things.
 \end{enumerate}
 
-Linked Data uses RDF~\cite{Klyne2004} to create typed links between things in the world,
+Linked Data uses RDF~\cite{klyne2004rdf} to create
+typed links between things in the world,
 the result is oftentimes referred to as the Web of Data.
-As outlined before, RDF encodes statements about things in the form of
-subject, predicate, object triples.
+As outlined before, RDF encodes statements
+about things in the form of
+\texttt{\{subject, predicate, object\}} triples.
 If subject and object have URIs from different namespaces,
-Bizer \emph{et al.} speak of \emph{RDF links} in~\cite{Bizer2007}.
-An examplary RDF link taken from~\cite{Bizer2009} stating that a~description of the movie Pulp Fiction
-from the Linked Movie Database~\cite{Hassanzadeh2009} and from DBpedia are in fact talking about the same movie
+Bizer \emph{et al.} speak of \emph{RDF links}
+in~\cite{heath2011linkeddata}.
+An exemplary RDF link adapted from~\cite{bizer2009linkeddatastory}
+stating that a~description of the movie Pulp Fiction
+from the Linked Movie Database~\cite{hassanzadeh2009linkedmovie}
+and a~description from DBpedia~\cite{auer2007dbpedia}
+are indeed talking about the same movie
 can be seen in \autoref{code:rdflink}.
 
-\begin{lstlisting}[caption={[Exemplary RDF link.]{Exemplary RDF link stating that a~description of the movie Pulp Fiction from the Linked Movie Database~\cite{Hassanzadeh2009} and from DBpedia are in fact talking about the same movie.}},label={code:rdflink}]
+\begin{lstlisting}[caption={[Exemplary RDF link.]{Exemplary RDF
+  link stating that a~description of the movie Pulp Fiction from
+  the Linked Movie Database~\cite{hassanzadeh2009linkedmovie}
+  and a~description from DBpedia are indeed talking
+  about the same movie.}},
+  label={code:rdflink}]
 http://data.linkedmdb.org/resource/film/77
-http://www.w3.org/2002/07/owl\#sameAs
-http://dbpedia.org/resource/Pulp_Fiction_%28film%29
+http://www.w3.org/2002/07/owl#sameAs
+http://dbpedia.org/page/Pulp_Fiction
 \end{lstlisting}
 
-\subsection{The Linked Open Data Cloud}\label{sec:lodcloud}
-The Linking Open Data (LOD) project~\cite{Bizer2011} is the most visible Linked Data effort.
-The project’s objective is to identify existing datasets with open licenses,
-convert them to RDF whilst obeying the Linked Data principles, and finally publish them on the Web.
-Due to its open structure everyone can contribute to the project by publishing a~dataset and
+\subsection{The Linking Open Data Cloud Diagram}
+\label{sec:lodcloud}
+
+The Linking Open Data (LOD) cloud
+diagram~\cite{cyganiak2011lodcloud} is a~visualization effort
+that shows datasets that have been published in
+Linked Data~\cite{bernerslee2006linkeddata}
+format by contributors to the Linking Open Data community project
+and other individuals and organizations.
+The objective is to identify existing datasets with open licenses,
+convert them to RDF whilst obeying the Linked Data principles,
+and finally publish them on the Web.
+Due to its open structure, everyone can contribute to the project by publishing a~dataset and
 interlinking it to existing datasets.
-Today, the project includes datasets of big names such as the BBC, Thomson Reuters,
-or the Library of Congress to name just a~few.
-The current state of the Linking Open Data project can be seen in the so-called Linked Open Data cloud,
-a~diagram that depicts the interconnectedness of each dataset.
-The state of the LOD cloud as of September 2010 can be seen in \autoref{fig:lod-cloud}.
+Today, the project includes datasets of major organizations
+such as the BBC, Thomson Reuters, or the Library of Congress
+to name just a~few.
+The state of the LOD cloud has been examined
+in~\cite{bizer2011statelodcloud}.
+The latest LOD cloud diagram as of September 2011 can be seen in \autoref{fig:lod-cloud}.
 
 \begin{figure}[htbp!]
 \begin{center}
   \includegraphics[width=1.0\textwidth]{lod-cloud.png}    
-  \caption[The Linked Open Data cloud as of September 2010.]{The Linked Open Data cloud as of September 2010, by Richard Cyganiak and Anja Jentzsch. Source: \url{http://lod-cloud.net/}}    
+  \caption[The Linked Open Data cloud as of September 2010.]
+  {The Linked Open Data cloud as of September 2011, by Richard
+   Cyganiak and Anja Jentzsch.
+   Source: \url{http://lod-cloud.net/}.}    
   \label{fig:lod-cloud}
   \end{center}  
 \end{figure}
@@ -931,14 +1009,19 @@ We have shown how structured data in form of tables
 is a~first step towards richer semantics.
 An example of converting structured data from Wikipedia
 to machine-readable data is the knowledge base DBpedia.
-Further, we have looked at the intrinsic semantics of HTML in versions 4 and 5,
-and how through additional attributes even richer semantics can be added
+Further, we have looked at the intrinsic semantics
+of HTML in versions 4 and 5,
+and how through additional attributes
+even richer semantics can be added
 by the annotation formats Microformats and Microdata.
-We have formally introduced the Resource Description Format (RDF)
+We have introduced the Resource Description Format (RDF)
 and its different serializations.
-On top of RDF, we have detailed how the Semantic Web query language SPARQL
+On top of RDF, we have detailed
+how the Semantic Web query language SPARQL
 can be used to express queries across data sources.
-Finally, we have shown how data on the Web can be exposed as so-called Linked Data,
-an effort which gets visible in the Linked Open Data cloud.
+Finally, we have shown how data on the Web
+can be exposed as so-called Linked Data,
+an effort which gets visible in the Linking Open Data cloud.
 With these Semantic Web background technologies,
-we have set the foundations for the coming chapters that build upon those pillars.
+we have set the foundations for the coming chapters
+that build upon those pillars.
