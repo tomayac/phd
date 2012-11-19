@@ -593,13 +593,18 @@ of this sample graph.
 
 \subsubsection{The Notation3 Syntax} \label{sec:notation3}
 
-Notation3~\cite{BernersLee2011} was introduced by Tim Berners-Lee.
-Notation3 has some features that go beyond the pure expressiveness of RDF, like rules.
+Notation3~\cite{bernerslee2011notation3} was introduced
+by Tim Berners-Lee.
+Notation3 has some features that go beyond
+the pure expressiveness of RDF, like rules.
 Its media type is \texttt{text/n3;\-charset=utf-8},
-the recommended file extension is \texttt{.n3}, the encoding is always UTF-8.
-\autoref{code:notation3-syntax} shows the previously introduced sample graph serialized in Notation3.
+the recommended file extension is \texttt{.n3},
+the encoding is always UTF-8.
+\autoref{code:notation3-syntax} shows the previously
+introduced sample graph serialized in Notation3.
 
-\begin{lstlisting}[caption={A sample graph in Notation3 syntax.},label={code:notation3-syntax}]
+\begin{lstlisting}[caption={A sample graph in Notation3 syntax.},
+  label={code:notation3-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 _:node15urahancx74223 a foaf:Person ;
@@ -608,16 +613,25 @@ _:node15urahancx74223 a foaf:Person ;
 \end{lstlisting}
 
 \subsubsection{The Turtle Syntax} \label{sec:turtle}
-Turtle~\cite{Prudhommeaux2011} was developed by Dave Beckett and Tim Berners-Lee
-It is a~superset of N-Triples (see \autoref{sec:n-triples}) and
-a subset of Notation3 (see \autoref{sec:notation3}).
-It has reached a~\emph{de facto} standard status.
-Its media type is \texttt{text/turtle}
-(the sometimes still observable media type \texttt{application/x-turtle} is deprecated),
-the recommended file extension is \texttt{.ttl}, the encoding is UTF-8.
-\autoref{code:turtle-syntax} shows the previously introduced sample graph serialized in Turtle.
 
-\begin{lstlisting}[caption={A sample graph in Turtle syntax.},label={code:turtle-syntax}]
+Turtle~\cite{prudhommeaux2011turtle},
+or the Terse RDF Triple Language, was defined by Dave Beckett.
+It is a~superset of N-Triples (see \autoref{sec:n-triples}) and
+a~subset of Notation3 (see \autoref{sec:notation3}).
+It has reached a~\emph{de facto} standard status,
+with the RDF Working Group publishing the new Turtle specification
+as a~Last Call Working Draft on July 10, 2012.
+Its media type is \texttt{text/turtle}
+(the sometimes still observable media type
+\texttt{application/x-turtle} is deprecated),
+the recommended file extension is \texttt{.ttl},
+the encoding is UTF-8.
+\autoref{code:turtle-syntax} shows the previously
+introduced sample graph serialized in Turtle.
+
+\begin{lstlisting}[caption={A sample graph in Turtle syntax,
+  the syntax is equivalent to \autoref{code:notation3-syntax}.},
+  label={code:turtle-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 _:node15urahancx74223 a foaf:Person ;
@@ -626,17 +640,23 @@ _:node15urahancx74223 a foaf:Person ;
 \end{lstlisting}
 
 \subsubsection{The N-Triples Syntax} \label{sec:n-triples}
-The N-Triples~\cite{Grant2004} syntax was primarily developed by Dave Beckett and Art Barstow.
+
+The N-Triples~\cite{grant2004ntriples} syntax was primarily
+developed by Dave Beckett and Art Barstow.
 N-Triples is a~subset of Turtle (see \autoref{sec:turtle}),
-which in turn is a~subset of Notation3 (see \autoref{sec:notation3}).
+which in turn is a~subset of Notation3
+(see \autoref{sec:notation3}).
 There are very few variations to express a~graph in N-Triples,
 which makes it an ideal syntax for testing purposes, however,
 as it is missing some shortcuts of Turtle, it is quite verbose.
 Its media type is \texttt{text/plain}, the recommended file extension is \texttt{.nt},
-and the encoding is 7-bit US-ASCII.
-\autoref{code:ntriples-syntax} shows the previously introduced sample graph serialized in N-Triples.
+and the encoding is 7-bit US-ASCII
+(and explicitly \emph{not} UTF-8).
+\autoref{code:ntriples-syntax} shows the previously
+introduced sample graph serialized in N-Triples.
 
-\begin{lstlisting}[caption={A sample graph in N-Triples syntax.},label={code:ntriples-syntax}]
+\begin{lstlisting}[caption={A sample graph in N-Triples syntax.},
+  label={code:ntriples-syntax}]
 _:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
     <http://xmlns.com/foaf/0.1/Person> .
 _:1 <http://xmlns.com/foaf/0.1/name>
@@ -646,14 +666,21 @@ _:1 <http://xmlns.com/foaf/0.1/mbox_sha1sum>
 \end{lstlisting}
 
 \subsubsection{The RDF/XML Syntax}
-RDF/XML~\cite{Beckett2004} was introduced by the W3C as the first RDF serialization syntax.
-Albeit more human-friendly serialization formats such as Turtle are gaining more and more traction,
-RDF/XML is still very wide-spread.
-Its media type is \texttt{application/rdf+xml}, the recommended file extension is \texttt{.rdf},
-the encoding is UTF-8.
-\autoref{code:rdfxml-syntax} shows the previously introduced sample graph serialized in RDF/XML.
 
-\begin{lstlisting}[caption={A sample graph in RDF/XML syntax.},label={code:rdfxml-syntax}]
+RDF/XML~\cite{beckett2004rdfxml} was introduced by
+the W3C as the first RDF serialization syntax.
+Albeit more human-friendly serialization formats
+such as Turtle~\cite{prudhommeaux2011turtle}
+gain more and more traction,
+RDF/XML is still very wide-spread.
+Its media type is \texttt{application/rdf+xml},
+the recommended file extension is \texttt{.rdf},
+the encoding is UTF-8.
+\autoref{code:rdfxml-syntax} shows the previously
+introduced sample graph serialized in RDF/XML.
+
+\begin{lstlisting}[caption={A sample graph in RDF/XML syntax.},
+  label={code:rdfxml-syntax}]
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
@@ -669,37 +696,62 @@ the encoding is UTF-8.
 \end{lstlisting}
 
 \subsubsection{The RDFa Syntax}
-RDFa has a~special role in that it is a~specification for attributes to express structured data
-in XHTML~\cite{Adida2008} (but also standard HTML).
-It uses the rendered hypertext content of XHTML for the RDFa markup,
-so that data publishers can use the same document for human- and machine-readable content.
-There is also a~specification for RDFa 1.1 in HTML4 and HTML5~\cite{Sporny2011}.
+
+RDFa~\cite{adida2012rdfa} has a~special role
+in that it is a~specification for attributes
+to express structured data in XHTML~\cite{pemberton2000xhtml},
+but also in HTML4 and HTML5~\cite{sporny2012htmlrdfa}.
+It uses the rendered hypertext content of (X)HTML
+for the RDFa markup,
+so that data publishers can use the same document
+for human- and machine-readable content.
 The contained RDF triples can be extracted with distillers,
-in consequence RDFa can be considered as another serialization syntax for RDF,
-with the same expressive power as RDF/XML or Turtle.
-Its media type is \texttt{application/xhtml+xml}, the recommended file extension is \texttt{.html}.
-RDFa shares some design goals with Microformats~\cite{Celik2006}
-Where Microformats specify both a~syntax for embedding structured data into HTML
+in consequence RDFa can be considered
+as another serialization syntax for RDF,
+with the same expressive power as
+RDF/XML~\cite{beckett2004rdfxml},
+Turtle~\cite prudhommeaux2011turtle{}, \emph{etc.}
+Its media type is \texttt{application/xhtml+xml},
+the recommended file extension is \texttt{.html}.
+RDFa shares some design goals
+with Microformats~\cite{celik2006microformats}.
+Where Microformats specify both a~syntax
+for embedding structured data into HTML
 \emph{and} a~vocabulary of specific terms for each Microformat,
 RDFa in contrast \emph{only} specifies a~syntax.
 RDFa relies on independent external specifications of vocabularies.
-The essence of RDFa is a~set of attributes that contain metadata about things,
-and that can be embedded in mark-up languages, for example in XHTML or HTML.
-The concrete attributes are:
+The essence of RDFa is a~set of attributes
+that contain metadata about things,
+and that can be embedded in mark-up languages,
+for example in XHTML or HTML.
+The concrete attributes are as follows.
 
 \begin{itemize}
-\item \texttt{about} and \texttt{src}: a~URI or CURIE (compact URI expressions) specifying the resource the metadata is about.
-\item \texttt{rel}: specifying a~relationship with another resource.
-\item \texttt{href} and \texttt{resource}: specifying the partner resource.
-\item \texttt{property}: specifying a~property for the content of an element.
-\item \texttt{content}: optional attribute that overrides the content of the element when using the property attribute.
-\item \texttt{datatype}: optional attribute that specifies the datatype of text specified for use with the property attribute.
-\item \texttt{typeof}: optional attribute that specifies the RDF type(s) of the subject (the resource that the metadata is about).
+  \item \texttt{@about} and \texttt{@src} a~URI or
+        CURIE (compact URI) that specifies the resource
+        the metadata is about.
+  \item \texttt{@rel} specifies a~relationship with
+        another resource.
+  \item \texttt{@href} and \texttt{@resource} specify
+        the partner resource.
+  \item \texttt{@property} specify a~property for
+        the content of an element.
+  \item \texttt{@content} optional attribute that overrides
+        the content of the element when using
+        the property attribute.
+  \item \texttt{@datatype} optional attribute that
+        specifies the datatype of text specified
+        for use with the property attribute.
+  \item \texttt{@typeof} optional attribute that specifies
+        the RDF type(s) of the subject (the resource
+        that the metadata is about).
 \end{itemize}
 
-\autoref{code:rdfa-syntax} shows the previously introduced sample graph serialized in RDFa.
+\autoref{code:rdfa-syntax} shows the previously introduced
+sample graph serialized in RDFa.
 
-\begin{lstlisting}[caption={A sample graph in RDFa syntax.},label={code:rdfa-syntax}]
+\begin{lstlisting}[caption={A sample graph in RDFa syntax.},
+  label={code:rdfa-syntax}]
 <div about="_:1" typeof="http://xmlns.com/foaf/0.1/Person">           
   <span property="http://xmlns.com/foaf/0.1/mbox_sha1sum">
     cef817456278b70cee8e5a1611539ef9d928810e
@@ -711,6 +763,7 @@ The concrete attributes are:
 \end{lstlisting}
 
 \section{SPARQL -- Semantic Web Query Language}
+
 SPARQL is a~recursive acronym that stands for SPARQL Protocol and RDF Query Language.
 The SPARQL specification~\cite{Prudhommeaux2008} defines the syntax and semantics
 of the SPARQL query language for RDF.
