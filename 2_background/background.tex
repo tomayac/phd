@@ -28,6 +28,7 @@ and then introducing popular social networks
 and some of their core features.
 
 \section{The Web and Semantics}
+
 Tim Berners Lee, inventor of the World-Wide Web (W3, WWW),
 or simply, the \emph{Web}, \emph{et al.}
 write in~\cite{bernerslee1994worldwideweb}:
@@ -55,6 +56,7 @@ The \emph{Semantic Web} brings the two worlds---the
 World-Wide Web and semantics---together.
 
 \section{Semantic Web}
+
 The lexical database
 WordNet~\cite{fellbaum1998wordnet,miller1995wordnet}
 by the Cognitive Science Laboratory
@@ -124,6 +126,7 @@ more intelligent price comparison services, \emph{etc.}
 \end{figure}
 
 \subsection{The Non-Semantic Web} \label{sec:non-semantic-web}
+
 To differentiate the Semantic Web from the non-semantic Web,
 it helps to step back one step and
 see why the non-semantic Web is not semantic.
@@ -149,6 +152,7 @@ and that the latter is (i) an author, and (ii)
 the author of \emph{The Catcher in the Rye}.
 
 \subsection{Structured Data on the Web}
+
 A very first step to add semantics to the Web
 is using tabular data.
 \autoref{tab:sample-table-structured-data} shows an example
@@ -210,6 +214,7 @@ In the next section, we therefore introduce
 the structured knowledge base DBpedia~\cite{auer2007dbpedia}.
 
 \subsection{The Structured Knowledge Base DBpedia}
+
 An often reoccurring (however not binding) pattern
 in the Semantic Web world
 is the use of DBpedia~\cite{auer2007dbpedia}
@@ -235,6 +240,7 @@ Freebase~\cite{markoff2007freebase},
 YAGO~\cite{suchanek2007yago}, and CYC~\cite{lenat1995cyc}.
 
 \subsection{Semantics in HTML Versions 4.01 and 5}
+
 As outlined in \autoref{sec:non-semantic-web},
 HTML versions 4.01~\cite{raggett1999html}
 and 5~\cite{berjon2012html5}
@@ -321,63 +327,114 @@ and attributes and their meaning.
 \end{itemize}
 
 \paragraph{HTML5 Input Attributes}
+
 \begin{itemize}
-\item \texttt{datetime} specifies a~control for setting the element’s value
-to a~string representing a~global date and time (with timezone information).
-\item \texttt{datetime-local} specifies a~control for setting the element’s value
-to a~string representing a~local date and time (with no timezone information).
-\item \texttt{date} specifies a~control for setting the element’s value
-to a~string representing a~date, \texttt{month} specifies a~control
-for setting the element’s value to a~string
-representing a~month, \texttt{week} specifies a~control for setting the element’s value
-to a~string representing a~week.
-\item \texttt{time} specifies a~control for setting the element’s value
-to a~string representing a~time (with no timezone information.
-\item \texttt{number} specifies a~control for setting the element’s value
-to a~string representing a~number.
-\item \texttt{range}  represents an imprecise control for setting the element’s value
-to a~string representing a~number.
-\item \texttt{email} specifies a~control for editing a~list of email addresses
-given in the element’s value.
-\item \texttt{url} specifies a~control for editing an absolute URL
-given in the element’s value.
-\item \texttt{search} specifies a~one-line plain-text edit control
-for entering one or more search terms.
-\item \texttt{color} specifies a~color-well control for setting the element’s value
-to a~string representing a~simple color.
+  \item \texttt{@datetime} specifies a~control for setting the
+        element’s value to a~string representing a~global date
+        and time (with timezone information).
+  \item \texttt{@datetime-local} specifies a~control for setting
+        the element’s value to a~string representing a~local date
+        and time (with no timezone information).
+  \item \texttt{@date} specifies a~control for setting the 
+        element’s value to a~string representing a~date,
+        \texttt{@month} specifies a~control for setting the
+        element’s value to a~string representing a~month,
+        \texttt{@week} specifies a~control for setting the
+        element’s value to a~string representing a~week.
+  \item \texttt{@time} specifies a~control for setting the
+        element’s value to a~string representing a~time
+        (with no timezone information).
+  \item \texttt{@number} specifies a~control for setting the
+        element’s value to a~string representing a~number.
+  \item \texttt{@range} represents an imprecise control
+        for setting the element’s value to a~string
+        representing a~number.
+  \item \texttt{@email} specifies a~control for editing
+        a~list of email addresses given in the element’s value.
+  \item \texttt{@url} specifies a~control for editing an
+        absolute URL given in the element’s value.
+  \item \texttt{@search} specifies a~one-line plain-text
+        edit control for entering one or more search terms.
+  \item \texttt{@color} specifies a~color-well control for
+        setting the element’s value to a~string representing
+        a~simple color.
 \end{itemize}
 
 \subsection{Structured Data Beyond Pure HTML}
-In this Subsection, we describe how structured data can be included in HTML documents
-by either overloading existing HTML attributes, or by adding new HTML attributes.
+
+In this subsection, we describe how structured data
+can be included in HTML documents
+by either overloading existing HTML attributes,
+or by adding new ones.
 
 \subsubsection{Microformats}
-Microformats~\cite{Celik2006} are a~set of open data mark-up formats developed
-and defined by the Microformats community\footnote{\url{http://microformats.org/discuss}}.
-Microformats are not an official standard, but rather a~widely adopted grass-roots-driven movement
+
+Microformats~\cite{celik2006microformats} are a~set of
+open data mark-up formats developed
+and defined by the Microformats
+community\footnote{\url{http://microformats.org/discuss}}.
+Microformats are not an official standard,
+but rather a~widely adopted grass-roots-driven movement
 with origins in the blogging scene.
 It is to be noted that Microformats do not require a~new language,
-but reuse building blocks from widely adopted standards such as the \texttt{@class},
-\texttt{@rel}, and \texttt{@title} attributes in HTML.
-Their main design goal is to focus first on humans, then on machines.
-A concrete example of Microformat mark-up in HTML can be seen in \autoref{code:microformats}.
+but reuse building blocks from widely adopted standards
+such as the \texttt{@class}, \texttt{@rel}, and \texttt{@title}
+attributes in HTML.
+Their main design goal is to focus first on humans,
+then on machines.
+A concrete example of Microformat mark-up in HTML
+can be seen in \autoref{code:microformats}.
 There are currently nine stable
 Microformats\footnote{\url{http://microformats.org/wiki/Main_Page\#Specifications}},
 as listed below:
 
 \begin{itemize}
-\item \texttt{hCalendar} is a~distributed calendaring and events format, using a~1:1 representation of the standard \texttt{iCalendar} format (RFC2445,~\cite{Dawson-1-1998}).
-\item \texttt{hCard} is a~format for representing people, companies, organizations, and places, using a~1:1 representation of the standard \texttt{vCard} format (RFC2426,~\cite{Dawson-2-1998}).
-\item \texttt{rel-license} is a~format for indicating content licenses, which is embeddable in HTML~\cite{LeHors1999} or XHTML~\cite{Pemberton2000}, Atom~\cite{Nottingham2005}, RSS~\cite{Cadenhead2006}, and arbitrary XML~\cite{Bray1998}.
-\item \texttt{rel-nofollow} is a~format for hyperlinks indicating that the destination of that hyperlink should not be afforded any additional weight or ranking by user agents such as search engines, which perform link analysis upon Web pages.
-\item \texttt{rel-tag} format for hyperlinks indicating that the destination of that hyperlink is an author-designated keyword for the current page.
-\item \texttt{VoteLinks} is a~format for adding the idea of agreement, abstention or indifference, and disagreement to hyperlinks.
-\item \texttt{XFN} is a~format for representing human relationships using hyperlinks, which enables Web authors to indicate their relationships to people.
-\item \texttt{XMDP} is a~format for defining metadata profile documents (XHTML Meta Data Profile), which enables Web authors to well-define custom meta tags.
-\item \texttt{XOXO} is a~format for defining a~new XHTML document type for subsetting and extending XHTML, which serves as the basis for XHTML-friendly outlines for processing by XML engines, and for easy interactive rendering by browsers.
+  \item \texttt{hCalendar} is a~distributed calendaring and
+        events format, using a~1:1 representation of the standard
+        \texttt{iCalendar} format
+        (RFC~2445,~\cite{dawson1998icalendar}).
+  \item \texttt{hCard} is a~format for representing people,
+        companies, organizations, and places, using a~1:1
+        representation of the standard \texttt{vCard} format
+        (RFC~2426,~\cite{dawson1998vcard}).
+  \item \texttt{rel-license} is a~format for indicating content
+        licenses, which is embeddable in
+        HTML~\cite{raggett1999html} or
+        XHTML~\cite{pemberton2000xhtml},
+        Atom~\cite{nottingham2005atom},
+        RSS~\cite{cadenhead2006rss},
+        and arbitrary XML~\cite{bray2008xml}.
+  \item \texttt{rel-nofollow} is a~format for hyperlinks
+        indicating that the destination of that hyperlink should
+        not be afforded any additional weight or ranking by user
+        agents such as search engines, which perform link
+        analysis upon Web pages.
+  \item \texttt{rel-tag} is a~format for hyperlinks indicating
+        that the destination of that hyperlink is an
+        author-designated keyword for the current page.
+  \item \texttt{VoteLinks} is a~format for adding the idea of
+        agreement, abstention or indifference, and disagreement
+        to hyperlinks.
+  \item \texttt{XFN} is a~format for representing human
+        relationships using hyperlinks, which enables Web authors
+        to indicate their relationships to people.
+  \item \texttt{XMDP} is a~format for defining metadata profile
+        documents (XHTML Meta Data Profile), which enables Web
+        authors to well-define custom meta tags.
+  \item \texttt{XOXO} is a~format for defining a~new
+        XHTML~\cite{pemberton2000xhtml}
+        document type for subsetting and extending XHTML,
+        which serves as the basis for XHTML-friendly outlines for
+        processing by XML engines, and for easy interactive
+        rendering by browsers.
 \end{itemize}
 
-\begin{lstlisting}[caption={[Sample code snippet with embedded hCard Microformat mark-up.]{Sample code snippet with embedded \texttt{hCard} Microformat mark-up. Source: \url{http://microformats.org/wiki/hcard}}},label={code:microformats}]
+\begin{lstlisting}[caption={
+   [Sample code snippet with embedded hCard Microformat mark-up.]
+   {Sample code snippet with embedded \texttt{hCard} Microformat
+    mark-up. Source: \url{http://microformats.org/wiki/hcard}.}
+  },
+  label={code:microformats}]
 <div class="vcard">
   <a class="fn org url" href="http://www.commerce.net/">CommerceNet</a>
   <div class="adr">
@@ -401,23 +458,50 @@ as listed below:
 \end{lstlisting}
 
 \subsubsection{Microdata}
-Microdata~\cite{Hickson2010} defines a~way to annotate content (or items) with specific machine-readable labels,
-for example to allow scripts to provide services that are customized to a~website.
-Microdata allows nested groups of name-value pairs to be added to documents,
+
+Microdata~\cite{hickson2012microdata} defines a~way to annotate 
+content (or items) with specific machine-readable labels,
+for example, to allow scripts to provide services that are
+customized to a~website.
+Microdata allows for nested groups of name-value pairs
+to be added to documents,
 in parallel with the existing content.
-The Microdata specification introduces a~set of new attributes to HTML:
+The Microdata specification introduces
+a~set of new attributes to HTML:
 
 \begin{itemize}
-\item \texttt{itemscope}: creates an item (or thing) and indicates that descendants of this element contain information about it. This attribute precedes the \texttt{itemtype} attribute in the HTML element's tag.
-\item \texttt{itemtype}: a~valid URL of a~vocabulary that describes the item and its properties context.
-\item \texttt{itemid}: indicates a~unique identifier of the item in the vocabulary.
-\item \texttt{itemprop}: indicates that its containing tag holds the value of the specified item property. The properties name and value context are described by the items vocabulary. Properties values usually consist of string values, but can also use URLs using the \texttt{a} element and its \texttt{href} attribute, the \texttt{img} element and its \texttt{src} attribute, or other elements that link to or embed external resources.
-\item \texttt{itemref}: properties that are not descendants of the element with the \texttt{itemscope} attribute can be associated with the item using this attribute. Provides a~list of elements to web crawlers to find additional property values of the item elsewhere in the document.
+  \item \texttt{@itemscope} creates an item (or thing) and
+        indicates that descendants of this element contain
+        information about it. This attribute precedes the
+        \texttt{@itemtype} attribute in the HTML element's tag.
+  \item \texttt{@itemtype} a~valid URL of a~vocabulary that
+        describes the item and its properties context.
+  \item \texttt{itemid} indicates a~unique identifier
+        of the item in the vocabulary.
+  \item \texttt{@itemprop} indicates that its containing tag
+        holds the value of the specified item property.
+        The properties name and value context are described by
+        the items vocabulary. Properties values usually
+        consist of string values,
+        but can also use URLs using the \texttt{<a>} tag
+        and its \texttt{@href} attribute,
+        the \texttt{<img>} tag and its \texttt{@src} attribute,
+        or other tags that link to or embed external resources.
+  \item \texttt{@itemref} properties that are not descendants of
+        the element with the \texttt{@itemscope} attribute
+        can be associated with the item using this attribute.
+        Provides a~list of elements to web crawlers to find
+        additional property values of the item
+        elsewhere in the document.
 \end{itemize}
 
-An example of Microdata in HTML can be seen in Figure~\ref{code:microdata}
+An example of Microdata in HTML can be seen in \autoref{code:microdata}.
 
-\begin{lstlisting}[caption={[Sample code snippet with Microdata mark-up.]{Sample code snippet with Microdata mark-up. Source: \url{http://www.w3.org/TR/microdata/}}},label={code:microdata}]
+\begin{lstlisting}[caption={
+  [Sample code snippet with Microdata mark-up.]
+  {Sample code snippet with Microdata mark-up.
+   Source: \url{http://www.w3.org/TR/microdata/}.}},
+  label={code:microdata}]
 <div itemscope>
   <p>My name is <span itemprop="name">Neil</span>.</p>
   <p>
@@ -429,58 +513,86 @@ An example of Microdata in HTML can be seen in Figure~\ref{code:microdata}
 \end{lstlisting}
 
 \section{Resource Description Framework (RDF)} \label{sec:rdf}
-The Resource Description Framework (RDF)~\cite{Klyne2004} defines
-a~set of W3C standards for the formal description of resources that are identified by URIs.
+
+The Resource Description Framework (RDF)~\cite{klyne2004rdf}
+defines a~set of W3C standards for the formal description of
+resources that are identified by URIs.
 RDF is a~core component of the Semantic Web.
-Initially it was designed to describe metadata on the World Wide Web (WWW) such as authors,
-copyrights, etc. of documents, however, using a~definition of the term \emph{resource}
-beyond the WWW context, RDF is now also used to describe metadata of any URI-identifiable entity.
+Initially, it was designed to describe metadata
+on the World-Wide Web (WWW) such as authors,
+copyrights, \emph{etc.} of documents, however,
+applying a~definition of the term \emph{resource}
+beyond the WWW context,
+RDF is now also used to describe metadata
+of any URI-identifiable entity.
 
 \subsection{Triples as a~Data Structure}
-As outlined before, one of the main purposes of the Semantic Web is to give information
-a~well-defined meaning.
-Using an example from Berners-Lee’s article~\cite{BernersLee2001},
-meaning can be to differentiate between the concepts of a~shipping and a~billing address,
-or the concept of an address in the sense of delivering a~formal spoken communication to an audience.
+
+As outlined before, one of the main purposes of the Semantic Web
+is to give information a~well-defined meaning.
+Using an example from Tim Berners-Lee’s
+article~\cite{bernerslee2001semanticweb},
+meaning can be to differentiate between the concepts of
+a~shipping and a~billing address,
+or the concept of an address in the sense of
+delivering a~formal spoken communication to an audience.
 In order to assure the differences in meaning,
 things are identified by a~Unique Resource Identifier (URI).
-The majority of the data processed by machines can be described by elementary sentences like
-\emph{A cat is a~mammal}, \emph{Thomas Steiner is author of this document}, or
-\emph{Prince William is married to Kate Middleton}.
-Each of these sentences has a~subject (\emph{A cat}), a~predicate (\emph{is a}),
-and an object (\emph{mammal}).
+The majority of the data processed by machines
+can be described by elementary sentences like
+\emph{A cat is a~mammal},
+\emph{Thomas Steiner is the author of this document},
+or \emph{Prince William is married to Kate Middleton}.
+Each of these sentences has a~subject (\emph{A cat}),
+a~predicate (\emph{is a}), and an object (\emph{mammal}).
 Every subject, predicate, and object can be identified by a~URI.
-This concept turns out to be very powerful, as it allows to express the same concept,
-represented by a~URI (like for example mammal by \url{http://dbpedia.org/resource/Mammal})
-with different terms in different languages (like for example Säugetier, mammal, or nisäkkäät). 
-Everyone can extend the set of concepts, simply by creating a~URI on the Web.
-This form of knowledge representation is used by the Resource Description Framework, or short RDF.
+This concept is very powerful,
+as it allows to express the same concept,
+represented by a~URI (like, for example, mammal by
+\url{http://dbpedia.org/resource/Mammal})
+with different terms in different languages
+(like, for example, Säugetier, mammal, or nisäkkäät).
+Everyone can extend the set of concepts,
+simply by creating a~URI on the Web.
+This form of knowledge representation
+is used by the Resource Description Framework.
 
 \subsection{Important RDF Serialization Syntaxes}
-The knowledge represented in the RDF triple data structure needs to be serialized
-in order to be stored or transmitted over the Internet.
-Several serialization formats exist, each of which has its particular advantages
-and disadvantages, mostly around readability for human beings and parsability for machines.
-Most people prefer the Turtle~\cite{Prudhommeaux2011} format for its readability,
-whereas for machines N-Triples~\cite{Grant2004} is the easiest to parse.
+
+The knowledge represented in the RDF triple data structure
+needs to be serialized in order to be stored
+or transmitted over the Internet.
+Several serialization formats exist,
+each of which with its particular advantages
+and disadvantages, mostly around readability for human beings
+and parsability for machines.
+Most people prefer the Turtle~\cite{prudhommeaux2011turtle}
+format for its readability,
+whereas for machines N-Triples~\cite{grant2004ntriples}
+is the easiest to parse.
 
 \subsubsection{RDF Sample Graph}
-In the following, we will illustrate the various RDF serialization formats
+In the following, we will illustrate the various
+RDF serialization formats
 with an RDF sample graph, which is introduced here.
-It contains data about a~FOAF~\cite{Brickley2010} person named \emph{John X. Foobar},
-and an email address with an SHA1 checksum of \emph{cef817456278b70cee8e5a1611539\-ef9d928810e}.
+It contains data about a~fictive FOAF~\cite{brickley2010foaf}
+person named \emph{John X. Foobar},
+and an email address with an SHA1 checksum of
+\emph{cef817456278b70cee8e5a1611539\-ef9d928810e}.
 The actual email address is obscured to avoid spam emails.
-\autoref{fig:sample-rdf-graph} shows the graphical representation of this sample graph.
+\autoref{fig:sample-rdf-graph} shows the graphical representation
+of this sample graph.
 
-\begin{figure}[htbp!]
+\begin{figure}[h!]
 \begin{center}
- \includegraphics[width=\linewidth]{sample-rdf-graph.png} 
- \caption{A sample RDF graph visualized.}
- \label{fig:sample-rdf-graph}
- \end{center}  
+  \includegraphics[width=\linewidth]{sample-rdf-graph.png} 
+  \caption{A sample RDF graph visualized.}
+  \label{fig:sample-rdf-graph}
+  \end{center}  
 \end{figure}
 
 \subsubsection{The Notation3 Syntax} \label{sec:notation3}
+
 Notation3~\cite{BernersLee2011} was introduced by Tim Berners-Lee.
 Notation3 has some features that go beyond the pure expressiveness of RDF, like rules.
 Its media type is \texttt{text/n3;\-charset=utf-8},
