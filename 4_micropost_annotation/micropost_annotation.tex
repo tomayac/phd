@@ -104,10 +104,10 @@ like users' geographic locations.
   \label{fig:facebook}
 \end{figure}
 
-\subsection{A Mash-up API for Named Entity Disambiguation}
+\subsection{A Wrapper API for Named Entity Disambiguation}
 
 As mentioned before, in order to perform named entity extraction
-and disambiguation, we rely on a~mash-up API
+and disambiguation, we rely on a~wrapper API
 that calls existing third party NLP APIs in the background
 and that delivers the combined results of these APIs
 in a~consolidated way.
@@ -116,7 +116,7 @@ It is  desirable
 to the joint results, and
 (ii)~to track the provenance of the joint results
 in order to understand how they were formed.
-We will show at the concrete example of the mash-up NLP API
+We will show at the concrete example of the wrapper NLP API
 used for our browser extensions how these two constraints
 can be fulfilled in a~generalizable way.
 
@@ -418,7 +418,7 @@ framework~\cite{rizzo2011nerd,rizzo2012nerd}.
 We have decided for a~type-agnostic approach,
 which we motivate in the following.
 
-\subsection{Identity Links On the Semantic Web}
+\subsection{Identity Links on the Semantic Web}
 \label{sec:sameasorg}
 
 From the considered services, OpenCalais returns data in its
@@ -426,10 +426,10 @@ own namespace (\url{http://d.opencalais.com/*}), which is
 weakly, however, not in all cases,
 interlinked with other datasets in the LOD cloud.
 In contrast, the other services return results either directly
-from DBpedia (\url{http://dbpedia.org/resource/*}),
+in the DBpedia namespace (\url{http://dbpedia.org/resource/*}),
 as in the case of DBpedia Spotlight,
-or from DBpedia together with other
-well interlinked LOD cloud datasets like Freebase
+or in the DBpedia namespace together with other
+well interlinked LOD cloud dataset namespaces, like Freebase
 (\url{http://rdf.freebase.com/rdf/*}) in the cases of
 AlchemyAPI and Zemanta.
 
@@ -447,14 +447,17 @@ An example of a~good equivalence link is shown below.
 \indent \texttt{<http://rdf.freebase.com/rdf/en.barack\_obama>}
 
 \noindent As Halpin \emph{et al.} show
-in~\cite{halpin2010owlsameas}, the problem
+in astudy~\cite{halpin2010owlsameas}, the problem
 with \texttt{owl:sameAs} is that people tend to use it
-in very different ways.
-The authors differentiate four separate usage styles
-in~\cite{halpin2010owlsameas}, ranging from lose relatedness
-to strict equality, however, each marked as \texttt{owl:sameAs}.
+in different ways with different intentions.
+In~\cite{halpin2010owlsameas},
+the authors differentiate between four separate usage styles,
+ranging from expressing loose relatedness,
+to strict equivalence.
+Despite the different intentions, people tend to incorrectly use
+\texttt{owl:sameAs} habitually, according to the study.
 Inference is thus problematic, if not impossible,
-when the intended sense of the link creator of the particular
+when the intention of the link creator of the particular
 \texttt{owl:sameAs} link is unknown.
 
 \subsection{Linked Data Principles Applied}
@@ -484,241 +487,151 @@ These APIs take a~textual document as an input,
 perform named entity extraction and disambiguation on it,
 and finally link the detected named entities back
 into the LOD cloud.
-We use these APIs in parallel, and by combining their results
+We use these APIs in parallel, and by combining their results,
 aim for the emergence effect in the sense of Aristotle:
 \textit{``the totality is not, as it were, a~mere heap,
 but the whole is something besides the
 parts''}\footnote{Aristotle, Metaphysics, Book H 1045a 8--10.}.
 
-\subsection{Entity Consolidation Process}
-We define the process of entity consolidation as the merging process of entities, \emph{i.e.}, if several services extract the same or different
-entities from the same input text fragment or term, we say that the entity is consolidated if through entity ranking a~winning entity has been determined.
+We recall the wrapper API described in the introduction of
+this chapter that calls third party NLP Web services
+in order to return a~combined result of consolidated entities.
+All NLP Web services return lists of entities with
+their respective types and/or subtypes, names,
+relevance, and URIs that interlink the entity in question
+with the LOD cloud.
+The problem is that each service has implemented
+its own typing system and providing mappings for all of them
+is a~time-consuming, cumbersome task.
+While Rizzo \emph{et al.} have defined mappings in the context
+of the NERD framework~\cite{rizzo2011nerd,rizzo2012nerd},
+we decided for a different approach.
+As all services provide links into the LOD cloud,
+the desired typing information can be retrieved from there
+in a~true Linked Data manner if need be.
 
-The considered existing named entity disambiguation Web services (also referred to as entity mapping services) take as input parameter a~text, and return a~ranked list of entity
-candidates, all identified by URIs, and enriched by depending on the service more or less meta information. In order to
-gain confidence in a~decision it is a~common pattern to rely not only on the response from one source, but to
-independently request responses from several sources. Figure~\ref{fig:diagram} illustrates this idea for four named entity disambiguation Web services. The figure has two levels: the direct result level that contains the direct output of the 
-particular entity mapping service, and the \texttt{owl:sameAs} level that contains \texttt{owl:sameAs} results for the
-direct results. These are obtained either from data in the direct result entities themselves, or from a~Web service
-like sameAs.org, described by Glaser \emph{et al.} in~\cite{Glaser:SameAs}.
+We illustrate the approach with an example:
+\textit{``Google Inc. is an American multinational corporation
+which provides Internet-related products and services,
+including Internet search, cloud computing, software and 
+advertising technologies.''}
+If we use the just mentioned text
+as an input for the NLP wrapper API,
+among others, we hope to retrieve the named entity for the
+company Google, represented by, for example, the URL
+\url{http://dbpedia.org/resource/Google} as an output.
 
-\begin{figure*}
- \centering
- \includegraphics[width=0.6\textwidth]{diagram.png}
- \caption{Exemplary result set configuration using four entity mapping services with only the particular top result displayed for each entity mapping service. The figure shows the direct results of the particular entity mapping service, and \texttt{owl:sameAs} results for the direct results.}
- \label{fig:diagram}
-\end{figure*}
+\autoref{code:googlezemanta} shows the output
+of just Zemanta in isolation,
+\autoref{code:googlealchemyapi} shows the output
+of just AlchemyAPI in isolation,
+and finally, \autoref{code:googlecombined} shows the consolidated
+output of the two named entity recognition APIs together. 
+In this example, the entity names differ (``Google Inc.''
+vs. ``Google''). However, going down the list of URLs for
+each entity from the two services, the consolidation algorithm
+matches via the URL \url{http://dbpedia.org/resource/Google}.
+Given the different two entity names (``Google Inc.'' vs.
+``Google''), the consolidated name is then an array of all
+detected names.
+Each service already includes a~relevance score ranging from
+0 (irrelevant) to 1 (relevant).
+The consolidated relevance is the
+average relevance of both services.
+We maintain provenance metadata for each URI
+on the JSON representation.
+Finally, we repeat the process for all other services.
 
-In the following we will discuss strategies in order to decide for the most probable entity candidate from a~given
-result set configuration.
+\newpage
 
-\subsection{Direct Approaches}
-The most obvious class of approaches is what we call direct approaches, \emph{i.e.}, with direct approaches we do not look at potential \texttt{owl:sameAs} data at all, but exclusively work with the direct output of the entity mapping Web services.
-
-\paragraph{Majority-based Winner Entity Determination}\label{sec:direct}
-By \textit{majority-based} we mean that simply the entity with the most votes is elected the winner entity. If no
-winner can be determined, we either randomly select a~winner, or rank the candidates by the trustworthiness of the
-particular Linked Data sources (a complete definition of \textit{trustworthiness of Linked Data sources} is out of
-scope of this chapter, however, the number of inbound links in the Linked Open Data
-cloud is a~good indicator).
-
-We treat each of the first $n$ results of each service equally, and elect the winner entity by determining the
-absolute majority of entities as in Subsection~\ref{sec:direct}. The chance to have a~correct entity within all results is
-higher the more results we consider. a~next step different from treating each of the first $n$
-results equally is to preserve the information of the entity mapping services' ranking by introducing rank
-weights. The particular ranking formula of each entity mapping service is not necessarily known, however, we treat it as a~black box and assume objective ranking criteria.
-
-\paragraph{Direct Source-weighted Winner Entity Determination}
-Another option is to always select the trustworthiest result by the inbound links ranking criteria as outlined in Section~\ref{sec:direct}, independent from the majority constellation. Practically speaking this means that
-if, \emph{e.g.}, DBpedia is considered trustworthier as, \emph{e.g.},  GeoNames\footnote{\textit{http://www.geonames.org/}}, we
-trust the DBpedia result over any other result from GeoNames.
-
-\paragraph{Direct Majority-based Source-weighted Winner Entity Determination}
-Based on direct majority-based winner entity determination we introduce weight factors that give trustworthy
-sources a~boost. This means that even if in a~concrete instance a~certain trustworthy source does not have the majority of votes, it still
-can win the election and be the winning entity. The final result depends on the to-be-determined concrete
-weight factors and on the particular majority constellation. Conflicts are be resolved as outlined in Section~\ref{sec:direct}.
-
-\subsection{owl:sameAs Approaches}
-With \texttt{owl:sameAs} approach, we mean that in addition to the direct results of the entity mapping Web services, we also
-consider \texttt{owl:sameAs} data for the direct results.
-
-\paragraph{owl:sameAs Majority-based Winner Entity Determination}\label{sec:owlsameas}
-Analogue to direct majority-based winner entity determination, \texttt{owl:sameAs} majority-based winner entity
-determination works by introducing entity clusters. An entity cluster is defined by a~direct result and its
-\texttt{owl:sameAs} corresponding sub-results. The entity cluster with the most votes is then elected as winning
-cluster, \emph{i.e.}, the winner entity is the direct result of its particular winning entity cluster.
-
-\paragraph{owl:sameAs Source-weighted Winner Entity Determination}
-This approach is very similar to the corresponding direct approach, with the difference that a~low-weight direct result
-(direct in the sense of being a~direct output of the entity mapping Web service) still wins if it has high-weight
-\texttt{owl:sameAs} sub-results.
-
-\paragraph{owl:sameAs Source-weighted Majority-based Winner Entity Determination}
-Within entity clusters we apply source weights in order to emphasize trustworthy sources and then apply
-majority-based winner determination as described in Section~\ref{sec:owlsameas}.
-
-\subsection{Exemplary Entity Consolidation}                     \label{sec:consolidation-nlp}
-We recall the mash-up API described in the introduction of this chapter that calls third party NLP Web services in order to return a~combined result of consolidated entities.
-All NLP Web services return entities with their types and/or subtypes, names,
-relevance, and URIs that link into the LOD cloud. The problem is that each service has implemented its own typing
-system and providing mappings for all of them would be a~relatively time-consuming task. However, as all services
-provide links into the LOD cloud, the desired typing information can be pulled from there in a~true Linked Data manner. The least common
-multiple of the results for the query ``Google Translate'' is depicted below. For the sake of clarity, we just show one
-entity with two URIs while the original result contained seven entities among which six were relevant and one was only loosely related.
-
-\begin{lstlisting}
+\begin{lstlisting}[caption={Output of Zemanta in isolation.},
+  label={code:googlezemanta}]
 [
   {
-    "name": "Google Translate",
-    "relevance": 0.7128319999999999,
+    "name": "Google Inc.",
+    "relevance": 0.972007,
     "uris": [
       {
-        "uri": "http://dbpedia.org/resource/Google_Translate",
-        "source": "alchemyapi"
+        "uri": "http://rdf.freebase.com/ns/en/google",
+        "source": "zemanta"
       },
       {
-        "uri": "http://rdf.freebase.com/ns/en/google_translate",
+        "uri": "http://dbpedia.org/resource/Google",
         "source": "zemanta"
       }
     ],
-    "source": "alchemyapi,zemanta"
+    "source": "zemanta"
   }
 ]
 \end{lstlisting}
 
-These results come from a~request to our wrapper API via \texttt{GET} \textit{/entity-extraction/combined/Google\%20Translate},
-and the particular services' results can be obtained via \texttt{GET} \textit{/entity-extraction/\{service\_name\}/Google\%20Translate\%20is\%20a\\\%20service\%20by\%20Google}.
-While AlchemyAPI and Zemanta return results from DBpedia and other interlinked LOD cloud resources, OpenCalais returns
-only results in its own namespace
-(\emph{e.g.}, \textit{http://d.opencalais.com/er/company/ralg-tr1r/ce181d44-1915-3387-83da-0dc4ec01c6da.rdf} for the
-company Google). In this particular case, retrieving the resource RDF representation and parsing for
-\texttt{owl:sameAs} return links to DBpedia. However, in the general case, we found OpenCalais URIs sometimes pointing
-to non-existent resources or to not very rich resources such
-as \textit{http://d.opencalais.com/pershash-1/cfcf1aa2-de05-3939-a7d5-10c9c7b3e87b.html}, a~URI identifying
-the current US President Barack Obama where the only information is that Barack Obama is of type person. In order to
-consolidate extracted entities, we use the following approach: we have a~look at each of the extracted entities from
-service one and compare each entity's URIs with each URIs from each extracted entity from service two, illustrated below.
-
-First, we consider the isolated results for the text fragment from AlchemyAPI only:
-
-\begin{lstlisting}
-{
-  "name": "Google",
-  "relevance": 0.496061,
-  "uris": [
-    {
-      "uri": "http://dbpedia.org/resource/Google",
-      "source": "alchemyapi"
-    },
-    {
-      "uri": "http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000042acea",
-      "source": "alchemyapi"
-    },
-    {
-      "uri": "http://cb.semsol.org/company/google.rdf",
-      "source": "alchemyapi"
-    }
-  ],
-  "source": "alchemyapi"
-}
+\begin{lstlisting}[caption={Output of AlchemyAPI in isolation.},
+  label={code:googlealchemyapi}]
+[
+  {
+    "name": "Google",
+    "relevance": 0.535781,
+    "uris": [
+      {
+        "uri": "http://dbpedia.org/resource/Google",
+        "source": "alchemyapi"
+      },
+      {
+        "uri": "http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000042acea",
+        "source": "alchemyapi"
+      }
+    ],
+    "source": "alchemyapi"
+  }
+]
 \end{lstlisting}
 
-Second, we consider the isolated results for the same text fragment from Zemanta only:
+\newpage
 
-\begin{lstlisting}
-{
-  "name": "Google Inc.",
-  "relevance": 0.563132,
-  "uris": [
-    {
-      "uri": "http://rdf.freebase.com/ns/en/google",
-      "source": "zemanta"
-    },
-    {
-      "uri": "http://dbpedia.org/resource/Google",
-      "source": "zemanta"
-    },
-    {
-      "uri": "http://cb.semsol.org/company/google#self",
-      "source": "zemanta"
-    }
-  ],
-  "source": "zemanta"
-}
+\begin{lstlisting}[caption={
+   [Consolidated output of two named entity recognition APIs]
+   {Consolidated output of two named entity recognition APIs,
+    namely Zemanta and AlchemyAPI.}
+  },
+  label={code:googlecombined}]
+[
+  {
+    "name": [
+      "Google",
+      "Google Inc."
+    ],
+    "relevance": 0.753894,
+    "uris": [
+      {
+        "uri": "http://rdf.freebase.com/ns/en/google",
+        "source": "zemanta"
+      },
+      {
+        "uri": "http://dbpedia.org/resource/Google",
+        "source": "zemanta"
+      },
+      {
+        "uri": "http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000042acea",
+        "source": "alchemyapi"
+      }
+    ],
+    "source": "zemanta,alchemyapi"
+  }
+]
 \end{lstlisting}
-
-Finally, we consider the merged results from both Zemanta and AlchemyAPI. Note that these results are not exposed externally, they are used internally by the wrapper Web service:
-
-\begin{lstlisting}
-{
-  "name": [
-    "Google",
-    "Google Inc."
-  ],
-  "relevance":  0.5295965,
-  "uris": [
-    {
-      "uri": "http://dbpedia.org/resource/Google",
-      "source": "alchemyapi"
-    },
-    {
-      "uri": "http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000042acea",
-      "source": "alchemyapi"
-    },
-    {
-      "uri": "http://umbel.org/umbel/ne/wikipedia/Google",
-      "source": "alchemyapi"
-    },
-    {
-      "uri": "http://cb.semsol.org/company/google.rdf",
-      "source": "alchemyapi"
-    },
-    {
-      "uri": "http://rdf.freebase.com/ns/en/google",
-      "source": "zemanta"
-    },
-    {
-      "uri": "http://cb.semsol.org/company/google#self",
-      "source": "zemanta"
-    }
-  ],
-  "source": "alchemyapi,zemanta"
-}
-\end{lstlisting}
-
-In this example, the entity names mismatch (``google inc.'' vs. ``google''). However, going down the list of URIs for
-the entity, one can note a~match via \textit{http://dbpedia.org/resource/Google}. Additionally, there can also
-be seen two would-be matches: \textit{http://cb.semsol.org/company/google.rdf}
-vs. \textit{http://cb.semsol.org/company/google\#self} and
-\textit{http://rdf.freebase.com/ns/en/google} vs.
-\textit{http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000\\0042acea}. However, the inconsistent use of
-URIs when there are more than one URIs available for the same entity hinders the match from being made. An additional
-retrieval of the resources would be necessary to detect that in the latter case
-\textit{http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000\\0042acea} redirects to
-\textit{http://rdf.freebase.com/ns/en/google}, whereas the first example seems to be broken
-(\textit{http://cb.semsol.org/company/google\#self} returns the status code 404). The good thing, however, is
-that as soon as \emph{one} match has been detected, one can consolidate the entities from both services.
-
-Given the mismatching two entity names (``google inc.'' vs. ``google''), the consolidated name is then an array of all
-detected synonymous. The consolidated relevance is the average relevance of both services. Each service already includes a~relevance score ranging from
-0 (irrelevant) to 1 (relevant), so we directly use it. In our approach, the consolidated and merged entities from
-service one and two are then in turn compared to extracted entities from service three and so on, if we used even more
-services. In practice, however, due to the not always given interconnectedness of OpenCalais, there are no matches
-after having compared Zemanta-extracted entities with AlchemyAPI-extracted entities. We maintain provenance metadata for each URI on the lowest data representation level (JSON)
-on both a~per URI basis and an entity basis with the NLP-detected entity consolidation.
 
 \section{Tracking Provenance With Multiple Sources}                    \label{sec:tracking}
+
 As outlined before, we use several data sources (APIs) in the background in order to add meaning to social network microposts. Extracted named entities from a~micropost might in consequence be the result of up to four agreeing (or disagreeing) API calls. 
 
 \subsection{The Need for Providing Provenance Metadata}
 Hartig \emph{et al.} mention in~\cite{ipaw10:olaf} some reasons that justify the need for provenance metadata. Among those is linked dataset replication and distribution on the Web with not necessarily identical namespaces: based on the same source data, different copies of a~linked dataset can be created with different degrees of interconnectedness by different publishers.
 
-We add to this list the automatic conversion of legacy unstructured data to Linked Data with heuristics where extracted entities---while being consolidated and backed up by different data sources---might still be wrong. Especially with our ``mash-up''-like approach, it is very desirable to be able to track back to the concrete source where a~certain piece of information comes from. This enables (i) to correct the error at the root of our API (fighting the cause), (ii) to correct the concrete error in an RDF annotation (fighting the symptom), and (iii) to judge the trustworthiness and quality of a~dataset, which is probably the most important reason.
+We add to this list the automatic conversion of legacy unstructured data to Linked Data with heuristics where extracted entities---while being consolidated and backed up by different data sources---might still be wrong. Especially with our ``wrapper''-like approach, it is very desirable to be able to track back to the concrete source where a~certain piece of information comes from. This enables (i) to correct the error at the root of our API (fighting the cause), (ii) to correct the concrete error in an RDF annotation (fighting the symptom), and (iii) to judge the trustworthiness and quality of a~dataset, which is probably the most important reason.
 
 In order to track the contributions of the various sources, we have decided to use the Provenance Vocabulary~\cite{Hartig:Provenance} by Hartig and Zhao with the prefix \texttt{prv}, the HTTP Vocabulary in RDF~\cite{HTTP:RDF} by Koch \emph{et al.} with prefix \texttt{http}, and a~vocabulary for Representing Content in RDF~\cite{CNT:RDF} by the same authors with prefix \texttt{cnt}. We have chosen the HTTP Vocabulary in RDF for the fact that it is a~W3C Working Draft  developed by the Evaluation and Repair Tools Working Group (ERT WG), which is part of the World Wide Web Consortium (W3C) Web Accessibility Initiative (WAI). The Provenance Vocabulary was chosen because of its relatively broad implementation in several projects, such as Pubby\footnote{\texttt{http://www4.wiwiss.fu-berlin.de/pubby/}}, Triplify\footnote{\texttt{http://triplify.org/Overview}}, and D2R Server\footnote{\texttt{http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/}}.
 
-While our mash-up API supports two output formats (application/json and text/turtle), we have added provenance information exclusively to the text/turtle variant. In order to represent the extracted named entities in a~micropost, we use the Common Tag vocabulary~\cite{CommonTag:Spec}. a~micropost is \texttt{ctag:tagged} with a~\texttt{ctag:Tag}, which consists of a~textual \texttt{ctag:label} and a~pointer to a~resource that specifies what the label \texttt{ctag:means}. The Common Tag vocabulary is well-established and developed by both industry and academic partners. In order to make statements about a~bundle of triples, we group them in a~named graph. We use the TriG~\cite{Bizer:TriG} syntax:
+While our wrapper API supports two output formats (application/json and text/turtle), we have added provenance information exclusively to the text/turtle variant. In order to represent the extracted named entities in a~micropost, we use the Common Tag vocabulary~\cite{CommonTag:Spec}. a~micropost is \texttt{ctag:tagged} with a~\texttt{ctag:Tag}, which consists of a~textual \texttt{ctag:label} and a~pointer to a~resource that specifies what the label \texttt{ctag:means}. The Common Tag vocabulary is well-established and developed by both industry and academic partners. In order to make statements about a~bundle of triples, we group them in a~named graph. We use the TriG~\cite{Bizer:TriG} syntax:
 
 \begin{lstlisting}
 :G = {
