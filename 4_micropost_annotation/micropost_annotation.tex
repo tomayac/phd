@@ -622,18 +622,77 @@ Finally, we repeat the process for all other services.
 
 \section{Tracking Provenance With Multiple Sources}                    \label{sec:tracking}
 
-As outlined before, we use several data sources (APIs) in the background in order to add meaning to social network microposts. Extracted named entities from a~micropost might in consequence be the result of up to four agreeing (or disagreeing) API calls. 
+As outlined before, we use several APIs in combination
+in order to add meaning to social network microposts.
+Extracted named entities from a~micropost can in consequence
+be the result of up to four agreeing (or disagreeing) API calls.
 
 \subsection{The Need for Providing Provenance Metadata}
-Hartig \emph{et al.} mention in~\cite{ipaw10:olaf} some reasons that justify the need for provenance metadata. Among those is linked dataset replication and distribution on the Web with not necessarily identical namespaces: based on the same source data, different copies of a~linked dataset can be created with different degrees of interconnectedness by different publishers.
 
-We add to this list the automatic conversion of legacy unstructured data to Linked Data with heuristics where extracted entities---while being consolidated and backed up by different data sources---might still be wrong. Especially with our ``wrapper''-like approach, it is very desirable to be able to track back to the concrete source where a~certain piece of information comes from. This enables (i) to correct the error at the root of our API (fighting the cause), (ii) to correct the concrete error in an RDF annotation (fighting the symptom), and (iii) to judge the trustworthiness and quality of a~dataset, which is probably the most important reason.
+Hartig \emph{et al.} mention in~\cite{hartig2010provenance}
+reasons to justify the need for provenance metadata.
+Among those reasons are linked dataset replication and distribution
+on the Web with not necessarily identical namespaces:
+based on the same source data, different publishers can
+create diverging copies of a~linked dataset
+with different levels of interconnectedness.
+We add to this the automatic conversion of unstructured data
+to Linked Data with heuristics,
+where extracted entities---albeit consolidated
+and backed by different data sources---might still be wrong.
+Especially with our wrapper approach,
+it is desirable to be able to track back to the concrete source
+where a~certain piece of information came from.
+This enables
+(i) to correct the error at the root of our API
+(fighting the cause) or
+(ii) to correct the concrete error in an RDF annotation
+(fighting the symptom), and
+(iii) to judge the trustworthiness and quality of a~dataset,
+which represents the most important reason.
 
-In order to track the contributions of the various sources, we have decided to use the Provenance Vocabulary~\cite{Hartig:Provenance} by Hartig and Zhao with the prefix \texttt{prv}, the HTTP Vocabulary in RDF~\cite{HTTP:RDF} by Koch \emph{et al.} with prefix \texttt{http}, and a~vocabulary for Representing Content in RDF~\cite{CNT:RDF} by the same authors with prefix \texttt{cnt}. We have chosen the HTTP Vocabulary in RDF for the fact that it is a~W3C Working Draft  developed by the Evaluation and Repair Tools Working Group (ERT WG), which is part of the World Wide Web Consortium (W3C) Web Accessibility Initiative (WAI). The Provenance Vocabulary was chosen because of its relatively broad implementation in several projects, such as Pubby\footnote{\texttt{http://www4.wiwiss.fu-berlin.de/pubby/}}, Triplify\footnote{\texttt{http://triplify.org/Overview}}, and D2R Server\footnote{\texttt{http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/}}.
+In order to track the contributions of the various sources,
+we have decided to use the Provenance
+Vocabulary~\cite{hartig2012provenance}
+by Hartig and Zhao with the prefix \texttt{prv},
+the HTTP Vocabulary in RDF~\cite{koch2011http}
+by Koch \emph{et al.} with prefix \texttt{http},
+and a~vocabulary for representing content in
+RDF~\cite{koch2011content}
+by the same authors with prefix \texttt{cnt}.
+We have chosen the HTTP Vocabulary in RDF for the fact that
+it is a~W3C Working Draft developed by the
+Evaluation and Repair Tools Working Group (ERT WG),
+which is part of the World Wide Web Consortium (W3C)
+Web Accessibility Initiative (WAI).
+The Provenance Vocabulary was chosen because of its existing
+deployment in several projects, such as
+Pubby\footnote{\url{http://wifo5-03.informatik.uni-mannheim.de/pubby/},
+accessed November 20, 2012},
+Triplify\footnote{\url{http://triplify.org/Overview},
+accessed November 20, 2012},
+and D2R
+Server\footnote{\texttt{http://wifo5-03.informatik.uni-mannheim.de/bizer/d2r-server/publishing/},
+accessed November 20, 2012}.
 
-While our wrapper API supports two output formats (application/json and text/turtle), we have added provenance information exclusively to the text/turtle variant. In order to represent the extracted named entities in a~micropost, we use the Common Tag vocabulary~\cite{CommonTag:Spec}. a~micropost is \texttt{ctag:tagged} with a~\texttt{ctag:Tag}, which consists of a~textual \texttt{ctag:label} and a~pointer to a~resource that specifies what the label \texttt{ctag:means}. The Common Tag vocabulary is well-established and developed by both industry and academic partners. In order to make statements about a~bundle of triples, we group them in a~named graph. We use the TriG~\cite{Bizer:TriG} syntax:
+While our wrapper API supports two output formats
+(\texttt{application/json} and \texttt{text/turtle}),
+we have added provenance information exclusively to the
+\texttt{text/turtle} variant.
+In order to represent the extracted named entities in a~micropost,
+we use the Common Tag vocabulary~\cite{tori2009commontag}.
+A~micropost is \texttt{ctag:tagged} with a~\texttt{ctag:Tag},
+which consists of a~textual \texttt{ctag:label} and a~pointer
+to a~resource that specifies what the label \texttt{ctag:means}.
+The Common Tag vocabulary is well-established and developed by
+both industry and academic partners.
+In order to make statements about a~bundle of triples,
+we group them in a~named graph.
+We use the TriG~\cite{bizer2007trig} syntax,
+an example can be seen in \autoref{code:trig}.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Example named graph in TriG syntax.},
+  label={code:trig}]
 :G = {
   <https://www.facebook.com/Tomayac/posts/10150175940867286> ctag:tagged [
       a~ctag:Tag ;
@@ -643,17 +702,84 @@ While our wrapper API supports two output formats (application/json and text/tur
 } .
 \end{lstlisting}
 
-\subsection{The Provenance Vocabulary}                                      \label{sec:provenance}
-In this section, we outline the required steps in order to make statements about the provenance of a~group of triples contained in a~named graph \texttt{:G} that was generated using several HTTP \texttt{GET} requests to third party APIs. We use the Provenance Vocabulary~\cite{Hartig:Provenance} with prefix \texttt{prv}, the HTTP Vocabulary in RDF~\cite{HTTP:RDF} with prefix \texttt{http}, and the Representing Content in RDF~\cite{CNT:RDF} vocabulary with prefix \texttt{cnt}.
+\subsection{The Provenance Vocabulary}
+\label{sec:provenance}
 
-First, we state that \emph{:G} is both a~\emph{prv:DataItem} and obviously an \emph{rdfg:Graph}. \emph{:G} is \emph{prv:createdBy} the process of a~\emph{prv:DataCreation}. This \emph{prv:DataCreation} is \emph{prv:performedBy} a~\emph{prv:NonHumanActor}, a~\emph{prvTypes:DataProvidingService} to be precise (simplified as \emph{http://tomayac.no.de/entity-extraction/combined} in the listing). This service is \emph{prv:operatedBy} a~human (\texttt{http://tomayac.com/thomas\_steiner.rdf\#me}). Time is often important for provenance, so the \emph{prv:performedAt} date of the \emph{prv:DataCreation} needs to be saved. During the process of the \emph{prv:DataCreation} there are \emph{prv:usedData}, which are \emph{prv:retrievedBy} a~\emph{prv:DataAcess} that is \emph{prv:performedAt} a~certain time, and \emph{prv:performedBy} a~non-human actor (our API) that is \emph{prv:operatedBy} a~human (\texttt{http://tomayac.com/thomas\_steiner.rdf\#me}. For the \emph{prv:DataAccess} (there is one for each third party API involved), we \emph{prv:accessedService} from a~\emph{prv:DataProvidingService} of which we \emph{prv:accessedResource} at a~certain \emph{irw:WebResource}. Therefore, we \emph{prvTypes:exchangedHTTPMessage} which is an \emph{http:Request} using \emph{http:httpVersion} ``1.1'' and the \emph{http:methodName} ``GET''.
+In this section, we outline the required steps
+in order to make statements about the provenance
+of a~group of triples contained in a~named graph
+\texttt{:G} that was generated using several HTTP \texttt{GET}
+requests to third party APIs.
+We use the Provenance Vocabulary~\cite{hartig2012provenance} with
+prefix \texttt{prv}, the HTTP Vocabulary in RDF~\cite{koch2011http}
+with prefix \texttt{http}, and the Representing Content in RDF
+vocabulary~\cite{koch2011content} with prefix \texttt{cnt}.
 
-\subsection{Provenance RDF Overview}                                           \label{sec:appendix}
-This section provides a~shortened overview of the provenance RDF in Turtle syntax for a~ micropost tagged with the label ``BibTeX'' and the assigned
-meaning \texttt{http://dbpedia.org/resource/BibTeX}. The named graph \texttt{:G} in the first part of the listing contains the absolute data (the fact that the  micropost with the URI \texttt{https://www.facebook.com/Tomayac/posts/\-10150177486072286} is tagged with the label ``BibTeX'', which is represented by the HTTP URI \texttt{http://dbpedia.org/resource/BibTeX}). The second part with metadata about \texttt{:G} says that these facts were generated via two calls, one using the HTTP method \texttt{GET}, and the other \texttt{POST}.
-It is to be noted that statements such as in the listing above refer to the triple objects as an identifier for a~Web resource (where the Web resource is a~representation of the result of the API call at the time where it was \texttt{prv:performedAt}). As provenance metadata always refers to the time context in which a~certain statement was made, it is essentially unimportant what representation the resource returns in future.
+First, we state that \texttt{:G} is both a~\texttt{prv:DataItem}
+and an \texttt{rdfg:Graph}.
+\texttt{:G} is \texttt{prv:createdBy} the process of
+a~\texttt{prv:DataCreation}.
+This \texttt{prv:DataCreation} is \texttt{prv:performedBy}
+a~\texttt{prv:NonHumanActor},
+a~\texttt{prvTypes:DataProvidingService}
+to be precise (simplified as
+\texttt{http://tomayac.no.de/entity-extraction/combined}
+in \autoref{code:provenance}).
+This service is \texttt{prv:operatedBy} a~human
+(\texttt{http://tomayac.com/thomas\_steiner.rdf\#me}).
+Time is important for provenance,
+so the \texttt{prv:performedAt} date of
+the \texttt{prv:DataCreation}
+needs to be saved.
+During the process of the \texttt{prv:DataCreation}
+there are \texttt{prv:usedData},
+which are \texttt{prv:retrievedBy} a~\texttt{prv:DataAcess}
+that is \texttt{prv:performedAt} a~certain time,
+and \texttt{prv:performedBy} a~non-human actor
+(our API) that is \texttt{prv:operatedBy}
+a~human (\texttt{http://tomayac.com/thomas\_steiner.rdf\#me}.
+For the \texttt{prv:DataAccess}
+(there is one for each third party API involved),
+we \texttt{prv:accessedService} from
+a~\texttt{prv:DataProvidingService} of which we
+\texttt{prv:accessedResource} at
+a~certain \texttt{irw:WebResource}.
+Therefore, we \texttt{prvTypes:exchangedHTTPMessage} which is an
+\texttt{http:Request} using \texttt{http:httpVersion} ``1.1''
+and the \texttt{http:methodName} ``GET''.
 
-\begin{lstlisting}
+\subsection{Provenance RDF Overview}
+
+This section provides a~shortened overview of the provenance RDF
+in Turtle syntax for a~micropost that was automatically
+tagged with the label ``BibTeX''
+and the assigned meaning
+\url{http://dbpedia.org/resource/BibTeX}.
+The named graph \texttt{:G} in the first part
+of \autoref{code:provenance}
+contains the absolute data (the fact that the micropost with
+the URL
+\url{https://www.facebook.com/Tomayac/posts/10150177486072286}
+is tagged with the label ``BibTeX'', which is represented by
+the HTTP URL \url{http://dbpedia.org/resource/BibTeX}).
+The second part with metadata about \texttt{:G} says that
+these facts were generated via two calls,
+one using the HTTP method \texttt{GET},
+and the other \texttt{POST}.
+It is to be noted that statements
+such as in \autoref{code:provenance} 
+refer to the triple objects as an identifier for a~Web resource
+(where the Web resource is a~representation of the result of the
+API call at the time where it was \texttt{prv:performedAt}).
+As provenance metadata always refers to the time context
+in which a~certain statement was made,
+it is essentially unimportant
+what representation the resource returns in future.
+
+\begin{lstlisting}[caption={Shortened overview of the provenance
+       RDF in Turtle syntax for an automatically annotated
+       micropost.},
+  label={code:provenance}]
 :G = {
   <https://www.facebook.com/Tomayac/posts/10150177486072286> ctag:tagged [
      a~ctag:Tag ;
@@ -676,7 +802,9 @@ It is to be noted that statements such as in the listing above refer to the trip
         prv:performedAt "2011-05-20T15:06:30Z"^^xsd:dateTime ;
         prv:performedBy <http://tomayac.no.de/entity-extraction/combined> ;
         prv:accessedService <http://spotlight.dbpedia.org/rest/annotate> ;
-        prv:accessedResource <http://spotlight.dbpedia.org/rest/annotate?text=Tom%20has%20the%20LaTeX%2C%20BibTeX%2C%20LaTeX%2C%20LaTeX%20blues...&confidence=0.4&support=20> ;
+        prv:accessedResource
+          <http://spotlight.dbpedia.org/rest/annotate?text=Tom%20has%20...
+              blues&confidence=0.4&support=20> ;
         prvTypes:exchangedHTTPMessage [
           a~http:Request ;
           http:httpVersion "1.1" ;
@@ -708,7 +836,7 @@ It is to be noted that statements such as in the listing above refer to the trip
             cnt:characterEncoding "UTF-8" ;
             cnt:chars """method=zemanta.suggest_markup
             &api_key=Your_API_Key
-            &text=Tom%20has%20the%20LaTeX%2C%20BibTeX%2C%20LaTeX%2C%20LaTeX%20blues...
+            &text=Tom%20has%20...blues
             &format=json
             &return_rdf_links=1""" ;
           ] ;
@@ -718,16 +846,35 @@ It is to be noted that statements such as in the listing above refer to the trip
   ] .
 \end{lstlisting}
 
-\section{Future Work and Conclusion}                                                        
+\section{Conclusion}                                                        
 \label{sec:conclusion}
+
 In this chapter, we have shown how the Provenance
-Vocabulary can be used to keep track of the original third party Web service calls that led to the consolidated
-results. These references to the original calls are to be understood as the identification of Web resources (\emph{i.e.}, the
-results of a~request). We have shown how a~concrete multi-source Web service can automatically maintain provenance
-metadata, both for entirely machine-generated content, but also for partly (or completely) human-generated content. We
-believe that being able to track back the origin of a~triple is of crucial importance, especially given the network
-effect which is one of the Linked Data benefits. The generated triples are very verbose, and in consequence stating even simple facts that a~combined result is based on two separate sub-results takes up a~lot of space. The verbosity is mainly due to the used vocabularies, the Provenance Vocabulary and the HTTP Vocabulary in RDF.
-Already commenced future work will be to explore ways to stick to existing standards as these vocabularies on the one hand, but on the other hand to simplify drastically in order to come to less verbose provenance descriptions. While it is always easier to come up with a~specialized vocabulary that does one task well (for example we could imagine a~simple vocabulary with the sole purpose to log the API call of a~Web service invocation), broader reuse and acceptance can be gained by reusing existing vocabularies. We will see how to find the right balance here, and are conscious that our current approach is a~first step in that direction, however, that many more steps are ahead to take. Our vision is to establish a~common method for specifying provenance data for mash-up Web services. 
+Vocabulary can be used to keep track of the original
+third party Web service calls that led to the consolidated
+results. These references to the original calls
+are to be understood as the identification of Web resources,
+\emph{i.e.}, the results of a~request.
+We have shown how a~concrete multi-source Web service can
+automatically maintain provenance metadata,
+both for entirely machine-generated content,
+but also for partly (or completely) human-generated content.
+Being able to track back the origin of a~triple
+is of crucial importance,
+especially given the network effect which is one of the
+Linked Data benefits.
+The generated triples are very verbose,
+and in consequence stating even simple facts like
+that a~combined result is based on two separate sub-results
+takes up a~lot of space.
+The verbosity is mainly due to the used vocabularies,
+the Provenance Vocabulary and the HTTP Vocabulary in RDF.
+Future work will be to explore ways
+to simplify drastically in order to come to
+less verbose provenance descriptions.
+While it is always easier to come up with a~specialized vocabulary
+that does one task well, broader reuse and acceptance
+can be gained by reusing existing vocabularies.
 
 \section*{Chapter Notes}
 This chapter is partly based on the following publications:
