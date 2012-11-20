@@ -265,33 +265,147 @@ to the underlying APIs.
 \section{Structuring Unstructured Textual Data} 
 \label{sec:structuring}
 
-When we speak of adding structure to unstructured textual data we mean the process of extracting the main concepts in the form of named entities from a~given text. An ``entity'' is defined by WordNet as ``that which is perceived or known or inferred to have its own distinct existence (living or nonliving)''. Typically named entities from a~text can be persons, companies, organizations, geographies, but also things like quantities, expressions of time, books, albums, authors etc. The extraction is based on Natural Language Processing (NLP) and Machine Learning.
+When we speak of adding structure to unstructured textual data,
+we mean the process of extracting the main concepts
+in the form of named entities from a~given text
+and the process of disambiguating those named entities,
+\emph{i.e.}, the removal of uncertainty of meaning from
+an ambiguous named entity like \emph{Barcelona},
+which can stand for the football club, or the city of Barcelona.
+An \emph{entity} is defined by
+WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
+as \textit{``that which is perceived or known or inferred
+to have its own distinct existence (living or nonliving)''}. 
+Typically, named entities from a~text can be persons, companies,
+organizations, geographies, but also things like quantities,
+expressions of time, books, albums, authors, \emph{etc.}
+The extraction of named entities is commonly based on
+Natural Language Processing (NLP) combined with Machine Learning.
 
-\subsection{Natural Language Processing Services}\label{sec:nlp-services}
-Natural Language Processing is defined as ``the branch of information science that deals with natural language information''. From the many NLP toolkits, in the following we list some NLP Web services that link to datasets in the Linked Open Data
-cloud\footnote{\textit{http://lod-cloud.net/}} in order to disambiguate named entities.
+\subsection{Natural Language Processing Services}
+\label{sec:nlp-services}
 
-\subsection{OpenCalais}\label{sec:opencalais}
-OpenCalais~\cite{OpenCalais} is the only Web service we use that provides details on occurrences in concrete sections of the submitted coherent text. This allows for exact matching of the location in the text where a~certain entity is believed to appear. This is especially useful as OpenCalais is also oftentimes capable of recognizing references within the text to prior discovered entities (see the emphasized words as an example: ``\emph{Obama} thanked people for their work in ensuring the victory. \emph{He} also thanked his family […]''). An OpenCalais response consists of three parts:
+WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
+defines \emph{Natural Language Processing} as
+\textit{``the branch of information science that deals with
+natural language information''}.
+From the many NLP toolkits available,
+in the following, we list some NLP Web services
+that link to datasets in the
+Linking Open Data
+cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}
+in order to disambiguate named entities.
+
+\subsubsection{OpenCalais}\label{sec:opencalais}
+
+The
+OpenCalais\footnote{\url{http://www.opencalais.com/documentation/opencalais-documentation},
+accessed November 20, 2012}
+Web service automatically creates rich semantic metadata
+for textual documents.
+Using Natural Language Processing (NLP),
+machine learning and other methods, OpenCalais analyzes documents
+and finds the entities within it and also returns the facts and
+events hidden within a~document.
+OpenCalais is the only of the examined Web services
+that provides details on occurrences in concrete sections
+of the submitted coherent text.
+This allows for the exact matching of the location in the text
+where a~certain entity is believed to appear.
+This is especially useful as OpenCalais
+is also oftentimes capable of recognizing references
+within the text to prior discovered entities
+(for example, in the following text,
+\emph{he} is mapped back to Obama: \textit{``\emph{Obama}
+thanked people for their work in ensuring the victory.
+\emph{He} also thanked his family.''}).
+An OpenCalais response consists of three parts:
 
 \begin{itemize}
-\item a~list of topics that the text could be categorized in.
-\item a~list of concrete entities that occur in the text.
-\item a~list of social tags that a~human being could assign.
+  \item a~list of topics that the text is categorized in.
+  \item a~list of concrete entities that occur in the text.
+  \item a~list of social concept tags.
 \end{itemize}
 
-The problem with the extracted entities is that they are not always disambiguated. An example is the URI \textit{http://d.opencalais.com/pershash-1/cf42394f-4ae9-3e8e-958a-088149c86565.html} that represents the concept of type ``person'' of president Barack Hussein Obama. However, president Barack Obama is also represented by the URI \textit{http://d.opencalais.com/pershash-1/cfcf1aa2-de05-3939-a7d5-10c9c7b3e87b.html} that was returned in one and the same response to one of our test requests. A~second issue is that only a~tiny fraction of the returned entities link to other Linked Open Data (LOD) sources in the LOD cloud. In order to find links to the linking hub DBpedia, each returned entity has to be retrieved at the expense of an HTTP request, and the returned RDF has to be checked for said links.
+The problem with the extracted entities is
+that they are not always uniquely disambiguated.
+An example is the URL \url{http://d.opencalais.com/pershash-1/cf42394f-4ae9-3e8e-958a-088149c86565.html}
+that represents the concept of an entity of type \texttt{person}
+named \emph{Barack Hussein Obama}.
+However, a~\texttt{person}-type \emph{Barack Obama} entity from the same document is also represented by the URL
+\url{http://d.opencalais.com/pershash-1/cfcf1aa2-de05-3939-a7d5-10c9c7b3e87b.html}
+Other services successfully disambiguated both occurrences and
+recognized them to stand for the same person, President Obama.
+A~second issue is that only a~tiny fraction of the returned
+entities link to other Linked Open Data sources in the
+LOD cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
+In order to discover links to the LOD cloud,
+each returned entity URL has to be retrieved at the expense
+of an HTTP request, and the returned RDF has to be checked
+for said links.
 
-\subsection{AlchemyAPI}
-AlchemyAPI~\cite{AlchemyAPI} differentiates between entities and concepts, however, in practice the difference being very subtle, we treat entities and concepts the same. Overall the AlchemyAPI results are very accurate and of mostly excellent Linked Data quality as there are links to well-known members of the LOD cloud, among others to DBpedia, OpenCyc, and Freebase. AlchemyAPI also provides links to other data sources, however, sometimes the returned URIs resolve to 404 ``Not found'' errors. One example that we came across during our tests was the URI \textit{http://umbel.org/umbel/ne/wikipedia/George\_W.\_Bush.rdf}, which should represent the concept of the person George W. Bush. AlchemyAPI also oftentimes returns thematically very related, but for a~concrete text not directly relevant entities.
+\subsubsection{AlchemyAPI}
 
-\subsection{Zemanta}
-Zemanta~\cite{Zemanta} provides high quality entities that are linked to well-known datasets of the LOD cloud, \emph{e.g.}, DBpedia, Semantic CrunchBase, or Freebase. Zemanta convinces through very accurate entity disambiguation and thus high precision, however, at the cost of recall. Where other services try to return at least something of lower precision, the design objectives of Zemanta instead seem to prefer not to return anything if the underlying algorithms are unsure of the quality of the results. 
+AlchemyAPI~\footnote{\url{http://www.alchemyapi.com/api/entity/},
+accessed November 20, 2012}
+is capable of identifying people, companies, organizations,
+cities, geographic features, and other typed entities within
+textual documents.
+The service employs statistical algorithms and NLP
+to extract semantic richness embedded within text.
+AlchemyAPI differentiates between entity extraction and
+concept tagging, however, in practice the difference
+being subtle, we treat entities and concepts the same.
+Overall, AlchemyAPI results are very accurate
+and in the majority of cases of excellent Linked Data quality,
+as there are links to well-known members of the LOD cloud,
+among others to DBpedia~\cite{auer2007dbpedia},
+OpenCyc~\cite{lenat1995cyc},
+and Freebase~\cite{markoff2007freebase}.
+AlchemyAPI also provides links to other data sources, however,
+sometimes the returned URLs result in \texttt{404 Not found}.
+One example that we came across during our tests was the URL
+\url{http://umbel.org/umbel/ne/wikipedia/George\_W.\_Bush.rdf}, which should represent the concept of the person George W. Bush.
+AlchemyAPI also oftentimes returns thematically very related,
+but for a~concrete text not directly relevant entities.
 
-\subsection{DBpedia Spotlight}
-DBpedia Spotlight~\cite{spotlight} is a~tool for annotating mentions of DBpedia resources in text, providing a~solution for linking unstructured information sources to the Linked Open Data cloud through DBpedia. DBpedia Spotlight performs named entity extraction, including entity detection and disambiguation with adjustable precision and recall.
+\subsubsection{Zemanta}
 
-\section{Consolidating Named Entity Disambiguation Results} \label{sec:consolidate}
+Zemanta\footnote{\url{http://developer.zemanta.com/docs/},
+accessed November 20, 2012}
+allows developers to query the service for contextual metadata
+about a~given text.
+There are currently four main components returned:
+articles, keywords, images, in-text links, and
+optional component categories.
+The service provides high quality entities that are linked
+to well-known datasets of the LOD cloud, \emph{e.g.},
+DBpedia or Freebase.
+Zemanta convinces through very accurate entity disambiguation
+and thus high precision, however, at the cost of recall.
+Where other services return named entities of lower precision,
+the design objectives of Zemanta instead seem to prefer
+not to return anything at all.
+
+\subsubsection{DBpedia Spotlight}
+
+DBpedia Spotlight~\cite{mendes2011dbpediaspotlight}
+is a~tool for annotating mentions of DBpedia resources in text,
+providing a~solution for linking unstructured information sources
+to the Linked Open Data cloud through DBpedia.
+DBpedia Spotlight performs named entity extraction,
+including entity detection and disambiguation
+with adjustable precision and recall.
+DBpedia Spotlight allows users to configure the annotations
+to their specific needs through the DBpedia
+Ontology\footnote{\url{http://wiki.dbpedia.org/Ontology},
+accessed November 20, 2012}
+and quality measures such as prominence, topical pertinence,
+contextual ambiguity and disambiguation confidence.
+
+\section{Consolidating Named Entity Disambiguation Results} 
+\label{sec:consolidate}
+
 In this section, we motivate the use of multiple existing named entity disambiguation Web services in parallel for the task of
 obtaining entity candidates for a~text such as a~micropost. In addition to that, we also introduce the notion of
 \texttt{owl:sameAs}-based approaches.
