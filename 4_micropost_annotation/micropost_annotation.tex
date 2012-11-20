@@ -1,8 +1,3 @@
-
-% this file is called up by thesis.tex
-% content in this file will be fed into the main document
-
-%: ----------------------- introduction file header -----------------------
 \chapter{Micropost Annotation}
 
 % the code below specifies where the figures are stored
@@ -12,60 +7,178 @@
     \graphicspath{{4_micropost_annotation/figures/EPS/}{4_micropost_annotation/figures/}}
 \fi
 
-% ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
-% ----------------------------------------------------------------------
+\section{Introduction}
+\label{sec:introduction}
 
-\section{Introduction}                                                      \label{sec:introduction}
-According to official statistics~\cite{Facebook}, the social networking site Facebook has more than 500 million active users out of which half log on to Facebook in any given day. The average Facebook user has 130 friends, and creates 90 pieces of content each month. This sums up to the impressive number of overall twenty-two billion five hundred million pieces of content per month. 
-Latest statistics from Twitter~\cite{TweetStats} suggest that currently more than 140 million active users share 340 million tweets a day. 
+According to official statistics, Facebook is the biggest
+social network with one billion monthly active
+users\footnote{\url{http://newsroom.fb.com/Key-Facts},
+accessed November 20, 2012}
+as of October 2012.
+Official user statistics from
+Twitter\footnote{\url{http://blog.twitter.com/2012/03/twitter-turns-six.html},
+accessed November 20, 2012}
+stemming from March 2012 suggest
+that currently more than 140 million active users
+share 340 million tweets a day.
+Altogether, the users of social networks
+produce an incredible amount of public and private data.
+In this chapter, we report on methods to access and make sense
+out of \emph{public} status updates,
+or, our preferred term, microposts.
 
 \subsection{Direct Access to Micropost Raw Data}
-Similar to the microblogging site Twitter with its full text Twitter search, Facebook as well offers both a search feature on the website, and a JSON-based search API over status updates from all global Facebook members\footnote{\textit{http://bit.ly/ogpsearch}}. In order to perform data mining, a statistically significant amount of microposts is necessary (this is also known as access to the ``fire hose''). However, while Twitter grants selected parties access to its Streaming API~\cite{Twitter} for research purposes, for Facebook there is no such documented option.
+
+Social networks in general offer so-called
+Application Programming Interfaces (APIs)
+in order to allow for developers to access
+part of the networks' data programmatically.
+Similar to the microblogging site Twitter
+with its search
+API\footnote{\url{https://dev.twitter.com/docs/api/1.1/get/search/tweets},
+accessed November 20, 2012},
+Facebook as well offers both a~search function on the website,
+and a~search
+API\footnote{\url{https://developers.facebook.com/docs/reference/api/},
+accessed November 20, 2012},
+and so does
+\googleplus\footnote{\url{https://developers.google.com/+/api/},
+accessed November 20, 2012}.
+In order to perform data mining,
+a~statistically significant amount of microposts is necessary
+(this is also known as having access to the \emph{fire hose}).
+However, while Twitter grants developers access to its Streaming
+APIs\footnote{\url{https://dev.twitter.com/docs/streaming-apis},
+accessed November 20, 2012},
+for Facebook and \googleplus there are no such documented options.
 
 \subsection{Browser Extensions to Access Microposts Indirectly}
-To address this shortage, we have developed browser extensions called Facebook Swarm NLP\footnote{\textit{http://bit.ly/facebookswarmnlp}} and Twitter Swarm NLP\footnote{\textit{http://bit.ly/twitterswarmnlp}} for a popular Web browser. These extensions inject JavaScript code into the Facebook.com or Twitter.com homepages to perform data analysis on the encountered set of microposts by sending extracted data to a central data processing unit.
-Users need to be logged in to Facebook or Twitter for the extensions to work, and must have given their \emph{explicit agreement} during the extension installation process on part of their data being shared in an anonymized way.
+
+To address this shortage, we have developed browser extensions
+for the two major social networks Facebook and Twitter,
+called Facebook Swarm
+NLP\footnote{\url{http://bit.ly/facebookswarmnlp},
+accessed November 20, 2012}
+and Twitter Swarm
+NLP\footnote{\url{http://bit.ly/twitterswarmnlp},
+accessed November 20, 2012}
+for a~popular Web browser.
+These extensions inject JavaScript code into Facebook and
+Twitter to perform data analysis on the encountered set of
+\emph{public} microposts by sending extracted data
+to a~central data processing unit.
+Users need to be logged in to Facebook or Twitter for the 
+extensions to work, and must have given
+their \emph{explicit agreement} during
+the extension installation process
+for part of their data being shared in an anonymized way.
+While this is far inferior and not comparable at all
+with direct \emph{fire hose} access,
+yet given a~critical amount of participants
+it still provides access to a~random sample of microposts
+from different social networks.
 
 \subsection{Data Analysis Flow}
-The extensions first retrieve all status updates from the contacts that are displayed on the current user's timeline. Second, the extensions perform named entity extraction and disambiguation via Natural Language Processing (NLP) using a remote NLP API on each of the microposts in order to add semantic meaning to them. The extracted named entities are then displayed below each micropost, as illustrated in Figure~\ref{fig:facebook}. Finally the extracted named entities are sent to a central Web analytics~\cite{Kaushik} framework to compute basic or advanced trends, for example by ranking the most discussed-about named entities per day, or by pivoting named entities by Web analytics data, like users' geographic locations.
+
+The extensions first retrieve all status updates
+from the contacts that are displayed
+on the current user's timeline.
+Second, the extensions perform named entity extraction (NEE)
+and disambiguation via Natural Language Processing (NLP)
+using a~remote NLP API on each of the microposts
+in order to add semantic meaning to them.
+The extracted named entities are then displayed
+below each micropost, as illustrated in \autoref{fig:facebook}.
+Finally the extracted named entities
+are sent to a~central Web analytics~\cite{kaushik2009analytics}
+framework to compute basic or advanced trends, for example,
+by ranking the most discussed-about named entities per day,
+or by pivoting named entities by Web analytics data,
+like users' geographic locations.
 
 \begin{figure}[htb!]
   \centering
-    \includegraphics[width=0.45\textwidth]{facebook-swarm-nlp.png}
-  \caption{Facebook Swarm NLP browser extension. Extracted named entities have a pale yellow background.}     
+  \includegraphics[width=0.45\textwidth]{facebook-swarm-nlp.png}
+  \caption{Facebook Swarm NLP browser extension.
+    Extracted named entities have a pale yellow background.}     
   \label{fig:facebook}
 \end{figure}
 
 \subsection{A Mash-up API for Named Entity Disambiguation}
-As mentioned before, in order to perform named entity extraction and disambiguation, we rely on a mash-up API that calls existing third party NLP APIs in the background and that delivers the combined results of these APIs in a consolidated way. It is  desirable (i)~to credit back the contribution of each single third party API to the joint results, and (ii)~to track the provenance of the joint results in order to understand how they were formed. We will show at the concrete example of the mash-up NLP API used for our browser extension how these two constraints can be fulfilled in a generalizable way.
+
+As mentioned before, in order to perform named entity extraction
+and disambiguation, we rely on a mash-up API
+that calls existing third party NLP APIs in the background
+and that delivers the combined results of these APIs
+in a~consolidated way.
+It is  desirable
+(i)~to credit back the contribution of each single third party API
+to the joint results, and
+(ii)~to track the provenance of the joint results
+in order to understand how they were formed.
+We will show at the concrete example of the mash-up NLP API
+used for our browser extensions how these two constraints
+can be fulfilled in a generalizable way.
 
 \section{Related Work}\label{sec:related}
-We regard related work from different angles. First, we look into different approaches for named entity disambiguation, which is relevant for adding meaning to microposts.
-Second, we look into efforts in mashing up Web services, which is important for tracking data provenance when using multiple APIs in combination.
+
+We regard related work from different angles.
+First, we look into different approaches
+for named entity disambiguation,
+which is relevant for adding meaning to microposts.
+Second, we look into efforts in mashing up Web services,
+which is important for tracking data provenance
+when using multiple APIs in combination.
 
 \subsection{Entity Disambiguation Using Lexical Databases}
-In~\cite{Choudhury:YouTube}, Choudhury \emph{et al.} describe a framework for semantic enrichment, ranking, and integration of
-Web video tags using Semantic Web technologies. This task is more related to microposts as it seems like at a first glance: video tags can consist of more than one word, and microposts (on Twitter) oftentimes consist of just a few words by design. In order to enrich the typically sparse user-generated tag space, meta
-data like the recording time and location, or the video title and video description are used, but also social features
-such as playlists where a video appears in and related videos. Next, the tags are ranked by their co-occurrence and in
-a final step interlinked to DBpedia concepts for greater integration with other
-datasets. Choudhury \emph{et al.} disambiguate the tags based on WordNet~\cite{Princeton:WordNet} synsets if possible (\emph{i.e.}, if
-there is only one matching synset in WordNet, the corresponding WordNet URI in DBpedia is selected. If there are more
-than one matching synsets, the tags and their context tags similarity is computed and thereby tried to decide on an
-already existing tag URI).
-Lopez \emph{et al.} describe in~\cite{Lopez} an automatic titling method based on the four stages corpus 
-acquisition, candidate sentences determination, noun 
-phrase extraction, and selection of a particular noun phrase to play the role of the text title. Their method is in so far relevant to our work as automatically generated text titles can simplify the micropost annotation step for longer microposts, where annotated titles are used instead of the actual micropost.
 
-\subsection{Entity Disambiguation With Semantic Coherence And News Trends}
-In~\cite{Fernandez:IdentityRank}, Fern\'{a}ndez \emph{et al.} examine entity disambiguation in the context of news annotation.
-They introduce a novel algorithmic approach to entity disambiguation called \textit{IdentityRank}. Running IdentityRank
-on a news item consists of three steps: finding the candidate instances in the news ontology for each entity in the
-news item, ranking these candidate instances using a modified version of PageRank~\cite{Brin:PageRank}, and finally
-retraining the algorithm with the journalist's feedback once the process is finished. IdentityRank first takes into
-account the number of occurrences of candidate entities in the past in order to find news trends, and second the
-occurrences of candidate entities in past articles in the same categories in order to find semantic coherences.
+In~\cite{choudhury2009youtubetags},
+Choudhury \emph{et al.} describe a framework for
+semantic enrichment, ranking, and integration
+of Web video tags using Semantic Web technologies.
+This task is more related to microposts
+as it seems like at a first glance:
+video tags can consist of more than one word,
+and microposts (especially on Twitter) oftentimes consist
+of just a~few words.
+In order to enrich the typically sparse
+user-generated tag space,
+meta data like the recording time and location,
+or the video title and video description are used,
+but also social features such as the playlists
+where a video appears in and related videos.
+Next, the tags are ranked by their co-occurrence
+and in a~final step interlinked to DBpedia~\cite{auer2007dbpedia}
+concepts for greater integration with other datasets.
+The authors disambiguate the tags based on
+WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
+synsets if possible, \emph{i.e.},
+if there is only one matching synset in WordNet,
+the corresponding WordNet URI in DBpedia is selected.
+If there are more than one matching synsets,
+the tags and their context tags similarity is computed
+and thereby tried to decide on an already existing tag URI.
+
+\subsection{Entity Disambiguation With Semantic Coherence and News Trends}
+
+In~\cite{fernandez2007identityrank},
+Fernández \emph{et al.} examine named entity disambiguation
+in the context of news annotation.
+Their approach consists of three steps:
+finding the candidate instances in the NEWS
+ontology~\cite{fernandez2010newsontology}
+for each entity in a~news item,
+ranking these candidate instances
+using a modified version of
+PageRank~\cite{brin1998pagerank},
+and finally retraining the algorithm
+with the journalist's feedback once the process is finished.
+The approach first takes into account the number
+of occurrences of candidate entities in the past
+in order to find news trends,
+and second, the occurrences of candidate entities
+in past articles in the same categories
+in order to find semantic coherences.
 
 \subsection{Disambiguation With Disambiguation Dictionaries}
 In~\cite{Nguyen:NamedEntity}, Nguyen \emph{et al.} show how disambiguation dictionaries can be used to disambiguate entities
