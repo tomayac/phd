@@ -406,29 +406,89 @@ contextual ambiguity and disambiguation confidence.
 \section{Consolidating Named Entity Disambiguation Results} 
 \label{sec:consolidate}
 
-In this section, we motivate the use of multiple existing named entity disambiguation Web services in parallel for the task of
-obtaining entity candidates for a~text such as a~micropost. In addition to that, we also introduce the notion of
-\texttt{owl:sameAs}-based approaches.
+In this section, we motivate the use of multiple
+named entity disambiguation Web services in \emph{parallel}
+with the objective of obtaining named entity candidates
+for a~textual document such as a~micropost.
+The task of evaluating and aligning named entity extraction and
+disambiguation APIs and their typed output
+has been formally addressed by Rizzo \emph{et al.}
+in the context of the NERD
+framework~\cite{rizzo2011nerd,rizzo2012nerd}.
+We have decided for a~type-agnostic approach,
+which we motivate in the following.
 
-\subsection{Identity Links On the Semantic Web}                             \label{sec:sameasorg}
-In order to tackle the problem of different namespaces in results that we have outlined before, a~straightforward idea is to use a~Web service such as
-sameAs~\cite{Glaser:SameAs} to easily find mappings from one namespace into another. In practice,
-however, while many data sources in the Linked Data world are marked as being equal to each other (\emph{e.g.},
-\textit{http://dbpedia.org/resource/Barack\_Obama} \texttt{owl:sameAs} \textit{http://rdf.freebase.com/rdf/en.barack\_obama}),
-the quality of such equality links is not always excellent. As Halpin \emph{et al.} show in~\cite{Halpin:SameAs}, the problem
-with \texttt{owl:sameAs} is that people tend to use it very differently. The authors 
-differentiate four separate usage styles, each with its particular implications. Inference is thus problematic, if not
-impossible, when the sense of the particular use of \texttt{owl:sameAs} is unknown.
+\subsection{Identity Links On the Semantic Web}
+\label{sec:sameasorg}
+
+From the considered services, OpenCalais returns data in its
+own namespace (\url{http://d.opencalais.com/*}), which is
+weakly, however, not in all cases,
+interlinked with other datasets in the LOD cloud.
+In contrast, the other services return results either directly
+from DBpedia (\url{http://dbpedia.org/resource/*}),
+as in the case of DBpedia Spotlight,
+or from DBpedia together with other
+well interlinked LOD cloud datasets like Freebase
+(\url{http://rdf.freebase.com/rdf/*}) in the cases of
+AlchemyAPI and Zemanta.
+
+In order to address the problem of different namespaces in results,
+an approach as presented by Glaser \emph{et al.} 
+in~\cite{glaser2009sameas} based on \texttt{owl:sameAs} links
+could be used.
+In practice, however, while many resources in the Linked Data
+world are marked as equivalent to each other,
+the quality of such equivalence links is not always excellent.
+An example of a~good equivalence link is shown below.
+
+\texttt{<http://dbpedia.org/resource/Barack\_Obama>}\\
+\indent \texttt{<owl:sameAs>}\\
+\indent \texttt{<http://rdf.freebase.com/rdf/en.barack\_obama>}
+
+\noindent As Halpin \emph{et al.} show
+in~\cite{halpin2010owlsameas}, the problem
+with \texttt{owl:sameAs} is that people tend to use it
+in very different ways.
+The authors differentiate four separate usage styles
+in~\cite{halpin2010owlsameas}, ranging from lose relatedness
+to strict equality, however, each marked as \texttt{owl:sameAs}.
+Inference is thus problematic, if not impossible,
+when the intended sense of the link creator of the particular
+\texttt{owl:sameAs} link is unknown.
 
 \subsection{Linked Data Principles Applied}
-Sir Tim Berners-Lee has introduced Linked Data in a~W3C Design Issue~\cite{TimBL:LinkedData}, where he defines the four rules for Linked~Data:
+
+As we recall from \autoref{sec:linked-data-principles}, 
+Tim Berners-Lee has introduced Linked Data in a~W3C
+Design Issue~\cite{bernerslee2006linkeddata},
+where he defines the four rules for Linked~Data:
+
 \begin{enumerate}
-\item Use URIs as names for things.
-\item Use HTTP URIs so that people can look up those names.
-\item When someone looks up a~URI, provide useful information, using the standards (RDF*, SPARQL).
-\item Include links to other URIs, so that they can discover more things.
+  \item Use URIs as names for things.
+  \item Use HTTP URIs so that people can look up those names.
+  \item When someone looks up a~URI, provide useful information, 
+        using the standards (RDF*, SPARQL).
+  \item Include links to other URIs, so that they can discover
+        more things.
 \end{enumerate}
-In order to represent extracted named entities from social network microposts in an unambiguous way, we apply the first and the second Linked Data principle by representing named entities with HTTP URIs. This is taken care of by the third party NLP APIs that we use for our Chrome extensions, namely OpenCalais~\cite{OpenCalais}, Zemanta~\cite{Zemanta}, DBpedia Spotlight~\cite{spotlight}, and AlchemyAPI~\cite{AlchemyAPI}. These APIs take a~text fragment as input, perform named entity extraction on it, and then link the extracted entities back into the Linking Open Data (LOD) cloud. We use these APIs in parallel, and by combining their results aiming at the emergence effect in the sense of Aristotle: ``\emph{[\ldots] the totality is not, as it were, a~mere heap, but the whole is something besides the parts [\ldots]}''\footnote{Aristotle, Metaphysics, Book H 1045a 8-10.}. 
+
+In order to represent extracted named entities from
+social network microposts in an unambiguous way,
+we apply the first and the second Linked Data principle
+by representing named entities with HTTP URIs.
+This is taken care of by the third party NLP APIs
+that we use for our experiments, namely OpenCalais,
+Zemanta, DBpedia Spotlight, and AlchemyAPI.
+These APIs take a~textual document as an input,
+perform named entity extraction and disambiguation on it,
+and finally link the detected named entities back
+into the LOD cloud.
+We use these APIs in parallel, and by combining their results
+aim for the emergence effect in the sense of Aristotle:
+\textit{``the totality is not, as it were, a~mere heap,
+but the whole is something besides the
+parts''}\footnote{Aristotle, Metaphysics, Book H 1045a 8--10.}.
 
 \subsection{Entity Consolidation Process}
 We define the process of entity consolidation as the merging process of entities, \emph{i.e.}, if several services extract the same or different
