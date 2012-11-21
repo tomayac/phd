@@ -306,6 +306,10 @@ combined with this list of short domain URLs:
 
 \noindent The complete data flow is illustrated in the
 architectural diagram in \autoref{fig:architecture}.
+As a~side note, Twitter on its website now has its limited own
+media extractor~\cite{wang2012twitter}
+with support for some of of the media platforms,
+however, our own media extractor goes beyond Twitter's offer.
 
 \begin{figure}
   \centering
@@ -316,72 +320,100 @@ architectural diagram in \autoref{fig:architecture}.
   \label{fig:architecture}
 \end{figure}
 
-%%%  3.3 Media Item Processing  %%%
-\subsection{Media Item Processing}
-As part of the processing chain, we have limited the number of returned results for each media item extractor to 10 items for videos, and 20 items for images. This explains the tendency to round numbers of results in Table~3, marked with $n+$.
+\section{Evaluation}
+\label{sec:evaluation}
 
-\subsubsection{Machine Translation}
-Social networking is happening at a global scale. In consequence, many microposts are authored in languages different from English. In order to still make sense out of those microposts, we apply machine translation to translate non-English microposts to English. We use the Google Translate API\footnote{\url{http://code.google.com/apis/language/translate/v2/getting_started.html}} which, if the source language parameter is left blank, tries first to detect the source language and subsequently translates the micropost to English.
+We have run experiments in the period of January 10--19, 2012
+in which we have selected nine events.
+For these events, we have collected media items and microposts
+using our media extractor
 
-\subsubsection{Part of Speech Tagging}
-Our processing chain supports part of speech tagging via an open source JavaScript library called jspos\footnote{\url{http://code.google.com/p/jspos/}},
-eventually based on Eric Brill's POS tagger~\cite{brill1992simple}. Part of speech tagging does not yet play an active role in the processing chain. However,
-we aim for leveraging the additional data for better micropost analysis in the future.
-
-\subsubsection{Named Entity Disambiguation}
-Despite their typical relative brevity, microposts still carry a considerable amount of information. It has been shown how meaning can be added to Facebook microposts through named entity recognition and disambiguation~\cite{AddingMeaningToMicroposts}. We generalize the approach to common microposts,
-using the NERD framework~\cite{NERD}.
-
-\subsubsection{Media Item Deduplication}
-We try to evaluate the popularity of the media items shared across social networks. This task involves the deduplication of extracted media items.
-For images, we use PhotoSweeper\footnote{\url{http://itunes.apple.com/us/app/photosweeper/id463362050?mt=12}}, a commercial image deduplication software and we have manually deduplicated videos. In the future, we aim to perform this task fully automatically but with this work, we have already created a baseline for specific future algorithms tailored to media item deduplication on social networks.
-
-\paragraph{Image Deduplication}
-The image duplication software we employed allows for different algorithms to be used. We have applied strict pixel-per-pixel comparison for the detection of \emph{exact} duplicates, i.e. we do \emph{not} count a resized version of an image as exact duplicate. Based on bitmap- or histogram-based similarity comparison methods, we introduce the relatively wide term of \emph{loose} duplicate. Bitmap similarity is based on comparing pixels of size-reduced bitmaps.
-For our comparison, we used bitmaps of the size $128 \times 128$ pixels without smoothed edges, which corresponds to the best quality settings in the software.
-Histogram similarity is based on comparing histograms of size-reduced bitmaps. This method helps finding similar images despite differences in color saturation and lighting. For both similarity comparison methods, a varying threshold was used. In our experiments, we could not make out a clear winning setting for all events. Rather, even for the same event, only a combination of both similarity comparison methods led to satisfactory results, i.e. to a set of loosely duplicate images that also a human being would have chosen. We would like to highlight, however, that all detected loosely duplicate images were detected algorithmically, which is an important fact for the objective of fully automating the deduplication process.
-
-\paragraph{Video Deduplication}
-We have deduplicated the videos in the dataset by first automatically splitting them in shots~\cite{CrowdsourcingEvent}, and then manually comparing the videos shot-wise. We considered \emph{exact} duplicates the videos that shared the same shots and same length. For \emph{loose} duplicates, we manually decided whether the videos showed loosely the same based on human judgment. We do not claim that our results are algorithmically reproducible for loosely similar video detection.
-
-%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  4. Experiments  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Experiments}                                                       \label{sec:experiments}
-We run experiments during the period of January 10 to 19, 2012 in which we have selected nine events. For those events, we collected media items and microposts using our media extractor (the dataset as well as the visual summaries are available at \url{http://webmasterapp.net/social/icmr2012/}. We invite the reader to browse the dataset and compile a personal set of loose and exact duplicate media items. YouTube video URLs are signed with a token that expires but they can be accessed by following the \texttt{storyurl} link.
-
-%%%  4.1 Events Considered  %%%
 \subsection{Events Considered}
-We give a short overview of the nine selected events in order to give the reader the necessary background knowledge.
-\newline
-\textbf{Assad Speech.} On January 10, 2012, Syrian President Bashar al-Assad delivered a lengthy televised talk strongly defending his government's actions and motivations, despite world pressure on his embattled government for its 10-month crackdown on protesters.
-% \footnote{Assad Speech: \url{http://www.cnn.com/2012/01/10/world/meast/syria-unrest/}}
-\newline
-\textbf{CES Las Vegas.} The International Consumer Electronics Show (CES) is a major technology-related trade show held each January in the Las Vegas Convention Center. Not open to the public, the Consumer Electronics Association-sponsored show typically hosts previews of products and new product announcements.
-%\footnote{CES Las Vegas: \url{http://www.cesweb.org/aboutcea.asp}}
-\newline
-\textbf{Costa Concordia Disaster.} The Costa Concordia is an Italian cruise ship that hit a reef and partially sank on January 13, 2012 off the Italian coast.
-The vessel ran aground at Isola del Giglio, Tuscany, resulting in the evacuation of 4,211 people on board.
-%\footnote{Coosta Concordia Disaster: \url{http://www.costacruise.com/B2C/USA/Info/concordia_statement.htm}}
-\newline
-\textbf{Cut the Rope Launch.} On January 10, 2012 during Microsoft's keynote at CES, the HTML5 version of the popular mobile game \textit{Cut the Rope} was announced. This is a sub-event of CES Las Vegas.
-%\footnote{Cut the Rope Launch: \url{http://ces.cnet.com/8301-33377_1-57356403/}}
-\newline
-\textbf{Dixville Notch.} Dixville Notch is an unincorporated village in Dixville township of Coos County, New Hampshire, USA, best known in connection with its longstanding middle-of-the-night vote in the U.S. presidential election. In a tradition that started in the 1960 election, all the eligible voters in Dixville Notch gather at midnight in the ballroom of The Balsams. This year, on January 10, 2012, the voters cast their ballots and the polls officially closed one minute later.
-%\footnote{Dixville Notch: \url{http://www.washingtonpost.com/2012/01/09/gIQANslKnP_story.html}}
-\newline
-\textbf{Free Mobile Launch.} Free Mobile is a French mobile broadband company, part of the Iliad group. On January 10, 2012, a long-awaited mobile phone package for \EUR{19.99} with calls included to 40 countries, texts, multimedia messages and Internet was announced by the Iliad group's Chief Strategy Officer, Xavier Niel.
-%\footnote{Free Mobile Launch: \url{http://www.nytimes.com/2012/01/11/technology/iliad-takes-aim-at-top-mobile-operators-in-france.html}}
-\newline
-\textbf{Blackout SOPA.} The Stop Online Piracy Act (SOPA) is a bill of the United States proposed in 2011 to fight online trafficking in copyrighted intellectual property and counterfeit goods. On January 18, the English Wikipedia, Reddit, and several other Internet companies coordinated a service blackout to protest SOPA and its sister bill, the Protect IP Act. Other companies, including Google, posted links and images in an effort to raise awareness.
-%\footnote{Blackout SOPA: \url{http://sopablackout.org/learnmore/}}
-\newline
-\textbf{Ubuntu TV Launch.} Ubuntu TV by Canonical, based on the user interface Unity, is a variant of the Ubuntu operating system, designed to be a Linux distribution specially adapted for embedded systems in televisions. It was announced by Canonical on January 10, 2012, at CES.
-%\footnote{Ubuntu TV: \url{http://www.theverge.com/2012/1/9/2695387/ubuntu-tv-video-hands-on}}
-\newline
-\textbf{Christian Wulff Case.} Since December 2011, German President Christian Wulff faces controversy over discrepancies in statements about a loan while being governor of Lower Saxony. When the affair settled down, it was revealed that he had applied pressure on Springer Press to delay revelations on the issue until he was back from a visit abroad. When Wulff found out that a tabloid was going to break the story, he left a message on the voice mail of the editor-in-chief in which he threatened to take legal action.
-%\footnote{Christian Wulff Case: \url{http://www.spiegel.de/international/germany/0,1518,804631,00.html}}
+
+We give a short overview of the nine selected events
+in order to give the reader the necessary background knowledge.
+
+\begin{description}
+  \item[Assad Speech]
+       On January 10, 2012, Syrian President Bashar al-Assad
+       delivered a televised talk defending his
+       government's actions and motivations, despite world
+       pressure on his government for its 10-month
+       crackdown on
+       protesters\footnote{\url{http://www.cnn.com/2012/01/10/world/meast/syria-unrest/},
+       accessed November 21, 2012}.
+  \item[CES Las Vegas]
+       The International Consumer Electronics Show (CES) is
+       a major technology-related trade show held each January
+       in the Las Vegas Convention Center. Not open to the public,
+       the Consumer Electronics Association-sponsored show
+       typically hosts previews of products and new product
+       announcements\footnote{\url{http://www.cesweb.org/},
+       accessed November 21, 2012}.
+  \item[Costa Concordia Disaster]
+       The Costa Concordia is an Italian cruise ship that hit
+       a reef and partially sank on January 13, 2012 off the
+       Italian coast. The vessel ran aground at Isola del Giglio,
+       Tuscany, resulting in the evacuation of 4,211
+       people\footnote{\url{http://en.wikipedia.org/wiki/Costa_Concordia_disaster},
+       accessed November 21, 2012}.
+  \item[Cut the Rope Launch]
+       On January 10, 2012 during Microsoft's keynote at CES, the
+       HTML5 version of the popular mobile game \textit{Cut the
+       Rope} was announced. This is a sub-event of CES Las
+       Vegas\footnote{\url{http://ces.cnet.com/8301-33377_1-57356403/},
+       accessed November 21, 2012}.
+  \item[Dixville Notch]
+       Dixville Notch is an unincorporated village in Dixville
+       township of Coos County, New Hampshire, USA, best known in
+       connection with its longstanding middle-of-the-night vote in
+       the U.S. presidential election. In a tradition that started
+       in the 1960 election, all the eligible voters in Dixville
+       Notch gather at midnight in the ballroom of The Balsams.
+       This year, on January 10, 2012, the voters cast their
+       ballots and the polls officially closed one minute
+       later\footnote{\url{http://www.washingtonpost.com/2012/01/09/gIQANslKnP_story.html},
+       accessed November 21, 2012}.
+  \item[Free Mobile Launch]
+       Free Mobile is a French mobile broadband company, part of
+       the Iliad group. On January 10, 2012, a long-awaited mobile
+       phone package for \EUR{19.99} with calls included to 40
+       countries, texts, multimedia messages and Internet was
+       announced by the Iliad group's Chief Strategy Officer,
+       Xavier
+       Niel\footnote{\url{http://www.nytimes.com/2012/01/11/technology/iliad-takes-aim-at-top-mobile-operators-in-france.html},
+       accessed November 21, 2012}.
+  \item[Blackout SOPA]
+       The Stop Online Piracy Act (SOPA) is a bill of the United
+       States proposed in 2011 to fight online trafficking in
+       copyrighted intellectual property and counterfeit goods.
+       On January 18, the English Wikipedia, Reddit, and several
+       other Internet companies coordinated a service blackout
+       to protest SOPA and its sister bill, the Protect IP Act.
+       Other companies, including Google, posted links and
+       images in an effort to raise
+       awareness\footnote{\url{http://sopablackout.org/learnmore/},
+       accessed November 21, 2012}.
+  \item[Ubuntu TV Launch]
+       Ubuntu TV by Canonical, based on the user interface Unity,
+       is a variant of the Ubuntu operating system, designed to be
+       a Linux distribution specially adapted for embedded systems
+       in televisions. It was announced by Canonical on January
+       10, 2012, at
+       CES\footnote{\url{http://www.theverge.com/2012/1/9/2695387/ubuntu-tv-video-hands-on},
+       accessed November 21, 2012}.
+  \item[Christian Wulff Case]
+       Since December 2011, former German President Christian
+       Wulff faces controversy over discrepancies in statements
+       about a loan while being governor of Lower Saxony.
+       It was revealed that he had applied pressure
+       on Springer Press to delay revelations on the issue until
+       he was back from a visit abroad. When Wulff found out that
+       a tabloid was going to break the story, he left a message
+       on their voice mail in which he threatened to take legal
+       action\footnote{\url{http://www.spiegel.de/international/germany/0,1518,804631,00.html},
+       accessed November 21, 2012}.
+\end{description}
 
 %%%  4.2 Dataset  %%%
 \subsection{Dataset}
@@ -444,24 +476,6 @@ For each event, we have manually selected the best settings to limit the number 
 
 %Some videos are false positives (Cut the rope launch, Dixville, Free mobile, Ubuntu).
 
-%%%  4.3 Ranking Media Items  %%%
-\subsection{Ranking Media Items}
-Looking at our dataset, it is obvious that the amount of exact duplicate images and videos is largely inferior compared to the amount of loose duplicates. On the one hand, this is owed to applied search operators that exclude re-shared microposts such as Re-Tweets of the same tweet. Hence, the same media item can appear twice in our results only if two users authored different microposts referencing the same media item. On the other hand, it is also owed to our strict definition of exact duplicate which counts resized versions of the same media item as different. We argue that this makes sense as someone had to actively process the media item. A good example is the Blackout SOPA event where the text in the first sequence in \autoref{fig:sequences} is identical while the images have different file sizes, resolutions and paddings. This implies that someone has taken the initial image and applied some post-processing (e.g. cropping) before re-sharing it. A similar example is the second sequence in \autoref{fig:sequences} of the Costa Concordia Disaster where the chimney got cut off.
-
-Long term access to the media items that have been extracted is fragile if only the reference is kept. Users can terminate their accounts on social networks,
-delete media items, or change their privacy settings at any time. In addition, social networks can themselves remove media items according to their policies or government order. Hence, in the context of the Assad Speech event, we experienced media items that were quickly no longer available.
-%To be on the safe side, only media items where explicitly the media item owner as well as the social network permit storage by third parties should be stored.
-%We did not consider legal requirements, however, do note that for potential future exploitation this is indispensable.
-
-By clustering loose duplicate media items in sequences, we aim at boosting diversity in the returned set of media items for a given event: if there are many media items for an event, in the long term we try to only show the most relevant ones from each sequence. This will require a media item ranking formula that will include a combination of different categories of ranking criteria:
-\newline
-\textbf{Visual Features.} Extracted visual features from media items can help judge their quality. Sharp is better than blurry, higher contrast is better than lower contrast, etc. Interestingly, we observe that videos with less or just one camera shot are more likely produced by amateurs, while videos with more shots are more likely produced by professionals. Depending on the event, one might be preferred over the other.
-\newline
-\textbf{Low-level Features.} Common low-level features such as resolution, file size, but also the presence of EXIF metadata or geolocation are good quality indicators. Longer videos are better than shorter videos, higher resolution is better than lower resolution, etc.
-\newline
-\textbf{Social Features.} Media items belonging to the same sequence can have different popularity, either globally across social networks, or on specific social networks. Combining network-specific signals (e.g. number of Re-Tweets on Twitter, Likes on Facebook, +1s on Google+, views on YouTube) and generic signals (e.g. number of comments to a micropost) help to generate a good social popularity indicator. This can also include user diversity by featuring content from different users rather than just content from one user.
-\newline
-\textbf{Textual Features.} Media items are often surrounded by a textual description in a micropost. Named entity disambiguation can reveal valuable insights which can be further combined with face recognition techniques in order to select media items. Assuming that a user sends a micropost containing a media item about a concert while mentioning the name of a singer. A framework such as NERD can map the singer's name to a Linked Data concept and help searching for known objects such as the singer's face.
 
 \begin{figure*}
 \begin{tabular}{p{\textwidth}}

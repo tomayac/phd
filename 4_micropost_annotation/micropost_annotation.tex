@@ -404,6 +404,29 @@ accessed November 20, 2012}
 and quality measures such as prominence, topical pertinence,
 contextual ambiguity and disambiguation confidence.
 
+\subsection{Machine Translation}
+
+Social networking happens at a global scale.
+In consequence, many microposts are authored
+in languages different from English.
+In order to still make sense out of those microposts,
+we apply machine translation to translate non-English microposts
+to English.
+We use the Google Translate
+API\footnote{\url{https://developers.google.com/translate/v2/getting_started},
+accessed November 21, 2012}
+which, if the source language parameter is left blank,
+tries to first detect the source language,
+and subsequently translates the micropost to English.
+
+\subsection{Part-of-Speech Tagging}
+Our processing chain supports part-of-speech (POS) tagging
+based on an adapted Brill POS tagger~\cite{brill1992pos}.
+In the current processing chain, POS tagging does not yet
+play an active role,
+however, we aim for leveraging the additional data
+for better micropost analysis in the future.
+
 \section{Consolidating Named Entity Disambiguation Results} 
 \label{sec:consolidate}
 

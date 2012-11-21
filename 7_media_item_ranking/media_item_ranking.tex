@@ -126,6 +126,27 @@ video and music playlist generation~\cite{YouTube2010,Playlist2006},
 however media gallery composition requires mixing video
 \emph{and} image media items.
 
+%%%% BEGINNING %%%%% Need to clean this up %%%%%%%
+\subsection{Ranking Media Items}
+Looking at our dataset, it is obvious that the amount of exact duplicate images and videos is largely inferior compared to the amount of loose duplicates. On the one hand, this is owed to applied search operators that exclude re-shared microposts such as Re-Tweets of the same tweet. Hence, the same media item can appear twice in our results only if two users authored different microposts referencing the same media item. On the other hand, it is also owed to our strict definition of exact duplicate which counts resized versions of the same media item as different. We argue that this makes sense as someone had to actively process the media item. A good example is the Blackout SOPA event where the text in the first sequence in \autoref{fig:sequences} is identical while the images have different file sizes, resolutions and paddings. This implies that someone has taken the initial image and applied some post-processing (e.g. cropping) before re-sharing it. A similar example is the second sequence in \autoref{fig:sequences} of the Costa Concordia Disaster where the chimney got cut off.
+
+Long term access to the media items that have been extracted is fragile if only the reference is kept. Users can terminate their accounts on social networks,
+delete media items, or change their privacy settings at any time. In addition, social networks can themselves remove media items according to their policies or government order. Hence, in the context of the Assad Speech event, we experienced media items that were quickly no longer available.
+%To be on the safe side, only media items where explicitly the media item owner as well as the social network permit storage by third parties should be stored.
+%We did not consider legal requirements, however, do note that for potential future exploitation this is indispensable.
+
+By clustering loose duplicate media items in sequences, we aim at boosting diversity in the returned set of media items for a given event: if there are many media items for an event, in the long term we try to only show the most relevant ones from each sequence. This will require a media item ranking formula that will include a combination of different categories of ranking criteria:
+\newline
+\textbf{Visual Features.} Extracted visual features from media items can help judge their quality. Sharp is better than blurry, higher contrast is better than lower contrast, etc. Interestingly, we observe that videos with less or just one camera shot are more likely produced by amateurs, while videos with more shots are more likely produced by professionals. Depending on the event, one might be preferred over the other.
+\newline
+\textbf{Low-level Features.} Common low-level features such as resolution, file size, but also the presence of EXIF metadata or geolocation are good quality indicators. Longer videos are better than shorter videos, higher resolution is better than lower resolution, etc.
+\newline
+\textbf{Social Features.} Media items belonging to the same sequence can have different popularity, either globally across social networks, or on specific social networks. Combining network-specific signals (e.g. number of Re-Tweets on Twitter, Likes on Facebook, +1s on Google+, views on YouTube) and generic signals (e.g. number of comments to a micropost) help to generate a good social popularity indicator. This can also include user diversity by featuring content from different users rather than just content from one user.
+\newline
+\textbf{Textual Features.} Media items are often surrounded by a textual description in a micropost. Named entity disambiguation can reveal valuable insights which can be further combined with face recognition techniques in order to select media items. Assuming that a user sends a micropost containing a media item about a concert while mentioning the name of a singer. A framework such as NERD can map the singer's name to a Linked Data concept and help searching for known objects such as the singer's face.
+
+%%%% END %%%%% Need to clean this up %%%%%%%
+
 \subsection{Media Gallery Aesthetics}
 
 \noindent \textbf{Definition}

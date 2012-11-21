@@ -17,6 +17,17 @@
 % ----------------------------------------------------------------------
 
 \section{Image Deduplication}
+\subsubsection{Media Item Deduplication}
+We try to evaluate the popularity of the media items shared across social networks. This task involves the deduplication of extracted media items.
+For images, we use PhotoSweeper\footnote{\url{http://itunes.apple.com/us/app/photosweeper/id463362050?mt=12}}, a commercial image deduplication software and we have manually deduplicated videos. In the future, we aim to perform this task fully automatically but with this work, we have already created a baseline for specific future algorithms tailored to media item deduplication on social networks.
+
+\paragraph{Image Deduplication}
+The image duplication software we employed allows for different algorithms to be used. We have applied strict pixel-per-pixel comparison for the detection of \emph{exact} duplicates, i.e. we do \emph{not} count a resized version of an image as exact duplicate. Based on bitmap- or histogram-based similarity comparison methods, we introduce the relatively wide term of \emph{loose} duplicate. Bitmap similarity is based on comparing pixels of size-reduced bitmaps.
+For our comparison, we used bitmaps of the size $128 \times 128$ pixels without smoothed edges, which corresponds to the best quality settings in the software.
+Histogram similarity is based on comparing histograms of size-reduced bitmaps. This method helps finding similar images despite differences in color saturation and lighting. For both similarity comparison methods, a varying threshold was used. In our experiments, we could not make out a clear winning setting for all events. Rather, even for the same event, only a combination of both similarity comparison methods led to satisfactory results, i.e. to a set of loosely duplicate images that also a human being would have chosen. We would like to highlight, however, that all detected loosely duplicate images were detected algorithmically, which is an important fact for the objective of fully automating the deduplication process.
+
+\paragraph{Video Deduplication}
+We have deduplicated the videos in the dataset by first automatically splitting them in shots~\cite{CrowdsourcingEvent}, and then manually comparing the videos shot-wise. We considered \emph{exact} duplicates the videos that shared the same shots and same length. For \emph{loose} duplicates, we manually decided whether the videos showed loosely the same based on human judgment. We do not claim that our results are algorithmically reproducible for loosely similar video detection.
 
 \section{Video Shot Detection}
 Video shot detection is the processor-intensive task of splitting a~video into continuous shots, with hard or soft cuts as the boundaries. In this paper, we present a~client-side on-the-fly approach to this challenge based on modern HTML5-enabled Web APIs. We show how video shot detection can be seamlessly embedded into video platforms like YouTube using browser extensions. Once a~video has been split into shots, shot-based video navigation gets enabled and more fine-grained playing statistics can be created.
