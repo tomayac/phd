@@ -124,7 +124,7 @@ to fall back to Web scraping.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\linewidth,
+  \includegraphics[width=0.7\linewidth,
     trim=16px 17px 12px 15px,clip]{davidsimonds.jpg}
   \caption[David Simonds illustrates social networks as walled
     gardens.]
@@ -164,7 +164,8 @@ least common multiple of all social networks.
 We explain the abstraction layer in the following
 with the help of a concrete example,
 stemming from a query to the media collector
-that gets explained in more detail later in this chapter.
+that gets explained in more detail
+in the upcoming \autoref{sec:media-item-extractors}.
 The media collector was used to query for media items
 that match the search term \emph{hamburg}.
 \autoref{code:facebook} shows sample output of the media extractor
@@ -251,14 +252,69 @@ as detailed in \autoref{cha:micropost-annotation}.
 \end{lstlisting}
 
 \subsection{Media Item Extractors}
-We have developed a media extractor composed of media item extractors for the seven social networks Google+, MySpace, Facebook, Twitter, Instagram, YouTube, and Flickr with additional support for the four media sharing platforms img.ly, yfrog, MobyPicture, and Twitpic. The media extractor takes as input a search term that is relevant to a known event, e.g. ``costa concordia'' for the Costa Concordia Disaster. This search term gets forwarded to the search APIs of the social networks in parallel. Each social network has a 30 seconds timeout window to deliver its results. When the timeout is reached, or when all social networks have responded,
-the available results are aligned according to the data format defined in \autoref{sec:data-format}. Media items are retrieved either directly or via Web scraping. For some social networks, e.g. MySpace, a combination of Web scraping and API access is required since the API does not return all necessary fields of our data format. Hence, the timestamp of when a media item is uploaded on MySpace can be obtained only via Web scraping. The complete data flow is illustrated in the architectural diagram (\autoref{fig:architecture}).
-\begin{figure*}
-\centering
-\includegraphics[width=1.0\linewidth]{architecture.pdf}
-\caption{Overview of the media extractor: hybrid approach for the media item extraction process using a combination of API access and Web scraping}
-\label{fig:architecture}
-\end{figure*}
+\label{sec:media-item-extractors}
+
+We have developed a combined media extractor composed of
+separate media item extractors for the seven social networks
+\googleplus, Myspace, Facebook, Twitter, Instagram, YouTube,
+and Flickr, with additional support for the media sharing
+platforms Img.ly, Imgur, Lockerz, Yfrog, MobyPicture, and Twitpic.
+The media extractor takes as input a search term that is relevant
+to a known event, \emph{e.g.}, the term \emph{boston celtics}
+for a recent match of the Basketball team Boston Celtics.
+This search term gets forwarded to the search APIs
+of the social networks in parallel.
+Each social network has a 30 seconds timeout window
+to deliver its results.
+When the timeout is reached,
+or when all social networks have responded,
+the available results are represented according to the data format
+defined in \autoref{sec:data-format}.
+Media items and the relevant metadata like view count, comments,
+\emph{etc.} are retrieved either directly, or via Web scraping.
+For some social networks, \emph{e.g.}, Img.ly
+a combination of Web scraping and API access is required
+since the API does not return all necessary fields
+of our data format.
+
+\subsubsection{Special Role of Twitter}
+
+Twitter plays a special role, as it can be used as
+a third-order support social network,
+as detailed previously in
+\autoref{sec:twitter}
+and \autoref{sec:classification-of-social-networks}.
+This means that the micropost text is located on Twitter,
+but the referenced media items are located
+on third party media platforms.
+Due to the length limitation for tweets of 140 characters,
+short URLs are used on the service.
+We search for the search term in question (\emph{e.g.},
+following up from the example before, \emph{boston celtics}),
+but combine it with the short URL domain parts of
+the media platforms.
+For example, the short domain URL of the social network Flickr
+is \url{flic.kr}, where the long domain URL is \url{flicker.com}.
+The short domain URL of Instagram is \url{instagr.am},
+where the long domain URL is \url{instagram.com}, \emph{etc.}
+We have created a list of all known short domain URLs for the 
+considered media platforms so that the complete search query
+for Twitter is the actual search term,
+combined with this list of short domain URLs:
+
+\emph{boston celtics AND (flic.kr OR instagr.am OR ...)}
+
+\noindent The complete data flow is illustrated in the
+architectural diagram in \autoref{fig:architecture}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=1.0\linewidth]{architecture.pdf}
+  \caption{Overview of the media extractor:
+    hybrid approach for the media item extraction process using
+    a combination of API access and Web scraping}
+  \label{fig:architecture}
+\end{figure}
 
 %%%  3.3 Media Item Processing  %%%
 \subsection{Media Item Processing}
