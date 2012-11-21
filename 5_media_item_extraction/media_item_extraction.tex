@@ -48,6 +48,40 @@ the events we are dealing with are known beforehand
 and we use specific human-chosen search terms
 to find illustrating media.
 
+\section{Related Work}
+\label{sec:related-work}
+
+Related work covers research
+that aims to collect, align, and organize media
+for trends or events.
+Liu \emph{et al.} combine semantic inferencing and visual analysis
+to automatically find media to illustrate
+events~\cite{liu2011events}.
+They interlink large datasets of event metadata
+and media with the Linking Open Data
+Cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
+In~\cite{liu2011socialmedia}, they show how visual summaries
+of past events providing viewers with a more compelling feeling
+of the event's atmosphere can be created
+based on a method to automatically detect and identify events
+from social media sharing web sites.
+Approaches for alignment use visual, temporal,
+and spacial similarity measures to map multiple photo streams of
+the same events~\cite{yang2011photostream}.
+Other ways to collect and order media from social networks use
+user-driven metadata such as geospatial
+information~\cite{crandall2009mappingphotos}.
+Becker \emph{et al.} show in~\cite{becker2010eventidentification}
+how to exploit the rich context associated with social media
+content, including user-provided annotations
+and automatically generated information.
+Using this rich context, they define document similarity metrics
+to enable online clustering of media to events.
+In~\cite{becker2012plannedevents}, the same authors develop 
+recall-oriented query formulation strategies
+based on noisy event metadata
+from event aggregation platforms.
+
 \section{Social Networks and Media Items}                                    \label{sec:social-networks}
 
 We first recall the definitions previously made in
@@ -88,8 +122,6 @@ as follows.
        social networks to find references to media items,
        which allows for storing those media items in binary form.       
 \end{description}
-
-\section{Media Item Extraction}
 
 An \emph{Application Programming Interface (API)}
 is a programmatic specification intended to be used
@@ -163,10 +195,10 @@ Naturally, any abstraction can only represent the
 least common multiple of all social networks.
 We explain the abstraction layer in the following
 with the help of a concrete example,
-stemming from a query to the media collector
+stemming from a query to the media extractor
 that gets explained in more detail
 in the upcoming \autoref{sec:media-item-extractors}.
-The media collector was used to query for media items
+The media extractor was used to query for media items
 that match the search term \emph{hamburg}.
 \autoref{code:facebook} shows sample output of the media extractor
 for a Facebook post, which was processed
@@ -415,11 +447,41 @@ in order to give the reader the necessary background knowledge.
        accessed November 21, 2012}.
 \end{description}
 
-%%%  4.2 Dataset  %%%
 \subsection{Dataset}
-Our data set contained 448 images with an average file size of $\sim$0.7MB and 143 videos (Table~2). Some videos are no longer available due to either an account termination or a video takedown by the user (Assad, Dixville). We observed that the process of image deduplication is by no means a solved issue. Content-based image retrieval (CBIR) uses features like color, texture, and shape to search images from large-scale databases. The same technique, however, can also be used for the deduplication of photographs~\cite{Pattabhi:RAICS11}. We used the PhotoSweeper CBIR-based image duplication detection software that allows for manual algorithm and threshold selection to detect duplicates in the dataset (Table~\ref{tab:duplicate-media}).
+Our data set contained 448 images with an average file size of
+$\sim$0.7MB and 143 videos.
+Some videos are no longer available due to either
+account termination or video takedown by the user
+(Assad, Dixville).
+Table~\ref{tab:number-media} \todo{Fix reference} shows the total
+numbers of retrieved photos and videos of the media extractor.
+Column values marked with $n+$ signify that there were more 
+results, but that only $n$ results were considered. 
+We have calculated the precisions for each event for both video 
+and photo separately, the overall photo precision was $0.73$,
+and the overall video precision was $0.54$.
+We note that these values were calculated \emph{before}
+any pruning at all, \emph{i.e.}, before taking into account
+the additional textual information from microposts like
+potential extracted named entities.
+The dataset is very diverse with respect to image quality,
+image format, and naturally content.
+It ranges from entirely sharp screenshots
+in all sorts of formats (\emph{e.g.},
+screenshots of the Google homepage for the Blackout SOPA event
+to screenshots of a wide banner advertisement),
+to blurry cell phone images in standard photo formats
+(\emph{e.g.}, photos of the stage
+for the Free Mobile Launch event).
+\autoref{fig:sequences} shows sample images for
+some of the considered nine events.
+We have observed that more than one search sessions are necessary
+in order to obtain a satisfactory recall.
+Query strategies developed by Becker~\cite{becker2012plannedevents}
+that combine different combinations of event title,
+event venue, and event city work consistently well.
 
-\begin{table*}[htbp]
+\begin{sidewaystable}[h!]
   \centering{
   \small{
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
@@ -429,53 +491,39 @@ Our data set contained 448 images with an average file size of $\sim$0.7MB and 1
     \multicolumn{2}{c|}{\textbf{Ropes}} & \multicolumn{2}{c|}{\textbf{SOPA}} & \multicolumn{2}{c|}{\textbf{Ubuntu}} &
     \multicolumn{2}{c|}{\textbf{Wulff}} \\
     \cline{2-19}
-    \multicolumn{1}{|c|}{\textbf{Network}} & \textbf{I} & \textbf{V} & \textbf{I} & \textbf{V} & \textbf{I} & \textbf{V} &
-    \textbf{I} & \textbf{V} & \textbf{I} & \textbf{V} & \textbf{I} & \textbf{V} & \textbf{I} & \textbf{V} & \textbf{I} &
-    \textbf{V} & \textbf{I} & \textbf{V} \\
+    \multicolumn{1}{|c|}{\textbf{Network}} & \textbf{P} & \textbf{V} & \textbf{P} & \textbf{V} & \textbf{P} & \textbf{V} &
+    \textbf{P} & \textbf{V} & \textbf{P} & \textbf{V} & \textbf{P} & \textbf{V} & \textbf{P} & \textbf{V} & \textbf{P} &
+    \textbf{V} & \textbf{P} & \textbf{V} \\
     \hline
     \textbf{Google+} & 3 & 2 & 5 & 3 & 15 & 1 & 4 & 1 & 6 & 0 & 5 & 1 & 5 & 0 & 6 & 1 & 7 & 0\\
-    \textbf{MySpace} & 0 & 0 & 0 & 0 & 10+ & 0 & 9 & 0 & 1 & 0 & 6 & 0 & 0 & 0 & 0 & 0 & 8 & 0\\
+    \textbf{Myspace} & 0 & 0 & 0 & 0 & 10+ & 0 & 9 & 0 & 1 & 0 & 6 & 0 & 0 & 0 & 0 & 0 & 8 & 0\\
     \textbf{Facebook} & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0\\
     \textbf{Twitter} & 2 & 0 & 2 & 0 & 3 & 0 & 3 & 0 & 2 & 0 & 4 & 0 & 5 & 0 & 0 & 0 & 2 & 0\\
     \textbf{Instagram} & 0 & 0 & 20+ & 0 & 20+ & 0 & 0 & 0 & 20+ & 0 & 20+ & 0 & 20+ & 0 & 0 & 0 & 2 & 0\\
     \textbf{YouTube} & 0 & 10+ & 0 & 10+ & 0 & 10+ & 0 & 3 & 0 & 10+ & 0 & 10+ & 0 & 10+ & 0 & 10+ & 0 & 10+\\
     \textbf{Flickr} & 10+ & 0 & 10+ & 6 & 10+ & 10+ & 10+ & 10+ & 10+ & 0 & 10+ & 10+ & 10+ & 0 & 10+ & 9 & 10+ & 2\\
-    \textbf{MobyPicture} & 0 & 0 & 1 & 0 & 4 & 0 & 0 & 0 & 2 & 0 & 20+ & 0 & 1 & 0 & 2 & 0 & 3 & 0\\
+    \textbf{MobyPic} & 0 & 0 & 1 & 0 & 4 & 0 & 0 & 0 & 2 & 0 & 20+ & 0 & 1 & 0 & 2 & 0 & 3 & 0\\
     \textbf{Twitpic} & 0 & 0 & 20+ & 0 & 18 & 0 & 1 & 0 & 20+ & 0 & 20+ & 0 & 19 & 0 & 2 & 0 & 20+ & 0\\
     \hline
     \textbf{Total} & 15 & 12 & 58 & 20 & 80 & 22 & 27 & 14 & 61 & 10 & 85 & 21 & 60 & 12 & 20 & 20 & 52 & 12\\
     \hline
+    \textbf{Relevant} & 12 & 7 & 39 & 18 & 61 & 15 & 8 & 2 & 46 & 4 & 76 & 14 & 43 & 5 & 18 & 13 & 39 & 7\\    
+    \hline
+    \hline    
+    \textbf{Precision} & .80 & .58 & .67 & .90 & .76 & .55 & .30 & .14 & .75 & .40 & .89 & .67 & .71 & .42 & .90 & .65 & .75 & .58\\
+    \hline  
+    \hline        
   \end{tabular}
   }
   \label{tab:number-media}
-  \caption{Number of images and videos collected for the 9 events (resp. \textbf{Assad Speech}, \textbf{CES Las Vegas}, \textbf{Costa Concordia Disaster}, \textbf{Dixville Notch}, \textbf{Free Mobile Launch}, \textbf{Cut the Rope Launch}, \textbf{Blackout SOPA}, \textbf{Ubuntu TV Launch} and \textbf{Christian Wulff Case}) grouped by social networks}
+  \caption{Number of images and videos collected for nine events
+    happening between January 10--19, 2012
+    grouped by social networks, separated in photo (P)
+    and video (V) results.
+    Overall \textbf{photo precision: 0.73}.
+    Overall \textbf{video precision: 0.54}.}
   }
-\end{table*}
-
-For each event, we have manually selected the best settings to limit the number of duplicate misses and false positives. The main problem with the dataset is its diversity. It ranges from entirely sharp screenshots in all sorts of formats (e.g. screenshots of the Google homepage for the Blackout SOPA event), to blurry cell phone images in standard photo formats (e.g. photos of the stage for the Free Mobile Launch event). A common performance tweak to speed up the duplication detection process is to shrink images to quadratic bitmaps. In the context of our dataset, however, this approach is counter productive, as a screenshot of a rectangular IAB $728 \times 90$ ``leaderboard'' banner is treated the same as a standard 3.1 megapixels ($2048 \times 1536$) cell phone photo. In practice, shrinking a wide rectangular banner to a square led to many incorrect results requiring manual deduplication with the Blackout SOPA event.
-
-\begin{table*}[htbp]
-  \begin{tabular}{|c|c|c||c|c|}
-    \hline
-    \textbf{Event} & \textbf{Exact Duplicate I} & \textbf{Loose Duplicate I} & \textbf{Exact Duplicate V} & \textbf{Loose Duplicate V}\\
-    \hline
-    Assad Speech & 0 image in 0 seq & 2 images in 1 seq & 0 video in 0 seq & 2 videos in 1 seq\\
-    CES Las Vegas & 0 image in 0 seq & 9 images in 3 seq & 0 video in 0 seq & 2 videos in 1 seq\\
-    Costa Concordia & 0 image in 0 seq & 6 images in 3 seq & 0 video in 0 seq & 0 video in 0 seq\\
-    Cut the Rope Launch & 2 images in 1 seq & 15 images in 5 seq & 0 video in 0 seq & 14 videos in 3 seq\\
-    Dixville Notch & 2 images in 1 seq & 2 images in 1 seq & 2 videos in 1 seq & 0 video in 0 seq\\
-    Free Mobile Launch & 2 images in 1 seq & 16 images in 7 seq & 0 video in 0 seq & 0 video in 0 seq\\
-    Blackout SOPA & 0 image in 0 seq & 14 images in 4 seq & 2 videos in 1 seq & 0 video in 0 seq\\
-    Ubuntu TV Launch & 0 image in 0 seq & 5 images in 1 seq & 4 videos in 1 seq & 9 videos in 4 seq\\
-    Christian Wulff Case & 4 images in 2 seq & 0 image in 0 seq & 0 video in 0 seq & 0 video in 0 seq\\
-    \hline
-  \end{tabular}
-  \label{tab:duplicate-media}
-  \caption{Exact and loose duplicate images (I) and videos (V) per event}
-\end{table*}
-
-%Some videos are false positives (Cut the rope launch, Dixville, Free mobile, Ubuntu).
-
+\end{sidewaystable}
 
 \begin{figure*}
 \begin{tabular}{p{\textwidth}}
@@ -518,27 +566,6 @@ For each event, we have manually selected the best settings to limit the number 
 	\begin{thumbsequence}
 		\doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate3.jpg}}
 		\doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate4.jpg}}
-	\end{thumbsequence}
-\end{tabular}
-
-\vspace{.5em}
-
-\begin{tabular}{p{.5\textwidth}p{.5\textwidth}}
-\eventtitle{Dixville Notch}
-	\begin{thumbsequence}
-		\doublebox{\includegraphics[height=\thumbheight]{dixville/exactduplicate1.jpg}}
-		\doublebox{\includegraphics[height=\thumbheight]{dixville/exactduplicate2.jpg}}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{dixville/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{dixville/looseduplicate2.jpg}
-	\end{thumbsequence}
-	&
-\vspace{-3pt}
-\eventtitle{Assad Speech}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{assad/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{assad/looseduplicate2.jpg}
 	\end{thumbsequence}
 \end{tabular}
 
@@ -619,100 +646,127 @@ For each event, we have manually selected the best settings to limit the number 
 	\end{thumbsequence}
 	\begin{thumbsequence}
 		\includegraphics[height=\thumbheight]{ces/looseduplicate8.jpg}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate9.jpg}
 	\end{thumbsequence}
 \end{tabular}
-
-\vspace{.5em}
-
-\begin{tabular}{p{.5\textwidth}p{.5\textwidth}}
-	\eventtitle{Cut the Rope Launch}
-	\begin{thumbsequence}
-		\doublebox{\includegraphics[height=\thumbheight]{ropes/exactduplicate1.jpg}}
-		\doublebox{\includegraphics[height=\thumbheight]{ropes/exactduplicate2.jpg}}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate5.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate6.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate7.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate8.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate9.jpg}
-	\end{thumbsequence}
-	\newline\vspace{-.5em}\newline
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate12.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate13.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate14.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate15.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate10.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate11.jpg}
-	\end{thumbsequence}
-	\newstrip
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate2.jpg}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate3.png}
-		\includegraphics[height=\thumbheight]{ropes/looseduplicate4.png}
-	\end{thumbsequence}
-	&
-\eventtitle{Ubuntu TV launch}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ubuntu/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{ubuntu/looseduplicate2.jpg}
-		\newstrip
-		\includegraphics[height=\thumbheight]{ubuntu/looseduplicate3.jpg}
-		\includegraphics[height=\thumbheight]{ubuntu/looseduplicate4.jpg}
-		\newstrip
-		\includegraphics[height=\thumbheight]{ubuntu/looseduplicate5.png}
-	\end{thumbsequence}
-\end{tabular}
-\caption{Results of the image deduplication (exact and loose duplicate) for the 9 selected events}
+\caption{Sample images for some of the considered nine events
+         (showing only exact or near-duplicate media items).}
 \label{fig:sequences}
 \end{figure*}
 
-%%%  4.4 Generating Media Galleries  %%%
-\subsection{Generating Media Galleries}
-Once the media items are ranked, it is possible to generate media galleries and build visual summaries. Popular media items can be displayed bigger, longer, or with a special decoration like a thicker border in comparison to less popular media items. For videos, the audio part poses a challenge. In our experiments, we observe that intermixing the audio of all videos of an event often generates a very characteristic ``noise cloud''. A good example is the Assad Speech event, where a mix of Arabic voices blends nicely with the speech of a US politician. A different example is the CES Las Vegas event, where the atmosphere of a big exposition with music, announcements, and technical analysis becomes alive.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  5. Related Work  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Need for Media Item Deduplication}
 
-\section{Related Work}                                                      \label{sec:related-work}
-% Separate related work in fields:
-% - media item collection from social networks
-% - event summarization
-% Highlight what Twitter is doing (most popular image/video)
-% Google news top stories
-% Automatic gallery creation
+Given our broad approach to retrieve media items
+across multiple social networks,
+we observed many duplicate, or near-duplicate media items.
+Oftentimes, these duplicates stem from users who
+cross-post to several social networks.
+Instead of trying to filter out cross-posted items,
+we rather keep them and instead cluster them.
+We are especially interested in social interactions
+that media items trigger, for example, one and the same 
+photo, if cross-posted to separate networks, can retrieve
+shares, likes, views, or comments independently
+on each of those networks.
+By clustering media items, we get a higher level view
+on a media item's overall performance on different networks.
+We also observed media items that were near-duplicates,
+for example, from people who attended the same event like a concert
+and who took photos of the stage from almost the same angle.
+Similar to exact duplicates,
+by clustering near-duplicate media items,
+we can treat them like exact duplicates to get the same
+network-agnostic view point.
+We will examine media item deduplication and near-deduplication
+in \autoref{sec:media-item-deduplication}
 
-A~first category of related work includes research that aims to collect, align, and organize media for trends or events.
-Liu \emph{et al.} combine semantic inferencing and visual analysis to automatically find media to illustrate events~\cite{Liu:ICMR11}.
-They interlink large datasets of event metadata and media with the Linking Open Data Cloud~\cite{LODcloud}.
-Approaches for alignment use visual, temporal, and spacial similarity measures to map multiple photo streams of the same events~\cite{Yang2011}.
-Other ways to collect and order media from social networks use user-driven metadata such as geospatial information~\cite{Crandall}.
+\subsection{The Need for Ranking Media Items}
 
-Another relevant work area is duplicate and near-duplicate media detection. Work on ordinal measures for image correspondence started in the last decade of the 20\superscript{th}~century~\cite{Bhat}. Recently, Chum \emph{et al.} have proposed a near-duplicate image detection method using MinHash and tf--idf weighting~\cite{Chum}. A~method for both images and video has been proposed by Yang \emph{et al.}~\cite{Yang}. Specialized methods for video exist as well~\cite{Min, Wu}, an excellent survey of which has been conducted by Lian \emph{et al.}~\cite{Lian}.
+Our ultimate goal is to generate media galleries
+to create visual event summaries.
+Especially given high recall search terms,
+we need a way to rank and prune media items.
+Popular media items can be displayed bigger, longer,
+or with a special decoration like a thicker border
+in comparison to less popular media items.
+For videos, the audio part poses a challenge.
+In our experiments, we observe that intermixing the audio
+of all videos of an event often generates
+a very characteristic \emph{noise cloud}.
+A good example is the Assad Speech event,
+where a mix of Arabic voices blends nicely
+with the speech of a US politician.
+A different example is the CES Las Vegas event,
+where the atmosphere of a big exposition with music,
+announcements, and technical analysis becomes alive.
+We will have a closer look at media item ranking in
+\autoref{sec:media-item-ranking}.
 
-When unique media items have been collected, the remaining task is to summarize events by selecting the most relevant media fragments. Fabro and B\"osz\"orm\'enyi~\cite{Fabro:MMM12} detail the summarization and presentation of events from content retrieved from social media. Nowadays, many domain-specific methods already exhibit good accuracy, for example in the sports domain~\cite{Li1,Li2}. However, the challenge in this field is to find methods that are content-agnostic. Methods that exploit semantic information~(\emph{e.g.} \cite{Chen}) will likely provide high-quality results in the future, but today's most relevant summaries are produced by user interaction~\cite{Olsen}.
+\section{Conclusion}
+\label{sec:conclusion}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  6. Conclusion and Future Work  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In this chapter, we have presented a generic media extractor
+for gathering media items shared on social networks to
+illustrate known events.
+We have proposed a common abstraction layer on top of the
+social networks' native data formats to align search results.
+Our approach for extracting media items and associated
+textual microposts covers already most of
+the Western social networks.
+Context-aware multimedia analysis will bring a new range of
+parameters into play since many media items contain a message
+that is complementary to the text.
+For example, facial detection~\cite{viola2004facedetection}
+and eventually recognition~\cite{wright2009facerecognition}
+can signify the presence of specific people in a media item.
+As visual recognition systems grow more powerful,
+more objects will eventually be recognizable by
+machines~\cite{serre2007objectrecognition},
+which would allow for generating \emph{visual hashtags}
+that describe the content
+\emph{inside} of the media item.
+Extracted features in all three categories
+(\emph{textual}---from the micropost,
+\emph{visual}---from the media item,
+and \emph{social}---from the social network
+in the form of social interactions)
+can serve as ranking criteria, be it in isolation,
+or in combination by introducing a ranking formula.
+As a result, this will also positively influence
+the diversity of automated summarizations.
 
-\section{Conclusion and Future Work}                                        \label{sec:conclusion}
-In this section, we presented a generic media extractor for gathering media items shared on social networks and illustrating known events. We proposed a common schema for aligning the search results of these platforms. We further described a full processing chain of the media items that includes machine translation, POS tagging, named entity disambiguation and media item deduplication. We show how media items can be ranked in order to generate visual summaries that convey the feeling of the wisdom of the crowd for a known event.
+Nonetheless, it remains important to view the media and the
+associated text as a whole, since the text
+could convey a sentiment about,
+or an explanation of the visual data.
+Using named entity recognition as outlined in
+\autoref{cha:micropost-annotation},
+the important semantic elements in the message text get identified. 
+The content of the message can subsequently be used
+to narrow down the search space for visual factors
+enabling cross-fertilization between the textual
+and visual analysis, which results in effective context-aware analysis possibilities~\cite{verborgh2012multimediaannotation}.
 
-Our implementation for extracting visual media and associated textual messages covers already most of the Western social networks. We plan to support more social networks used in other parts of the world while improving the Web scrapers in order to significantly improve the quantity and diversity of media and messages shared for an event. Multimedia analysis techniques should be better integrated in the processing chain as this will create a multi-modal environment where different factors are used to organize social content. Hence, content deduplication and visual quality metrics (sharpness, contrast\ldots) can be used to rank the media items. Furthermore, the identification of the original content can allow users to choose a balance between popularity (favor omnipresent content) and originality (promote rare content).
-
-Context-aware multimedia analysis will likely bring a new range of parameters into play since many media items contain a message that is complementary to the text. For example, facial detection~\cite{ViolaJones} and eventually recognition~\cite{Wright} can signify the presence of specific people in a media fragment.
-As visual recognition systems grow more powerful, more objects will eventually be recognizable by machines~\cite{Serre}, which would allow generating \emph{visual hashtags} that describe the content \emph{inside} of the media item. Extracted features in all three categories~(\emph{textual} -- from the micropost, \emph{visual} -- from the media item, and \emph{social} -- from the social network in the form of ReTweets, Likes, +1s\ldots) can also serve as ranking criteria, be it in isolation, or in combination by introducing a ranking formula. As a result, this would also positively influence the diversity of automated summarizations.
-
-Nonetheless, it remains important to view the media and the associated text as a whole, since the text could convey a sentiment about or an explanation of the visual data. Using named entity recognition~\cite{NERD,AddingMeaningToMicroposts}, the important semantic elements in the message text can be identified. The content of the message could subsequently be used to narrow down the search space for visual factors enabling cross-fertilization between the textual and visual analysis, which results in effective context-aware analysis possibilities~\cite{verborgh_mtap_2011}.
+Finally, by leveraging the LOD cloud,
+we can use that knowledge to get a more diverse view on events.
+At time of writing, the so-called
+\emph{Operation Pillar of
+Defense\footnote{\url{http://en.wikipedia.org/wiki/Operation_Pillar_of_Defense}, accessed November 21, 2012}}
+by the Israeli armed forces
+causes ongoing conflicts between Palestinians and Israelis.
+Using the LOD cloud, promising search terms like, for example,
+\emph{gaza}, can be easily looked up in different languages
+like Hebrew or Arabic.
+In practice, these additional search terms return interesting
+new media items that a pure monolingual search
+would not have revealed---oftentimes,
+and especially in the concrete case,
+at the expense of neutrality.
+We are confident, however, that the additional coverage
+from more angles helps sharpen one's own view point of an event,
+especially with the option of back-translating microposts
+in foreign languages, which our approach supports,
+as mentioned in \autoref{sec:machine-translation}.
 
 \section*{Chapter Notes}
 This chapter is partly based on the following publications:
