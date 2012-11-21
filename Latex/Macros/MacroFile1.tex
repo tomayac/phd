@@ -16,6 +16,12 @@
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
 
+% thumbnail environment
+\newcommand{\eventtitle}[1]{{\hbox{\strut \textbf{#1}}}}
+\newcommand{\thumbheight}{14mm}
+\newcommand{\newstrip}{\newline\vspace{-1em}\newline}
+\newenvironment{thumbsequence}{}{\makebox[4mm]{}}
+
 % todo macro
 \usepackage{color}
 \newcommand{\todo}[1]{\noindent\textcolor{red}{{\bf \{TODO}: #1{\bf \}}}}

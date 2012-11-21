@@ -1,15 +1,3 @@
-
-% thumbnail environment
-\newcommand{\eventtitle}[1]{{\hbox{\strut \textbf{#1}}}}
-\newcommand{\thumbheight}{14mm}
-\newcommand{\newstrip}{\newline\vspace{-1em}\newline}
-\newenvironment{thumbsequence}{}{\makebox[4mm]{}}
-
-
-% this file is called up by thesis.tex
-% content in this file will be fed into the main document
-
-%: ----------------------- introduction file header -----------------------
 \chapter{Media Item Extraction}
 
 % the code below specifies where the figures are stored
@@ -19,169 +7,256 @@
     \graphicspath{{5_media_item_extraction/figures/EPS/}{5_media_item_extraction/figures/}}
 \fi
 
-% ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
-% ----------------------------------------------------------------------
+\section{Introduction}
+\label{sec:introduction}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  1. Introduction  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
+Before the rise of social networks,
+event coverage was mostly an affair of professional news agencies.
+The widespread availability of mobile phones
+with higher resolution cameras has transformed
+citizens into witnesses who are used to comment
+and share media illustrating events on social networks.
+Some examples with global impact
+include the shootings in
+Ut{\o}ya\footnote{\url{http://en.wikipedia.org/wiki/2011_Norway_attacks},
+accessed November 21, 2012},
+which first appeared on Twitter,
+the capture and arrest of Muammar
+Gaddafi\footnote{\url{http://en.wikipedia.org/wiki/Death_of_Muammar_Gaddafi},
+accessed November 21, 2012},
+which first appeared on YouTube,
+or the emergency ditching of a plane in the Hudson
+river\footnote{\url{http://en.wikipedia.org/wiki/US_Airways_Flight_1549},
+accessed November 21, 2012},
+which first appeared on Twitpic.
+Some news
+communities\footnote{\url{http://www.citizenside.com/},
+accessed November 21, 2012}
+have even specialized in aggregating and brokering
+such user-generated content.
+Events, such as sports matches or concerts are 
+largely illustrated by social media,
+albeit distributed over many social networks.
 
-\section{Introduction}                                                      \label{sec:introduction}
-Before the rise of social networks, event coverage was mostly an affair of professional news agencies.
-The widespread availability of mobile phones with higher resolution cameras has transformed citizens into witnesses
-who are used to comment and share media illustrating events on social networks. Some examples with global impact
-include the shootings in Ut{\o}ya, which first appeared on Twitter, the capture and arrest of Muammar Gaddafi, which
-first appeared on YouTube, or the emergency ditching of a plane in the Hudson river, which first appeared on Twitpic.
-Some news agencies\footnote{\url{http://www.citizenside.com/}} have even specialized in aggregating and brokering
-this user-generated content. Scheduled events (as opposed to breaking events) such as sports games or concerts are also
-largely illustrated by social media, albeit distributed over many social networks.
+In this section, we tackle the challenge of reconciling
+social media that illustrates known events,
+but that is spread over various social networks
+with the objective of creating visual summaries of them.
+We propose a social network agnostic
+approach for the extraction of images and videos covering events. We want to emphasize that we do \emph{not} perform event detection: 
+the events we are dealing with are known beforehand
+and we use specific human-chosen search terms
+to find illustrating media.
 
-In this section, we tackle the challenge of reconciling the social media that could illustrate known events but that
-are spread over the network in order to build visual summaries of them. We propose a social network agnostic
-approach for the extraction of images and videos covering events. We want to emphasize that we do \emph{not} perform
-event detection: the events we are dealing with are known and we use specific human-chosen search terms to find illustrating
-media. As opposed to \mbox{ImageCLEF} and \mbox{TRECVID} that both evaluate content-based analysis approaches for
-multimedia information retrieval, our approach deals with the separate additional task of extracting media from social networks
-in the first place.
+\section{Social Networks and Media Items}                                    \label{sec:social-networks}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  2. Social Networks & Media Items  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We first recall the definitions previously made in
+\autoref{sec:definition} and add a formal definition
+borrowed from~\cite{liu2011events}
+of what we mean by \emph{event}.
+Most social networks offer a search functionality that allows for
+content to be retrieved based on search terms,
+with or without more advanced search operators
+such as exclusion, inclusion, phrase search, \emph{etc.}
+Each social network has special constraints
+regarding the supported search operators or filtering options.
+We define the term \emph{media item extraction}
+as follows.
 
-\section{Social Networks \& Media Items}                                    \label{sec:social-networks}
-In this section, we first define the terms that we will use in order to avoid any ambiguity. In particular, we show that social networks have different levels of support for media items. Then, we describe how media items can be extracted from social networks.
-
-%%%  2.1 Definitions  %%%
 \subsection{Definitions}
-\textbf{Event}: An event is defined as a phenomenon that has happened or that is scheduled to happen. It is an observable occurrence grouping
-persons, places, times and activities while being often documented by people through different media~\cite{Liu:ICMR11}. Some events
-are ongoing such as the Occupy (Wall Street) movement.
 
-\textbf{Media Item}: A media item is defined as an image or video file that gets distributed via a social network. An example can be a photo of a baby that
-a parent shares on Instagram.
-
-\textbf{Micropost}: A micropost is defined as a textual status message that can optionally accompany a media item. An example can be the status update
-\emph{``life is full of wonders, and you are one of them''} posted on Facebook that contains the previously shared photo of the baby.
-
-% RT: for me the boundary between social networks and media sharing platforms is NOT fluid but blurred. Is this not what you mean?
-\textbf{Social Network}: A social network is an online service or media platform that focuses on building and reflecting social relationships among
-people who share interests and/or activities. The boundary between social networks and media platforms is blurred.
-Several media sharing platforms~(e.g. YouTube) enable people to upload content and optionally allow other people to react
-to this content in the form of comments, likes or dislikes. On other social networks~(e.g. Facebook), users can update their status,
-post links to stories, upload media content and also give readers the option to react. Finally, there are hybrid clients~(e.g. TweetDeck
-for Twitter using Twitpic) where social networks integrate with media platforms typically via third party applications.
-Therefore, we consider three types of support of media items with social networks:
-\begin{itemize}
-  \item \emph{First-order support}: The social network is centered on media items and posting requires the inclusion of a media item (e.g. YouTube, Flickr);
-  \item \emph{Second-order support}: The social network lets users upload media items but it is also possible to post only textual messages (e.g. Facebook);
-  \item \emph{Third-order support}: The social network has no direct support for media items but relies on third party application to host media items,
-which are linked to the status update (e.g. Twitter before the introduction of native photo support).
-\end{itemize}
-
-In our work, we consider 11 different social networks that represent all together most of the market share while offering mature API capabilities.
-The criteria for including the media sharing platforms follow a study performed by the company Sysomos, specialized in social media monitoring and analytics~\cite{Sysomos2011}. 
-We have provided a categorization of social networks in \autoref{sec:classification-of-social-networks}.
-
-%%%  2.2 Media Item Extraction  %%%
-\subsection{Media Item Extraction}
-Most social networks offer a search functionality that allows content to be retrieved based on search terms, with or without more advanced
-search operators such as exclusion, inclusion, phrase search, etc. Each social network has special constraints regarding the search operators
-supported or the filtering options available (e.g. time). We define the term \emph{media item extraction} as the process of leveraging
-search functionalities of social networks to find references to media items which allows for storing those media items in a binary form.
-
-An \emph{Application Programming Interface (API)} is a programmatic specification intended to be used as an interface by software components on client and server to communicate with each other. \emph{Web scraping} is the process of automatically extracting information from web sites. Web scraping involves practical solutions based on existing technologies that are often entirely ad hoc. Examples of such technologies are regular expressions or DOM (Document Object Model) parsing of Web pages into a DOM tree.
-In the DOM, documents have a logical structure that is very much like a tree;
-to be more precise, which is like a ``forest'' or ``grove'',
-which can contain more than one tree.
-Each document contains zero or one doctype nodes, one root element node,
-and zero or more comments or processing instructions;
-the root element serves as the root of the element tree for the document~\cite{LeHegaret2000}.
-
-The difference between \emph{Web scraping} and the somewhat related concept of \emph{screen scraping} is that screen scraping relies on the visual layout of a website, while Web scraping relies on the textual and/or hierarchical structure of web sites.
-
-\begin{comment}
-Social networks are very much perceived as ``walled gardens''. Several social networks (e.g. Twitter) have full read and write access via specified APIs while others (e.g. Google+) have read-only APIs access. Interestingly, some media platforms (e.g. img.ly) have write-only without read support which requires to fall back to Web scraping in order to retrieve data.
-\end{comment}
-\begin{figure}
- \centering
- \includegraphics[width=1.0\linewidth,trim=16px 17px 12px 15px,clip]{davidsimonds.jpg}
- \caption{David Simonds illustrates social networks as walled gardens due to their (by design) lock-in effects~\cite{DavidSimonds}}
- \label{fig:DavidSimonds}
-\end{figure}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  3. Media Collector  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Media Collector}                                                   \label{sec:media-collector}
-First, we introduce a common data format used consistently between all social networks considered.
-Second, we explain the architecture for different kinds of media item extractors. Finally,
-we describe the various processing steps applied to each media item collected.
-
-%%%  3.1 Data Format  %%%
-\subsection{Data Format}                                                    \label{sec:data-format}
-We propose a common alignment schema for all social networks considered in \autoref{tab:platforms} in order to be
-agnostic of concrete social networks. The resulting set of metadata for a media item is detailed below:
 \begin{description}
-  \item[Media URL:] Deep link to the media item (\url{http://farm7.staticflickr.com/6059/6290784192_567346ba6a_o.jpg}).
-  \item[Type:] Type of the media item (``photo'' or ``video'').
-  \item[Story URL:] URL of the micropost where the media item appeared (\url{http://www.flickr.com/photos/96628098@N00/6290784192/}).
-  \item[Message:] Text Description of the micropost in raw format (\texttt{``Laura. \#lumixg20f17, \#iswc2011, \#international\-semanticwebconference, \#bonn, \#germany''}).
-  \item[Clean:] Cleaned text description of the micropost where some characters are removed (\texttt{``Laura. lumixg20f17, iswc2011, internationalsemanticwebconference, bonn, germany''}).
-  \item[User:] URL of the micropost author (\url{http://www.flickr.com/photos/96628098@N00/}).
-  \item[Published:] Timestamp when the micropost was authored or the media item was uploaded (\texttt{2011\-10\-27T12:24:41Z}).
+  \item[Social Network:]
+       A~social network is an online service or media platform
+       that focuses on building and reflecting
+       social relationships among people
+       who share interests and/or activities.
+  \item[Media Item:]
+       A~media item is defined as an image or video
+       file that gets distributed via a~social network.
+  \item[Micropost:]
+       A~micropost is defined as a~textual status message
+       that can optionally be accompanied by a~media item.
+  \item[Event:]
+       An event is defined as a phenomenon that has happened
+       or that is scheduled to happen.
+       It is an observable occurrence grouping persons,
+       places, times and activities while being often
+       documented by people through different media.
+  \item[Media Item Extraction:]
+       The process of leveraging search functionalities of
+       social networks to find references to media items,
+       which allows for storing those media items in binary form.       
 \end{description}
 
-% Use a consistent example from one of the experiments
-\autoref{lst:media} shows the sample output of a media extractor for the social network Facebook.
-{\footnotesize
-\begin{lstlisting}[caption={Sample output of the media extractor showing a Facebook post processed with named entity extraction and disambiguation (slightly edited for legibility).},label={lst:media}]
-{
- "Facebook": [
-  {
-   "mediaurl": "http://video.ak.fbcdn.net/...",
-   "storyurl": "https://www.facebook.com/permalink.
-   php?story_fbid=231781590231029&id=1254772464",
-   "message": {
-    "text": "Videoed between Hamburg and Snyder.
-      Thought I would share.",
-    "clean": "Videoed between Hamburg and Snyder.
-      Thought I would share.",
-    "entities": [
-     [
-      {
-       "name": "Hamburg",
-       "relevance": 0.82274,
-       "uri": "http://dbpedia.org/resource/Hamburg"
-      },
-      {
-       "name": "Snyder",
-       "relevance": 0.857,
-       "uri": "http://dbpedia.org/resource/
-         Snyder,_Texas"
-      }
-     ]
-    ]
-   },
-   "user": "https://www.facebook.com/profile.php?
-     id=1254772464",
-   "type": "video",
-   "timestamp": 1326371479000,
-   "published": "2012-01-12T12:31:19Z"
-  }
- ]
-}
-\end{lstlisting}}
+\section{Media Item Extraction}
 
-%%%  3.2 Media Item Extractors  %%%
+An \emph{Application Programming Interface (API)}
+is a programmatic specification intended to be used
+as an interface by software components on client and server
+to communicate with each other.
+\emph{Web scraping} is the process of
+automatically extracting information from Web pages.
+Web scraping involves practical solutions based on
+existing technologies that are often entirely \emph{ad hoc}.
+Examples of such technologies are regular expressions,
+Document Object Model (DOM)
+parsing~\cite{lehors2004dom},
+or CSS selectors~\cite{hunt2012cssselectors}.
+The difference between \emph{Web scraping}
+and the related concept of \emph{screen scraping}
+is that screen scraping relies on the visual layout of a Web page,
+while Web scraping relies on the textual
+and/or hierarchical structure of Web pages.
+
+Social networks are often perceived as
+\emph{walled gardens}~\cite{simonds2008walledgarden},
+as illustrated by David Simonds in \autoref{fig:walled-gardens}.
+While some social networks (\emph{e.g.}, Twitter)
+have full read and write access via specified APIs,
+other social networks (\emph{e.g.}, \googleplus)
+currently only have read APIs access.
+In some cases, however, API access is too limited,
+so that not all desired information gets exposed
+(\emph{e.g.}, view counts with Img.ly),
+which forces people interested in that data
+to fall back to Web scraping.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth,
+    trim=16px 17px 12px 15px,clip]{davidsimonds.jpg}
+  \caption[David Simonds illustrates social networks as walled
+    gardens.]
+    {David Simonds illustrates social networks as walled
+    gardens.}
+  \label{fig:walled-gardens}
+\end{figure}
+
+\section{Media Extractor}
+\label{sec:media-extractor}
+
+In this section, we first introduce a common data format
+that we have developed as an abstraction layer on top of the native
+data formats used by the considered social networks.
+We then explain the architecture
+of different kinds of media item extractors.
+Finally, we describe the various processing steps
+applied to each collected media item.
+
+\subsection{Abstraction Layer Data Format}
+\label{sec:data-format}
+
+Each social network uses a different data representation schema.
+While all social networks with API access are
+JSON-based~\cite{crockford2006json}, the differences in both 
+social network class and media item support level,
+outlined in detail in
+\autoref{sec:description-of-popular-social-networks} and
+\autoref{sec:classification-of-social-networks},
+are also reflected in the returned JSON data.
+We therefore propose a common abstraction layer 
+on top of the native data formats of all considered social networks
+outlined in \autoref{tab:platforms} in order to gain
+an agnostic view on the underlying social networks.
+Naturally, any abstraction can only represent the
+least common multiple of all social networks.
+We explain the abstraction layer in the following
+with the help of a concrete example,
+stemming from a query to the media collector
+that gets explained in more detail later in this chapter.
+The media collector was used to query for media items
+that match the search term \emph{hamburg}.
+\autoref{code:facebook} shows sample output of the media extractor
+for a Facebook post, which was processed
+with named entity extraction and disambiguation 
+as detailed in \autoref{cha:micropost-annotation}.
+
+\begin{description}
+  \item[\texttt{mediaUrl}] Deep link to a media item.
+  \item[\texttt{posterUrl}] Deep link to a thumbnail for photos
+    or still frame for videos.
+  \item[\texttt{micropostUrl}] Deep link to the micropost on
+    the social network.
+  \item[\texttt{micropost}] Container for a micropost.
+  \begin{description}
+    \item[\texttt{html}] Text of the micropost with potential HTML
+      markup.
+    \item[\texttt{plainText}] Text of the micropost with
+      potential HTML markup removed.
+    \item[\texttt{entities}] Extracted and disambiguated
+      named entities from the micropost text.
+  \end{description}      
+  \item[\texttt{userProfileUrl}] Deep link to the user's
+    profile on the social network.
+  \item[\texttt{type}] Type of the media item,
+    can be \texttt{photo} or \texttt{video}.
+  \item[\texttt{timestamp}] Number of milliseconds since
+    1 January 1970 00:00:00 UTC when the micropost was
+    published.
+  \item[\texttt{publicationDate}] Date in ISO 8601
+    format when the micropost was published. 
+  \item[\texttt{socialInteractions}] Container for social
+    interactions.
+  \begin{description}  
+  \item[\texttt{likes}] Number of times a micropost was liked, or
+    \texttt{null}.
+  \item[\texttt{shares}] Number of times a micropost was shared, or
+    \texttt{null}.
+  \item[\texttt{comments}] Number of comments a micropost
+    received, or \texttt{null}.
+  \item[\texttt{views}] Number of views a micropost reached, or
+    \texttt{null}.
+  \end{description}    
+\end{description}
+
+\begin{lstlisting}[caption={Sample output of the media extractor
+  showing a Facebook post processed with named entity extraction
+  and disambiguation (slightly edited for legibility).},
+  label={code:facebook}]
+{
+  "mediaUrl": "http://video.ak.fbcdn.net/...",
+  "posterUrl": "http://external.ak.fbcdn.net/...",
+  "micropostUrl": "https://www.facebook.com/permalink.php?story_fbid=
+    231781590231029&id=1254772464",
+  "micropost": {
+    "html": "Videoed between Hamburg and Snyder. Thought I would share.",
+    "plainText": "Videoed between Hamburg and Snyder. Thought I would share.",
+    "entities": [
+      [
+        {
+          "name": "Hamburg",
+          "relevance": 0.82274,
+          "uri": "http://dbpedia.org/resource/Hamburg"
+        },
+        {
+          "name": "Snyder",
+          "relevance": 0.857,
+          "uri": "http://dbpedia.org/resource/Snyder,_Texas"
+        }
+      ]
+    ]
+  },
+  "userProfileUrl": "https://www.facebook.com/profile.php?id=1254772464",
+  "type": "video",
+  "timestamp": 1326371479000,
+  "publicationDate": "2012-01-12T12:31:19Z",
+  "socialInteractions": {
+    "likes": 0,
+    "shares": 0,
+    "comments": 3,
+    "views": null
+  }
+}
+\end{lstlisting}
+
 \subsection{Media Item Extractors}
-We have developed a media collector composed of media item extractors for the seven social networks Google+, MySpace, Facebook, Twitter, Instagram, YouTube, and Flickr with additional support for the four media sharing platforms img.ly, yfrog, MobyPicture, and Twitpic. The media collector takes as input a search term that is relevant to a known event, e.g. ``costa concordia'' for the Costa Concordia Disaster. This search term gets forwarded to the search APIs of the social networks in parallel. Each social network has a 30 seconds timeout window to deliver its results. When the timeout is reached, or when all social networks have responded,
+We have developed a media extractor composed of media item extractors for the seven social networks Google+, MySpace, Facebook, Twitter, Instagram, YouTube, and Flickr with additional support for the four media sharing platforms img.ly, yfrog, MobyPicture, and Twitpic. The media extractor takes as input a search term that is relevant to a known event, e.g. ``costa concordia'' for the Costa Concordia Disaster. This search term gets forwarded to the search APIs of the social networks in parallel. Each social network has a 30 seconds timeout window to deliver its results. When the timeout is reached, or when all social networks have responded,
 the available results are aligned according to the data format defined in \autoref{sec:data-format}. Media items are retrieved either directly or via Web scraping. For some social networks, e.g. MySpace, a combination of Web scraping and API access is required since the API does not return all necessary fields of our data format. Hence, the timestamp of when a media item is uploaded on MySpace can be obtained only via Web scraping. The complete data flow is illustrated in the architectural diagram (\autoref{fig:architecture}).
 \begin{figure*}
 \centering
 \includegraphics[width=1.0\linewidth]{architecture.pdf}
-\caption{Overview of the media collector: hybrid approach for the media item extraction process using a combination of API access and Web scraping}
+\caption{Overview of the media extractor: hybrid approach for the media item extraction process using a combination of API access and Web scraping}
 \label{fig:architecture}
 \end{figure*}
 
@@ -218,7 +293,7 @@ We have deduplicated the videos in the dataset by first automatically splitting 
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Experiments}                                                       \label{sec:experiments}
-We run experiments during the period of January 10 to 19, 2012 in which we have selected nine events. For those events, we collected media items and microposts using our media collector (the dataset as well as the visual summaries are available at \url{http://webmasterapp.net/social/icmr2012/}. We invite the reader to browse the dataset and compile a personal set of loose and exact duplicate media items. YouTube video URLs are signed with a token that expires but they can be accessed by following the \texttt{storyurl} link.
+We run experiments during the period of January 10 to 19, 2012 in which we have selected nine events. For those events, we collected media items and microposts using our media extractor (the dataset as well as the visual summaries are available at \url{http://webmasterapp.net/social/icmr2012/}. We invite the reader to browse the dataset and compile a personal set of loose and exact duplicate media items. YouTube video URLs are signed with a token that expires but they can be accessed by following the \texttt{storyurl} link.
 
 %%%  4.1 Events Considered  %%%
 \subsection{Events Considered}
@@ -560,7 +635,7 @@ When unique media items have been collected, the remaining task is to summarize 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusion and Future Work}                                        \label{sec:conclusion}
-In this section, we presented a generic media collector for gathering media items shared on social networks and illustrating known events. We proposed a common schema for aligning the search results of these platforms. We further described a full processing chain of the media items that includes machine translation, POS tagging, named entity disambiguation and media item deduplication. We show how media items can be ranked in order to generate visual summaries that convey the feeling of the wisdom of the crowd for a known event.
+In this section, we presented a generic media extractor for gathering media items shared on social networks and illustrating known events. We proposed a common schema for aligning the search results of these platforms. We further described a full processing chain of the media items that includes machine translation, POS tagging, named entity disambiguation and media item deduplication. We show how media items can be ranked in order to generate visual summaries that convey the feeling of the wisdom of the crowd for a known event.
 
 Our implementation for extracting visual media and associated textual messages covers already most of the Western social networks. We plan to support more social networks used in other parts of the world while improving the Web scrapers in order to significantly improve the quantity and diversity of media and messages shared for an event. Multimedia analysis techniques should be better integrated in the processing chain as this will create a multi-modal environment where different factors are used to organize social content. Hence, content deduplication and visual quality metrics (sharpness, contrast\ldots) can be used to rank the media items. Furthermore, the identification of the original content can allow users to choose a balance between popularity (favor omnipresent content) and originality (promote rare content).
 
