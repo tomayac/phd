@@ -21,7 +21,7 @@ WordNet~\cite{fellbaum1998wordnet,miller1995wordnet} defines
 the term \emph{duplicate} as
 \textit{``a copy that corresponds to an original exactly''}.
 the corresponding verb \emph{to duplicate} is defined as to
-\textit{``make a duplicate or duplicates of''}.
+\textit{``make a~duplicate or duplicates of''}.
 The derived term \emph{deduplication} in consequence refers to
 the act of eliminating duplicate or redundant information.
 
@@ -29,9 +29,9 @@ the act of eliminating duplicate or redundant information.
 
 We define two media items of type photo as \emph{exact duplicate},
 if their pixel contents are exactly the same.
-This implies that by our definition, a scaled version
+This implies that by our definition, a~scaled version
 of the same photo is \emph{not} an exact duplicate. 
-Similarly, a rotated version of a photo is also \emph{not}
+Similarly, a~rotated version of a~photo is also \emph{not}
 an exact duplicate. 
 In contrast, two photo files with different file names,
 or different Exchangeable image file
@@ -41,20 +41,20 @@ accessed November 22, 2012}
 if their pixel contents are exactly the same.
 Exact duplicate photos typically occur if users share content 
 from one social network on another, for example,
-if one user posts a photo on Instagram that then someone else
+if one user posts a~photo on Instagram that then someone else
 (or even the same user) posts on Facebook.
 
 \subsection{Definition of Near-Duplicate for Photos}
 
 We define two media items of type photo as \emph{near-duplicate},
-if their pixel contents differ no more than a given threshold.
+if their pixel contents differ no more than a~given threshold.
 Examples of near-duplicate photos are scaled versions
-of the same photo, photos shot from a slightly different angle,
-rotated photos up to a certain degree, \emph{etc.}
+of the same photo, photos shot from a~slightly different angle,
+rotated photos up to a~certain degree, \emph{etc.}
 Near-duplicate photos typically occur if event attendants
 stand close to each other and thus take photos
-from a similar standpoint.
-Another scenario is a user applying a photo effect to a photo
+from a~similar standpoint.
+Another scenario is a~user applying a~photo effect to a~photo
 (like an Instagram filter) and then sharing both, the modified,
 and the unmodified version.
 
@@ -75,7 +75,7 @@ independently from each other.
 
 We define two media items of type video as \emph{near-duplicate},
 if their pixel contents per frame differ no more
-than a given threshold.
+than a~given threshold.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
 Typical scenarios where near-duplicate videos can occur is through
@@ -83,18 +83,18 @@ logo or subtitle insertion, resizing, re-encoding,
 or aspect-ration changes.
 Note, we do not consider video subsegments near-duplicates.
 
-\subsection{Special Case of Photo Contained in a Video}
+\subsection{Special Case of Photo Contained in a~Video}
 
 We define the special case of
-\emph{a photo being contained in a video} if the pixel contents
-of a photo media item differ no more than a given threshold from
-the pixel contents of any of the frames of a video media item.
+\emph{a photo being contained in a~video} if the pixel contents
+of a~photo media item differ no more than a~given threshold from
+the pixel contents of any of the frames of a~video media item.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
 Typically, this phenomenon occurs if two event attendants
 of the same event both cover the event from almost the same
-standpoint, however, if the one attendant takes a video,
-while the other attendant takes a photo.
+standpoint, however, if the one attendant takes a~video,
+while the other attendant takes a~photo.
 
 \subsection{Motivation and Chapter Outline}
 
@@ -104,9 +104,9 @@ Our goal is to deduplicate media items on-the-fly
 at the very moment they are extracted from social networks.
 Due to this limitation, we cannot rely on any preprocessing
 at all that state-of-the-art algorithms rely on.
-This is why we dedicate a whole section entirely to on-the-fly
+This is why we dedicate a~whole section entirely to on-the-fly
 shot boundary detection for online video,
-which is by no means a solved problem.
+which is by no means a~solved problem.
 The contribution of our approach is that it is entirely Web-based
 and on-the-fly, which introduces interesting new challenges
 that traditional approaches to shot boundary detection
@@ -122,7 +122,7 @@ of the target videos, which---together with streaming speed
 issues---makes exact frame-wise video navigation impossible.
 Our approaches to video and photo near-duplicate
 and exact duplicate detection are founded
-on a tile-wise histogram-based pixel comparison algorithm.
+on a~tile-wise histogram-based pixel comparison algorithm.
 
 \section{Video Shot Boundary Detection}
 Video shot boundary detection is the processor-intensive task
@@ -136,18 +136,18 @@ shot-based video navigation gets enabled,
 more fine-grained playing statistics can be created,
 and finally, shot-based video comparison is possible.
 \autoref{fig:screenshot} shows detected camera
-shots for a sample video.
-The algorithm has been incorporated in a browser extension
-such that it can run transparently on a major online video portal.
+shots for a~sample video.
+The algorithm has been incorporated in a~browser extension
+such that it can run transparently on a~major online video portal.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.7\linewidth]{./stevejobs.png}
   \end{center}
-  \caption{Camera shots for a sample video on 
-    a major online video portal, detected on-the-fly via
+  \caption{Camera shots for a~sample video on 
+    a~major online video portal, detected on-the-fly via
     our shot boundary algorithm incorporated
-    in a browser extension.}
+    in a~browser extension.}
   \label{fig:screenshot}
 \end{figure}
 
@@ -415,29 +415,48 @@ at all, \emph{i.e.}, setting
 $\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, 
 led to better results.
 
-\section{Related Work}
-\label{sec:related-work}
-
-Another relevant work area is duplicate and near-duplicate media detection. Work on ordinal measures for image correspondence started in the last decade of the 20\superscript{th}~century~\cite{Bhat}. Recently, Chum \emph{et al.} have proposed a near-duplicate image detection method using MinHash and tf--idf weighting~\cite{Chum}. A~method for both photos and video has been proposed by Yang \emph{et al.}~\cite{Yang}. Specialized methods for video exist as well~\cite{Min, Wu}, an excellent survey of which has been conducted by Lian \emph{et al.}~\cite{Lian}.
-
-
-
 \section{Photo Deduplication}
-\subsubsection{Media Item Deduplication}
-We try to evaluate the popularity of the media items shared across social networks. This task involves the deduplication of extracted media items.
-For photos, we use PhotoSweeper\footnote{\url{http://itunes.apple.com/us/app/photosweeper/id463362050?mt=12}}, a commercial photo deduplication software and we have manually deduplicated videos. In the future, we aim to perform this task fully automatically but with this work, we have already created a baseline for specific future algorithms tailored to media item deduplication on social networks.
 
-\paragraph{Photo Deduplication}
-The photo duplication software we employed allows for different algorithms to be used. We have applied strict pixel-per-pixel comparison for the detection of \emph{exact} duplicates, i.e. we do \emph{not} count a resized version of a photo as exact duplicate. Based on bitmap- or histogram-based similarity comparison methods, we introduce the relatively wide term of \emph{loose} duplicate. Bitmap similarity is based on comparing pixels of size-reduced bitmaps.
-For our comparison, we used bitmaps of the size $128 \times 128$ pixels without smoothed edges, which corresponds to the best quality settings in the software.
-Histogram similarity is based on comparing histograms of size-reduced bitmaps. This method helps finding similar photos despite differences in color saturation and lighting. For both similarity comparison methods, a varying threshold was used. In our experiments, we could not make out a clear winning setting for all events. Rather, even for the same event, only a combination of both similarity comparison methods led to satisfactory results, i.e. to a set of loosely duplicate photos that also a human being would have chosen. We would like to highlight, however, that all detected loosely duplicate photos were detected algorithmically, which is an important fact for the objective of fully automating the deduplication process.
+We determine the popularity of media items shared across
+social networks.
+This task involves the deduplication of extracted media items.
+In the previous section, we have presented an algorithm
+for on-the-fly shot boundary detection for video media items.
+In this section, we will show how components of this algorithm
+can be used to deduplicate images.
+First, we look at related work for the task of photo deduplication.
 
-\paragraph{Video Deduplication}
-We have deduplicated the videos in the dataset by first automatically splitting them in shots~\cite{CrowdsourcingEvent}, and then manually comparing the videos shot-wise. We considered \emph{exact} duplicates the videos that shared the same shots and same length. For \emph{loose} duplicates, we manually decided whether the videos showed loosely the same based on human judgment. We do not claim that our results are algorithmically reproducible for loosely similar video detection.
+\subsection{Related Work}
+
+Work on ordinal measures that serve as a~general tool for
+image matching was performed by Bhat \emph{et al.}
+in~\cite{bhat1998imagecorrespondence}.
+Chum \emph{et al.} have proposed a~near-duplicate image detection method using min-Hash and
+term frequency--inverse document frequency (tf--idf)
+weighting~\cite{chum2008nearduplicate}.
+The proposed method uses a~visual vocabulary of vector quantized local feature descriptors based on
+Scale Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
+A~method for both photos and video has been proposed by Yang \emph{et al.}~\cite{yang2009nearduplicate}.
+
+\subsection{Experiments}
+
+\subsection{Evaluation}
 
 \section{Video Deduplication}
 
-\section{Evaluation}
+\subsection{Related Work}
+
+In addition to the before-mentioned  combined approach
+for video and photo near-duplicate
+detection~\cite{yang2009nearduplicate}, also more
+specialized methods for video deduplication exist,
+for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate}.
+A~survey of video deduplication methods has been conducted by
+Lian \emph{et al.} in~\cite{lian2010survey}.
+
+\subsection{Experiments}
+
+\subsection{Evaluation}
 
 \section{Conclusion}
 
