@@ -207,23 +207,99 @@ outperform histogram-based approaches~\cite{gargi2000videoshot}.
 A~detailed comparison can be found in
 Yuan~\emph{et~al.}~\cite{yuan2007shotboundary}.
 
-\subsection{Shot Boundary Detection Algorithm} \label{sec:details-of-algo}
-In this Section, we discuss our shot boundary detection algorithm, which falls in the category of histogram-based algorithms.  Since visually dissimilar video frames can have similar overall histograms, we also take local histograms into account. 
-We therefore split video frames in freely configurable rows and columns, i.e., lay a~grid of tiles over the frames. The user interface (\autoref{fig:algorithm}) currently allows for anything from a~$\mathit{1} \times \mathit{1}$ grid to a~$\mathit{20} \times \mathit{20}$ grid. For each step we examine a~frame $\mathit{f}$ and its direct predecessor frame $\mathit{f - 1}$.
+\subsection{Shot Boundary Detection Algorithm}
+\label{sec:details-of-algo}
 
-Apart from the per-tile histogram average distance, the frame distance function further considers a~freely configurable number of \emph{most different} and \emph{most similar} tiles. This is driven by the observation that different parts of a~video have different intensities of color changes, dependent on the movements from frame to frame. The idea is thus to increase the influence of movements in the frame distance function, and to decrease the influence of permanence. In the debug view of our approach (\autoref{fig:algorithm}), blue boxes indicate movements, while red boxes indicate permanence. In the concrete example, Steve Jobs' head and shoulders move as he talks, which can be clearly seen by the blue boxes in the particular tiles. Additional movements come from a~swaying flag on the left, and a~plant on the right. In contrast, the speaker desk, the white background, and the upper part of his body remain static, resulting in red boxes. For this example, we use a~grid layout of $\mathit{20} \times \mathit{20}$ tiles ($\mathit{nTiles} = \mathit{400}$), and a~certain number $\mathit{tileLimit}$ of most different or similar tiles, i.e., we treat one third of all tiles as most different tiles, one third as normal tiles, and one third as most similar tiles, and apply boosting and limiting factors to the most different and most similar tiles respectively. This distribution was empirically determined to reveal best results. We work with also empirically determined values of~$\mathit{1.1}$ for the $\mathit{boostingFactor}$, which slightly increases the impact of the most different tiles, and $\mathit{0.9}$ for the $\mathit{limitingFactor}$, which slightly decreases the impact of the most similar tiles. The algorithm pseudo code can be seen in \autoref{code:algorithm}.
+In this section, we discuss our shot boundary detection algorithm,
+which falls in the category of histogram-based algorithms.
+Since visually dissimilar video frames
+can have similar global histograms,
+instead we take local histograms into account. 
+We therefore split video frames in freely configurable
+rows and columns, \emph{i.e.}, lay a~grid of tiles over each frame.
+The user interface, as can be seen in \autoref{fig:algorithm},
+currently allows for anything from a~$\mathit{1} \times \mathit{1}$ 
+grid to a~$\mathit{20} \times \mathit{20}$ grid.
+For each step, we examine a~frame $\mathit{f}$ and its direct
+predecessor frame $\mathit{f - 1}$.
 
-We define the average histogram distance between two frames $\mathit{f}$ and $\mathit{f - 1}$ as $\mathit{avgHisto}_{f}$. In a~first step, we have examined the histogram distance data statistically, and experimentally found out that while the overall average frame distance $\mathit{avgDist}_{f}$, defined as: $$\mathit{avgDist}_{f} = \frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}\mathit{avgHisto}_{f, t}$$ is very intuitive to human beings, far more value lies in the standard deviation $\mathit{stdDev}_{f}$, based on the definition of the overall average frame distance $\mathit{avgDist}_{f}$: $$\mathit{stdDev}_{f} = \sqrt{\frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}(\mathit{avgHisto}_{f, t} - \mathit{avgDist}_{f})^{2}}$$ We use the value of the standard deviation as a~value for the shot splitting threshold~\cite{Lienhart1999} to come to very accurate shot splitting results. We found the boosting and limiting factors to have overall a~positive quality impact on more lively videos, and a~negative quality impact on more monotone videos. Best results can be achieved if, after changing either the boosting or the limiting factors for the most similar or different tiles, the value of the shot splitting threshold is adapted to the new resulting standard deviation. The user interface optionally does this automatically.
+Apart from the per-tile average histogram distance,
+the frame distance function further considers
+a~freely configurable number of \emph{most different} and
+\emph{most similar} tiles.
+This is driven by the observation that different parts
+of a~video have different intensities of color changes,
+dependent on the movements from frame to frame.
+The idea is thus to boost the influence of movements in the frame
+distance function, and to limit the influence of permanence.
+In the debug view of our approach, as depicted in
+\autoref{fig:algorithm}, blue boxes indicate movements,
+while red boxes indicate permanence.
+In the concrete example, Steve Jobs' head and shoulders move
+as he talks, which can be clearly seen
+at the blue boxes in the particular tiles.
+Additional movements come from a~swaying flag on the left,
+and a~plant on the right.
+In contrast, the speaker desk, the white background,
+and the upper part of his body remain static,
+resulting in red boxes.
+For this example, we use a~grid layout of
+$\mathit{20} \times \mathit{20}$ tiles
+($\mathit{nTiles} = \mathit{400}$),
+and an empirically determined  number
+$\mathit{tileLimit}$ of most different or similar tiles,
+\emph{i.e.}, we treat one third of all tiles
+as most different tiles, one third as normal tiles,
+and one third as most similar tiles,
+and apply boosting and limiting factors to the most different
+and most similar tiles respectively.
+We work with values of~$\mathit{1.1}$ for the
+$\mathit{boostingFactor}$, which slightly increases
+the impact of the most different tiles,
+and $\mathit{0.9}$ for the $\mathit{limitingFactor}$,
+which slightly decreases the impact of the most similar tiles.
+The algorithm pseudo code can be seen in \autoref{code:algorithm}.
+
+We define the average histogram distance between two frames
+$\mathit{f}$ and $\mathit{f - 1}$ as $\mathit{avgHisto}_{f}$.
+In a~first step, we have examined the histogram distance
+data statistically, and observed that while
+the overall average frame distance $\mathit{avgDist}_{f}$,
+defined as $$\mathit{avgDist}_{f} =
+\frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}
+\mathit{avgHisto}_{f, t}$$ is very intuitive to human beings,
+far more value lies in the standard deviation
+$\mathit{stdDev}_{f}$, based on the definition of the overall
+average frame distance $\mathit{avgDist}_{f}$
+$$\mathit{stdDev}_{f} =
+\sqrt{\frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}
+(\mathit{avgHisto}_{f, t} - \mathit{avgDist}_{f})^{2}}$$
+We use the standard deviation as a~value for the shot splitting
+threshold~\cite{lienhart1999comparison}
+to come to very accurate shot splitting results.
+We found the boosting and limiting factors to have an overall
+positive quality impact on more lively videos,
+and a~negative quality impact on more monotone videos.
+Best results can be achieved if,
+after changing either the boosting or the limiting factors
+for the most similar or different tiles,
+the value of the shot splitting threshold is adapted
+to the new resulting standard deviation.
+The user interface optionally does this automatically.
 
 \begin{figure}
-\begin{center}
-   \includegraphics[width=1.0\linewidth]{./algorithm.png}
-\end{center}
-   \caption{Debug view of the shot boundary detection process. Blue boxes highlight tiles with the most differences to the previous frame, red boxes those with most similarities.}
-\label{fig:algorithm}
+  \begin{center}
+    \includegraphics[width=1.0\linewidth]{./algorithm.png}
+  \end{center}
+  \caption{Debug view of the shot boundary detection process.
+    Blue boxes highlight tiles with the most differences
+    to the previous frame, red boxes those with most similarities.}
+  \label{fig:algorithm}
 \end{figure}
 
-\begin{lstlisting}[caption=Pseudocode of shot boundary detection algorithm., label=code:algorithm, float]
+\begin{lstlisting}[caption=Pseudocode of shot boundary detection
+  algorithm.,
+  label=code:algorithm, float]
 for frame in frames
   f = frame.index  
   for tile in tiles of frame      
@@ -242,24 +318,102 @@ for frame in frames
   avgDist[f] = avg(avgHisto[f])
 \end{lstlisting}
 
-\subsection{Implementation Details} \label{sec:implementation}
-Our shot boundary detection algorithm is implemented in form of an extension for the Google Chrome browser. Chrome extensions are small software programs written in a~combination of HTML, JavaScript, and CSS, which users can install to enrich their browsing experience. For this paper we focus on extensions based on so-called content scripts. Content scripts are JavaScript programs that run in the context of Web pages via dynamic code injection. By using the standard Document Object Model (DOM), they can read or modify details of the Web pages a~user visits. The advantage of this browser extension approach is that it is very powerful and generalizable at the same time. Powerful in the sense that it allows for significantly changing ones user experience with a~platform like YouTube and simply add new features, and generalizable in the sense that in theory it would be possible to simply add video shot boundary detection to any HTML5-enabled video website.
+\subsection{Implementation Details}
+\label{sec:implementation}
 
-The complete video analysis process happens fully on the client side. We use HTML5 JavaScript APIs of the \texttt{<video>} and \texttt{<canvas>} elements. The extension is activated as soon as the user enters a~YouTube video watch page. By default, YouTube uses Flash-encoded videos that are not programmatically accessible from a~JavaScript context, however, via an API used by the YouTube \texttt{<iframe>} embed code, we can replace the Flash version with the HTML5 version of a~video. In order to obtain a~video still frame from the \texttt{<video>} element at the current video position, we use the \texttt{drawImage()} function of the 2D context of the \texttt{<canvas>} element, which as its first parameter accepts a~\texttt{<video>} element. We then analyze the video frame's pixels tile-wise and calculate the histograms. In order to retrieve the tile-wise pixel data from the 2D context of the \texttt{<canvas>}, we use the \texttt{getImageData()} function. For processing speed reasons, we currently limit our approach to a~resolution of one second, i.e., for each analysis step seek the video in $\mathit{1s}$ steps. We then calculate the frame distances as outlined in \autoref{sec:details-of-algo}. For each frame, we generate an \texttt{<img>} element with a~base64-encoded data URI representation of the video frame's data that later gets injected into the DOM tree of YouTube, as can be seen in \autoref{fig:screenshot}. Each of the \texttt{<img>} elements has a~registered JavaScript event handler that upon click triggers two actions: first, the video seeks to the corresponding time, and second, the shot is tracked as a~hot spot in the video. Clicks on hot spots can be tracked using standard Web analytics services, which allows for the suggestion of more accurate entry points to videos in the longterm. 
-In prior work~\cite{derive2011} we have shown how hot spots can be used to detect different kinds of events in videos.
+The complete video analysis process happens fully
+on the client side.
+We use HTML5 JavaScript APIs of the \texttt{<video>} and
+\texttt{<canvas>} tags.
+In order to obtain a~video still frame
+from the \texttt{<video>} tag at the current video position,
+we use the \texttt{drawImage()} function of the 2D context of the
+\texttt{<canvas>} tag,
+which as its first parameter accepts a~video.
+We then analyze the video frame's pixels tile-wise
+and calculate the histograms.
+In order to retrieve the tile-wise pixel data
+from the 2D context of the \texttt{<canvas>},
+we use the \texttt{getImageData()} function.
+For processing speed reasons, we currently limit our approach to
+a~resolution of one second, \emph{i.e.},
+for each analysis step,
+seek the video in $\mathit{1s}$ steps.
+We then calculate the frame distances as outlined in
+\autoref{sec:details-of-algo}.
+For each frame, we can optionally generate an \texttt{<img>} tag
+with a~base64-encoded data URI representation
+of the video frame's data
+that can serve for filmstrip representations of the video.
 
 \subsection{Evaluation} \label{sec:evaluation}
-Detecting shots on-the-fly in streaming video comes with its very own challenges. First, it is a~question of streaming speed. We have to stream the same video twice in parallel: on the one hand the user-visible foreground video, and on the other hand the video used in the background for the analysis process. Especially with high-definition (HD) video this can be very demanding. We do not attach the background \texttt{<video>} element to the DOM tree to save some CPU cycles, however, the background video still needs to be seeked to each frame in second-steps and be processed, while the foreground video is playing normally. Even on a~higher-end computer (our experiments ran on a~MacBook Pro, Intel Core 2 Duo 2,66 GHz, 8 GB RAM), the process of analyzing and displaying in parallel a~$\mathit{1280} \times \mathit{720}$ HD video of media type \emph{video/mp4; codecs="avc1.64001F, mp4a.40.2"} causes an average CPU load of about 70\%. The HTML5 specification states that \textit{``[\ldots] when the playback rate is not exactly 1.0, hardware, software, or format limitations can cause video frames to be dropped [\ldots]''}~\cite{whatwgvideo}. In practice, this causes the analysis environment to be far from optimal. In our experiments we differentiated between false positives, i.e., shot changes that were detected, but not existent, and misses, i.e., shot changes that were existent, but not detected. Compared to a~set of videos with manually annotated shot changes, our algorithm detected fewer false positives than misses. The reasons were gradual transitions and shots shorter than one second (below our detection resolution) for misses, and large movements in several tiles for false positives. Overall, we reached an accuracy of about 86\%, which is not optimal, but given the challenges sufficient for our use case of facilitating in-video navigation. 
-Performance potential resides in the usage of Web Workers,
-JavaScript programs that run in the background, independently of other user interface scripts.
 
-\subsection{Future Work and Conclusion} \label{sec:future-work-conclusion}
+Detecting shots on-the-fly in streaming video
+comes with its very own challenges.
+First, it is a~question of streaming speed.
+Especially with high-definition (HD) video,
+this can be very demanding.
+We do not attach the analysis \texttt{<video>} tag
+to the DOM tree~\cite{lehors2004dom} to save some CPU cycles,
+however, the video still needs to be sought to each frame
+in one second-steps and be processed.
+Even on a~higher-end computer (our experiments ran on a~MacBook
+Pro, Intel Core 2 Duo 2,66 GHz, 8 GB RAM),
+the process of analyzing and displaying in parallel
+a~$\mathit{1280} \times \mathit{720}$ HD video of media type
+\emph{video/mp4; codecs="avc1.64001F, mp4a.40.2"}
+caused an average CPU load of about 70\%.
+The HTML5~\cite{berjon2012html5} specification states that
+\textit{``when the playback rate is not exactly 1.0,
+hardware, software, or format limitations can cause video frames
+to be dropped''}.
+In practice, this causes the analysis environment
+to be far from optimal.
+In our experiments we differentiated between false positives,
+\emph{i.e.}, shot changes that were detected,
+but not existent, and misses, \emph{i.e.},
+shot changes that were existent,
+but not detected.
+Compared to a~set of videos with manually annotated shot changes,
+our algorithm detected fewer false positives than misses.
+The reasons were gradual transitions and shots
+shorter than one second (below our detection resolution)
+for misses, and large movements in several tiles
+for false positives.
+Overall, we reached an accuracy of about 86\%,
+which is not optimal, but given the challenges
+sufficient for our use case of
+detecting near- or exact duplicate videos. 
 
-In a~first step, future work will consist in improving the analysis speed by dynamically selecting lower quality analysis video files, given that videos are available in several resolutions (both LD and HD). We will check in how far analysis results differ for the various qualities. In a~second step, we will work on more advanced heuristics for the various user-definable options in the analysis process (\autoref{fig:algorithm}). While there is no optimal configuration for all types of videos, there are some key indicators that can help categorize videos into classes and propose predefined known working settings based on the standard deviation $\mathit{stdDev_{f}}$ and the overall average frame distance $\mathit{avgDist_{f}}$. Both are dependent on the values of $\mathit{boostingFactor}$, $\mathit{limitingFactor}$, $\mathit{rows}$, and $\mathit{columns}$. Interpreting our results so far, there is evidence that low complexity settings are sufficient in most cases, i.e., a~number of $\mathit{rows}$ and $\mathit{columns}$ higher than~$\mathit{2}$ does not necessarily lead to more accurate shot boundary detection results. The same applies to the number of to-be-considered most different or similar tiles $\mathit{tileLimit}$. We even had cases where not treating those tiles differently at all, i.e., setting $\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, led to better results. We plan to use an adapted version of the algorithm for event summarization based on user-generated video content.
+\subsection{Optimization Potential}
 
-Concluding, we have promising results, especially in combination with hot spot identification from prior work~\cite{derive2011}, which in future can provide for more accurate entry point suggestions in long videos, or enable skip marks in videos with intros.
-For video shot boundary detection, some challenges remain, especially with the observed streaming speed-related issues and predefined parameter settings to improve accuracy. None\-theless, when searching for a~certain point in a~video, the obtained results already allow for focused in-video navigation and also facilitate exploratory shot-wise video consumption.
-
+Optimization potential lies in
+improving the analysis speed by dynamically selecting
+lower quality analysis video files,
+given that videos are oftentimes available in several resolutions
+(both LD and HD).
+We will check in how far analysis results differ
+for the various qualities.
+Second, more advanced heuristics for the various user-definable
+options in the analysis process are needed.
+While there is no optimal configuration for all types of videos,
+there are some key indicators that can help categorize videos
+into classes and propose predefined known working settings
+based on the standard deviation $\mathit{stdDev_{f}}$
+and the overall average frame distance $\mathit{avgDist_{f}}$.
+Both are dependent on the values of $\mathit{boostingFactor}$,
+$\mathit{limitingFactor}$, $\mathit{rows}$, and $\mathit{columns}$. 
+Interpreting our results so far, there is evidence
+that low complexity settings are sufficient in most cases,
+\emph{i.e.}, a~number of $\mathit{rows}$ and $\mathit{columns}$
+higher than~$\mathit{2}$ does not necessarily
+lead to more accurate shot boundary detection results.
+The same applies to the number of to-be-considered most different
+or similar tiles $\mathit{tileLimit}$.
+We even had cases where not treating those tiles differently
+at all, \emph{i.e.}, setting
+$\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, 
+led to better results.
 
 \section{Related Work}
 \label{sec:related-work}
