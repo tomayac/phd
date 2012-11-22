@@ -8,26 +8,110 @@
     \graphicspath{{6_media_item_deduplication/figures/EPS/}{6_media_item_deduplication/figures/}}
 \fi
 
-% ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
-% ----------------------------------------------------------------------
+\section{Introduction}
+
+In the previous \autoref{cha:media-item-extraction}
+in \autoref{sec:the-need-for-media-item-deduplication},
+we have motivated the need for media item deduplication.
+By clustering media items, we get a~higher level view on
+a~media item cluster's overall performance on different networks.
+As detailed in \autoref{sec:definition}, media items can be
+photos or videos.
+WordNet~\cite{fellbaum1998wordnet,miller1995wordnet} defines
+the term \emph{duplicate} as
+\textit{``a copy that corresponds to an original exactly''}.
+the corresponding verb \emph{to duplicate} is defined as to
+\textit{``make a duplicate or duplicates of''}.
+The derived term \emph{deduplication} in consequence refers to
+the act of eliminating duplicate or redundant information.
+
+\subsection{Definition of Exact Duplicate for Photos}
+
+We define two media items of type photo as \emph{exact duplicate},
+if their pixel contents are exactly the same.
+This implies that by our definition, a scaled version
+of the same photo is \emph{not} an exact duplicate. 
+Similarly, a rotated version of a photo is also \emph{not}
+an exact duplicate. 
+In contrast, two photo files with different file names,
+or different Exchangeable image file
+format\footnote{\url{http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2010_E.pdf},
+accessed November 22, 2012}
+(Exif) data, are considered exact duplicate,
+if their pixel contents are exactly the same.
+Exact duplicate photos typically occur if users share content 
+from one social network on another, for example,
+if one user posts a photo on Instagram that then someone else
+(or even the same user) posts on Facebook.
+
+\subsection{Definition of Near-Duplicate for Photos}
+
+We define two media items of type photo as \emph{near-duplicate},
+if their pixel contents differ no more than a given threshold.
+Examples of near-duplicate photos are scaled versions
+of the same photo, photos shot from a slightly different angle,
+rotated photos up to a certain degree, \emph{etc.}
+Near-duplicate photos typically occur if event attendants
+stand close to each other and thus take photos
+from a similar standpoint.
+Another scenario is a user applying a photo effect to a photo
+(like an Instagram filter) and then sharing both, the modified,
+and the unmodified version.
+
+\subsection{Definition of Exact Duplicate for Videos}
+
+We define two media items of type video as \emph{exact duplicate},
+if their pixel contents are frame by frame exactly the same.
+In practice, we lower this condition and instead of every frame
+only consider frames at shot boundaries.
+We make \emph{no} requirements on the audio, \emph{i.e.},
+a video in two different languages, however, that fulfills the 
+pixel contents equality condition, is considered exact duplicate.
+Typical scenarios where exact duplicate videos can occur is,
+for example, two users sharing the same YouTube video
+independently from each other.
+
+\subsection{Definition of Near-Duplicate for Videos}
+
+We define two media items of type video as \emph{near-duplicate},
+if their pixel contents per frame differ no more
+than a given threshold.
+In practice, we lower this condition and instead of every frame
+only consider frames at shot boundaries.
+Typical scenarios where near-duplicate videos can occur is through
+logo or subtitle insertion, resizing, re-encoding,
+or aspect-ration changes.
+Note, we do not consider video subsegments near-duplicates.
+
+\subsection{Special Case of Photo Contained in a Video}
+
+We define the special case of
+\emph{a photo being contained in a video} if the pixel contents
+of a photo media item differ no more than a given threshold from
+the pixel contents of any of the frames of a video media item.
+In practice, we lower this condition and instead of every frame
+only consider frames at shot boundaries.
+Typically, this phenomenon occurs if two event attendants
+of the same event both cover the event from almost the same
+standpoint, however, if the one attendant takes a video,
+while the other attendant takes a photo.
 
 \section{Related Work}
 \label{sec:related-work}
 
-Another relevant work area is duplicate and near-duplicate media detection. Work on ordinal measures for image correspondence started in the last decade of the 20\superscript{th}~century~\cite{Bhat}. Recently, Chum \emph{et al.} have proposed a near-duplicate image detection method using MinHash and tf--idf weighting~\cite{Chum}. A~method for both images and video has been proposed by Yang \emph{et al.}~\cite{Yang}. Specialized methods for video exist as well~\cite{Min, Wu}, an excellent survey of which has been conducted by Lian \emph{et al.}~\cite{Lian}.
+Another relevant work area is duplicate and near-duplicate media detection. Work on ordinal measures for image correspondence started in the last decade of the 20\superscript{th}~century~\cite{Bhat}. Recently, Chum \emph{et al.} have proposed a near-duplicate image detection method using MinHash and tf--idf weighting~\cite{Chum}. A~method for both photos and video has been proposed by Yang \emph{et al.}~\cite{Yang}. Specialized methods for video exist as well~\cite{Min, Wu}, an excellent survey of which has been conducted by Lian \emph{et al.}~\cite{Lian}.
 
 
 
-\section{Image Deduplication}
+\section{Photo Deduplication}
 \subsubsection{Media Item Deduplication}
 We try to evaluate the popularity of the media items shared across social networks. This task involves the deduplication of extracted media items.
-For images, we use PhotoSweeper\footnote{\url{http://itunes.apple.com/us/app/photosweeper/id463362050?mt=12}}, a commercial image deduplication software and we have manually deduplicated videos. In the future, we aim to perform this task fully automatically but with this work, we have already created a baseline for specific future algorithms tailored to media item deduplication on social networks.
+For photos, we use PhotoSweeper\footnote{\url{http://itunes.apple.com/us/app/photosweeper/id463362050?mt=12}}, a commercial photo deduplication software and we have manually deduplicated videos. In the future, we aim to perform this task fully automatically but with this work, we have already created a baseline for specific future algorithms tailored to media item deduplication on social networks.
 
-\paragraph{Image Deduplication}
-The image duplication software we employed allows for different algorithms to be used. We have applied strict pixel-per-pixel comparison for the detection of \emph{exact} duplicates, i.e. we do \emph{not} count a resized version of an image as exact duplicate. Based on bitmap- or histogram-based similarity comparison methods, we introduce the relatively wide term of \emph{loose} duplicate. Bitmap similarity is based on comparing pixels of size-reduced bitmaps.
+\paragraph{Photo Deduplication}
+The photo duplication software we employed allows for different algorithms to be used. We have applied strict pixel-per-pixel comparison for the detection of \emph{exact} duplicates, i.e. we do \emph{not} count a resized version of a photo as exact duplicate. Based on bitmap- or histogram-based similarity comparison methods, we introduce the relatively wide term of \emph{loose} duplicate. Bitmap similarity is based on comparing pixels of size-reduced bitmaps.
 For our comparison, we used bitmaps of the size $128 \times 128$ pixels without smoothed edges, which corresponds to the best quality settings in the software.
-Histogram similarity is based on comparing histograms of size-reduced bitmaps. This method helps finding similar images despite differences in color saturation and lighting. For both similarity comparison methods, a varying threshold was used. In our experiments, we could not make out a clear winning setting for all events. Rather, even for the same event, only a combination of both similarity comparison methods led to satisfactory results, i.e. to a set of loosely duplicate images that also a human being would have chosen. We would like to highlight, however, that all detected loosely duplicate images were detected algorithmically, which is an important fact for the objective of fully automating the deduplication process.
+Histogram similarity is based on comparing histograms of size-reduced bitmaps. This method helps finding similar photos despite differences in color saturation and lighting. For both similarity comparison methods, a varying threshold was used. In our experiments, we could not make out a clear winning setting for all events. Rather, even for the same event, only a combination of both similarity comparison methods led to satisfactory results, i.e. to a set of loosely duplicate photos that also a human being would have chosen. We would like to highlight, however, that all detected loosely duplicate photos were detected algorithmically, which is an important fact for the objective of fully automating the deduplication process.
 
 \paragraph{Video Deduplication}
 We have deduplicated the videos in the dataset by first automatically splitting them in shots~\cite{CrowdsourcingEvent}, and then manually comparing the videos shot-wise. We considered \emph{exact} duplicates the videos that shared the same shots and same length. For \emph{loose} duplicates, we manually decided whether the videos showed loosely the same based on human judgment. We do not claim that our results are algorithmically reproducible for loosely similar video detection.
@@ -61,7 +145,7 @@ Below, we present an overview of several well-known categories of shot detection
 
 A~related method is \emph{histogram analysis}~\cite{Smeaton1999}, where changes in frame histograms are used to justify shot boundaries. Their insensitivity to spatial information within a~frame makes histograms less prone to partial and global movements in a~shot. We argue as a~drawback that even visually very dissimilar frames can have similar overall histograms. For example, different shots in the same shot can be difficult to distinguish because of similar color information.
 
-As a~compromise, a~third group of methods consists of a~\emph{trade-off between the above two techniques}~\cite{Ahmed1999}. Different histograms of several, non-overlapping blocks are calculated for each frame, thereby categorizing different regions of the image with their own color-based, space-invariant fingerprint. The results are promising, while computational complexity is kept to a~minimum, which is why we have chosen a~variation on this approach in this paper.
+As a~compromise, a~third group of methods consists of a~\emph{trade-off between the above two techniques}~\cite{Ahmed1999}. Different histograms of several, non-overlapping blocks are calculated for each frame, thereby categorizing different regions of the photo with their own color-based, space-invariant fingerprint. The results are promising, while computational complexity is kept to a~minimum, which is why we have chosen a~variation on this approach in this paper.
 
 Other approaches to shot boundary detection include the \emph{comparison of mean and standard deviations} of frame intensities~\cite{Lienhart1999}. Detection using other features such as edges~\cite{Zabih1995} and motion~\cite{Bouthemy1997} have also been proposed. However, Gargi \emph{et~al.}\ have shown that these more complex methods do not necessarily outperform histogram-based approaches~\cite{Gargi2000}. A~detailed comparison can be found in Yuan~\emph{et~al.}~\cite{Yuan2007}.
 At time of writing, YouTube is about to roll out

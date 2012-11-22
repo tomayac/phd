@@ -1,4 +1,5 @@
 \chapter{Media Item Extraction}
+\label{cha:media-item-extraction}
 
 % the code below specifies where the figures are stored
 \ifpdf
@@ -25,7 +26,7 @@ the capture and arrest of Muammar
 Gaddafi\footnote{\url{http://en.wikipedia.org/wiki/Death_of_Muammar_Gaddafi},
 accessed November 21, 2012},
 which first appeared on YouTube,
-or the emergency ditching of a plane in the Hudson
+or the emergency ditching of a~plane in the Hudson
 river\footnote{\url{http://en.wikipedia.org/wiki/US_Airways_Flight_1549},
 accessed November 21, 2012},
 which first appeared on Twitpic.
@@ -42,8 +43,9 @@ In this section, we tackle the challenge of reconciling
 social media that illustrates known events,
 but that is spread over various social networks
 with the objective of creating visual summaries of them.
-We propose a social network agnostic
-approach for the extraction of images and videos covering events. We want to emphasize that we do \emph{not} perform event detection: 
+We propose a~social network agnostic
+approach for the extraction of photos and videos covering events.
+We want to emphasize that we do \emph{not} perform event detection: 
 the events we are dealing with are known beforehand
 and we use specific human-chosen search terms
 to find illustrating media.
@@ -61,9 +63,9 @@ They interlink large datasets of event metadata
 and media with the Linking Open Data
 Cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
 In~\cite{liu2011socialmedia}, they show how visual summaries
-of past events providing viewers with a more compelling feeling
+of past events providing viewers with a~more compelling feeling
 of the event's atmosphere can be created
-based on a method to automatically detect and identify events
+based on a~method to automatically detect and identify events
 from social media sharing web sites.
 Approaches for alignment use visual, temporal,
 and spacial similarity measures to map multiple photo streams of
@@ -85,10 +87,10 @@ from event aggregation platforms.
 \section{Social Networks and Media Items}                                    \label{sec:social-networks}
 
 We first recall the definitions previously made in
-\autoref{sec:definition} and add a formal definition
+\autoref{sec:definition} and add a~formal definition
 borrowed from~\cite{liu2011events}
 of what we mean by \emph{event}.
-Most social networks offer a search functionality that allows for
+Most social networks offer a~search functionality that allows for
 content to be retrieved based on search terms,
 with or without more advanced search operators
 such as exclusion, inclusion, phrase search, \emph{etc.}
@@ -106,13 +108,17 @@ as follows.
        social relationships among people
        who share interests and/or activities.
   \item[Media Item:]
-       A~media item is defined as an image or video
+       A~media item is defined as
+       a~photo\footnote{We chose the term \emph{photo}
+       over the term \emph{image} as 
+       Facebook, Twitter, and \googleplus use it.}
+       or video
        file that gets distributed via a~social network.
   \item[Micropost:]
        A~micropost is defined as a~textual status message
        that can optionally be accompanied by a~media item.
   \item[Event:]
-       An event is defined as a phenomenon that has happened
+       An event is defined as a~phenomenon that has happened
        or that is scheduled to happen.
        It is an observable occurrence grouping persons,
        places, times and activities while being often
@@ -124,7 +130,7 @@ as follows.
 \end{description}
 
 An \emph{Application Programming Interface (API)}
-is a programmatic specification intended to be used
+is a~programmatic specification intended to be used
 as an interface by software components on client and server
 to communicate with each other.
 \emph{Web scraping} is the process of
@@ -137,7 +143,7 @@ parsing~\cite{lehors2004dom},
 or CSS selectors~\cite{hunt2012cssselectors}.
 The difference between \emph{Web scraping}
 and the related concept of \emph{screen scraping}
-is that screen scraping relies on the visual layout of a Web page,
+is that screen scraping relies on the visual layout of a~Web page,
 while Web scraping relies on the textual
 and/or hierarchical structure of Web pages.
 
@@ -168,7 +174,7 @@ to fall back to Web scraping.
 \section{Media Extractor}
 \label{sec:media-extractor}
 
-In this section, we first introduce a common data format
+In this section, we first introduce a~common data format
 that we have developed as an abstraction layer on top of the native
 data formats used by the considered social networks.
 We then explain the architecture
@@ -179,7 +185,7 @@ applied to each collected media item.
 \subsection{Abstraction Layer Data Format}
 \label{sec:data-format}
 
-Each social network uses a different data representation schema.
+Each social network uses a~different data representation schema.
 While all social networks with API access are
 JSON-based~\cite{crockford2006json}, the differences in both 
 social network class and media item support level,
@@ -187,31 +193,31 @@ outlined in detail in
 \autoref{sec:description-of-popular-social-networks} and
 \autoref{sec:classification-of-social-networks},
 are also reflected in the returned JSON data.
-We therefore propose a common abstraction layer 
+We therefore propose a~common abstraction layer 
 on top of the native data formats of all considered social networks
 outlined in \autoref{tab:platforms} in order to gain
 an agnostic view on the underlying social networks.
 Naturally, any abstraction can only represent the
 least common multiple of all social networks.
 We explain the abstraction layer in the following
-with the help of a concrete example,
-stemming from a query to the media extractor
+with the help of a~concrete example,
+stemming from a~query to the media extractor
 that gets explained in more detail
 in the upcoming \autoref{sec:media-item-extractors}.
 The media extractor was used to query for media items
 that match the search term \emph{hamburg}.
 \autoref{code:facebook} shows sample output of the media extractor
-for a Facebook post, which was processed
+for a~Facebook post, which was processed
 with named entity extraction and disambiguation 
 as detailed in \autoref{cha:micropost-annotation}.
 
 \begin{description}
-  \item[\texttt{mediaUrl}] Deep link to a media item.
-  \item[\texttt{posterUrl}] Deep link to a thumbnail for photos
+  \item[\texttt{mediaUrl}] Deep link to a~media item.
+  \item[\texttt{posterUrl}] Deep link to a~thumbnail for photos
     or still frame for videos.
   \item[\texttt{micropostUrl}] Deep link to the micropost on
     the social network.
-  \item[\texttt{micropost}] Container for a micropost.
+  \item[\texttt{micropost}] Container for a~micropost.
   \begin{description}
     \item[\texttt{html}] Text of the micropost with potential HTML
       markup.
@@ -232,19 +238,19 @@ as detailed in \autoref{cha:micropost-annotation}.
   \item[\texttt{socialInteractions}] Container for social
     interactions.
   \begin{description}  
-  \item[\texttt{likes}] Number of times a micropost was liked, or
+  \item[\texttt{likes}] Number of times a~micropost was liked, or
     \texttt{null}.
-  \item[\texttt{shares}] Number of times a micropost was shared, or
+  \item[\texttt{shares}] Number of times a~micropost was shared, or
     \texttt{null}.
-  \item[\texttt{comments}] Number of comments a micropost
+  \item[\texttt{comments}] Number of comments a~micropost
     received, or \texttt{null}.
-  \item[\texttt{views}] Number of views a micropost reached, or
+  \item[\texttt{views}] Number of views a~micropost reached, or
     \texttt{null}.
   \end{description}    
 \end{description}
 
 \begin{lstlisting}[caption={Sample output of the media extractor
-  showing a Facebook post processed with named entity extraction
+  showing a~Facebook post processed with named entity extraction
   and disambiguation (slightly edited for legibility).},
   label={code:facebook}]
 {
@@ -286,17 +292,17 @@ as detailed in \autoref{cha:micropost-annotation}.
 \subsection{Media Item Extractors}
 \label{sec:media-item-extractors}
 
-We have developed a combined media extractor composed of
+We have developed a~combined media extractor composed of
 separate media item extractors for the seven social networks
 \googleplus, Myspace, Facebook, Twitter, Instagram, YouTube,
 and Flickr, with additional support for the media sharing
 platforms Img.ly, Imgur, Lockerz, Yfrog, MobyPicture, and Twitpic.
-The media extractor takes as input a search term that is relevant
-to a known event, \emph{e.g.}, the term \emph{boston celtics}
-for a recent match of the Basketball team Boston Celtics.
+The media extractor takes as input a~search term that is relevant
+to a~known event, \emph{e.g.}, the term \emph{boston celtics}
+for a~recent match of the Basketball team Boston Celtics.
 This search term gets forwarded to the search APIs
 of the social networks in parallel.
-Each social network has a 30 seconds timeout window
+Each social network has a~30 seconds timeout window
 to deliver its results.
 When the timeout is reached,
 or when all social networks have responded,
@@ -311,7 +317,7 @@ of our data format.
 
 \subsubsection{Special Role of Twitter}
 
-Twitter plays a special role, as it can be used as
+Twitter plays a~special role, as it can be used as
 a third-order support social network,
 as detailed previously in
 \autoref{sec:twitter}
@@ -329,7 +335,7 @@ For example, the short domain URL of the social network Flickr
 is \url{flic.kr}, where the long domain URL is \url{flicker.com}.
 The short domain URL of Instagram is \url{instagr.am},
 where the long domain URL is \url{instagram.com}, \emph{etc.}
-We have created a list of all known short domain URLs for the 
+We have created a~list of all known short domain URLs for the 
 considered media platforms so that the complete search query
 for Twitter is the actual search term,
 combined with this list of short domain URLs:
@@ -348,7 +354,7 @@ however, our own media extractor goes beyond Twitter's offer.
   \includegraphics[width=1.0\linewidth]{architecture.pdf}
   \caption{Overview of the media extractor:
     hybrid approach for the media item extraction process using
-    a combination of API access and Web scraping}
+    a~combination of API access and Web scraping}
   \label{fig:architecture}
 \end{figure}
 
@@ -362,13 +368,13 @@ using our media extractor
 
 \subsection{Events Considered}
 
-We give a short overview of the nine selected events
+We give a~short overview of the nine selected events
 in order to give the reader the necessary background knowledge.
 
 \begin{description}
   \item[Assad Speech]
        On January 10, 2012, Syrian President Bashar al-Assad
-       delivered a televised talk defending his
+       delivered a~televised talk defending his
        government's actions and motivations, despite world
        pressure on his government for its 10-month
        crackdown on
@@ -376,7 +382,7 @@ in order to give the reader the necessary background knowledge.
        accessed November 21, 2012}.
   \item[CES Las Vegas]
        The International Consumer Electronics Show (CES) is
-       a major technology-related trade show held each January
+       a~major technology-related trade show held each January
        in the Las Vegas Convention Center. Not open to the public,
        the Consumer Electronics Association-sponsored show
        typically hosts previews of products and new product
@@ -384,7 +390,7 @@ in order to give the reader the necessary background knowledge.
        accessed November 21, 2012}.
   \item[Costa Concordia Disaster]
        The Costa Concordia is an Italian cruise ship that hit
-       a reef and partially sank on January 13, 2012 off the
+       a~reef and partially sank on January 13, 2012 off the
        Italian coast. The vessel ran aground at Isola del Giglio,
        Tuscany, resulting in the evacuation of 4,211
        people\footnote{\url{http://en.wikipedia.org/wiki/Costa_Concordia_disaster},
@@ -392,14 +398,14 @@ in order to give the reader the necessary background knowledge.
   \item[Cut the Rope Launch]
        On January 10, 2012 during Microsoft's keynote at CES, the
        HTML5 version of the popular mobile game \textit{Cut the
-       Rope} was announced. This is a sub-event of CES Las
+       Rope} was announced. This is a~sub-event of CES Las
        Vegas\footnote{\url{http://ces.cnet.com/8301-33377_1-57356403/},
        accessed November 21, 2012}.
   \item[Dixville Notch]
        Dixville Notch is an unincorporated village in Dixville
        township of Coos County, New Hampshire, USA, best known in
        connection with its longstanding middle-of-the-night vote in
-       the U.S. presidential election. In a tradition that started
+       the U.S. presidential election. In a~tradition that started
        in the 1960 election, all the eligible voters in Dixville
        Notch gather at midnight in the ballroom of The Balsams.
        This year, on January 10, 2012, the voters cast their
@@ -407,8 +413,8 @@ in order to give the reader the necessary background knowledge.
        later\footnote{\url{http://www.washingtonpost.com/2012/01/09/gIQANslKnP_story.html},
        accessed November 21, 2012}.
   \item[Free Mobile Launch]
-       Free Mobile is a French mobile broadband company, part of
-       the Iliad group. On January 10, 2012, a long-awaited mobile
+       Free Mobile is a~French mobile broadband company, part of
+       the Iliad group. On January 10, 2012, a~long-awaited mobile
        phone package for \EUR{19.99} with calls included to 40
        countries, texts, multimedia messages and Internet was
        announced by the Iliad group's Chief Strategy Officer,
@@ -416,20 +422,20 @@ in order to give the reader the necessary background knowledge.
        Niel\footnote{\url{http://www.nytimes.com/2012/01/11/technology/iliad-takes-aim-at-top-mobile-operators-in-france.html},
        accessed November 21, 2012}.
   \item[Blackout SOPA]
-       The Stop Online Piracy Act (SOPA) is a bill of the United
+       The Stop Online Piracy Act (SOPA) is a~bill of the United
        States proposed in 2011 to fight online trafficking in
        copyrighted intellectual property and counterfeit goods.
        On January 18, the English Wikipedia, Reddit, and several
-       other Internet companies coordinated a service blackout
+       other Internet companies coordinated a~service blackout
        to protest SOPA and its sister bill, the Protect IP Act.
        Other companies, including Google, posted links and
-       images in an effort to raise
+       photos in an effort to raise
        awareness\footnote{\url{http://sopablackout.org/learnmore/},
        accessed November 21, 2012}.
   \item[Ubuntu TV Launch]
        Ubuntu TV by Canonical, based on the user interface Unity,
-       is a variant of the Ubuntu operating system, designed to be
-       a Linux distribution specially adapted for embedded systems
+       is a~variant of the Ubuntu operating system, designed to be
+       a~Linux distribution specially adapted for embedded systems
        in televisions. It was announced by Canonical on January
        10, 2012, at
        CES\footnote{\url{http://www.theverge.com/2012/1/9/2695387/ubuntu-tv-video-hands-on},
@@ -437,18 +443,18 @@ in order to give the reader the necessary background knowledge.
   \item[Christian Wulff Case]
        Since December 2011, former German President Christian
        Wulff faces controversy over discrepancies in statements
-       about a loan while being governor of Lower Saxony.
+       about a~loan while being governor of Lower Saxony.
        It was revealed that he had applied pressure
        on Springer Press to delay revelations on the issue until
-       he was back from a visit abroad. When Wulff found out that
-       a tabloid was going to break the story, he left a message
+       he was back from a~visit abroad. When Wulff found out that
+       a~tabloid was going to break the story, he left a~message
        on their voice mail in which he threatened to take legal
        action\footnote{\url{http://www.spiegel.de/international/germany/0,1518,804631,00.html},
        accessed November 21, 2012}.
 \end{description}
 
 \subsection{Dataset}
-Our data set contained 448 images with an average file size of
+Our data set contained 448 photos with an average file size of
 $\sim$0.7MB and 143 videos.
 Some videos are no longer available due to either
 account termination or video takedown by the user
@@ -464,19 +470,19 @@ We note that these values were calculated \emph{before}
 any pruning at all, \emph{i.e.}, before taking into account
 the additional textual information from microposts like
 potential extracted named entities.
-The dataset is very diverse with respect to image quality,
-image format, and naturally content.
+The dataset is very diverse with respect to photo quality,
+photo format, and naturally content.
 It ranges from entirely sharp screenshots
 in all sorts of formats (\emph{e.g.},
 screenshots of the Google homepage for the Blackout SOPA event
-to screenshots of a wide banner advertisement),
-to blurry cell phone images in standard photo formats
+to screenshots of a~wide banner advertisement),
+to blurry cell phone photos in standard photo formats
 (\emph{e.g.}, photos of the stage
 for the Free Mobile Launch event).
-\autoref{fig:sequences} shows sample images for
+\autoref{fig:sequences} shows sample photos for
 some of the considered nine events.
 We have observed that more than one search sessions are necessary
-in order to obtain a satisfactory recall.
+in order to obtain a~satisfactory recall.
 Query strategies developed by Becker~\cite{becker2012plannedevents}
 that combine different combinations of event title,
 event venue, and event city work consistently well.
@@ -516,12 +522,13 @@ event venue, and event city work consistently well.
   \end{tabular}
   }
   \label{tab:number-media}
-  \caption{Number of images and videos collected for nine events
+  \caption{Number of photos and videos collected for nine events
     happening between January 10--19, 2012
     grouped by social networks, separated in photo (P)
     and video (V) results.
     Overall \textbf{photo precision: 0.73}.
-    Overall \textbf{video precision: 0.54}.}
+    Overall \textbf{video precision: 0.54}. Note, this is before
+    post-processing.}
   }
 \end{sidewaystable}
 
@@ -648,13 +655,14 @@ event venue, and event city work consistently well.
 		\includegraphics[height=\thumbheight]{ces/looseduplicate8.jpg}
 	\end{thumbsequence}
 \end{tabular}
-\caption{Sample images for some of the considered nine events
+\caption{Sample photos for some of the considered nine events
          (showing only exact or near-duplicate media items).}
 \label{fig:sequences}
 \end{figure*}
 
 
 \subsection{The Need for Media Item Deduplication}
+\label{sec:the-need-for-media-item-deduplication}
 
 Given our broad approach to retrieve media items
 across multiple social networks,
@@ -668,10 +676,10 @@ that media items trigger, for example, one and the same
 photo, if cross-posted to separate networks, can retrieve
 shares, likes, views, or comments independently
 on each of those networks.
-By clustering media items, we get a higher level view
-on a media item's overall performance on different networks.
+By clustering media items, we get a~higher level view on
+a~media item cluster's overall performance on different networks.
 We also observed media items that were near-duplicates,
-for example, from people who attended the same event like a concert
+for example, from people who attended the same event like a~concert
 and who took photos of the stage from almost the same angle.
 Similar to exact duplicates,
 by clustering near-duplicate media items,
@@ -685,40 +693,40 @@ in \autoref{sec:media-item-deduplication}
 Our ultimate goal is to generate media galleries
 to create visual event summaries.
 Especially given high recall search terms,
-we need a way to rank and prune media items.
+we need a~way to rank and prune media items.
 Popular media items can be displayed bigger, longer,
-or with a special decoration like a thicker border
+or with a~special decoration like a~thicker border
 in comparison to less popular media items.
-For videos, the audio part poses a challenge.
+For videos, the audio part poses a~challenge.
 In our experiments, we observe that intermixing the audio
 of all videos of an event often generates
 a very characteristic \emph{noise cloud}.
-A good example is the Assad Speech event,
-where a mix of Arabic voices blends nicely
-with the speech of a US politician.
-A different example is the CES Las Vegas event,
-where the atmosphere of a big exposition with music,
+A~good example is the Assad Speech event,
+where a~mix of Arabic voices blends nicely
+with the speech of a~US politician.
+A~different example is the CES Las Vegas event,
+where the atmosphere of a~big exposition with music,
 announcements, and technical analysis becomes alive.
-We will have a closer look at media item ranking in
+We will have a~closer look at media item ranking in
 \autoref{sec:media-item-ranking}.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this chapter, we have presented a generic media extractor
+In this chapter, we have presented a~generic media extractor
 for gathering media items shared on social networks to
 illustrate known events.
-We have proposed a common abstraction layer on top of the
+We have proposed a~common abstraction layer on top of the
 social networks' native data formats to align search results.
 Our approach for extracting media items and associated
 textual microposts covers already most of
 the Western social networks.
-Context-aware multimedia analysis will bring a new range of
-parameters into play since many media items contain a message
+Context-aware multimedia analysis will bring a~new range of
+parameters into play since many media items contain a~message
 that is complementary to the text.
 For example, facial detection~\cite{viola2004facedetection}
 and eventually recognition~\cite{wright2009facerecognition}
-can signify the presence of specific people in a media item.
+can signify the presence of specific people in a~media item.
 As visual recognition systems grow more powerful,
 more objects will eventually be recognizable by
 machines~\cite{serre2007objectrecognition},
@@ -731,13 +739,13 @@ Extracted features in all three categories
 and \emph{social}---from the social network
 in the form of social interactions)
 can serve as ranking criteria, be it in isolation,
-or in combination by introducing a ranking formula.
-As a result, this will also positively influence
+or in combination by introducing a~ranking formula.
+As a~result, this will also positively influence
 the diversity of automated summarizations.
 
 Nonetheless, it remains important to view the media and the
-associated text as a whole, since the text
-could convey a sentiment about,
+associated text as a~whole, since the text
+could convey a~sentiment about,
 or an explanation of the visual data.
 Using named entity recognition as outlined in
 \autoref{cha:micropost-annotation},
@@ -748,7 +756,7 @@ enabling cross-fertilization between the textual
 and visual analysis, which results in effective context-aware analysis possibilities~\cite{verborgh2012multimediaannotation}.
 
 Finally, by leveraging the LOD cloud,
-we can use that knowledge to get a more diverse view on events.
+we can use that knowledge to get a~more diverse view on events.
 At time of writing, the so-called
 \emph{Operation Pillar of
 Defense\footnote{\url{http://en.wikipedia.org/wiki/Operation_Pillar_of_Defense}, accessed November 21, 2012}}
@@ -758,7 +766,7 @@ Using the LOD cloud, promising search terms like, for example,
 \emph{gaza}, can be easily looked up in different languages
 like Hebrew or Arabic.
 In practice, these additional search terms return interesting
-new media items that a pure monolingual search
+new media items that a~pure monolingual search
 would not have revealed---oftentimes,
 and especially in the concrete case,
 at the expense of neutrality.
