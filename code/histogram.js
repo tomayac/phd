@@ -5,9 +5,9 @@ var Histogram = (function(window) {
       var x = opt_x || 0;
       var y = opt_y || 0;
       var w = opt_width || ctx.canvas.width;
-      var h = opt_height || ctx.canvas.height;      
+      var h = opt_height || ctx.canvas.height;
       var returnValues = opt_values || false;
-      // Core bits adapted (stolen) from
+      // Core bits adapted from
       // https://github.com/jseidelin/pixastic/blob/master/actions/histogram.js
       if (returnValues) {
         var values = [];
@@ -32,14 +32,14 @@ var Histogram = (function(window) {
         avg.r += r;
         avg.g += g;
         avg.b += b;
-        if (returnValues) {        
+        if (returnValues) {
           values[round((r * 0.3 + g * 0.59 + b * 0.11) / 3)]++;
         }
       }
       var r = ~~(avg.r / q);
       var g = ~~(avg.g / q);
       var b = ~~(avg.b / q);
-      if (returnValues) {      
+      if (returnValues) {
         return {
           values: values,
           pixel: {
@@ -59,8 +59,8 @@ var Histogram = (function(window) {
           },
           average: round((r + g + b) / 3),
           css: 'rgb(' + r + ',' + g + ',' + b + ')'
-        };        
+        };
       }
     }
   };
-})(window);    
+})(window);

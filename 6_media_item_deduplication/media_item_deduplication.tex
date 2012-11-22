@@ -410,7 +410,7 @@ higher than~$\mathit{2}$ does not necessarily
 lead to more accurate shot boundary detection results.
 The same applies to the number of to-be-considered most different
 or similar tiles $\mathit{tileLimit}$.
-We even had cases where not treating those tiles differently
+We had cases where not treating those tiles differently
 at all, \emph{i.e.}, setting
 $\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, 
 led to better results.
@@ -450,7 +450,22 @@ In addition to the before-mentioned  combined approach
 for video and photo near-duplicate
 detection~\cite{yang2009nearduplicate}, also more
 specialized methods for video deduplication exist,
-for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate}.
+for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate},
+by Min \emph{et al.} who, given the observation that 
+transformations tend to preserve the semantic information conveyed
+by the video content, propose a novel approach for identifying
+near-duplicate videos by making use of both low-level visual
+features and high-level semantic features
+detected using trained classifiers.
+Further, there is~\cite{oliveira2010nearduplicate} by Oliveira
+\emph{et al.} who look at near-duplicate video detection
+from a human angle.  
+The authors have conducted four large-scale surveys
+and have confirmed that humans perceive videos as near-duplicates
+both based on non-semantic features like different image or audio
+quality, but also based on semantic features like different
+videos of similar content, where, according to the authors,
+most research still focuses mostly on the non-semantic features.
 A~survey of video deduplication methods has been conducted by
 Lian \emph{et al.} in~\cite{lian2010survey}.
 
