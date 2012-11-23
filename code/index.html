@@ -14,7 +14,17 @@
     </form>
     <button id="reset">Clear</button>
     <button id="similaritySort">Cluster by Similarity</button>
-    <div style="overflow:auto; white-space:nowrap;" id="results"></div>
+    <br/>
+    <input type="range" id="threshold"/>
+    <label for="threshold" id="thresholdLabel"></label> Similarity Threshold
+    <br/>
+    <input type="range" id="similarTiles"/>
+    <label for="similarTiles" id="similarTilesLabel"></label> Similar Tiles
+    <br/>
+    <input type="checkbox" id="luminance"/><label id="luminanceLabel" for="luminance">Account for luminance</label>
+    <div id="queryLog"></div>
+    <!--<div style="overflow:auto; white-space:nowrap;" id="results"></div>-->
+    <div style="" id="results"></div>
     <script type="application/javascript">
       (function() {
         var illustrator = {
@@ -23,10 +33,11 @@
           PROXY_SERVER: 'http://localhost:8001/proxy/',
           THRESHOLD: 5,
           ACCOUNT_FOR_LUMINANCE: true,
-          GLOBAL_cols: 5,
-          GLOBAL_rows: 5,
+          COLS: 8,
+          ROWS: 8,
+          SIMILAR_TILES: 0,
           loaded: {},
-          histograms: {},
+          distances: {},
           tileHistograms: {},
           // checks if all media items are of the given status
           checkIfAllMediaItems: function(status) {
@@ -41,10 +52,45 @@
            * Initialzes the application
            */
           init: function() {
-            illustrator.GLOBAL_rows_x_cols =
-                illustrator.GLOBAL_cols * illustrator.GLOBAL_rows;
             if (illustrator.DEBUG) console.log('init');
             illustrator.reset();
+
+            var luminance = document.getElementById('luminance');
+            luminance.checked = illustrator.ACCOUNT_FOR_LUMINANCE;
+            luminance.addEventListener('change', function() {
+              illustrator.ACCOUNT_FOR_LUMINANCE = luminance.checked;
+              illustrator.distances = {};
+              illustrator.sort();
+            });
+
+            var threshold = document.getElementById('threshold');
+            threshold.value = illustrator.THRESHOLD;
+            var thresholdLabel = document.getElementById('thresholdLabel');
+            thresholdLabel.innerHTML = threshold.value;
+            threshold.addEventListener('change', function() {
+              thresholdLabel.innerHTML = threshold.value;
+              illustrator.THRESHOLD = threshold.value;
+              if (illustrator.checkIfAllMediaItems('histogram')) {
+                illustrator.sort();
+              };
+            });
+
+            var similarTiles = document.getElementById('similarTiles');
+            similarTiles.min = 1;
+            similarTiles.max = illustrator.ROWS * illustrator.COLS;
+            similarTiles.value =
+                Math.ceil(illustrator.ROWS * illustrator.COLS * 0.8);
+            illustrator.SIMILAR_TILES = similarTiles.value;
+            var similarTilesLabel =
+                document.getElementById('similarTilesLabel');
+            similarTilesLabel.innerHTML = similarTiles.value;
+            similarTiles.addEventListener('change', function() {
+              similarTilesLabel.innerHTML = similarTiles.value;
+              illustrator.SIMILAR_TILES = similarTiles.value;
+              if (illustrator.checkIfAllMediaItems('histogram')) {
+                illustrator.sort();
+              };
+            });
 
             var searchForm = document.getElementById('search_form');
             searchForm.addEventListener('submit', function(e) {
@@ -77,17 +123,24 @@
              if (illustrator.DEBUG) console.log('reset');
              var resultsDiv = document.getElementById('results');
              resultsDiv.innerHTML = '';
-             var query = document.getElementById('query').value;
+             var queryLogDiv = document.getElementById('queryLog');
+             queryLogDiv.innerHTML = '';
+             var query = document.getElementById('query');
              query.value = '';
              illustrator.loaded = {};
              illustrator.tileHistograms = {};
+             illustrator.distances = {};
            },
           /**
            * Searches for a term on a plethora of social media platforms
            */
           search: function(query) {
+            if (!query) {
+              return;
+            }
             if (illustrator.DEBUG) console.log('search ' + query);
-
+            var queryLogDiv = document.getElementById('queryLog');
+            queryLogDiv.innerHTML += '<br/>' + query;
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function (e) {
               if (xhr.readyState == 4) {
@@ -108,6 +161,8 @@
            */
           show: function(results) {
             var resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            illustrator.distances = {};
             for (var service in results) {
               results[service].forEach(function(item) {
                 // media asset
@@ -156,17 +211,18 @@
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
             // calculate the histograms tile-wise
-            var sw = ~~(img.width / illustrator.GLOBAL_cols);
-            var sh = ~~(img.height / illustrator.GLOBAL_rows);
-            var dw = ~~(canvas.width / illustrator.GLOBAL_cols);
-            var dh = ~~(canvas.height / illustrator.GLOBAL_rows);
+            var sw = ~~(img.width / illustrator.COLS);
+            var sh = ~~(img.height / illustrator.ROWS);
+            var dw = ~~(canvas.width / illustrator.COLS);
+            var dh = ~~(canvas.height / illustrator.ROWS);
 
             illustrator.tileHistograms[img.src] = {};
-            for (var i = 0; i < illustrator.GLOBAL_rows_x_cols; i++) {
+            var len = illustrator.COLS * illustrator.ROWS;
+            for (var i = 0; i < len; i++) {
               // calculate the boundaries for the current tile from the
               // image and translate it to boundaries on the main canvas
-              var mod = (i % illustrator.GLOBAL_cols);
-              var div = ~~(i / illustrator.GLOBAL_cols);
+              var mod = (i % illustrator.COLS);
+              var div = ~~(i / illustrator.COLS);
               var sx = mod * sw;
               var sy = div * sh;
               var dx = mod * dw;
@@ -191,59 +247,81 @@
           },
           sort: function() {
             var resultsDiv = document.getElementById('results');
-            var html = [];
-            var distances = {};
+            resultsDiv.innerHTML = '';
+            var clusters = {};
+            var distancesCalculated =
+                Object.keys(illustrator.distances).length ? true : false;
+            if (illustrator.DEBUG) console.log('Distances already calculated? ' + distancesCalculated);
 
-            var abs = Math.abs;
             var keys = Object.keys(illustrator.tileHistograms);
             var len = keys.length;
-            var i = 0;
-            var burnt = {};
-            var halfOfTiles = Math.ceil(illustrator.GLOBAL_rows_x_cols / 2);
-            if (illustrator.ACCOUNT_FOR_LUMINANCE) {
-              var rFactor = 0.3;
-              var gFactor = 0.59;
-              var bFactor = 0.11;
-            } else {
-              var rFactor = 1;
-              var gFactor = 1;
-              var bFactor = 1;
+
+            if (!distancesCalculated) {
+              if (illustrator.ACCOUNT_FOR_LUMINANCE) {
+                var rFactor = 0.3;
+                var gFactor = 0.59;
+                var bFactor = 0.11;
+              } else {
+                var rFactor = 1;
+                var gFactor = 1;
+                var bFactor = 1;
+              }
+              var abs = Math.abs;
+
+              for (var i = 0; i < len; i++) {
+                var outer = keys[i];
+                illustrator.distances[outer] = {};
+                var outerHistograms = illustrator.tileHistograms[outer];
+                for (var j = 0; j < len; j++) {
+                  if (j === i) continue;
+                  var inner = keys[j];
+                  var innerHistograms = illustrator.tileHistograms[inner];
+                  illustrator.distances[outer][inner] = {};
+                  for (var k in innerHistograms) {
+                    illustrator.distances[outer][inner][k] =
+                      ~~((abs(rFactor * (innerHistograms[k].r - outerHistograms[k].r)) +
+                          abs(gFactor * (innerHistograms[k].g - outerHistograms[k].g)) +
+                          abs(bFactor * (innerHistograms[k].b - outerHistograms[k].b))) / 3);
+                  }
+                }
+              }
             }
 
-            for (var outerKey in illustrator.tileHistograms) {
-              i++;
-              if (burnt[outerKey]) {
-                continue;
-              }
-              distances[outerKey] = {};
-              var outerHistograms = illustrator.tileHistograms[outerKey];
-              html.push('<br/><a href="' + outerKey + '"><img class="photo" src="' + outerKey + '"/></a>');
-              var startAt = 0;
-              for (var j = i; j < len; j++) {
-                var innerKey = keys[j];
-                var innerHistograms = illustrator.tileHistograms[innerKey];
-                distances[outerKey][innerKey] = {};
-                for (var tile in innerHistograms) {
-                  distances[outerKey][innerKey][tile] =
-                    ~~((abs(rFactor * (innerHistograms[tile].r - outerHistograms[tile].r)) +
-                     abs(gFactor * (innerHistograms[tile].g - outerHistograms[tile].g)) +
-                     abs(bFactor * (innerHistograms[tile].b - outerHistograms[tile].b))) / 3);
-                }
+            for (var i = 0; i < len; i++) {
+              if (!keys[i]) continue;
+              var outer = keys[i];
+              clusters[outer] = [];
+              var distanceToOuter = {};
+              for (var j = 0; j < len; j++) {
+                if (j === i) continue;
+                var inner = keys[j];
                 var similarTiles = 0;
-                for (var tile in distances[outerKey][innerKey]) {
-                  if (distances[outerKey][innerKey][tile] <= illustrator.THRESHOLD) {
+                for (var k in illustrator.distances[outer][inner]) {
+                  if (illustrator.distances[outer][inner][k] <= illustrator.THRESHOLD) {
                     similarTiles++;
                   }
                 }
-console.log(similarTiles + ' '+halfOfTiles )
-                if (similarTiles >= halfOfTiles) {
-                  burnt[innerKey] = true;
-                  html.push('<a href="' + innerKey + '"><img class="photo" src="' + innerKey + '"/></a>');
+                if (similarTiles >= illustrator.SIMILAR_TILES) {
+                  distanceToOuter[similarTiles] = j;
                 }
               }
+              if (Object.keys(distanceToOuter).length) {
+                var mostSimilar = distanceToOuter[Math.max.apply(null,
+                      Object.keys(distanceToOuter).map(function(num) {
+                        return parseInt(num, 10);
+                      }))];
+                clusters[outer].push(keys[mostSimilar]);
+                keys[mostSimilar] = false;
+              }
             }
-            resultsDiv.innerHTML += html.join('');
-            console.log(JSON.stringify(distances));
+            var html = [];
+            for (key in clusters) {
+              html.push('<img style="margin-left:50px;" class="photo" src="' +
+                  key +'"/>' + clusters[key].map(function(url) {
+                    return '<img class="photo" src="' + url +'"/>';
+                  }));
+            }
+            resultsDiv.innerHTML = html.join();
           }
         };
 

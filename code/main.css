@@ -1,7 +1,7 @@
 BODY {
   font-size: 12pt;
   font-family: sans-serif;
-  
+
 }
 
 H1 {
@@ -28,8 +28,8 @@ TD.legend {
 }
 
 TD.asset {
-  background-color: orange;  
-  width: 60em !important;  
+  background-color: orange;
+  width: 60em !important;
 }
 
 IMG.photo {
@@ -37,9 +37,9 @@ IMG.photo {
   margin: 0.2em;
 }
 
-IMG.photo:after {	
+IMG.photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
-  content: ''; 
+  content: '';
   position: absolute;
   top: 0;
   right: 0;
@@ -52,51 +52,51 @@ TD.asset > VIDEO {
 }
 
 TD.mediaurl {
-  background-color: orange;    
-  width: 60em !important;    
+  background-color: orange;
+  width: 60em !important;
 }
 
 TD.type {
-  background-color: orange;    
-  width: 60em !important;    
+  background-color: orange;
+  width: 60em !important;
 }
 
 TD.storyurl {
-  background-color: orange;    
-  width: 60em !important;    
+  background-color: orange;
+  width: 60em !important;
 }
 
 TD.message {
-  background-color: orange;    
-  width: 60em !important;  
+  background-color: orange;
+  width: 60em !important;
 }
 
 TD.clean {
-  background-color: orange;    
-  width: 60em !important;    
+  background-color: orange;
+  width: 60em !important;
 }
 
 TD.translation {
   background-color: orange;
-  width: 60em !important;        
+  width: 60em !important;
 }
 
 TD.entities {
   background-color: orange;
-  width: 60em !important;        
+  width: 60em !important;
 }
 
 TD.message {
   background-color: orange;
-  width: 60em !important;        
+  width: 60em !important;
 }
 
 TD.user {
-  background-color: orange;    
-  width: 60em !important;    
+  background-color: orange;
+  width: 60em !important;
 }
 
 TD.published {
   background-color: orange;
-  width: 60em !important;      
+  width: 60em !important;
 }
