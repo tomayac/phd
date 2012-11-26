@@ -6,6 +6,8 @@
     <script src="histogram.js"></script>
   </head>
   <body>
+    <span id="debug"></span>
+    <span id="count"></span>
     <h1>Social Media Illustrator</h1>
     <form method="get" id="search_form" onsubmit="return false;">
       <input name="query" id="query" />
@@ -33,8 +35,8 @@
           PROXY_SERVER: 'http://localhost:8001/proxy/',
           THRESHOLD: 5,
           ACCOUNT_FOR_LUMINANCE: true,
-          COLS: 8,
-          ROWS: 8,
+          COLS: 5,
+          ROWS: 5,
           SIMILAR_TILES: 0,
           loaded: {},
           distances: {},
@@ -161,7 +163,6 @@
            */
           show: function(results) {
             var resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
             illustrator.distances = {};
             for (var service in results) {
               results[service].forEach(function(item) {
@@ -187,7 +188,6 @@
                   image.src = source;
                   illustrator.loaded[source] = false;
                   image.onload = function() {
-                    image.style.border = 'solid 4px yellow';
                     illustrator.loaded[source] = true;
                     illustrator.histogram(image);
                   };
@@ -196,7 +196,6 @@
                   if (image.complete || image.complete === undefined) {
                     image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
                     image.src = source;
-                    image.style.border = 'solid 4px green';
                   }
                 }
               });
@@ -247,7 +246,6 @@
           },
           sort: function() {
             var resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
             var clusters = {};
             var distancesCalculated =
                 Object.keys(illustrator.distances).length ? true : false;
@@ -286,14 +284,15 @@
                 }
               }
             }
-
             for (var i = 0; i < len; i++) {
               if (!keys[i]) continue;
               var outer = keys[i];
               clusters[outer] = [];
               var distanceToOuter = {};
               for (var j = 0; j < len; j++) {
-                if (j === i) continue;
+                if (j === i) {
+                  continue;
+                }
                 var inner = keys[j];
                 var similarTiles = 0;
                 for (var k in illustrator.distances[outer][inner]) {
@@ -302,7 +301,11 @@
                   }
                 }
                 if (similarTiles >= illustrator.SIMILAR_TILES) {
-                  distanceToOuter[similarTiles] = j;
+                  if (!distanceToOuter[similarTiles]) {
+                    distanceToOuter[similarTiles] = [j];
+                  } else {
+                    distanceToOuter[similarTiles].push(j);
+                  }
                 }
               }
               if (Object.keys(distanceToOuter).length) {
@@ -310,20 +313,28 @@
                       Object.keys(distanceToOuter).map(function(num) {
                         return parseInt(num, 10);
                       }))];
-                clusters[outer].push(keys[mostSimilar]);
-                keys[mostSimilar] = false;
+                mostSimilar.forEach(function(index) {
+                  clusters[outer].push(keys[index]);
+                  keys[index] = false;
+                });
               }
             }
             var html = [];
             for (key in clusters) {
-              html.push('<img style="margin-left:50px;" class="photo" src="' +
-                  key +'"/>' + clusters[key].map(function(url) {
-                    return '<img class="photo" src="' + url +'"/>';
-                  }));
+              html.push('<br/><img style="margin-left:50px;" class="photo" src="' +
+                  key +'"/>'/* + decodeURIComponent(key.replace('http://localhost:8001/proxy/', '')) + ' ' */+ clusters[key].map(function(url) {
+                    return '<img class="photo" src="' + url +'"/> '/* + decodeURIComponent(url.replace('http://localhost:8001/proxy/', ''))*/;
+                  }).join(''));
             }
-            resultsDiv.innerHTML = html.join();
+            resultsDiv.innerHTML = '';
+            resultsDiv.innerHTML = html.join('');
           }
         };
+
+var debug = document.getElementById('debug');
+window.setInterval(function() {
+  debug.innerHTML = 'Images ' + document.getElementsByClassName('photo').length;
+}, 2000);
 
         // init
         illustrator.init();
