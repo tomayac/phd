@@ -319,13 +319,24 @@
                 });
               }
             }
-            var html = [];
+            var clusterSizes = {};
             for (key in clusters) {
-              html.push('<br/><img style="margin-left:50px;" class="photo" src="' +
-                  key +'"/>'/* + decodeURIComponent(key.replace('http://localhost:8001/proxy/', '')) + ' ' */+ clusters[key].map(function(url) {
-                    return '<img class="photo" src="' + url +'"/> '/* + decodeURIComponent(url.replace('http://localhost:8001/proxy/', ''))*/;
-                  }).join(''));
+              if (!clusterSizes[clusters[key].length]) {
+                clusterSizes[clusters[key].length] = [key];
+              } else {
+                clusterSizes[clusters[key].length].push(key);
+              }
             }
+
+            var html = [];
+            Object.keys(clusterSizes).sort().reverse().forEach(function(index) {
+              clusterSizes[index].forEach(function(key) {
+                html.push('<img style="margin-left:50px;" class="photo" src="' +
+                    key +'"/>' + clusters[key].map(function(url) {
+                      return '<img class="photo" src="' + url +'"/>';
+                    }).join(''));
+              });
+            });
             resultsDiv.innerHTML = '';
             resultsDiv.innerHTML = html.join('');
           }
