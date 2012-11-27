@@ -288,6 +288,7 @@
               if (!keys[i]) continue;
               var outer = keys[i];
               clusters[outer] = [];
+              keys[i] = false;
               var distanceToOuter = {};
               for (var j = 0; j < len; j++) {
                 if (j === i) {
@@ -342,10 +343,11 @@
           }
         };
 
-var debug = document.getElementById('debug');
-window.setInterval(function() {
-  debug.innerHTML = 'Images ' + document.getElementsByClassName('photo').length;
-}, 2000);
+        var debug = document.getElementById('debug');
+        window.setInterval(function() {
+          var images = document.getElementsByClassName('photo');
+          debug.innerHTML = 'Images ' + images.length;
+        }, 2000);
 
         // init
         illustrator.init();
