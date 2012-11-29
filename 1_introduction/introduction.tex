@@ -14,8 +14,8 @@ A~very open definition of the word \emph{event}
 given by WordNet~\cite{fellbaum1998wordnet,miller1995wordnet} is
 \emph{``something that happens at a~given place and time''}.
 Following this definition,
-we are indeed surrounded by events, most of them
-are of little to no interest for us.
+we are indeed surrounded by events,
+most of little to no interest for us.
 A~concert somewhere in the world of a~band
 that we do not even know may be a~good example.
 For some events, however, we may care more, for example,
@@ -42,7 +42,10 @@ our event summarization task is
 a~compilation of photos, videos,
 and microposts retrieved from social networks
 that are related to a~given event.
-High quality media galleries have the following properties:
+Event summarization covers textual,
+as well as multimedia content.
+We say a~media gallery is of high quality,
+if it fulfills the following properties.
 
 \begin{enumerate}
   \item \textit{Conciseness:}
@@ -59,19 +62,12 @@ High quality media galleries have the following properties:
         they catch and hold the attention of the viewer.     
 \end{enumerate}
 
-Event summarization covers textual,
-as well as multimedia content.
-For bigger events, official TV or newspaper journalists
-report on site, and oftentimes the event organizers themselves
-share official media material,
-or even an official press package with event reports and photos.
-
 \section{Research Question and Hypothesis}
 
 The main research question for this thesis
 can be formulated as follows.
  
-\noindent \textit{``Can user-customizable
+\textit{``Can user-customizable
 media galleries that summarize given events be
 created solely based on textual and multimedia data
 from social networks?''}
@@ -79,7 +75,7 @@ from social networks?''}
 \noindent The hypothesis that we test in this thesis
 can be formulated as follows.
 
-\noindent \textit{We argue that
+We argue that
 through media galleries that leverage content
 shared on social networks
 a~more \emph{authentic}, more \emph{concise},
@@ -89,9 +85,9 @@ view on events gets possible than by limiting oneself
 to officially produced media content;
 and that further such media galleries can be generated
 more \emph{efficiently} and \emph{in shorter time}
-than the officially produced ones.}
+than the officially produced ones.
 
-\noindent We validate these subjective and objective
+We validate these subjective and objective
 criteria with experiments for events of different categories
 such as sports, politics, culture, leisure,
 music, conferences, \emph{etc.}
@@ -115,9 +111,9 @@ we retrieve a~list of potentially event-relevant
 microposts that either contain media items directly,
 or that provide links to media items
 on external media item hosting platforms.
-Using third party NLP tools,
+Using third-party NLP tools,
 we recognize and disambiguate named entities
-in the microposts to predetermine their relevancy.
+in the microposts to predetermine their relevance.
 We extract the binary media item data
 from social networks or media item hosting platforms
 and relate it to the originating microposts
@@ -129,7 +125,7 @@ and then cluster similar media items
 We rank the deduplicated and clustered list
 of media items and their related microposts
 according to well-defined ranking criteria.
-In order to to generate interactively user-customizable
+In order to generate interactive and user-customizable
 media galleries that visually and audibly summarize the
 event in question, we compile the top-$n$ ranked
 media items and microposts in an aesthetic way
@@ -137,7 +133,7 @@ media items and microposts in an aesthetic way
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.55\textwidth]{thesis-diagram.png}
+  \includegraphics[]{thesis-diagram.png}
   \caption{Schematic depiction of event summary generation
     based on deduplicated, clustered, and ranked media items
     for an exemplary event.}
@@ -150,10 +146,10 @@ In this thesis, we report on methods for
 the automatic generation of event summaries.
 This particular field of research touches on many related areas
 of research and research communities,
-amongst which Social Network Research, Multimedia Content Analysis,
-Semantic Web and Natural Language Processing,
-Human Factors in Computing Systems,
-and Web Services.
+amongst which social network research, multimedia content analysis,
+Semantic Web and Natural Language Processing (NLP),
+human factors in computing systems,
+and Web services.
 In consequence, we have broken our contributions down into
 the following topics.
 
@@ -212,10 +208,10 @@ for the extraction of knowledge items from arbitrary Web pages.
 We have contributed an examination of Linked Data usage and
 visualization techniques of a~major commercial search engine.
 \todo{How Google is using citation}
-In addition to that, we have studied the usefulness and relevancy
+In addition to that, we have studied the usefulness and relevance
 of social network updates which were added to the search engine
 results pages of a~major commercial search engine.
-\todo{Adding realtime coverage citation}
+\todo{Adding real-time coverage citation}
 
 \subsection{Multimodal Search Engines}
 
@@ -259,7 +255,7 @@ common annoyances on arbitrary Web pages.
 The remainder of this thesis is structured as follows. 
 \todo{Add thesis structure}
 
-Each chapter is accompanied by a~final section named
-\emph{Chapter Notes}, which contains references of publications
-the chapter is (partly) based upon,
-and pointers to related material for further reading.
+Each chapter is closed by a~final section called
+\emph{Chapter Notes}, which contains references to publications
+that the chapter is based upon,
+and in some cases pointers to related material for further reading.

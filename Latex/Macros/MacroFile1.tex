@@ -1,6 +1,13 @@
 % This file contains macros that can be called up from connected TeX files
 % It helps to summarise repeated code, e.g. figure insertion (see below).
 
+\newenvironment{small_itemize}{
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{itemize}}
+
 \def\sectionautorefname{Section}
 \def\subsectionautorefname{Subsection}
 
@@ -21,6 +28,11 @@
 \newcommand{\thumbheight}{14mm}
 \newcommand{\newstrip}{\newline\vspace{-1em}\newline}
 \newenvironment{thumbsequence}{}{\makebox[4mm]{}}
+
+% linewrap symbol
+\usepackage{MnSymbol}
+\definecolor{grey}{RGB}{160,160,160}
+\newcommand{\linewrap}{\raisebox{-.4ex}{\textcolor{grey}{$\rhookleftarrow$}}}
 
 % todo macro
 \usepackage{color}

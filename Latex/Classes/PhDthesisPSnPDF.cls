@@ -47,7 +47,7 @@
 \newcommand{\listingsize}{\defaultlistingsize}
 \RecustomVerbatimCommand{\Verb}{Verb}{fontsize=\inlinelistingsize}
 \RecustomVerbatimEnvironment{Verbatim}{Verbatim}{fontsize=\defaultlistingsize}
-\lstset{frame=lines,captionpos=b,numberbychapter=false,escapechar=§,
+\lstset{frame=lines,captionpos=b,numberbychapter=true,escapechar=§,
         aboveskip=2em,belowskip=1em,abovecaptionskip=0.5em,belowcaptionskip=0.5em,
         framexbottommargin=-1em,basicstyle=\ttfamily\listingsize\selectfont}
 
@@ -92,17 +92,17 @@
 %        \item[\textbf{Superscripts}]}{%              R - Superscripts
 %          \ifthenelse{\equal{#1}{S}}{%
 %           \item[\textbf{Subscripts}]}{{%             S - Subscripts
-%	    \ifthenelse{\equal{#1}{X}}{%
-%	     \item[\textbf{Other Symbols}]}{{%    X - Other Symbols
-%	    \ifthenelse{\equal{#1}{Z}}{%
-%	     \item[\textbf{Acronyms}]}%              Z - Acronyms
-%              			{{}}}}}}}}}}
+%      \ifthenelse{\equal{#1}{X}}{%
+%       \item[\textbf{Other Symbols}]}{{%    X - Other Symbols
+%      \ifthenelse{\equal{#1}{Z}}{%
+%       \item[\textbf{Acronyms}]}%              Z - Acronyms
+%                    {{}}}}}}}}}}
 
 
 %:-------------------------- PDF/PS setup -----------------------
 
 %if you use a macTeX 2008 or later, use the ifpdf package
-\usepackage{ifpdf} 
+\usepackage{ifpdf}
 
 %if you use an older version, uncomment these lines:
 %\newif \ifpdf
@@ -119,13 +119,13 @@
 \ifpdf
 %-->
 %--> Google.com search "hyperref options"
-%--> 
+%-->
 %--> http://www.ai.mit.edu/lab/sysadmin/latex/documentation/latex/hyperref/manual.pdf
-%--> http://www.chemie.unibas.ch/~vogtp/LaTeX2PDFLaTeX.pdf 
+%--> http://www.chemie.unibas.ch/~vogtp/LaTeX2PDFLaTeX.pdf
 %--> http://www.uni-giessen.de/partosch/eurotex99/ oberdiek/print/sli4a4col.pdf
 %--> http://me.in-berlin.de/~miwie/tex-refs/html/latex-packages.html
 %-->
-    \usepackage[ pdftex, plainpages = false, pdfpagelabels, 
+    \usepackage[ pdftex, plainpages = false, pdfpagelabels,
                  pdfpagelayout = useoutlines,
                  bookmarks,
                  bookmarksopen = true,
@@ -140,19 +140,21 @@
                  anchorcolor = green,
                  hyperindex = true,
                  hyperfigures
-                 ]{hyperref} 
+                 ]{hyperref}
      \def\figureautorefname{Figure}
      \def\tableautorefname{Table}
      \def\appendixautorefname{Appendix}
      \def\chapterautorefname{Chapter}
      \def\sectionautorefname{Section}
-    
+     \def\subsubsectionautorefname{Subsection}
+     \def\subfloatautorefname{Subfigure}
+
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
     %\usepackage[pdftex]{graphicx}
     \pdfcompresslevel=9
     \graphicspath{{frontmatter/figures/PNG/}{frontmatter/figures/PDF/}{frontmatter/figures/}}
 \else
-    \usepackage[ dvips, 
+    \usepackage[ dvips,
                  bookmarks,
                  bookmarksopen = true,
                  bookmarksnumbered = true,
@@ -264,7 +266,7 @@
 % Stating the city of birth for title page where needed; uncommented for use
 %\def\cityofbirth#1{\gdef\@cityofbirth{#1}}
 
-% These macros define an environment for front matter that is always 
+% These macros define an environment for front matter that is always
 % single column even in a double-column document.
 
 \newenvironment{alwayssingle}{%
@@ -283,18 +285,18 @@
     { \Large {\bfseries {\@title}} \par}
 {\large \vspace*{35mm} {{\@crest} \par} \vspace*{25mm}}
     {{\Large \@author} \par}
-%	\vspace*{1ex}
-%	{{\@cityofbirth} \par}    
-{\large 
-	\vspace*{1ex}
+%  \vspace*{1ex}
+%  {{\@cityofbirth} \par}
+{\large
+  \vspace*{1ex}
     {{\@collegeordept} \par}
-	\vspace*{1ex}
+  \vspace*{1ex}
     {{\@university} \par}
-	\vspace*{25mm}
+  \vspace*{25mm}
     {{\submittedtext} \par}
-	\vspace*{1ex}
+  \vspace*{1ex}
     {\it {\@degree} \par}
-	\vspace*{2ex}
+  \vspace*{2ex}
     {\@degreedate}
 }%end large
   \end{center}
@@ -325,7 +327,7 @@
 
 % ACKNOWLEDGEMENTS
 %
-% The acknowledgements environment puts a large, bold, centered 
+% The acknowledgements environment puts a large, bold, centered
 % "Acknowledgements" label at the top of the page. The acknowledgements
 % themselves appear in a quote environment, i.e. tabbed in at both sides, and
 % on its own page.
@@ -341,8 +343,8 @@
 \begin{quote}}
 {\end{quote}\end{alwayssingle}}
 
-% The acknowledgementslong environment puts a large, bold, centered 
-% "Acknowledgements" label at the top of the page. The acknowledgement itself 
+% The acknowledgementslong environment puts a large, bold, centered
+% "Acknowledgements" label at the top of the page. The acknowledgement itself
 % does not appears in a quote environment so you can get more in.
 
 \newenvironment{acknowledgementslong}
@@ -423,9 +425,9 @@
 
 %\newenvironment{romanpages}
 %{
-%	\setcounter{page}{1}
-%	\renewcommand{\thepage}{\roman{page}}
+%  \setcounter{page}{1}
+%  \renewcommand{\thepage}{\roman{page}}
 %} % close romanpage env't
- 
+
 {\newpage\renewcommand{\thepage}{\arabic{page}}\setcounter{page}{1}}
 

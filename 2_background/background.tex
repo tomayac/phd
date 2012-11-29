@@ -29,15 +29,15 @@ and some of their core features.
 
 \section{The Web and Semantics}
 
-Tim Berners Lee, inventor of the World-Wide Web (W3, WWW),
-or simply, the \emph{Web}, \emph{et al.}
-write in~\cite{bernerslee1994worldwideweb}:
-\textit{``The World-Wide Web was developed
+Tim Berners Lee, inventor of the World Wide Web (W3, WWW),
+or simply, the \emph{Web},
+writes in~\cite{bernerslee1994worldwideweb}:
+\textit{``The World Wide Web was developed
 to be a~pool of human knowledge,
 which would allow collaborators
 in remote sites to share their ideas
 and all aspects of a~common project''}.
-Since the earliest days at CERN,
+Since the early days at CERN,
 the European Organization for Nuclear Research
 in Geneva, Switzerland,
 the Web has scaled to a~truly global system
@@ -53,7 +53,7 @@ Michel Bréal can be counted as a~founder
 of modern semantics with his 1897
 \emph{Essai de sémantique}~\cite{breal1897essai}.
 The \emph{Semantic Web} brings the two worlds---the
-World-Wide Web and semantics---together.
+World Wide Web and semantics---together.
 
 \section{Semantic Web}
 
@@ -64,7 +64,7 @@ of Princeton University defines the term \emph{semantic}
 as \emph{``of or relating to meaning or the study of meaning''}.
 The same source defines the term \emph{Web},
 which is a~common form for the complete term
-\emph{World Wide Web} (or just \emph{WWW}) as
+\emph{World Wide Web} as
 \emph{``computer network consisting of a~collection of internet sites that offer text and graphics and
 sound and animation resources through the hypertext
 transfer protocol''}.
@@ -100,12 +100,12 @@ that they merely display at present.''}
 \end{quotation}
 
 We currently experience a~fundamental shift
-from the World Wide Web (WWW) to the Semantic Web,
+from the World Wide Web to the Semantic Web,
 a~shift from moving bits to moving bits with a~meaning.
 This can have a~huge impact,
 which might not be as drastic as Tim Berners-Lee describes
 in his Scientific American article,
-but which might introduce many small improvements,
+but which might introduce many improvements,
 like more accurate search results,
 more intelligent price comparison services, \emph{etc.}
 \autoref{fig:fundamental-shift} illustrates this idea.
@@ -161,15 +161,15 @@ For human beings (interested in sports),
 the meaning of the columns in
 \autoref{tab:sample-table-structured-data} is clear:
 
-\begin{itemize}
-  \item P = matches \textbf{P}layed
-  \item W = \textbf{W}on 
-  \item D = \textbf{D}rew
-  \item L = \textbf{L}oss
-  \item F = Goals \textbf{F}or
-  \item A = Goals \textbf{A}gainst
-  \item Pts = \textbf{P}oin\textbf{ts}
-\end{itemize}
+\begin{small_itemize}
+  \item[] P = matches \textbf{P}layed
+  \item[] W = \textbf{W}on 
+  \item[] D = \textbf{D}rew
+  \item[] L = \textbf{L}oss
+  \item[] F = Goals \textbf{F}or
+  \item[] A = Goals \textbf{A}gainst
+  \item[] Pts = \textbf{P}oin\textbf{ts}
+\end{small_itemize}
 
 \begin{table}[b!]
   \begin{center}
@@ -206,26 +206,30 @@ If data providers were to use unique column identifiers like
 Unique Resource Identifiers (URIs),
 the problem would be easier.
 In the concrete example for English and German,
-rather than using ``D'' (Drew) and ``u.'' (unentschieden),
+rather than using ``D'' (\emph{Drew})
+and ``u.'' (\emph{unentschieden}),
 which both mean that the result was a~tie,
-the machine-readable column name could be identified by the URI
-\url{http://dbpedia.org/page/Tie_(draw)}.
+the machine-readable column name could instead be identified by
+a~\emph{Unique} Resource Identifier (URI) like
+\url{http://dbpedia.org/page/Tie_(draw)},
+or even a~fictive URI like \url{http://example.org/VGllXyhkcmF3KQ==}.
 In the next section, we therefore introduce
-the structured knowledge base DBpedia~\cite{auer2007dbpedia}.
+the structured knowledge base and interlinking hub
+in the Web of Data, DBpedia~\cite{auer2007dbpedia}.
 
 \subsection{The Structured Knowledge Base DBpedia}
 
-An often reoccurring (however not binding) pattern
+An often reoccurring pattern
 in the Semantic Web world
 is the use of DBpedia~\cite{auer2007dbpedia}
 as a~hub for identifying concepts by URIs.
 DBpedia is a~Semantic Web knowledge base
 with the objective of automatically extracting
-structured data from the human-generated information
+pre-structured tabular data from the human-generated info-boxes
 from the online encyclopedia
 Wikipedia~\footnote{\url{http://en.wikipedia.org/wiki/Main_Page}}.
-This structured information is then made available
-on the World-Wide Web in many formats,
+This pre-structured information is then made available
+on the World Wide Web in many formats,
 for example, in JSON~\cite{crockford2006json}
 and many RDF~\cite{klyne2004rdf} serializations.
 DBpedia allows for querying relationships
@@ -245,8 +249,8 @@ As outlined in \autoref{sec:non-semantic-web},
 HTML versions 4.01~\cite{raggett1999html}
 and 5~\cite{berjon2012html5}
 contain a~basic level of semantics.
-The main focus, however, is on the separation of semantics
-from presentation.
+The main focus, however, is on the separation of
+the markup of the textual structure from the actual presentation.
 For example the \texttt{<b>} and the \texttt{<strong>} tags
 both have the same visual effect:
 they make the node value appear in a~bold face \textbf{like so}.
@@ -261,7 +265,7 @@ if only visually one wants to create a~bold face look.
 In the following, we present a~list of semantic HTML tags
 and attributes and their meaning.
 
-\paragraph{Semantic HTML4.01 Tags}
+\paragraph{Semantic HTML 4.01 Tags}
 
 \begin{itemize}
   \item \texttt{<abbr>} specifies an abbreviation,
@@ -270,7 +274,7 @@ and attributes and their meaning.
         \texttt{<caption>} specifies a~caption for a~table.
   \item \texttt{<blockquote>} specifies a~block-level quotation
         (a~source in form of a~URI may be specified via the
-        \texttt{@cite} attribute),
+        \texttt{cite} attribute),
         \texttt{<cite>} specifies a~citation.
   \item \texttt{<dl>} specifies a~definition list, \texttt{<dt>}
         specifies a~definition term in a~definition list,
@@ -329,33 +333,33 @@ and attributes and their meaning.
 \paragraph{HTML5 Input Attributes}
 
 \begin{itemize}
-  \item \texttt{@datetime} specifies a~control for setting the
+  \item \texttt{datetime} specifies a~control for setting the
         element’s value to a~string representing a~global date
         and time (with timezone information).
-  \item \texttt{@datetime-local} specifies a~control for setting
+  \item \texttt{datetime-local} specifies a~control for setting
         the element’s value to a~string representing a~local date
         and time (with no timezone information).
-  \item \texttt{@date} specifies a~control for setting the 
+  \item \texttt{date} specifies a~control for setting the 
         element’s value to a~string representing a~date,
-        \texttt{@month} specifies a~control for setting the
+        \texttt{month} specifies a~control for setting the
         element’s value to a~string representing a~month,
-        \texttt{@week} specifies a~control for setting the
+        \texttt{week} specifies a~control for setting the
         element’s value to a~string representing a~week.
-  \item \texttt{@time} specifies a~control for setting the
+  \item \texttt{time} specifies a~control for setting the
         element’s value to a~string representing a~time
         (with no timezone information).
-  \item \texttt{@number} specifies a~control for setting the
+  \item \texttt{number} specifies a~control for setting the
         element’s value to a~string representing a~number.
-  \item \texttt{@range} represents an imprecise control
+  \item \texttt{range} represents an imprecise control
         for setting the element’s value to a~string
         representing a~number.
-  \item \texttt{@email} specifies a~control for editing
+  \item \texttt{email} specifies a~control for editing
         a~list of email addresses given in the element’s value.
-  \item \texttt{@url} specifies a~control for editing an
+  \item \texttt{url} specifies a~control for editing an
         absolute URL given in the element’s value.
-  \item \texttt{@search} specifies a~one-line plain-text
+  \item \texttt{search} specifies a~one-line plain-text
         edit control for entering one or more search terms.
-  \item \texttt{@color} specifies a~color-well control for
+  \item \texttt{color} specifies a~color-well control for
         setting the element’s value to a~string representing
         a~simple color.
 \end{itemize}
@@ -378,7 +382,7 @@ but rather a~widely adopted grass-roots-driven movement
 with origins in the blogging scene.
 It is to be noted that Microformats do not require a~new language,
 but reuse building blocks from widely adopted standards
-such as the \texttt{@class}, \texttt{@rel}, and \texttt{@title}
+such as the \texttt{class}, \texttt{rel}, and \texttt{title}
 attributes in HTML.
 Their main design goal is to focus first on humans,
 then on machines.
@@ -470,25 +474,25 @@ The Microdata specification introduces
 a~set of new attributes to HTML:
 
 \begin{itemize}
-  \item \texttt{@itemscope} creates an item (or thing) and
+  \item \texttt{itemscope} creates an item (or thing) and
         indicates that descendants of this element contain
         information about it. This attribute precedes the
-        \texttt{@itemtype} attribute in the HTML element's tag.
-  \item \texttt{@itemtype} a~valid URL of a~vocabulary that
+        \texttt{itemtype} attribute in the HTML element's tag.
+  \item \texttt{itemtype} a~valid URL of a~vocabulary that
         describes the item and its properties context.
   \item \texttt{itemid} indicates a~unique identifier
         of the item in the vocabulary.
-  \item \texttt{@itemprop} indicates that its containing tag
+  \item \texttt{itemprop} indicates that its containing tag
         holds the value of the specified item property.
         The properties name and value context are described by
         the items vocabulary. Properties values usually
         consist of string values,
         but can also use URLs using the \texttt{<a>} tag
-        and its \texttt{@href} attribute,
-        the \texttt{<img>} tag and its \texttt{@src} attribute,
+        and its \texttt{href} attribute,
+        the \texttt{<img>} tag and its \texttt{src} attribute,
         or other tags that link to or embed external resources.
-  \item \texttt{@itemref} properties that are not descendants of
-        the element with the \texttt{@itemscope} attribute
+  \item \texttt{itemref} properties that are not descendants of
+        the element with the \texttt{itemscope} attribute
         can be associated with the item using this attribute.
         Provides a~list of elements to web crawlers to find
         additional property values of the item
@@ -519,7 +523,7 @@ defines a~set of W3C standards for the formal description of
 resources that are identified by URIs.
 RDF is a~core component of the Semantic Web.
 Initially, it was designed to describe metadata
-on the World-Wide Web (WWW) such as authors,
+on the World Wide Web (WWW) such as authors,
 copyrights, \emph{etc.} of documents, however,
 applying a~definition of the term \emph{resource}
 beyond the WWW context,
@@ -568,8 +572,8 @@ and disadvantages, mostly around readability for human beings
 and parsability for machines.
 Most people prefer the Turtle~\cite{prudhommeaux2011turtle}
 format for its readability,
-whereas for machines N-Triples~\cite{grant2004ntriples}
-is the easiest to parse.
+whereas for machines, oftentimes RDF/XML~\cite{beckett2004rdfxml}
+is the easiest to work with.
 
 \subsubsection{RDF Sample Graph}
 In the following, we will illustrate the various
@@ -591,27 +595,6 @@ of this sample graph.
   \end{center}  
 \end{figure}
 
-\subsubsection{The Notation3 Syntax} \label{sec:notation3}
-
-Notation3~\cite{bernerslee2011notation3} was introduced
-by Tim Berners-Lee.
-Notation3 has some features that go beyond
-the pure expressiveness of RDF, like rules.
-Its media type is \texttt{text/n3;\-charset=utf-8},
-the recommended file extension is \texttt{.n3},
-the encoding is always UTF-8.
-\autoref{code:notation3-syntax} shows the previously
-introduced sample graph serialized in Notation3.
-
-\begin{lstlisting}[caption={A~sample graph in Notation3 syntax.},
-  label={code:notation3-syntax}]
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-
-_:node15urahancx74223 a foaf:Person ;
-  foaf:name "John X. Foobar" ;
-  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
-\end{lstlisting}
-
 \subsubsection{The Turtle Syntax} \label{sec:turtle}
 
 Turtle~\cite{prudhommeaux2011turtle},
@@ -632,6 +615,28 @@ introduced sample graph serialized in Turtle.
 \begin{lstlisting}[caption={A~sample graph in Turtle syntax,
   the syntax is equivalent to \autoref{code:notation3-syntax}.},
   label={code:turtle-syntax}]
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:node15urahancx74223 a foaf:Person ;
+  foaf:name "John X. Foobar" ;
+  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
+\subsubsection{The Notation3 Syntax} \label{sec:notation3}
+
+Notation3~\cite{bernerslee2011notation3} was introduced
+by Tim Berners-Lee.
+Notation3 has some features that go beyond
+the pure expressiveness of RDF, like rules,
+support for variables, and quantification.
+Its media type is \texttt{text/n3},
+the recommended file extension is \texttt{.n3},
+the encoding is always UTF-8.
+\autoref{code:notation3-syntax} shows the previously
+introduced sample graph serialized in Notation3.
+
+\begin{lstlisting}[caption={A~sample graph in Notation3 syntax.},
+  label={code:notation3-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 _:node15urahancx74223 a foaf:Person ;
@@ -710,7 +715,7 @@ in consequence RDFa can be considered
 as another serialization syntax for RDF,
 with the same expressive power as
 RDF/XML~\cite{beckett2004rdfxml},
-Turtle~\cite prudhommeaux2011turtle{}, \emph{etc.}
+Turtle~\cite{prudhommeaux2011turtle}, \emph{etc.}
 Its media type is \texttt{application/xhtml+xml},
 the recommended file extension is \texttt{.html}.
 RDFa shares some design goals
@@ -727,22 +732,23 @@ for example in XHTML or HTML.
 The concrete attributes are as follows.
 
 \begin{itemize}
-  \item \texttt{@about} and \texttt{@src} a~URI or
-        CURIE (compact URI) that specifies the resource
+  \item \texttt{about} and \texttt{src} a~URI or
+        CURIE (compact URI)~\cite{birbeck2007curie}
+        that specifies the resource
         the metadata is about.
-  \item \texttt{@rel} specifies a~relationship with
+  \item \texttt{rel} specifies a~relationship with
         another resource.
-  \item \texttt{@href} and \texttt{@resource} specify
+  \item \texttt{href} and \texttt{resource} specify
         the partner resource.
-  \item \texttt{@property} specify a~property for
+  \item \texttt{property} specify a~property for
         the content of an element.
-  \item \texttt{@content} optional attribute that overrides
+  \item \texttt{content} optional attribute that overrides
         the content of the element when using
         the property attribute.
-  \item \texttt{@datatype} optional attribute that
+  \item \texttt{datatype} optional attribute that
         specifies the datatype of text specified
         for use with the property attribute.
-  \item \texttt{@typeof} optional attribute that specifies
+  \item \texttt{typeof} optional attribute that specifies
         the RDF type(s) of the subject (the resource
         that the metadata is about).
 \end{itemize}
@@ -808,6 +814,8 @@ Given the (visionary) huge global graph, a~fictive
 SPARQL query like the one in \autoref{code:sparql}
 could be used to get results from the graph,
 like the email addresses of every person in the world.
+SPARQL queries, unlike traditional databases, are not necessarily
+guaranteed to return \emph{all} existing results.
 
 \begin{lstlisting}[caption={[SPARQL query returning the names and
   email addresses of every person in the world.]
@@ -833,7 +841,7 @@ whose name and email address are the values
 of the triples with the predicates \texttt{foaf:name}
 and \texttt{foaf:mbox} respectively.
 While this sounds like a~very powerful idea,
-for performance reasons in practice SPARQL endpoints
+in practice SPARQL endpoints
 like the DBpedia SPARQL
 endpoint\footnote{\url{http://dbpedia.org/sparql}}
 typically only allow for querying a~local graph.
@@ -949,9 +957,9 @@ typed links between things in the world,
 the result is oftentimes referred to as the Web of Data.
 As outlined before, RDF encodes statements
 about things in the form of
-\texttt{\{subject, predicate, object\}} triples.
+\texttt{(subject, predicate, object)} triples.
 If subject and object have URIs from different namespaces,
-Bizer \emph{et al.} speak of \emph{RDF links}
+Bizer \emph{et al.}\ speak of \emph{RDF links}
 in~\cite{heath2011linkeddata}.
 An exemplary RDF link adapted from~\cite{bizer2009linkeddatastory}
 stating that a~description of the movie Pulp Fiction
@@ -966,9 +974,9 @@ can be seen in \autoref{code:rdflink}.
   and a~description from DBpedia are indeed talking
   about the same movie.}},
   label={code:rdflink}]
-http://data.linkedmdb.org/resource/film/77
-http://www.w3.org/2002/07/owl#sameAs
-http://dbpedia.org/page/Pulp_Fiction
+<http://data.linkedmdb.org/resource/film/77> §\linewrap \\
+<http://www.w3.org/2002/07/owl\#sameAs> §\linewrap \\
+<http://dbpedia.org/page/Pulp\_Fiction>
 \end{lstlisting}
 
 \subsection{The Linking Open Data Cloud Diagram}
