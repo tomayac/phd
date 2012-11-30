@@ -595,6 +595,9 @@ var mediaFinder = {
      */
     function collectResults(json, service, pendingRequests) {
       if (GLOBAL_config.DEBUG) console.log('collectResults for ' + service);
+      io.sockets.emit('mediaResults', {
+        service: service
+      });
       if (!pendingRequests) {
         if (service !== 'combined') {
           var temp = json;

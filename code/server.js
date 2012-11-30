@@ -1,8 +1,11 @@
-var http = require('http');
-var https = require('https');
-var querystring = require('querystring');
 var request = require('request');
+var express = require('express');
+var http = require('http');
+var querystring = require('querystring');
 var jsdom = require('jsdom');
+var app = express();
+var server = http.createServer(app);
+global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
 var Uri = require('./uris.js');
 var mediaFinder = require('./mediafinder.js');
@@ -11,27 +14,23 @@ var GLOBAL_config = {
   DEBUG: true
 };
 
-// jspos, Part of Speech tagging
-var Lexer = require('./jspos/lexer.js');
-var POSTagger = require('./jspos/POSTagger.js');
-var express = require('express');
-var app = express.createServer();
-app.configure(function() {
-  app.use(express.methodOverride());
-  app.use(express.static(__dirname + '/'));
-});
+// start static serving
+// and set default route to index.html
+app.use(express.static(__dirname + '/static'));
+
 app.configure('development', function() {
   app.use(express.errorHandler({
     dumpExceptions: true,
     showStack: true
   }));
 });
+
 app.configure('production', function() {
   app.use(express.errorHandler());
 });
 
-app.get("/", function(req, res) {
-  res.redirect("/index.html");
+app.get('/', function(req, res) {
+  res.sendfile(__dirname + '/index.html');
 });
 
 app.get(/^\/search\/(.+)\/(.+)$/, search);
@@ -43,6 +42,9 @@ function proxy(req, res, next) {
   var pathname = require('url').parse(req.url).pathname;
   var url = decodeURIComponent(pathname.replace(path, '$1'));
   if (GLOBAL_config.DEBUG) console.log('Proxy request for ' + url);
+  io.sockets.emit('proxy', {
+    url: url
+  });
   try {
     res.setHeader('Cache-Control', 'max-age=7200, must-revalidate');
     request.get(url).pipe(res);
@@ -90,6 +92,11 @@ function search(req, res, next) {
   });
 }
 
+io.set('log level', 1);
+io.sockets.on('connection', function(socket) {
+});
+
+
 var port = process.env.PORT || 8001;
-app.listen(port);
+server.listen(port);
 console.log('node.JS running on ' + port);

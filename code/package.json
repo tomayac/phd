@@ -1,12 +1,14 @@
 {
-  "name": "media-server",
+  "name": "",
   "version": "0.0.1",
-  "scripts": {
-    "start": "node server.js"
-  },
   "dependencies": {
-    "express": "2.0",
-    "request": "2.1.1",
-    "jsdom": "0.2.4"
+    "express": "3.0.x",
+    "request": "2.11.x",
+    "socket.io": "0.9.x",
+    "jsdom": "0.2.x"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
   }
 }

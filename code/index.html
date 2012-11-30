@@ -4,10 +4,12 @@
     <title>Social Media Illustrator</title>
     <link rel="stylesheet" href="main.css" />
     <script src="histogram.js"></script>
+    <script src="./socket.io/socket.io.js"></script>
   </head>
   <body>
     <span id="debug"></span>
-    <span id="count"></span>
+    <br/>
+    <span id="socket_data"></span>
     <h1>Social Media Illustrator</h1>
     <form method="get" id="search_form" onsubmit="return false;">
       <input name="query" id="query" />
@@ -41,6 +43,7 @@
           loaded: {},
           distances: {},
           tileHistograms: {},
+          socket: null,
           // checks if all media items are of the given status
           checkIfAllMediaItems: function(status) {
             for (var key in illustrator.loaded) {
@@ -54,6 +57,9 @@
            * Initialzes the application
            */
           init: function() {
+            illustrator.socket = io.connect('http://localhost:8001/');
+            illustrator.initSockets();
+
             if (illustrator.DEBUG) console.log('init');
             illustrator.reset();
 
@@ -118,6 +124,16 @@
               };
             });
           },
+          initSockets: function() {
+            illustrator.socket.on('proxy', function(data) {
+              var socketData = document.getElementById('socket_data');
+              socketData.innerHTML = 'Loading file ' + data.url;
+            });
+            illustrator.socket.on('mediaResults', function(data) {
+              var socketData = document.getElementById('socket_data');
+              socketData.innerHTML = 'Receiving results from ' + data.service;
+            });
+          },
           /**
            * Resets all GUI elements
            */
@@ -167,36 +183,34 @@
             for (var service in results) {
               results[service].forEach(function(item) {
                 // media asset
-                if (item.type === 'photo') {
-                  var image = new Image();
-                  image.setAttribute('class', 'photo');
-                  var source = illustrator.PROXY_SERVER +
-                      encodeURIComponent(item.posterUrl);
+                var image = new Image();
+                image.setAttribute('class', 'photo');
+                var source = illustrator.PROXY_SERVER +
+                    encodeURIComponent(item.posterUrl);
 
-                  image.onerror = function() {
-                    try{
-                      image.parentNode.removeChild(image);
-                    } catch(e) {
-                      // noop
-                    }
-                    delete illustrator.loaded[source];
-                    console.log('Removed ' + image.src);
-                  };
-
-                  //resultsDiv.appendChild(image);
-                  image.setAttribute('alt', service);
-                  image.src = source;
-                  illustrator.loaded[source] = false;
-                  image.onload = function() {
-                    illustrator.loaded[source] = true;
-                    illustrator.histogram(image);
-                  };
-
-                  // make sure the load event fires for cached images too
-                  if (image.complete || image.complete === undefined) {
-                    image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-                    image.src = source;
+                image.onerror = function() {
+                  try{
+                    image.parentNode.removeChild(image);
+                  } catch(e) {
+                    // noop
                   }
+                  delete illustrator.loaded[source];
+                  console.log('Removed ' + image.src);
+                };
+
+                //resultsDiv.appendChild(image);
+                image.setAttribute('alt', service);
+                image.src = source;
+                illustrator.loaded[source] = false;
+                image.onload = function() {
+                  illustrator.loaded[source] = true;
+                  illustrator.histogram(image);
+                };
+
+                // make sure the load event fires for cached images too
+                if (image.complete || image.complete === undefined) {
+                  image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+                  image.src = source;
                 }
               });
             }
