@@ -10,6 +10,7 @@
     SIMILAR_TILES: 0,
     loaded: {},
     distances: {},
+    origins: {},
     tileHistograms: {},
     socket: null,
     // checks if all media items are of the given status
@@ -54,8 +55,7 @@
       var similarTiles = document.getElementById('similarTiles');
       similarTiles.min = 1;
       similarTiles.max = illustrator.ROWS * illustrator.COLS;
-      similarTiles.value =
-          Math.ceil(illustrator.ROWS * illustrator.COLS * 0.8);
+      similarTiles.value = Math.ceil(illustrator.ROWS * illustrator.COLS * 0.8);
       illustrator.SIMILAR_TILES = similarTiles.value;
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
@@ -79,6 +79,33 @@
       var resetButton = document.getElementById('reset');
       resetButton.addEventListener('click', function() {
         illustrator.reset();
+      });
+
+      var queryLogDiv = document.getElementById('queryLog');
+      queryLog.addEventListener('click', function(e) {
+        if ((e.target.nodeName.toLowerCase() === 'input') ||
+            (e.target.nodeName.toLowerCase() === 'label')) {
+          // can use checkbox, even if the label was clicked
+          var target = e.target;
+          var query = target.parentNode.getElementsByTagName('label')[0]
+              .getAttribute('for');
+          var checkbox = target.parentNode.getElementsByTagName('input')[0];
+          query = query.replace(/\_/g, ' ');
+          var displayState = '';
+          if (checkbox.checked) {
+            console.log('Showing media items from query "' + query + '"');
+            displayState = 'inline';
+          } else {
+            console.log('Hiding media items from query "' + query + '"');
+            displayState = 'none';
+          }
+          var sources = illustrator.origins[query].forEach(function(source) {
+            var images = document.querySelectorAll('img[src="' + source + '"]');
+            for (var i = 0, len = images.length; i < len; i++) {
+              images[i].style.display = displayState;
+            }
+          });
+        }
       });
 
       // sort by similarity
@@ -113,6 +140,7 @@
        illustrator.loaded = {};
        illustrator.tileHistograms = {};
        illustrator.distances = {};
+       illustrator.origins = {};
      },
     /**
      * Searches for a term on a plethora of social media platforms
@@ -123,13 +151,16 @@
       }
       if (illustrator.DEBUG) console.log('search ' + query);
       var queryLogDiv = document.getElementById('queryLog');
-      queryLogDiv.innerHTML += '<br/>' + query;
+      var queryId = query.replace(/\s/g, '_');
+      queryLogDiv.innerHTML +=
+          '<div><input type="checkbox" checked="checked" id="' + queryId +
+          '"> <label for="' + queryId + '">' + query + '</label></div>';
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4) {
           if (xhr.status == 200) {
             var results = JSON.parse(xhr.responseText);
-            illustrator.show(results);
+            illustrator.show(results, query);
           }
         }
       }
@@ -142,7 +173,7 @@
     /**
      * Shows the results
      */
-    show: function(results) {
+    show: function(results, query) {
       var resultsDiv = document.getElementById('results');
       illustrator.distances = {};
       for (var service in results) {
@@ -163,12 +194,15 @@
             console.log('Removed ' + image.src);
           };
 
-          //resultsDiv.appendChild(image);
-          image.setAttribute('alt', service);
           image.src = source;
           illustrator.loaded[source] = false;
           image.onload = function() {
             illustrator.loaded[source] = true;
+            if (!illustrator.origins[query]) {
+              illustrator.origins[query] = [source];
+            } else {
+              illustrator.origins[query].push(source);
+            }
             illustrator.histogram(image);
           };
 
@@ -232,6 +266,9 @@
       var keys = Object.keys(illustrator.tileHistograms);
       var len = keys.length;
 
+      var abs = Math.abs;
+      var max = Math.max;
+
       if (!distancesCalculated) {
         if (illustrator.ACCOUNT_FOR_LUMINANCE) {
           var rFactor = 0.3;
@@ -242,22 +279,21 @@
           var gFactor = 1;
           var bFactor = 1;
         }
-        var abs = Math.abs;
 
         for (var i = 0; i < len; i++) {
           var outer = keys[i];
           illustrator.distances[outer] = {};
-          var outerHistograms = illustrator.tileHistograms[outer];
+          var outerHisto = illustrator.tileHistograms[outer];
           for (var j = 0; j < len; j++) {
             if (j === i) continue;
             var inner = keys[j];
-            var innerHistograms = illustrator.tileHistograms[inner];
+            var innerHisto = illustrator.tileHistograms[inner];
             illustrator.distances[outer][inner] = {};
-            for (var k in innerHistograms) {
+            for (var k in innerHisto) {
               illustrator.distances[outer][inner][k] =
-                ~~((abs(rFactor * (innerHistograms[k].r - outerHistograms[k].r)) +
-                    abs(gFactor * (innerHistograms[k].g - outerHistograms[k].g)) +
-                    abs(bFactor * (innerHistograms[k].b - outerHistograms[k].b))) / 3);
+                ~~((abs(rFactor * (innerHisto[k].r - outerHisto[k].r)) +
+                    abs(gFactor * (innerHisto[k].g - outerHisto[k].g)) +
+                    abs(bFactor * (innerHisto[k].b - outerHisto[k].b))) / 3);
             }
           }
         }
@@ -274,8 +310,9 @@
           }
           var inner = keys[j];
           var similarTiles = 0;
-          for (var k in illustrator.distances[outer][inner]) {
-            if (illustrator.distances[outer][inner][k] <= illustrator.THRESHOLD) {
+          var distances = illustrator.distances[outer][inner];
+          for (var k in distances) {
+            if (distances[k] <= illustrator.THRESHOLD) {
               similarTiles++;
             }
           }
@@ -288,7 +325,7 @@
           }
         }
         if (Object.keys(distanceToOuter).length) {
-          var mostSimilar = distanceToOuter[Math.max.apply(null,
+          var mostSimilar = distanceToOuter[max.apply(null,
                 Object.keys(distanceToOuter).map(function(num) {
                   return parseInt(num, 10);
                 }))];
