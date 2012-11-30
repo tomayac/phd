@@ -5,27 +5,36 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <span id="debug"></span>
-    <br/>
-    <span id="socket_data"></span>
     <h1>Social Media Illustrator</h1>
-    <form method="get" id="search_form" onsubmit="return false;">
-      <input name="query" id="query" />
+
+    <form method="get" id="search_form">
+      <input name="query" id="query" autofocus="autofocus" placeholder="query terms"/>
       <label for="query">Query</label>
       <input type="submit" value="OK" />
     </form>
+
     <button id="reset">Clear</button>
+
     <button id="similaritySort">Cluster by Similarity</button>
     <br/>
+
     <input type="range" id="threshold"/>
     <label for="threshold" id="thresholdLabel"></label> Similarity Threshold
     <br/>
+
     <input type="range" id="similarTiles"/>
     <label for="similarTiles" id="similarTilesLabel"></label> Similar Tiles
     <br/>
-    <input type="checkbox" id="luminance"/><label id="luminanceLabel" for="luminance">Account for luminance</label>
+
+    <input type="checkbox" id="luminance"/>
+    <label id="luminanceLabel" for="luminance">Account for luminance</label>
+
     <div id="queryLog"></div>
-    <!--<div style="overflow:auto; white-space:nowrap;" id="results"></div>-->
+
+    <div id="debug"></div>
+
+    <div id="socket_data"></div>
+
     <div style="" id="results"></div>
 
     <script src="histogram.js"></script>

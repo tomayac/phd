@@ -70,23 +70,20 @@
 
       var searchForm = document.getElementById('search_form');
       searchForm.addEventListener('submit', function(e) {
-        if (e.target.nodeName.toLowerCase() !== 'form') {
-          return;
-        }
+        e.preventDefault();
         var query = document.getElementById('query').value;
         illustrator.search(query);
-        return false;
       }, false);
 
       // reset button
       var resetButton = document.getElementById('reset');
-      resetButton.addEventListener('click', function(e) {
+      resetButton.addEventListener('click', function() {
         illustrator.reset();
       });
 
       // sort by similarity
       var similaritySort = document.getElementById('similaritySort');
-      similaritySort.addEventListener('click', function(e) {
+      similaritySort.addEventListener('click', function() {
         if (illustrator.checkIfAllMediaItems('histogram')) {
           illustrator.sort();
         };
@@ -122,7 +119,7 @@
      */
     search: function(query) {
       if (!query) {
-        return;
+        return false;
       }
       if (illustrator.DEBUG) console.log('search ' + query);
       var queryLogDiv = document.getElementById('queryLog');
