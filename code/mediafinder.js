@@ -1,11 +1,9 @@
 var querystring = require('querystring');
 var request = require('request');
 var jsdom = require('jsdom');
+var pos = require('pos');
 var Step = require('./step.js');
 var Uri = require('./uris.js');
-// jspos, Part of Speech tagging
-var Lexer = require('./jspos/lexer.js');
-var POSTagger = require('./jspos/POSTagger.js');
 
 var GLOBAL_config = {
   DEBUG: true,
@@ -450,11 +448,11 @@ var mediaFinder = {
                     (item.micropost.translation.text) &&
                     (item.micropost.translation.language !== 'en')) {
                   // for non-English texts, use the translation if it exists
-                  words = new Lexer().lex(item.micropost.translation.text);
+                  words = new pos.Lexer().lex(item.micropost.translation.text);
                 } else {
-                  words = new Lexer().lex(item.micropost.clean);
+                  words = new pos.Lexer().lex(item.micropost.clean);
                 }
-                var taggedWords = new POSTagger().tag(words);
+                var taggedWords = new pos.POSTagger().tag(words);
                 var result = [];
                 for (var j = 0, len = taggedWords.length; j < len; j++) {
                   var taggedWord = taggedWords[j];

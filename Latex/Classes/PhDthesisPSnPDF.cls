@@ -116,6 +116,7 @@
 %        \pdftrue
 %\fi
 
+\usepackage[hyphens]{url}
 \ifpdf
 %-->
 %--> Google.com search "hyperref options"

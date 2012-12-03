@@ -13,7 +13,7 @@
 
 For the task of making sense out of social network microposts,
 our contributions are methods to consolidate and rank
-the results of multiple named entity recognition and
+the results of multiple named-entity recognition and
 disambiguation Web services that we have unified in form
 of a~wrapper Web service that (i) takes care of both
 consolidation and ranking, and that
@@ -47,7 +47,7 @@ Similar to the microblogging site Twitter
 with its search
 API\footnote{\url{https://dev.twitter.com/docs/api/1.1/get/search/tweets},
 accessed November 20, 2012},
-Facebook as well offers both a~search function on the website,
+Facebook offers both a~search function on the website,
 and a~search
 API\footnote{\url{https://developers.facebook.com/docs/reference/api/},
 accessed November 20, 2012},
@@ -55,9 +55,12 @@ and so does
 \googleplus\footnote{\url{https://developers.google.com/+/api/},
 accessed November 20, 2012}.
 In order to perform data mining,
-a~statistically significant amount of microposts is necessary
-(this is also known as having access to the \emph{fire hose}).
-However, while Twitter grants developers access to its Streaming
+a~statistically significant amount of microposts is necessary.
+Having access to \emph{all} microposts of a~service is referred to as
+having access to the \emph{fire hose}.
+Typically, developers are only granted access to a~smaller random 
+sample of microposts (colloquially referred to as \emph{garden hose} access).
+While Twitter grants all developers \emph{garden hose} access to its Streaming
 APIs\footnote{\url{https://dev.twitter.com/docs/streaming-apis},
 accessed November 20, 2012},
 for Facebook and \googleplus there are no such documented options.
@@ -71,7 +74,7 @@ NLP\footnote{\url{http://bit.ly/facebookswarmnlp},
 accessed November 20, 2012}
 and Twitter Swarm
 NLP\footnote{\url{http://bit.ly/twitterswarmnlp},
-accessed November 20, 2012}
+accessed November 20, 2012},
 for a~popular Web browser.
 These extensions inject JavaScript code into Facebook and
 Twitter to perform data analysis on the encountered set of
@@ -84,7 +87,7 @@ the extension installation process
 for part of their data being shared in an anonymized way.
 While this is far inferior and not comparable at all
 with direct \emph{fire hose} access,
-yet given a~critical amount of participants
+given a~critical amount of participants,
 it still provides access to a~random sample of microposts
 from different social networks.
 
@@ -93,31 +96,31 @@ from different social networks.
 The extensions first retrieve all status updates
 from the contacts that are displayed
 on the current user's timeline.
-Second, the extensions perform named entity extraction (NEE)
+Second, the extensions perform named-entity extraction (NEE)
 and disambiguation via Natural Language Processing (NLP)
 using a~remote NLP API on each of the microposts
 in order to add semantic meaning to them.
 The extracted named entities are then displayed
-below each micropost, as illustrated in \autoref{fig:facebook}.
+along each micropost, as illustrated in \autoref{fig:facebook}.
 Finally the extracted named entities
-are sent to a~central Web analytics~\cite{kaushik2009analytics}
-framework to compute basic or advanced trends, for example,
+are sent to a~central Web analytics framework~\cite{kaushik2009analytics}
+to compute basic or advanced trends, for example,
 by ranking the most discussed-about named entities per day,
 or by pivoting named entities by Web analytics data,
 like users' geographic locations.
 
 \begin{figure}[htb!]
   \centering
-  \includegraphics[width=0.45\textwidth]{facebook-swarm-nlp.png}
+  \includegraphics[width=0.75\textwidth]{facebook-swarm-nlp.png}
   \caption[Facebook Swarm NLP browser extension]
     {Facebook Swarm NLP browser extension.
     Extracted named entities have a~pale yellow background.}     
   \label{fig:facebook}
 \end{figure}
 
-\subsection{A~Wrapper API for Named Entity Disambiguation}
+\subsection{A~Wrapper API for Named-Entity Disambiguation}
 
-As mentioned before, in order to perform named entity extraction
+As mentioned before, in order to perform named-entity extraction
 and disambiguation, we rely on a~wrapper API
 that calls existing third-party NLP APIs in the background
 and that delivers the combined results of these APIs
@@ -127,15 +130,16 @@ It is  desirable
 to the joint results, and
 (ii)~to track the provenance of the joint results
 in order to understand how they were formed.
-We will show at the concrete example of the wrapper NLP API
-used for our browser extensions how these two constraints
-can be fulfilled in a~generalizable way.
+We will show how these two constraints
+can be fulfilled in a~generalizable way
+at the concrete example of the wrapper NLP API
+used for our browser extensions.
 
 \section{Related Work}\label{sec:related}
 
 We regard related work from different angles.
 First, we look into different approaches
-for named entity disambiguation,
+for named-entity disambiguation,
 which is relevant for adding meaning to microposts.
 Second, we look into efforts in mashing up Web services,
 which is important for tracking data provenance
@@ -148,13 +152,13 @@ Choudhury \emph{et al.}\ describe a~framework for
 semantic enrichment, ranking, and integration
 of Web video tags using Semantic Web technologies.
 This task is more related to microposts
-as it seems like at a~first glance:
+than it seems at first sight:
 video tags can consist of more than one word,
 and microposts (especially on Twitter) oftentimes consist
 of just a~few words.
 In order to enrich the typically sparse
 user-generated tag space,
-meta data like the recording time and location,
+meta data like the recording time and location
 or the video title and video description are used,
 but also social features such as the playlists
 where a~video appears in and related videos.
@@ -163,17 +167,19 @@ and in a~final step interlinked to DBpedia~\cite{auer2007dbpedia}
 concepts for greater integration with other datasets.
 The authors disambiguate the tags based on
 WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
-synsets if possible, \emph{i.e.},
+synsets (groups of data elements that are considered
+semantically equivalent for the purposes of information retrieval)
+if possible, \emph{i.e.},
 if there is only one matching synset in WordNet,
 the corresponding WordNet URI in DBpedia is selected.
 If there are more than one matching synsets,
-the tags and their context tags similarity is computed
-and thereby tried to decide on an already existing tag URI.
+the tags' and their context tags' similarity is computed
+to decide on an already existing tag URI.
 
-\subsection{Entity Disambiguation With Semantic Coherence and News Trends}
+\subsection{Entity Disambiguation with Semantic Coherence and News Trends}
 
 In~\cite{fernandez2007identityrank},
-Fernández \emph{et al.}\ examine named entity disambiguation
+Fernández \emph{et al.}\ examine named-entity disambiguation
 in the context of news annotation.
 Their approach consists of three steps:
 finding the candidate instances in the NEWS
@@ -198,13 +204,13 @@ Nguyen \emph{et al.}\ show how disambiguation dictionaries
 can be used to disambiguate entities
 using Wikipedia disambiguation pages.
 For a~set of entity candidates, all disambiguations are ranked
-using TF-IDF (or cosine similarity).
+using tf--idf (or cosine similarity)~\cite{manning2008ir}.
 The approach is a~hybrid and incremental process
 that utilizes previously identified named entities
 and related terms co-occurring with ambiguous names
 in a~text for entity disambiguation.
 
-\subsection{Disambiguation With Corpuses and Probability}
+\subsection{Disambiguation with Corpuses and Probability}
 
 Cucerzan shows in~\cite{cucerzan2007largescale}
 the use of a~corpus like Wikipedia for entity disambiguation.
@@ -236,12 +242,12 @@ These entities are then ranked and returned to the user.
 \subsection{Combining Different Web Services and Provenance}
 
 In~\cite{groth2009mashups}, Groth \emph{et al.}\
-describe how through tools and technologies such as
+describe how so-called mash-ups can be created in a~dynamic,
+just-in-time way, combining data from different data sources
+through tools and technologies such as
 Yahoo! Pipes\footnote{\url{http://pipes.yahoo.com/pipes/},
 accessed November 20, 2012},
-RSS~\cite{cadenhead2006rss}, and APIs,
-so-called mash-ups can be created in a~dynamic, just-in-time way,
-combining data from different data sources.
+RSS~\cite{cadenhead2006rss}, and APIs.
 The authors are driven by the motivation to allow for trust
 and confidence in mash-ups, and therefore
 consider it critical to be able to analyze the origin
@@ -249,7 +255,7 @@ of combined results.
 They suggest an approach based on OWL~\cite{mcguinness2004owl}
 and XML~\cite{bray2008xml},
 with a~focus on process documentation.
-However, different from us, where the goal is to transparently
+However, different from our work, where the goal is to transparently
 add provenance data at API invocation time,
 their focus is more on overall process documentation
 in the context of a~mash-up application.
@@ -257,7 +263,7 @@ in the context of a~mash-up application.
 The focus of Carroll \emph{et al.}\ in~\cite{carroll2005namedgraphs}
 is on the provenance of triples in the Semantic Web world, namely,
 for making statements about triples in graphs.
-Therefore, the authors introduce the concept of named graphs,
+Therefore, the authors introduce the concept of Named Graphs,
 an extension to RDF~\cite{klyne2004rdf}.
 In contrast to our work, Carroll \emph{et al.}\
 focus purely on using triples to make statements about triples
@@ -265,12 +271,16 @@ focus purely on using triples to make statements about triples
 whereas our approach uses RDF to make statements
 about potentially any API result.
  
+Web service specifications in the context of the 
+first-generation standards represented by WSDL~\cite{christensen2001wsdl},
+SOAP~\cite{gudgin2007soap}, and UDDI~\cite{sabbouh2001uddi}
+are occasionally referred to collectively as \emph{WS--*}.
 In the \emph{WS--*} world, BPEL4WS, described by
 Curbera \emph{et al.}\ in~\cite{curbera2003bpel4ws}
 provides a~formal language for the specification of
 business processes and business interaction protocols.
-This allows for the combination of several APIs, however,
-it does not credit back concrete outputs of a~combined API
+This allows for the combination of several APIs.
+However, it does not credit back concrete outputs of a~combined API
 to the underlying APIs.
 
 \section{Structuring Unstructured Textual Data} 
@@ -301,7 +311,7 @@ defines \emph{Natural Language Processing} as
 \textit{``the branch of information science that deals with
 natural language information''}.
 From the many NLP toolkits available,
-in the following, we list some NLP Web services
+hereafter, we list some NLP Web services
 that link to datasets in the
 Linking Open Data
 cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}
@@ -316,8 +326,8 @@ Web service automatically creates rich semantic metadata
 for textual documents.
 Using Natural Language Processing (NLP),
 machine learning and other methods, OpenCalais analyzes documents
-and finds the entities within it and also returns the facts and
-events hidden within a~document.
+and finds the entities within and also returns the facts and
+events hidden within them.
 OpenCalais is the only of the examined Web services
 that provides details on occurrences in concrete sections
 of the submitted coherent text.
@@ -357,7 +367,7 @@ for said links.
 
 \subsubsection{AlchemyAPI}
 
-AlchemyAPI~\footnote{\url{http://www.alchemyapi.com/api/entity/},
+AlchemyAPI\footnote{\url{http://www.alchemyapi.com/api/entity/},
 accessed November 20, 2012}
 is capable of identifying people, companies, organizations,
 cities, geographic features, and other typed entities within
@@ -365,20 +375,31 @@ textual documents.
 The service employs statistical algorithms and NLP
 to extract semantic richness embedded within text.
 AlchemyAPI differentiates between entity extraction and
-concept tagging, however, in practice the difference
-being subtle, we treat entities and concepts the same.
+concept tagging.
+AlchemyAPI's concept tagging API is capable of abstraction, \emph{i.e.},
+understanding how concepts relate and tag them accordingly
+(``Hillary Clinton'', ``Michelle Obama'', and ``Laura Bush" are all
+tagged as ``First Ladies of the United States'').
+In practice, the difference between named-entity extraction
+and concept tagging is subtle.
+In consequence, we treat entities and concepts the same.
 Overall, AlchemyAPI results are very accurate
-and in the majority of cases of excellent Linked Data quality,
-as there are links to well-known members of the LOD cloud,
-among others to DBpedia~\cite{auer2007dbpedia},
+and in the majority of cases excellently interlinked
+to well-known members of the LOD cloud,
+among others with DBpedia~\cite{auer2007dbpedia},
 OpenCyc~\cite{lenat1995cyc},
 and Freebase~\cite{markoff2007freebase}.
 AlchemyAPI also provides links to other data sources, however,
 sometimes the returned URLs result in \texttt{404 Not found}.
 One example that we came across during our tests was the URL
 \url{http://umbel.org/umbel/ne/wikipedia/George\_W.\_Bush.rdf}, which should represent the concept of the person George W. Bush.
-AlchemyAPI also oftentimes returns thematically very related,
-but for a~concrete text not directly relevant entities.
+The URL does serve as a~Semantic Web identifier, however, 
+harms the third Linked Data principle,
+as outlined in \autoref{sec:linked-data-principles}.
+AlchemyAPI also oftentimes returns thematically closely related,
+but for a~concrete text not directly relevant entities
+beyond the abstract concepts from its concept tagging service,
+for example, in a~text about the CEO of a~given company, a~CEO of one of its competitors, but that is not directly mentioned in the text.
 
 \subsubsection{Zemanta}
 
@@ -386,7 +407,7 @@ Zemanta\footnote{\url{http://developer.zemanta.com/docs/},
 accessed November 20, 2012}
 allows developers to query the service for contextual metadata
 about a~given text.
-There are currently four main components returned:
+The returned components currently span four categories:
 articles, keywords, photos, in-text links, and
 optional component categories.
 The service provides high quality entities that are linked
@@ -404,7 +425,7 @@ DBpedia Spotlight~\cite{mendes2011dbpediaspotlight}
 is a~tool for annotating mentions of DBpedia resources in text,
 providing a~solution for linking unstructured information sources
 to the Linked Open Data cloud through DBpedia.
-DBpedia Spotlight performs named entity extraction,
+DBpedia Spotlight performs named-entity extraction,
 including entity detection and disambiguation
 with adjustable precision and recall.
 DBpedia Spotlight allows users to configure the annotations
@@ -432,20 +453,27 @@ and subsequently translates the micropost to English.
 
 \subsection{Part-of-Speech Tagging}
 Our processing chain supports part-of-speech (POS) tagging
-based on an adapted Brill POS tagger~\cite{brill1992pos}.
+based on a~Brill POS tagger~\cite{brill1992pos} adapted for JavaScript.
+Brill taggers work by assigning tags to each word and then changing them
+using a set of predefined rules.
+In an initial run, if a~word is known, the tagger
+first assigns the most frequent tag,
+or, if a~word is unknown, it naively assigns the tag ``noun'' to it.
+By applying over and over the processing rules and
+changing the incorrect tags, a~sufficiently high accuracy is achieved.
 In the current processing chain, POS tagging does not yet
 play an active role,
 however, we aim for leveraging the additional data
 for better micropost analysis in the future.
 
-\section{Consolidating Named Entity Disambiguation Results} 
+\section{Consolidating Named-Entity Disambiguation Results} 
 \label{sec:consolidate}
 
 In this section, we motivate the use of multiple
-named entity disambiguation Web services in \emph{parallel}
+named-entity disambiguation Web services in \emph{parallel}
 with the objective of obtaining named entity candidates
 for a~textual document such as a~micropost.
-The task of evaluating and aligning named entity extraction and
+The task of evaluating and aligning named-entity extraction and
 disambiguation APIs and their typed output
 has been formally addressed by Rizzo \emph{et al.}\
 in the context of the NERD
@@ -456,7 +484,7 @@ which we motivate in the following.
 \subsection{Identity Links on the Semantic Web}
 \label{sec:sameasorg}
 
-From the considered services, OpenCalais returns data in its
+From the considered services, only OpenCalais returns data in its
 own namespace (\url{http://d.opencalais.com/*}), which is
 weakly, however, not in all cases,
 interlinked with other datasets in the LOD cloud.
@@ -475,14 +503,18 @@ could be used.
 In practice, however, while many resources in the Linked Data
 world are marked as equivalent to each other,
 the quality of such equivalence links is not always excellent.
-An example of a~good equivalence link is shown below.
+An example of a~good equivalence link is shown in \autoref{code:sameas}.
 
-\texttt{<http://dbpedia.org/resource/Barack\_Obama>}\\
-\indent \texttt{<owl:sameAs>}\\
-\indent \texttt{<http://rdf.freebase.com/rdf/en.barack\_obama>}
+\begin{lstlisting}[caption={Example of a~good equivalence link},
+  label={code:sameas},
+  escapechar=§]
+<http://dbpedia.org/resource/Barack_Obama> §\linewrap§
+  <http://www.w3.org/2002/07/owl#sameAs> §\linewrap§
+  <http://rdf.freebase.com/rdf/en.barack_obama> .
+\end{lstlisting}
 
 \noindent As Halpin \emph{et al.}\ show
-in astudy~\cite{halpin2010owlsameas}, the problem
+in a~study~\cite{halpin2010owlsameas}, the problem
 with \texttt{owl:sameAs} is that people tend to use it
 in different ways with different intentions.
 In~\cite{halpin2010owlsameas},
@@ -497,29 +529,18 @@ when the intention of the link creator of the particular
 
 \subsection{Linked Data Principles Applied}
 
-As we recall from \autoref{sec:linked-data-principles}, 
-Tim Berners-Lee has introduced Linked Data in a~W3C
-Design Issue~\cite{bernerslee2006linkeddata},
-where he defines the four rules for Linked~Data:
-
-\begin{enumerate}
-  \item Use URIs as names for things.
-  \item Use HTTP URIs so that people can look up those names.
-  \item When someone looks up a~URI, provide useful information, 
-        using the standards (RDF*, SPARQL).
-  \item Include links to other URIs, so that they can discover
-        more things.
-\end{enumerate}
-
+We recall the Linked Data principles, as outlined
+in \autoref{sec:linked-data-principles}.
 In order to represent extracted named entities from
 social network microposts in an unambiguous way,
-we apply the first and the second Linked Data principle
-by representing named entities with HTTP URIs.
+we apply the Linked Data principles
+by representing named entities in microposts with HTTP URIs
+that can be dereferenced for retrieving the corresponding information.
 This is taken care of by the third-party NLP APIs
 that we use for our experiments, namely OpenCalais,
 Zemanta, DBpedia Spotlight, and AlchemyAPI.
 These APIs take a~textual document as an input,
-perform named entity extraction and disambiguation on it,
+perform named-entity extraction and disambiguation on it,
 and finally link the detected named entities back
 into the LOD cloud.
 We use these APIs in parallel, and by combining their results,
@@ -546,13 +567,13 @@ the desired typing information can be retrieved from there
 in a~true Linked Data manner if need be.
 
 We illustrate the approach with an example:
-\textit{``Google Inc. is an American multinational corporation
+\textit{``Google Inc.\ is an American multinational corporation
 which provides Internet-related products and services,
 including Internet search, cloud computing, software and 
 advertising technologies.''}
 If we use the just mentioned text
 as an input for the NLP wrapper API,
-among others, we hope to retrieve the named entity for the
+among others, we expect to retrieve the named entity for the
 company Google, represented by, for example, the URL
 \url{http://dbpedia.org/resource/Google} as an output.
 
@@ -561,12 +582,12 @@ of just Zemanta in isolation,
 \autoref{code:googlealchemyapi} shows the output
 of just AlchemyAPI in isolation,
 and finally, \autoref{code:googlecombined} shows the consolidated
-output of the two named entity recognition APIs together. 
+output of the two named-entity recognition APIs together. 
 In this example, the entity names differ (``Google Inc.''
 vs. ``Google''). However, going down the list of URLs for
 each entity from the two services, the consolidation algorithm
 matches via the URL \url{http://dbpedia.org/resource/Google}.
-Given the different two entity names (``Google Inc.'' vs.
+Given the different two entity names (``Google Inc.'' vs.\
 ``Google''), the consolidated name is then an array of all
 detected names.
 Each service already includes a~relevance score ranging from
@@ -624,8 +645,8 @@ Finally, we repeat the process for all other services.
 \newpage
 
 \begin{lstlisting}[caption={
-   [Consolidated output of two named entity recognition APIs]
-   {Consolidated output of two named entity recognition APIs,
+   [Consolidated output of two named-entity recognition APIs]
+   {Consolidated output of two named-entity recognition APIs,
     namely Zemanta and AlchemyAPI.}
   },
   label={code:googlecombined}]
@@ -711,7 +732,7 @@ Server\footnote{\texttt{http://wifo5-03.informatik.uni-mannheim.de/bizer/d2r-ser
 accessed November 20, 2012}.
 
 While our wrapper API supports two output formats
-(\texttt{application/json} and \texttt{text/turtle}),
+(\texttt{application/json} and\linebreak \texttt{text/turtle}),
 we have added provenance information exclusively to the
 \texttt{text/turtle} variant.
 In order to represent the extracted named entities in a~micropost,
@@ -817,7 +838,7 @@ what representation the resource returns in future.
   label={code:provenance}]
 :G = {
   <https://www.facebook.com/Tomayac/posts/10150177486072286> ctag:tagged [
-     a~ctag:Tag ;
+     a ctag:Tag ;
      ctag:label "BibTeX" ;
      ctag:means <http://dbpedia.org/resource/BibTeX> ;
   ] .
@@ -825,15 +846,15 @@ what representation the resource returns in future.
 
 
 :G
-  a~prv:DataItem ;
-  a~rdfg:Graph ;
+  a prv:DataItem ;
+  a rdfg:Graph ;
   prv:createdBy [
-    a~prv:DataCreation ;
+    a prv:DataCreation ;
     prv:performedAt "2011-05-20T15:06:30Z"^^xsd:dateTime ;
     prv:performedBy <http://tomayac.no.de/entity-extraction/combined> ;
     prv:usedData [
       prv:retrievedBy [
-        a~prv:DataAcess ;
+        a prv:DataAcess ;
         prv:performedAt "2011-05-20T15:06:30Z"^^xsd:dateTime ;
         prv:performedBy <http://tomayac.no.de/entity-extraction/combined> ;
         prv:accessedService <http://spotlight.dbpedia.org/rest/annotate> ;
@@ -841,7 +862,7 @@ what representation the resource returns in future.
           <http://spotlight.dbpedia.org/rest/annotate?text=Tom%20has%20...
               blues&confidence=0.4&support=20> ;
         prvTypes:exchangedHTTPMessage [
-          a~http:Request ;
+          a http:Request ;
           http:httpVersion "1.1" ;
           http:methodName "GET" ;
           http:mthd <http://www.w3.org/2008/http-methods#GET> ;
@@ -850,13 +871,13 @@ what representation the resource returns in future.
     ] ;
     prv:usedData [
       prv:retrievedBy [
-        a~prv:DataAcess ;
+        a prv:DataAcess ;
         prv:performedAt "2011-05-20T15:06:41Z"^^xsd:dateTime ;
         prv:performedBy <http://tomayac.no.de/entity-extraction/combined> ;
         prv:accessedService <http://api.zemanta.com/services/rest/0.0/> ;
         prv:accessedResource <http://api.zemanta.com/services/rest/0.0/> ;
         prvTypes:exchangedHTTPMessage [
-          a~http:Request ;
+          a http:Request ;
           http:httpVersion "1.1" ;
           http:methodName "POST" ;
           http:mthd <http://www.w3.org/2008/http-methods#POST> ;
@@ -867,7 +888,7 @@ what representation the resource returns in future.
             ]   
           )
           http:body [
-            a~cnt:ContentAsText ;
+            a cnt:ContentAsText ;
             cnt:characterEncoding "UTF-8" ;
             cnt:chars """method=zemanta.suggest_markup
             &api_key=Your_API_Key
