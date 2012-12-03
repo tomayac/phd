@@ -37,7 +37,7 @@ to be a~pool of human knowledge,
 which would allow collaborators
 in remote sites to share their ideas
 and all aspects of a~common project''}.
-Since the early days at CERN,
+Since its earliest days at CERN,
 the European Organization for Nuclear Research
 in Geneva, Switzerland,
 the Web has scaled to a~truly global system
@@ -163,9 +163,9 @@ the meaning of the columns in
 
 \begin{small_itemize}
   \item[] P = matches \textbf{P}layed
-  \item[] W = \textbf{W}on 
-  \item[] D = \textbf{D}rew
-  \item[] L = \textbf{L}oss
+  \item[] W = \textbf{W}ins 
+  \item[] D = \textbf{D}raws
+  \item[] L = \textbf{L}osses
   \item[] F = Goals \textbf{F}or
   \item[] A = Goals \textbf{A}gainst
   \item[] Pts = \textbf{P}oin\textbf{ts}
@@ -206,7 +206,7 @@ If data providers were to use unique column identifiers like
 Unique Resource Identifiers (URIs),
 the problem would be easier.
 In the concrete example for English and German,
-rather than using ``D'' (\emph{Drew})
+rather than using ``D'' (\emph{Draws})
 and ``u.'' (\emph{unentschieden}),
 which both mean that the result was a~tie,
 the machine-readable column name could instead be identified by
@@ -723,8 +723,9 @@ with Microformats~\cite{celik2006microformats}.
 Where Microformats specify both a~syntax
 for embedding structured data into HTML
 \emph{and} a~vocabulary of specific terms for each Microformat,
-RDFa in contrast \emph{only} specifies a~syntax.
-RDFa relies on independent external specifications of vocabularies.
+RDFa in contrast \emph{only} specifies a~syntax,
+since the vocabularies it relies on
+are externally and independently specified.
 The essence of RDFa is a~set of attributes
 that contain metadata about things,
 and that can be embedded in mark-up languages,
@@ -844,7 +845,8 @@ While this sounds like a~very powerful idea,
 in practice SPARQL endpoints
 like the DBpedia SPARQL
 endpoint\footnote{\url{http://dbpedia.org/sparql}}
-typically only allow for querying a~local graph.
+typically only allow for querying a~local graph
+for performance reasons.
 
 \subsection{Different SPARQL Query Variations}
 
@@ -1007,7 +1009,7 @@ The latest LOD cloud diagram as of September 2011 can be seen in \autoref{fig:lo
   \caption[The Linked Open Data cloud as of September 2010.]
   {The Linked Open Data cloud as of September 2011, by Richard
    Cyganiak and Anja Jentzsch.
-   Source: \url{http://lod-cloud.net/}.}    
+   Source: \url{http://lod-cloud.net/}. \todo{Check final orientation}}    
   \label{fig:lod-cloud}
   \end{center}  
 \end{figure}
