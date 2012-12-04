@@ -420,8 +420,8 @@ led to better results.
 
 \section{Photo Deduplication}
 
-We determine the popularity of media items shared across
-social networks.
+We determine the popularity of media items
+shared across social networks.
 This task involves the deduplication of extracted media items.
 In the previous section, we have presented an algorithm
 for on-the-fly shot boundary detection for video media items.
@@ -434,13 +434,77 @@ First, we look at related work for the task of photo deduplication.
 Work on ordinal measures that serve as a~general tool for
 image matching was performed by Bhat \emph{et al.}\
 in~\cite{bhat1998imagecorrespondence}.
-Chum \emph{et al.}\ have proposed a~near-duplicate image detection method using min-Hash and
-term frequency--inverse document frequency (tf--idf)
+Chum \emph{et al.}\ have proposed a~near-duplicate image detection method
+using min-Hash and term frequency--inverse document frequency (tf--idf)
 weighting~\cite{chum2008nearduplicate}.
-The proposed method uses a~visual vocabulary of vector quantized local feature descriptors based on
+The proposed method uses a~visual vocabulary of
+vector quantized local feature descriptors based on
 Scale Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
 A~method for both photos and video~\cite{yang2009nearduplicate}
 has been proposed by Yang \emph{et al.}
+
+\subsection{Motivation}
+
+In the following, we list and discuss reasons for duplicate
+or near-duplicate content to arise in the first place.
+
+\subsection{Duplicate Content}
+
+Duplicate content arises whenever people either share exactly the same,
+or an exact copy of a~given media item.
+An example of the latter can be one user uploading the same media item
+to the two different social networks \googleplus and Facebook,
+and an example of the prior can be two users sharing the same
+YouTube video independently from each other, or re-sharing each other's content.
+
+\subsubsection{Near-Duplicate Content}
+
+Near-duplicate content arises in a~number of situations
+that we will illustrate in the following.
+
+\paragraph{Different Viewing Angle}
+
+When two people attend the same event
+and produce media items at roughly the same time
+covering the same scenes,
+their media items will be similar
+and only differ in the viewing angle. 
+\autoref{fig:viewing-angle} shows a~concrete example.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Viewing angle 1]{
+    \includegraphics[width=0.3\textwidth]{stage1.jpg}
+  }                
+  \subfloat[Viewing angle 2]{
+    \includegraphics[width=0.3\textwidth]{stage2.jpg}
+  }
+  \caption{Slightly different viewing angles of a~concert stage.}
+  \label{fig:viewing-angle}  
+\end{figure}
+
+\paragraph{Logo, Watermark, or Caption Insertion}
+
+Oftentimes organizations or individuals insert
+logos, watermarks, or captions into media items
+to highlight their origin and things being said,
+or to claim ownership of a~media item.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Blank]{
+    \includegraphics[width=0.25\textwidth]{speaker1.jpg}
+  }                
+  \subfloat[Caption]{
+    \includegraphics[width=0.25\textwidth]{speaker2.jpg}
+  }
+  \subfloat[Logo and lower third]{
+    \includegraphics[width=0.25\textwidth]{speaker3.jpg}
+  }
+  \caption{Caption, logo, and lower third insertion for a~speaker.}
+  \label{fig:logo}  
+\end{figure}
+
 
 \subsection{Experiments}
 

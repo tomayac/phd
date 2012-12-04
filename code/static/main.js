@@ -3,7 +3,7 @@
     DEBUG: true,
     MEDIA_SERVER: 'http://localhost:8001/search/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
-    THRESHOLD: 5,
+    THRESHOLD: 10,
     ACCOUNT_FOR_LUMINANCE: true,
     COLS: 5,
     ROWS: 5,
@@ -56,7 +56,7 @@
       var similarTiles = document.getElementById('similarTiles');
       similarTiles.min = 1;
       similarTiles.max = illustrator.ROWS * illustrator.COLS;
-      similarTiles.value = Math.ceil(illustrator.ROWS * illustrator.COLS * 0.8);
+      similarTiles.value = Math.floor(illustrator.ROWS * illustrator.COLS * 0.9);
       illustrator.SIMILAR_TILES = similarTiles.value;
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
