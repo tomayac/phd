@@ -592,8 +592,13 @@ Given the different two entity names (``Google Inc.'' vs.\
 detected names.
 Each service already includes a~relevance score ranging from
 0 (irrelevant) to 1 (relevant).
-The consolidated relevance is the
-average relevance of both services.
+The consolidated relevance are the
+averaged relevance scores of both services.
+While there may be different definitions of relevance
+applied by each service, however,
+those differences not being disclosed,
+the arithmetic mean is the most practicable way to deal with this,
+especially as all services use relevance scores between 0 and 1.
 We maintain provenance metadata for each URI
 on the JSON representation.
 Finally, we repeat the process for all other services.
@@ -835,7 +840,7 @@ what representation the resource returns in future.
 \begin{lstlisting}[caption={Shortened overview of the provenance
        RDF in Turtle syntax for an automatically annotated
        micropost.},
-  label={code:provenance}]
+  label={code:provenance},escapechar=§]
 :G = {
   <https://www.facebook.com/Tomayac/posts/10150177486072286> ctag:tagged [
      a ctag:Tag ;
@@ -859,7 +864,7 @@ what representation the resource returns in future.
         prv:performedBy <http://tomayac.no.de/entity-extraction/combined> ;
         prv:accessedService <http://spotlight.dbpedia.org/rest/annotate> ;
         prv:accessedResource
-          <http://spotlight.dbpedia.org/rest/annotate?text=Tom%20has%20...
+          <http://spotlight.dbpedia.org/rest/annotate?text=Tom%20has%20... §\linewrap§
               blues&confidence=0.4&support=20> ;
         prvTypes:exchangedHTTPMessage [
           a http:Request ;
@@ -890,10 +895,10 @@ what representation the resource returns in future.
           http:body [
             a cnt:ContentAsText ;
             cnt:characterEncoding "UTF-8" ;
-            cnt:chars """method=zemanta.suggest_markup
-            &api_key=Your_API_Key
-            &text=Tom%20has%20...blues
-            &format=json
+            cnt:chars """method=zemanta.suggest_markup §\linewrap§
+            &api_key=Your_API_Key §\linewrap§
+            &text=Tom%20has%20...blues §\linewrap§
+            &format=json §\linewrap§
             &return_rdf_links=1""" ;
           ] ;
         ] ;
