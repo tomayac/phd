@@ -12,6 +12,7 @@
     distances: {},
     origins: {},
     tileHistograms: {},
+    faces: {},
     socket: null,
     // checks if all media items are of the given status
     checkIfAllMediaItems: function(status) {
@@ -141,6 +142,7 @@
        illustrator.tileHistograms = {};
        illustrator.distances = {};
        illustrator.origins = {};
+       illustrator.faces = {};
      },
     /**
      * Searches for a term on a plethora of social media platforms
@@ -203,6 +205,7 @@
             } else {
               illustrator.origins[query].push(source);
             }
+            illustrator.detectFaces(image);
             illustrator.histogram(image);
           };
 
@@ -213,6 +216,15 @@
           }
         });
       }
+    },
+    detectFaces: function(img) {
+      var comp = ccv.detect_objects({
+        canvas: ccv.grayscale(ccv.pre(img)),
+        cascade: cascade,
+        interval: 5,
+        min_neighbors: 1
+      });
+      illustrator.faces[img.src] = comp;
     },
     histogram: function(img) {
       // draw the image on the canvas
@@ -355,6 +367,12 @@
       });
       resultsDiv.innerHTML = '';
       resultsDiv.innerHTML = html.join('');
+      for (var key in illustrator.faces) {
+        if (illustrator.faces[key].length > 0) {
+          var image = document.querySelector('img[src="' + key + '"]');
+          image.style.border = 'solid red 2px';
+        }
+      }
     }
   };
 
