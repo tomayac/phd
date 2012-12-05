@@ -580,6 +580,7 @@ both cropped and bulged.
 
 Especially with the popularity of Instagram, photo filters
 are a~considerable reason for near-duplicate media content.
+\autoref{fig:photo-filter} shows a~typical example.
 
 \begin{figure}[h!]
   \centering
@@ -593,9 +594,33 @@ are a~considerable reason for near-duplicate media content.
   \label{fig:photo-filter}  
 \end{figure}
 
-
-\subsection{Near-Duplicate Clustering Algorithm}
+\subsection{Near-Duplicate Photo Clustering Algorithm}
 \label{sec:near-duplicate-clustering-algorithm}
+
+In this subsection, we detail our near-duplicate photo clustering algorithm
+and its design goals.
+We start with a~description of its face detection component.
+
+\subsubsection{Face Detection}
+
+Face detection is a~computer vision technology
+that determines the regions of faces in images.
+Rotation invariant face detection aims to detect faces with arbitrary
+rotation angles and is crucial as the first step in automatic face detection
+for general applications, as face images are seldom upright and frontal.
+Face detection is a~subclass of the broader class of object detection.
+The Viola--Jones object detection framework proposed in 2001
+by Paul Viola and Michael
+Jones~\cite{viola2001objectdetection,viola2004robust}
+provides competitive object detection rates in real-time.
+It was motivated primarily by the problem of face detection.
+We use a~face detection algorithm that further improves Viola--Jones,
+based on work by Huang \emph{et al.}~\cite{huang2007facedetection}
+and Abramson \emph{et al.}~\cite{abramson2007yef},
+in a~ JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
+This algorithm is fast enough to be applied on hundreds of images
+in less than a~second overall processing time on a~standard laptop
+(mid 2010 MacBook Pro).
 
 \subsection{Experiments}
 
