@@ -9,6 +9,8 @@
 *.lot
 *.nlo
 *.toc
+*.ilg
+*.nls
 *.synctex.gz
 .texpadtmp
 .git

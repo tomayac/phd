@@ -450,7 +450,8 @@ or near-duplicate content to arise in the first place.
 
 \subsection{Duplicate Content}
 
-Duplicate content arises whenever people either share exactly the same,
+Duplicate content in the context of social networks
+arises whenever people either share exactly the same,
 or an exact copy of a~given media item.
 An example of the latter can be one user uploading the same media item
 to the two different social networks \googleplus and Facebook,
@@ -459,8 +460,13 @@ YouTube video independently from each other, or re-sharing each other's content.
 
 \subsubsection{Near-Duplicate Content}
 
-Near-duplicate content arises in a~number of situations
+Near-duplicate content in the context of social networks
+arises in a~number of situations
 that we will illustrate in the following.
+All photos are real examples of media items shared on social networks
+that were clustered correctly as near-duplicates
+by our clustering algorithm, which we will detail in
+\autoref{sec:near-duplicate-clustering-algorithm}.
 
 \paragraph{Different Viewing Angle}
 
@@ -474,37 +480,122 @@ and only differ in the viewing angle.
 \begin{figure}[h!]
   \centering
   \subfloat[Viewing angle 1]{
-    \includegraphics[width=0.3\textwidth]{stage1.jpg}
+    \includegraphics[width=0.25\textwidth]{stage1.jpg}
   }                
   \subfloat[Viewing angle 2]{
-    \includegraphics[width=0.3\textwidth]{stage2.jpg}
+    \includegraphics[width=0.25\textwidth]{stage2.jpg}
   }
   \caption{Slightly different viewing angles of a~concert stage.}
   \label{fig:viewing-angle}  
 \end{figure}
 
-\paragraph{Logo, Watermark, or Caption Insertion}
+\paragraph{Logo, Watermark, Lower Third, or Caption Insertion}
 
 Oftentimes organizations or individuals insert
 logos, watermarks, or captions into media items
-to highlight their origin and things being said,
+to highlight their origin or convey related information,
 or to claim ownership of a~media item.
+An example of logo and lower third insertion
+can be seen in \autoref{fig:logo}.
 
 \begin{figure}[h!]
   \centering
   \subfloat[Blank]{
-    \includegraphics[width=0.25\textwidth]{speaker1.jpg}
+    \includegraphics[width=0.2\textwidth]{speaker1.jpg}
   }                
   \subfloat[Caption]{
-    \includegraphics[width=0.25\textwidth]{speaker2.jpg}
+    \includegraphics[width=0.2\textwidth]{speaker2.jpg}
   }
-  \subfloat[Logo and lower third]{
-    \includegraphics[width=0.25\textwidth]{speaker3.jpg}
+  \subfloat[Logo, lower third]{
+    \includegraphics[width=0.2\textwidth]{speaker3.jpg}
   }
   \caption{Caption, logo, and lower third insertion for a~speaker.}
   \label{fig:logo}  
 \end{figure}
 
+\paragraph{Cropping}
+
+Cropping refers to the removal of the outer parts of an image
+to improve framing, accentuate subject matter or change aspect ratio.
+Cropping either happens manually via an image editing application,
+or, more often, the social networks themselves crop images
+to better fit in the timeline view of users.
+Typically images are automatically cropped to have a~square aspect ratio,
+as can be seen in the example in \autoref{fig:cropping}.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Original]{
+    \includegraphics[width=0.2\textwidth]{kid1.jpg}
+  }                
+  \subfloat[Cropped]{
+    \includegraphics[width=0.137\textwidth]{kid2.jpg}
+  }
+  \caption{Original and cropped version of an image.}
+  \label{fig:cropping}  
+\end{figure}
+
+\paragraph{Camera Shots}
+
+We have shown camera shot detection earlier in this chapter.
+Different frames stemming from the same camera shot
+can occur on social networks when they try to auto-select
+a~well-identifying poster frame with different heuristics,
+typically resulting in different frames for different social networks.
+\autoref{fig:camera-shot} shows an example of this phenomenon.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Frame 1]{
+    \includegraphics[width=0.2\textwidth]{camera1.jpg}
+  }                
+  \subfloat[Frame 2]{
+    \includegraphics[width=0.2\textwidth]{camera2.jpg}
+  }
+  \caption{Two different frames stemming from the same camera shot.}
+  \label{fig:camera-shot}  
+\end{figure}
+
+\paragraph{Aspect Ratio Changes with Bulging or Stretching}
+
+Aspect ratio changes can either happen combined with cropping
+(and thus losing parts of the image), and/or combined with 
+bulging or stretching (and thus deforming the image).
+\autoref{fig:bulged} shows an example where an image gets
+both cropped and bulged.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Original]{
+    \includegraphics[width=0.2\textwidth]{singer1.jpg}
+  }                
+  \subfloat[Stretched and bulged]{
+    \includegraphics[width=0.3\textwidth]{singer2.jpg}
+  }
+  \caption{Original, and stretched and cropped version of an image.}
+  \label{fig:bulged}  
+\end{figure}
+
+\paragraph{Photo Filters}
+
+Especially with the popularity of Instagram, photo filters
+are a~considerable reason for near-duplicate media content.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Original]{
+    \includegraphics[width=0.2\textwidth]{clickclickdecker1.jpg}
+  }                
+  \subfloat[With photo filter]{
+    \includegraphics[width=0.2\textwidth]{clickclickdecker2.jpg}
+  }
+  \caption{Original, and version with an applied photo filter of an image.}
+  \label{fig:photo-filter}  
+\end{figure}
+
+
+\subsection{Near-Duplicate Clustering Algorithm}
+\label{sec:near-duplicate-clustering-algorithm}
 
 \subsection{Experiments}
 
