@@ -631,6 +631,62 @@ than one would want to watch in a~reasonable time,
 it is tolerable for the algorithm to cluster media items aggressively
 rather than leaving too many media items unclustered.
 
+\subsubsection{Algorithm Description}
+
+
+
+\begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
+    image clustering algorithm.},
+  label={code:provenance},escapechar=§]
+ROWS = 5
+COLS = 5
+TILES_THRESHOLD = floor(ROWS * COLS * 0.9)
+SIMILARITY_THRESHOLD = 10
+
+histograms = {}
+faces = {}
+for image in images
+  faces[image] = getFaces(image)
+
+  for tile in image
+    histograms[image][tile] = getHistogram(tile)
+  end for
+end for  
+    
+distances = {}
+for outerImage in images
+  for innerImage in images
+    distances[outerImage][innerImage] = {}
+    for tile in histograms[outerImage]
+      distances[outerImage][innerImage][tile] =
+          abs(histograms[outerImage][tile] - histograms[innerImage][tile])
+    end for
+  end for
+end for
+  
+clusters = {}
+for outerImage in images  
+  clusters[outerImage] = []  
+  for innerImage in images
+    if outerImage == innerImage continue
+    
+    similarTiles = 0
+    for tile in distances[outerImage][innerImage]
+      if distances[outerImage][innerImage] <= SIMILARITY_THRESHOLD
+        similarTiles++
+      end if   
+    end for
+     
+    if similarTiles >= TILES_THRESHOLD
+      if faces[outerImage] == faces[innerImage]
+        clusters[outerImage].push(innerImage)
+      end if
+    end if
+    
+  end for
+end for        
+\end{lstlisting}
+
 \subsection{Experiments}
 
 \subsection{Evaluation}

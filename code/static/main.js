@@ -330,11 +330,9 @@
             }
           }
           if (similarTiles >= illustrator.SIMILAR_TILES) {
-console.log('Faces ' + illustrator.CONSIDER_FACES)
             if (illustrator.CONSIDER_FACES) {
               var outerFaces = illustrator.faces[outer].length;
               var innerFaces = illustrator.faces[inner].length;
-console.log(innerFaces + ' ' + outerFaces);
               if (innerFaces === outerFaces) {
                 if (!distanceToOuter[similarTiles]) {
                   distanceToOuter[similarTiles] = [j];

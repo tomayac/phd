@@ -277,10 +277,16 @@ var mediaFinder = {
           var $ = window.document;
           var match = 'the-image';
           try {
-            mediaUrl = $.getElementById(match).src;
-            callback(mediaUrl);
+            var image = $.getElementById(match);
+            if (image) {
+              mediaUrl = image.src;
+              callback(mediaUrl);
+            } else {
+              callback(false);
+            }
           } catch(e) {
-            throw('ERROR: img.ly screen scraper broken');
+            //throw('ERROR: img.ly screen scraper broken');
+            throw(e);
           }
         });
       } catch(e) {
