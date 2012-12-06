@@ -443,12 +443,8 @@ Scale Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
 A~method for both photos and video~\cite{yang2009nearduplicate}
 has been proposed by Yang \emph{et al.}
 
-\subsection{Motivation}
-
-In the following, we list and discuss reasons for duplicate
-or near-duplicate content to arise in the first place.
-
 \subsection{Duplicate Content}
+\label{sec:duplicate-content}
 
 Duplicate content in the context of social networks
 arises whenever people either share exactly the same,
@@ -617,10 +613,23 @@ It was motivated primarily by the problem of face detection.
 We use a~face detection algorithm that further improves Viola--Jones,
 based on work by Huang \emph{et al.}~\cite{huang2007facedetection}
 and Abramson \emph{et al.}~\cite{abramson2007yef},
-in a~ JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
-This algorithm is fast enough to be applied on hundreds of images
-in less than a~second overall processing time on a~standard laptop
-(mid 2010 MacBook Pro).
+in a~JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
+This algorithm is fast enough to be applied to hundreds of images
+in well less than a~second overall processing time on a~standard laptop
+(mid 2010 MacBook~Pro).
+
+\subsubsection{Algorithm Design Goals}
+
+In \autoref{sec:duplicate-content}, we have outlined
+cases of duplicate and near-duplicate content.
+Design goals of the algorithm include
+the capability to detect those cases
+in a~timely, entirely \emph{ad hoc} manner, without any pre-calculation.
+As in general for bigger events, event coverage is exhaustive, \emph{i.e.},
+there exist more media items
+than one would want to watch in a~reasonable time,
+it is tolerable for the algorithm to cluster media items aggressively
+rather than leaving too many media items unclustered.
 
 \subsection{Experiments}
 

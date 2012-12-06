@@ -8,6 +8,7 @@
     COLS: 5,
     ROWS: 5,
     SIMILAR_TILES: 0,
+    CONSIDER_FACES: true,
     loaded: {},
     distances: {},
     origins: {},
@@ -329,10 +330,24 @@
             }
           }
           if (similarTiles >= illustrator.SIMILAR_TILES) {
-            if (!distanceToOuter[similarTiles]) {
-              distanceToOuter[similarTiles] = [j];
+console.log('Faces ' + illustrator.CONSIDER_FACES)
+            if (illustrator.CONSIDER_FACES) {
+              var outerFaces = illustrator.faces[outer].length;
+              var innerFaces = illustrator.faces[inner].length;
+console.log(innerFaces + ' ' + outerFaces);
+              if (innerFaces === outerFaces) {
+                if (!distanceToOuter[similarTiles]) {
+                  distanceToOuter[similarTiles] = [j];
+                } else {
+                  distanceToOuter[similarTiles].push(j);
+                }
+              }
             } else {
-              distanceToOuter[similarTiles].push(j);
+              if (!distanceToOuter[similarTiles]) {
+                distanceToOuter[similarTiles] = [j];
+              } else {
+                distanceToOuter[similarTiles].push(j);
+              }
             }
           }
         }
