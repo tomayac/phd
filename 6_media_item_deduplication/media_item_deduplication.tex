@@ -730,7 +730,7 @@ accessed December 7, 2012},
 during which Taylor Swift and LL~Cool~J revealed the nominees in several key categories, including the so-called Big Four: Album, Record and Song of the Year and Best New Artist.
 CBS suggested the hashtag \texttt{\#GRAMMYNoms} for the event.
 
-\subsubsection{Victoria's Secret Fashion Show}
+\subsubsection{Victoria's Secret Fashion Show 2012}
 
 The \emph{Victoria's Secret Fashion
 Show}\footnote{\url{http://en.wikipedia.org/wiki/Victoria's_Secret_Fashion_Show},
@@ -748,6 +748,28 @@ was aired on December 4, 2012 on CBS with an audience of 9.48 million viewers.
 CBS suggested the hashtag \texttt{\#VSFashionShow} for the event.
 
 \subsection{Evaluation}
+
+We have collected and made available \todo{make available}
+datasets for both events with
+379 photos for the \emph{Victoria's Secret Fashion Show 2012} event 
+and 949 photos for the \emph{Grammy Awards Nominations 2013} event.
+These photos were collected using the media item extraction framework
+described in \autoref{cha:media-item-extraction}
+using a~mix of hashtag searches with the official event hashtags combined
+with full-text searches for event titles and variations thereof.
+Due to the short-lived nature of social networks,
+the returned results of the media item extraction process itself
+are not reproducible, our focus in this chapter
+is on media item deduplication and clustering.
+The concrete clustering parameters for the algorithm were set as listed below.
+
+\begin{small_itemize}
+  \item[] $ROWS$ = $COLS$ = $5$
+  \item[] $TILES\_THRESHOLD$ = $22$
+  \item[] $SIMILARITY\_THRESHOLD$ = $10$
+\end{small_itemize}
+
+In the following, we discuss the clustering and deduplication results.
 
 \section{Video Deduplication}
 
