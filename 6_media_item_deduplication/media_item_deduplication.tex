@@ -426,7 +426,7 @@ This task involves the deduplication of extracted media items.
 In the previous section, we have presented an algorithm
 for on-the-fly shot boundary detection for video media items.
 In this section, we will show how components of this algorithm
-can be used to deduplicate images.
+can be used to deduplicate photos.
 First, we look at related work for the task of photo deduplication.
 
 \subsection{Related Work}
@@ -511,12 +511,12 @@ can be seen in \autoref{fig:logo}.
 
 \paragraph{Cropping}
 
-Cropping refers to the removal of the outer parts of an image
+Cropping refers to the removal of the outer parts of a~photo
 to improve framing, accentuate subject matter or change aspect ratio.
 Cropping either happens manually via an image editing application,
-or, more often, the social networks themselves crop images
+or, more often, the social networks themselves crop photos
 to better fit in the timeline view of users.
-Typically images are automatically cropped to have a~square aspect ratio,
+Typically photos are automatically cropped to have a~square aspect ratio,
 as can be seen in the example in \autoref{fig:cropping}.
 
 \begin{figure}[h!]
@@ -527,7 +527,7 @@ as can be seen in the example in \autoref{fig:cropping}.
   \subfloat[Cropped]{
     \includegraphics[width=0.137\textwidth]{kid2.jpg}
   }
-  \caption{Original and cropped version of an image.}
+  \caption{Original and cropped version of a~photo.}
   \label{fig:cropping}  
 \end{figure}
 
@@ -555,9 +555,9 @@ typically resulting in different frames for different social networks.
 \paragraph{Aspect Ratio Changes with Bulging or Stretching}
 
 Aspect ratio changes can either happen combined with cropping
-(and thus losing parts of the image), and/or combined with 
-bulging or stretching (and thus deforming the image).
-\autoref{fig:bulged} shows an example where an image gets
+(and thus losing parts of the photo), and/or combined with 
+bulging or stretching (and thus deforming the photo).
+\autoref{fig:bulged} shows an example where a~photo gets
 both cropped and bulged.
 
 \begin{figure}[h!]
@@ -568,7 +568,7 @@ both cropped and bulged.
   \subfloat[Stretched and bulged]{
     \includegraphics[width=0.3\textwidth]{singer2.jpg}
   }
-  \caption{Original, and stretched and cropped version of an image.}
+  \caption{Original, and stretched and cropped version of a~photo.}
   \label{fig:bulged}  
 \end{figure}
 
@@ -586,7 +586,7 @@ are a~considerable reason for near-duplicate media content.
   \subfloat[With photo filter]{
     \includegraphics[width=0.2\textwidth]{clickclickdecker2.jpg}
   }
-  \caption{Original, and version with an applied photo filter of an image.}
+  \caption{Original, and version with an applied photo filter of a~photo.}
   \label{fig:photo-filter}  
 \end{figure}
 
@@ -601,10 +601,10 @@ We start with a~description of its face detection component.
 \label{sec:face-detection}
 
 Face detection is a~computer vision technology
-that determines the regions of faces in images.
+that determines the regions of faces in photos.
 Rotation invariant face detection aims to detect faces with arbitrary
 rotation angles and is crucial as the first step in automatic face detection
-for general applications, as face images are seldom upright and frontal.
+for general applications, as face photos are seldom upright and frontal.
 Face detection is a~subclass of the broader class of object detection.
 The Viola--Jones object detection framework proposed in 2001
 by Paul Viola and Michael
@@ -615,7 +615,7 @@ We use a~face detection algorithm that further improves Viola--Jones,
 based on work by Huang \emph{et al.}~\cite{huang2007facedetection}
 and Abramson \emph{et al.}~\cite{abramson2007yef},
 in a~JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
-This algorithm is fast enough to be applied to hundreds of images
+This algorithm is fast enough to be applied to hundreds of photos
 in well less than a~second overall processing time on a~standard laptop
 (mid 2010 MacBook~Pro).
 
@@ -634,18 +634,18 @@ rather than leaving too many media items unclustered.
 
 \subsubsection{Algorithm Description}
 
-Our near-duplicate image clustering algorithm belongs to the family of
-tile-wise histogram-based image clustering algorithms.
+Our near-duplicate photo clustering algorithm belongs to the family of
+tile-wise histogram-based photo clustering algorithms.
 As an additional semantic feature, the algorithm detects faces
 as described in \autoref{sec:face-detection}.
-For two images to be clustered,
+For two photos to be clustered,
 the following conditions have to be fulfilled.
 
 \begin{enumerate}
-  \item The numbers $f_1$ and $f_2$ of detected faces in both images
+  \item The numbers $f_1$ and $f_2$ of detected faces in both photos
     have to be the same, ($f_1, f_2 \geq 0$).
     We note that we do \emph{not} recognize faces.
-  \item Out of $m$ tiles of an image with $n$ tiles, ($m \leq n$),
+  \item Out of $m$ tiles of a~photo with $n$ tiles, ($m \leq n$),
     at most $TILES\_THRESHOLD$ tiles may differ not more than $SIMILARITY\_THRESHOLD$
     from their corresponding counterpart tiles.
 \end{enumerate}
@@ -658,7 +658,7 @@ The clusters are recalculated dynamically
 whenever either $TILES\_THRESHOLD$ or $SIMILARITY\_THRESHOLD$ change.
 
 \begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
-    image clustering algorithm.},
+    photo clustering algorithm.},
   label={code:clustering},escapechar=§]
 ROWS = 5
 COLS = 5
@@ -667,41 +667,41 @@ SIMILARITY_THRESHOLD = 10
 
 histograms = {}
 faces = {}
-for image in images
-  faces[image] = getFaces(image)
+for photo in photos
+  faces[photo] = getFaces(photo)
 
-  for tile in image
-    histograms[image][tile] = getHistogram(tile)
+  for tile in photo
+    histograms[photo][tile] = getHistogram(tile)
   end for
 end for  
     
 distances = {}
-for outerImage in images
-  for innerImage in images
-    distances[outerImage][innerImage] = {}
-    for tile in histograms[outerImage]
-      distances[outerImage][innerImage][tile] =
-          abs(histograms[outerImage][tile] - histograms[innerImage][tile])
+for outerPhoto in photos
+  for innerPhoto in photos
+    distances[outerPhoto][innerPhoto] = {}
+    for tile in histograms[outerPhoto]
+      distances[outerPhoto][innerPhoto][tile] =
+          abs(histograms[outerPhoto][tile] - histograms[innerPhoto][tile])
     end for
   end for
 end for
   
 clusters = {}
-for outerImage in images  
-  clusters[outerImage] = []  
-  for innerImage in images
-    if outerImage == innerImage continue
+for outerPhoto in photos  
+  clusters[outerPhoto] = []  
+  for innerPhoto in photos
+    if outerPhoto == innerPhoto continue
     
     similarTiles = 0
-    for tile in distances[outerImage][innerImage]
-      if distances[outerImage][innerImage] <= SIMILARITY_THRESHOLD
+    for tile in distances[outerPhoto][innerPhoto]
+      if distances[outerPhoto][innerPhoto] <= SIMILARITY_THRESHOLD
         similarTiles++
       end if   
     end for
      
     if similarTiles >= TILES_THRESHOLD
-      if faces[outerImage] == faces[innerImage]
-        clusters[outerImage].push(innerImage)
+      if faces[outerPhoto] == faces[innerPhoto]
+        clusters[outerPhoto].push(innerPhoto)
       end if
     end if
     
@@ -710,6 +710,42 @@ end for
 \end{lstlisting}
 
 \subsection{Experiments}
+
+We have evaluated the near-duplicate photo clustering
+on two events from recent history with high social network coverage
+that we will briefly describe in the following.
+
+\subsubsection{Grammy Awards Nominations 2013}
+
+The Grammy Award---or short Grammy---is an award by
+the National Academy of Recording Arts and Sciences of the United States
+to recognize outstanding achievement in the music industry.
+The annual presentation ceremony features performances by prominent artists,
+and some of the awards are presented in a~widely viewed televised ceremony.
+On December 5, 2012, the nominees for the 55\superscript{th} Annual Grammy Awards
+were announced at an event broadcasted live by CBS
+titled \emph{Grammy Nominations Concert
+Live}\footnote{\url{http://en.wikipedia.org/wiki/2013_Grammy_Awards},
+accessed December 7, 2012},
+during which Taylor Swift and LL~Cool~J revealed the nominees in several key categories, including the so-called Big Four: Album, Record and Song of the Year and Best New Artist.
+CBS suggested the hashtag \texttt{\#GRAMMYNoms} for the event.
+
+\subsubsection{Victoria's Secret Fashion Show}
+
+The \emph{Victoria's Secret Fashion
+Show}\footnote{\url{http://en.wikipedia.org/wiki/Victoria's_Secret_Fashion_Show},
+accessed December 7, 2012} is an annual event
+sponsored by Victoria's Secret, a~brand of lingerie and sleepwear.
+The show features some of the world's leading fashion models
+and is used by the brand to promote and market its goods in high-profile settings.
+American network television broadcasts the show during prime time.
+The show is a~lavish event with elaborate costumed lingerie and
+varying music by leading entertainers
+that attracts hundreds of celebrities and entertainers,
+with special performers and acts every year.
+The show which was previously taped on November 7, 2012
+was aired on December 4, 2012 on CBS with an audience of 9.48 million viewers.
+CBS suggested the hashtag \texttt{\#VSFashionShow} for the event.
 
 \subsection{Evaluation}
 
@@ -733,7 +769,7 @@ Further, there is~\cite{oliveira2010nearduplicate} by Oliveira
 from a~human angle.  
 The authors have conducted four large-scale surveys
 and have confirmed that humans perceive videos as near-duplicates
-both based on non-semantic features like different image or audio
+both based on non-semantic features like different photo or audio
 quality, but also based on semantic features like different
 videos of similar content, where, according to the authors,
 most research still focuses mostly on the non-semantic features.
