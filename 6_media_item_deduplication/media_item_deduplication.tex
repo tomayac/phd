@@ -598,6 +598,7 @@ and its design goals.
 We start with a~description of its face detection component.
 
 \subsubsection{Face Detection}
+\label{sec:face-detection}
 
 Face detection is a~computer vision technology
 that determines the regions of faces in images.
@@ -633,11 +634,32 @@ rather than leaving too many media items unclustered.
 
 \subsubsection{Algorithm Description}
 
+Our near-duplicate image clustering algorithm belongs to the family of
+tile-wise histogram-based image clustering algorithms.
+As an additional semantic feature, the algorithm detects faces
+as described in \autoref{sec:face-detection}.
+For two images to be clustered,
+the following conditions have to be fulfilled.
 
+\begin{enumerate}
+  \item The numbers $f_1$ and $f_2$ of detected faces in both images
+    have to be the same, ($f_1, f_2 \geq 0$).
+    We note that we do \emph{not} recognize faces.
+  \item Out of $m$ tiles of an image with $n$ tiles, ($m \leq n$),
+    at most $TILES\_THRESHOLD$ tiles may differ not more than $SIMILARITY\_THRESHOLD$
+    from their corresponding counterpart tiles.
+\end{enumerate}
+
+The simplified algorithm pseudocode can be seen in \autoref{code:clustering}.
+In the actual implementation some speed improvements have been applied,
+these were omitted in the listing for legibility reasons.
+We calculate the histograms and distances only once.
+The clusters are recalculated dynamically
+whenever either $TILES\_THRESHOLD$ or $SIMILARITY\_THRESHOLD$ change.
 
 \begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
     image clustering algorithm.},
-  label={code:provenance},escapechar=§]
+  label={code:clustering},escapechar=§]
 ROWS = 5
 COLS = 5
 TILES_THRESHOLD = floor(ROWS * COLS * 0.9)

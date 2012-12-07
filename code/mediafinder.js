@@ -285,8 +285,7 @@ var mediaFinder = {
               callback(false);
             }
           } catch(e) {
-            //throw('ERROR: img.ly screen scraper broken');
-            throw(e);
+            throw('ERROR: img.ly screen scraper broken');
           }
         });
       } catch(e) {
