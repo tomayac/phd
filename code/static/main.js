@@ -5,6 +5,7 @@
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     THRESHOLD: 10,
     ACCOUNT_FOR_LUMINANCE: true,
+    BW_TOLERANCE: 3,
     COLS: 5,
     ROWS: 5,
     SIMILAR_TILES: 0,
@@ -70,6 +71,21 @@
         };
       });
 
+      var bwTolerance = document.getElementById('bwTolerance');
+      bwTolerance.max = 10;
+      bwTolerance.min = 0;
+      bwTolerance.value = illustrator.BW_TOLERANCE;
+      var bwToleranceLabel =
+          document.getElementById('bwToleranceLabel');
+      bwToleranceLabel.innerHTML = bwTolerance.value;
+      bwTolerance.addEventListener('change', function() {
+        bwToleranceLabel.innerHTML = bwTolerance.value;
+        illustrator.BW_TOLERANCE = bwTolerance.value;
+        if (illustrator.checkIfAllMediaItems('histogram')) {
+          illustrator.calculateDistances();
+        };
+      });
+
       var searchForm = document.getElementById('search_form');
       searchForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -119,6 +135,7 @@
       });
     },
     initSockets: function() {
+      if (illustrator.DEBUG) console.log('init sockets');
       illustrator.socket.on('proxy', function(data) {
         var socketData = document.getElementById('socket_data');
         socketData.innerHTML = 'Loading file ' + data.url;
@@ -177,6 +194,7 @@
      * Shows the results
      */
     show: function(results, query) {
+      if (illustrator.DEBUG) console.log('show results');
       var resultsDiv = document.getElementById('results');
       illustrator.distances = {};
       for (var service in results) {
@@ -219,6 +237,7 @@
       }
     },
     detectFaces: function(img) {
+      if (illustrator.DEBUG) console.log('detect faces');
       var comp = ccv.detect_objects({
         canvas: ccv.grayscale(ccv.pre(img)),
         cascade: cascade,
@@ -228,6 +247,7 @@
       illustrator.faces[img.src] = comp;
     },
     histogram: function(img) {
+      if (illustrator.DEBUG) console.log('calculate histograms');
       // draw the image on the canvas
       var canvas = document.createElement('canvas');
       canvas.width = 128; //img.width;
@@ -260,57 +280,91 @@
           g: histogram.pixel.g,
           b: histogram.pixel.b
         };
-
-        ctx.fillStyle = histogram.css;
-        ctx.fillRect(dx, dy, dw, dh);
       }
 
       illustrator.loaded[img.src] = 'histogram';
       if (illustrator.checkIfAllMediaItems('histogram')) {
-        illustrator.sort();
+        illustrator.calculateDistances();
       };
     },
-    sort: function() {
-      var resultsDiv = document.getElementById('results');
-      var clusters = {};
-      var distancesCalculated =
-          Object.keys(illustrator.distances).length ? true : false;
-
+    calculateDistances: function() {
+      if (illustrator.DEBUG) console.log('calculate distances');
       var keys = Object.keys(illustrator.tileHistograms);
       var len = keys.length;
-
       var abs = Math.abs;
-      var max = Math.max;
 
-      if (!distancesCalculated) {
-        if (illustrator.ACCOUNT_FOR_LUMINANCE) {
-          var rFactor = 0.3;
-          var gFactor = 0.59;
-          var bFactor = 0.11;
-        } else {
-          var rFactor = 1;
-          var gFactor = 1;
-          var bFactor = 1;
-        }
+      if (illustrator.ACCOUNT_FOR_LUMINANCE) {
+        var rFactor = 0.3;
+        var gFactor = 0.59;
+        var bFactor = 0.11;
+      } else {
+        var rFactor = 1;
+        var gFactor = 1;
+        var bFactor = 1;
+      }
 
-        for (var i = 0; i < len; i++) {
-          var outer = keys[i];
-          illustrator.distances[outer] = {};
-          var outerHisto = illustrator.tileHistograms[outer];
-          for (var j = 0; j < len; j++) {
-            if (j === i) continue;
-            var inner = keys[j];
-            var innerHisto = illustrator.tileHistograms[inner];
-            illustrator.distances[outer][inner] = {};
+      var blackTolerance = illustrator.BW_TOLERANCE;
+      var whiteTolerance = 255 - illustrator.BW_TOLERANCE;
+
+      for (var i = 0; i < len; i++) {
+        var outer = keys[i];
+        illustrator.distances[outer] = {};
+        var outerHisto = illustrator.tileHistograms[outer];
+        for (var j = 0; j < len; j++) {
+          if (j === i) continue;
+          var inner = keys[j];
+          var innerHisto = illustrator.tileHistograms[inner];
+          illustrator.distances[outer][inner] = {};
+          // recycle because of symmetry of distances:
+          // dist(A<=>B) =  dist(B<=>A)
+          if ((illustrator.distances[inner]) &&
+              (illustrator.distances[inner][outer])) {
+            illustrator.distances[outer][inner] =
+                illustrator.distances[inner][outer];
+          // calculate new
+          } else {
             for (var k in innerHisto) {
-              illustrator.distances[outer][inner][k] =
-                ~~((abs(rFactor * (innerHisto[k].r - outerHisto[k].r)) +
-                    abs(gFactor * (innerHisto[k].g - outerHisto[k].g)) +
-                    abs(bFactor * (innerHisto[k].b - outerHisto[k].b))) / 3);
+              var innerR = innerHisto[k].r;
+              var innerG = innerHisto[k].g;
+              var innerB = innerHisto[k].b;
+              var outerR = outerHisto[k].r;
+              var outerG = outerHisto[k].g;
+              var outerB = outerHisto[k].b;
+
+              if ((innerR > blackTolerance &&
+                   innerG > blackTolerance &&
+                   innerB > blackTolerance) &&
+                  (outerR > blackTolerance &&
+                   outerG > blackTolerance &&
+                   outerB > blackTolerance) &&
+                  (innerR < whiteTolerance &&
+                   innerG < whiteTolerance &&
+                   innerB < whiteTolerance) &&
+                  (outerR < whiteTolerance &&
+                   outerG < whiteTolerance &&
+                   outerB < whiteTolerance)) {
+                illustrator.distances[outer][inner][k] =
+                  ~~((abs(rFactor * (innerR - outerR)) +
+                      abs(gFactor * (innerG - outerG)) +
+                      abs(bFactor * (innerB - outerB))) / 3);
+              }
             }
           }
         }
       }
+      illustrator.sort();
+    },
+    sort: function() {
+      if (illustrator.DEBUG) console.log('sort');
+      var resultsDiv = document.getElementById('results');
+      var clusters = {};
+
+      var keys = Object.keys(illustrator.tileHistograms);
+      var len = keys.length;
+      var abs = Math.abs;
+      var max = Math.max;
+
+      // the actual sorting
       for (var i = 0; i < len; i++) {
         if (!keys[i]) continue;
         var outer = keys[i];
