@@ -35,6 +35,45 @@
       if (illustrator.DEBUG) console.log('init');
       illustrator.reset();
 
+      var resultsDiv = document.getElementById('results');
+      results.addEventListener('click', function(e) {
+        if (e.target.nodeName.toLowerCase() !== 'img') {
+          return;
+        };
+        var img = e.target;
+        var src = img.src;
+        var canvas = document.createElement('canvas');
+        canvas.width = 100;
+        canvas.height = 100;
+        canvas.style.marginLeft = img.style.marginLeft;
+        canvas.setAttribute('class', 'photo');
+        var ctx = canvas.getContext('2d');
+
+        // calculate the histograms tile-wise
+        var sw = ~~(img.width / illustrator.COLS);
+        var sh = ~~(img.height / illustrator.ROWS);
+        var dw = ~~(canvas.width / illustrator.COLS);
+        var dh = ~~(canvas.height / illustrator.ROWS);
+
+        var histo = illustrator.tileHistograms[src];
+        img.parentNode.replaceChild(canvas, img);
+        for (var tile in histo) {
+          var mod = (tile % illustrator.COLS);
+          var div = ~~(tile / illustrator.COLS);
+          var sx = mod * sw;
+          var sy = div * sh;
+          var dx = mod * dw;
+          var dy = div * dh;
+          ctx.fillStyle = 'rgb(' + histo[tile].r + ',' + histo[tile].g + ',' +
+              histo[tile].b + ')';
+          ctx.fillRect(dx, dy, dw, dh);
+        }
+
+        canvas.addEventListener('click', function() {
+          canvas.parentNode.replaceChild(img, canvas);
+        });
+      });
+
       var luminance = document.getElementById('luminance');
       luminance.checked = illustrator.ACCOUNT_FOR_LUMINANCE;
       luminance.addEventListener('change', function() {

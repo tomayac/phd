@@ -1,7 +1,6 @@
 BODY {
   font-size: 12pt;
   font-family: sans-serif;
-
 }
 
 H1 {
@@ -32,12 +31,12 @@ TD.asset {
   width: 60em !important;
 }
 
-IMG.photo {
+.photo {
   height: 100px !important;
   margin: 0.2em;
 }
 
-IMG.photo:after {
+.photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
   content: '';
   position: absolute;
