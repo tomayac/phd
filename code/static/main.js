@@ -6,8 +6,8 @@
     THRESHOLD: 10,
     ACCOUNT_FOR_LUMINANCE: true,
     BW_TOLERANCE: 3,
-    COLS: 5,
-    ROWS: 5,
+    COLS: 10,
+    ROWS: 10,
     SIMILAR_TILES: 0,
     CONSIDER_FACES: true,
     loaded: {},
@@ -97,7 +97,7 @@
       var similarTiles = document.getElementById('similarTiles');
       similarTiles.min = 1;
       similarTiles.max = illustrator.ROWS * illustrator.COLS;
-      similarTiles.value = Math.floor(illustrator.ROWS * illustrator.COLS * 0.9);
+      similarTiles.value = Math.floor(illustrator.ROWS * illustrator.COLS * 2/3);
       illustrator.SIMILAR_TILES = similarTiles.value;
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
@@ -144,19 +144,16 @@
             (e.target.nodeName.toLowerCase() === 'label')) {
           // can use checkbox, even if the label was clicked
           var target = e.target;
-          var query = target.parentNode.getElementsByTagName('label')[0]
+          var queryId = target.parentNode.getElementsByTagName('label')[0]
               .getAttribute('for');
           var checkbox = target.parentNode.getElementsByTagName('input')[0];
-          query = query.replace(/\_/g, ' ');
           var displayState = '';
           if (checkbox.checked) {
-            console.log('Showing media items from query "' + query + '"');
             displayState = 'inline';
           } else {
-            console.log('Hiding media items from query "' + query + '"');
             displayState = 'none';
           }
-          var sources = illustrator.origins[query].forEach(function(source) {
+          var sources = illustrator.origins[queryId].forEach(function(source) {
             var images = document.querySelectorAll('img[src="' + source + '"]');
             for (var i = 0, len = images.length; i < len; i++) {
               images[i].style.display = displayState;
@@ -210,7 +207,7 @@
       }
       if (illustrator.DEBUG) console.log('search ' + query);
       var queryLogDiv = document.getElementById('queryLog');
-      var queryId = query.replace(/\s/g, '_');
+      var queryId = new Date().getTime();
       queryLogDiv.innerHTML +=
           '<div><input type="checkbox" checked="checked" id="' + queryId +
           '"> <label for="' + queryId + '">' + query + '</label></div>';
@@ -219,7 +216,7 @@
         if (xhr.readyState == 4) {
           if (xhr.status == 200) {
             var results = JSON.parse(xhr.responseText);
-            illustrator.show(results, query);
+            illustrator.show(results, queryId);
           }
         }
       }
@@ -232,7 +229,7 @@
     /**
      * Shows the results
      */
-    show: function(results, query) {
+    show: function(results, queryId) {
       if (illustrator.DEBUG) console.log('show results');
       var resultsDiv = document.getElementById('results');
       illustrator.distances = {};
@@ -258,10 +255,10 @@
           illustrator.loaded[source] = false;
           image.onload = function() {
             illustrator.loaded[source] = true;
-            if (!illustrator.origins[query]) {
-              illustrator.origins[query] = [source];
+            if (!illustrator.origins[queryId]) {
+              illustrator.origins[queryId] = [source];
             } else {
-              illustrator.origins[query].push(source);
+              illustrator.origins[queryId].push(source);
             }
             illustrator.detectFaces(image);
             illustrator.histogram(image);
@@ -370,18 +367,18 @@
               var outerG = outerHisto[k].g;
               var outerB = outerHisto[k].b;
 
-              if ((innerR > blackTolerance &&
-                   innerG > blackTolerance &&
-                   innerB > blackTolerance) &&
-                  (outerR > blackTolerance &&
-                   outerG > blackTolerance &&
-                   outerB > blackTolerance) &&
-                  (innerR < whiteTolerance &&
-                   innerG < whiteTolerance &&
-                   innerB < whiteTolerance) &&
-                  (outerR < whiteTolerance &&
-                   outerG < whiteTolerance &&
-                   outerB < whiteTolerance)) {
+              if ((innerR >= blackTolerance &&
+                   innerG >= blackTolerance &&
+                   innerB >= blackTolerance) &&
+                  (outerR >= blackTolerance &&
+                   outerG >= blackTolerance &&
+                   outerB >= blackTolerance) &&
+                  (innerR <= whiteTolerance &&
+                   innerG <= whiteTolerance &&
+                   innerB <= whiteTolerance) &&
+                  (outerR <= whiteTolerance &&
+                   outerG <= whiteTolerance &&
+                   outerB <= whiteTolerance)) {
                 illustrator.distances[outer][inner][k] =
                   ~~((abs(rFactor * (innerR - outerR)) +
                       abs(gFactor * (innerG - outerG)) +
