@@ -10,16 +10,18 @@
     ROWS: 10,
     SIMILAR_TILES: 0,
     CONSIDER_FACES: true,
-    loaded: {},
+    images: [],
+    statuses: {},
     distances: {},
     origins: {},
+    clusters: {},
     tileHistograms: {},
     faces: {},
     socket: null,
     // checks if all media items are of the given status
     checkIfAllMediaItems: function(status) {
-      for (var key in illustrator.loaded) {
-        if (illustrator.loaded[key] !== status) {
+      for (var key in illustrator.statuses) {
+        if (illustrator.statuses[key] !== status) {
           return false;
         }
       }
@@ -36,7 +38,35 @@
       illustrator.reset();
 
       var resultsDiv = document.getElementById('results');
-      results.addEventListener('click', function(e) {
+
+      var firstImage = null;
+      var secondImage = null;
+      resultsDiv.addEventListener('click', function(e) {
+console.log('dblclick')
+        if (e.target.nodeName.toLowerCase() !== 'img') {
+          return;
+        };
+console.log('still there')
+        var img = e.target;
+        var src = img.src;
+        if (!firstImage) {
+          firstImage = src;
+console.log('* First ' + firstImage);
+console.log('Second ' + secondImage);
+        } else {
+          secondImage = src;
+console.log('First ' + firstImage);
+console.log('* Second ' + secondImage);
+        }
+        if (firstImage && secondImage) {
+          var distance = illustrator.distances[firstImage][secondImage];
+          console.log(distance);
+          firstImage = null;
+          secondImage = null;
+        }
+      });
+
+      resultsDiv.addEventListener('click', function(e) {
         if (e.target.nodeName.toLowerCase() !== 'img') {
           return;
         };
@@ -80,6 +110,44 @@
         illustrator.ACCOUNT_FOR_LUMINANCE = luminance.checked;
         illustrator.distances = {};
         illustrator.sort();
+      });
+
+      var rows = document.getElementById('rows');
+      rows.value = illustrator.ROWS;
+      rows.max = 100;
+      rows.min = 1;
+      var rowsLabel = document.getElementById('rowsLabel');
+      rowsLabel.innerHTML = rows.value;
+      rows.addEventListener('mouseup', function() {
+        for (var key in illustrator.statuses) {
+          illustrator.statuses[key] = 'loaded';
+        }
+        illustrator.tileHistograms = {};
+        illustrator.clusters = {};
+        rowsLabel.innerHTML = rows.value;
+        illustrator.ROWS = rows.value;
+        illustrator.images.forEach(function(image) {
+          illustrator.histogram(image);
+        });
+      });
+
+      var cols = document.getElementById('cols');
+      cols.value = illustrator.COLS;
+      cols.max = 100;
+      cols.min = 1;
+      var colsLabel = document.getElementById('colsLabel');
+      colsLabel.innerHTML = cols.value;
+      cols.addEventListener('mouseup', function() {
+        for (var key in illustrator.statuses) {
+          illustrator.statuses[key] = 'loaded';
+        }
+        illustrator.tileHistograms = {};
+        illustrator.clusters = {};
+        colsLabel.innerHTML = cols.value;
+        illustrator.COLS = cols.value;
+        illustrator.images.forEach(function(image) {
+          illustrator.histogram(image);
+        });
       });
 
       var threshold = document.getElementById('threshold');
@@ -184,19 +252,21 @@
     /**
      * Resets all GUI elements
      */
-     reset: function reset() {
-       if (illustrator.DEBUG) console.log('reset');
-       var resultsDiv = document.getElementById('results');
-       resultsDiv.innerHTML = '';
-       var queryLogDiv = document.getElementById('queryLog');
-       queryLogDiv.innerHTML = '';
-       var query = document.getElementById('query');
-       query.value = '';
-       illustrator.loaded = {};
-       illustrator.tileHistograms = {};
-       illustrator.distances = {};
-       illustrator.origins = {};
-       illustrator.faces = {};
+    reset: function reset() {
+      if (illustrator.DEBUG) console.log('reset');
+      var resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+      var queryLogDiv = document.getElementById('queryLog');
+      queryLogDiv.innerHTML = '';
+      var query = document.getElementById('query');
+      query.value = '';
+      illustrator.statuses = {};
+      illustrator.tileHistograms = {};
+      illustrator.distances = {};
+      illustrator.origins = {};
+      illustrator.clusters = {};
+      illustrator.faces = {};
+      illustrator.images = [];
      },
     /**
      * Searches for a term on a plethora of social media platforms
@@ -216,7 +286,7 @@
         if (xhr.readyState == 4) {
           if (xhr.status == 200) {
             var results = JSON.parse(xhr.responseText);
-            illustrator.show(results, queryId);
+            illustrator.processSearchResults(results, queryId);
           }
         }
       }
@@ -227,11 +297,10 @@
       return false;
     },
     /**
-     * Shows the results
+     * Processes the results
      */
-    show: function(results, queryId) {
-      if (illustrator.DEBUG) console.log('show results');
-      var resultsDiv = document.getElementById('results');
+    processSearchResults: function(results, queryId) {
+      if (illustrator.DEBUG) console.log('receive search results');
       illustrator.distances = {};
       for (var service in results) {
         results[service].forEach(function(item) {
@@ -247,14 +316,15 @@
             } catch(e) {
               // noop
             }
-            delete illustrator.loaded[source];
+            delete illustrator.statuses[source];
             console.log('Removed ' + image.src);
           };
 
           image.src = source;
-          illustrator.loaded[source] = false;
+          illustrator.statuses[source] = false;
           image.onload = function() {
-            illustrator.loaded[source] = true;
+            illustrator.statuses[source] = true;
+            illustrator.images.push(image);
             if (!illustrator.origins[queryId]) {
               illustrator.origins[queryId] = [source];
             } else {
@@ -318,7 +388,7 @@
         };
       }
 
-      illustrator.loaded[img.src] = 'histogram';
+      illustrator.statuses[img.src] = 'histogram';
       if (illustrator.checkIfAllMediaItems('histogram')) {
         illustrator.calculateDistances();
       };
@@ -383,6 +453,8 @@
                   ~~((abs(rFactor * (innerR - outerR)) +
                       abs(gFactor * (innerG - outerG)) +
                       abs(bFactor * (innerB - outerB))) / 3);
+              } else {
+                illustrator.distances[outer][inner][k] = 255;
               }
             }
           }
@@ -392,8 +464,6 @@
     },
     sort: function() {
       if (illustrator.DEBUG) console.log('sort');
-      var resultsDiv = document.getElementById('results');
-      var clusters = {};
 
       var keys = Object.keys(illustrator.tileHistograms);
       var len = keys.length;
@@ -404,7 +474,7 @@
       for (var i = 0; i < len; i++) {
         if (!keys[i]) continue;
         var outer = keys[i];
-        clusters[outer] = [];
+        illustrator.clusters[outer] = [];
         keys[i] = false;
         var distanceToOuter = {};
         for (var j = 0; j < len; j++) {
@@ -445,17 +515,22 @@
                   return parseInt(num, 10);
                 }))];
           mostSimilar.forEach(function(index) {
-            clusters[outer].push(keys[index]);
+            illustrator.clusters[outer].push(keys[index]);
             keys[index] = false;
           });
         }
       }
+      illustrator.display();
+    },
+    display: function() {
+      if (illustrator.DEBUG) console.log('display');
+      var resultsDiv = document.getElementById('results');
       var clusterSizes = {};
-      for (key in clusters) {
-        if (!clusterSizes[clusters[key].length]) {
-          clusterSizes[clusters[key].length] = [key];
+      for (key in illustrator.clusters) {
+        if (!clusterSizes[illustrator.clusters[key].length]) {
+          clusterSizes[illustrator.clusters[key].length] = [key];
         } else {
-          clusterSizes[clusters[key].length].push(key);
+          clusterSizes[illustrator.clusters[key].length].push(key);
         }
       }
 
@@ -463,7 +538,7 @@
       Object.keys(clusterSizes).sort().reverse().forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
           html.push('<img style="margin-left:50px;" class="photo" src="' +
-              key +'"/>' + clusters[key].map(function(url) {
+              key +'"/>' + illustrator.clusters[key].map(function(url) {
                 return '<img class="photo" src="' + url +'"/>';
               }).join(''));
         });
