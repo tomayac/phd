@@ -1,6 +1,6 @@
 (function() {
   var illustrator = {
-    DEBUG: true,
+    DEBUG: false,
     MEDIA_SERVER: 'http://localhost:8001/search/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     THRESHOLD: 10,
@@ -9,6 +9,7 @@
     COLS: 10,
     ROWS: 10,
     SIMILAR_TILES: 0,
+    SIMILAR_TILES_FACTOR: 0.8,
     CONSIDER_FACES: true,
     images: [],
     statuses: {},
@@ -42,25 +43,37 @@
       var firstImage = null;
       var secondImage = null;
       resultsDiv.addEventListener('click', function(e) {
-console.log('dblclick')
         if (e.target.nodeName.toLowerCase() !== 'img') {
           return;
         };
-console.log('still there')
         var img = e.target;
         var src = img.src;
         if (!firstImage) {
           firstImage = src;
-console.log('* First ' + firstImage);
-console.log('Second ' + secondImage);
         } else {
           secondImage = src;
-console.log('First ' + firstImage);
-console.log('* Second ' + secondImage);
         }
         if (firstImage && secondImage) {
           var distance = illustrator.distances[firstImage][secondImage];
-          console.log(distance);
+console.log(distance);
+          var similarTiles = 0;
+          for (var k in distance) {
+            if (distance[k] <= illustrator.THRESHOLD) {
+              similarTiles++;
+            }
+          }
+          console.log('Similar tiles: ' + similarTiles +
+              ' (' + ((similarTiles / (illustrator.COLS * illustrator.ROWS))
+              * 100) + '%)');
+          if (similarTiles >= illustrator.SIMILAR_TILES) {
+            if (illustrator.CONSIDER_FACES) {
+              var outerFaces = illustrator.faces[firstImage].length;
+              var innerFaces = illustrator.faces[secondImage].length;
+              if (innerFaces === outerFaces) {
+                console.log('Detected faces: ' + innerFaces);
+              }
+            }
+          }
           firstImage = null;
           secondImage = null;
         }
@@ -76,6 +89,7 @@ console.log('* Second ' + secondImage);
         canvas.width = 100;
         canvas.height = 100;
         canvas.style.marginLeft = img.style.marginLeft;
+        canvas.style.border = 'solid green 2px';
         canvas.setAttribute('class', 'photo');
         var ctx = canvas.getContext('2d');
 
@@ -114,7 +128,7 @@ console.log('* Second ' + secondImage);
 
       var rows = document.getElementById('rows');
       rows.value = illustrator.ROWS;
-      rows.max = 100;
+      rows.max = 50;
       rows.min = 1;
       var rowsLabel = document.getElementById('rowsLabel');
       rowsLabel.innerHTML = rows.value;
@@ -124,16 +138,23 @@ console.log('* Second ' + secondImage);
         }
         illustrator.tileHistograms = {};
         illustrator.clusters = {};
+        illustrator.distances = {};
         rowsLabel.innerHTML = rows.value;
         illustrator.ROWS = rows.value;
+        similarTiles.max = illustrator.ROWS * illustrator.COLS;
+        similarTiles.value =
+            Math.ceil(illustrator.ROWS * illustrator.COLS *
+            illustrator.SIMILAR_TILES_FACTOR);
+        illustrator.SIMILAR_TILES = similarTiles.value;
+        similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.images.forEach(function(image) {
-          illustrator.histogram(image);
+          illustrator.calculateHistogram(image);
         });
       });
 
       var cols = document.getElementById('cols');
       cols.value = illustrator.COLS;
-      cols.max = 100;
+      cols.max = 50;
       cols.min = 1;
       var colsLabel = document.getElementById('colsLabel');
       colsLabel.innerHTML = cols.value;
@@ -143,10 +164,17 @@ console.log('* Second ' + secondImage);
         }
         illustrator.tileHistograms = {};
         illustrator.clusters = {};
+        illustrator.distances = {};
         colsLabel.innerHTML = cols.value;
         illustrator.COLS = cols.value;
+        similarTiles.max = illustrator.ROWS * illustrator.COLS;
+        similarTiles.value =
+            Math.ceil(illustrator.ROWS * illustrator.COLS *
+            illustrator.SIMILAR_TILES_FACTOR);
+        illustrator.SIMILAR_TILES = similarTiles.value;
+        similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.images.forEach(function(image) {
-          illustrator.histogram(image);
+          illustrator.calculateHistogram(image);
         });
       });
 
@@ -165,7 +193,9 @@ console.log('* Second ' + secondImage);
       var similarTiles = document.getElementById('similarTiles');
       similarTiles.min = 1;
       similarTiles.max = illustrator.ROWS * illustrator.COLS;
-      similarTiles.value = Math.floor(illustrator.ROWS * illustrator.COLS * 2/3);
+      similarTiles.value =
+          Math.ceil(illustrator.ROWS * illustrator.COLS *
+          illustrator.SIMILAR_TILES_FACTOR);
       illustrator.SIMILAR_TILES = similarTiles.value;
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
@@ -331,7 +361,7 @@ console.log('* Second ' + secondImage);
               illustrator.origins[queryId].push(source);
             }
             illustrator.detectFaces(image);
-            illustrator.histogram(image);
+            illustrator.calculateHistogram(image);
           };
 
           // make sure the load event fires for cached images too
@@ -352,12 +382,12 @@ console.log('* Second ' + secondImage);
       });
       illustrator.faces[img.src] = comp;
     },
-    histogram: function(img) {
+    calculateHistogram: function(img) {
       if (illustrator.DEBUG) console.log('calculate histograms');
       // draw the image on the canvas
       var canvas = document.createElement('canvas');
-      canvas.width = 128; //img.width;
-      canvas.height = 128; //img.height;
+      canvas.width = 100;
+      canvas.height = 100;
       var ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
@@ -454,7 +484,8 @@ console.log('* Second ' + secondImage);
                       abs(gFactor * (innerG - outerG)) +
                       abs(bFactor * (innerB - outerB))) / 3);
               } else {
-                illustrator.distances[outer][inner][k] = 255;
+                illustrator.distances[outer][inner][k] =
+                    illustrator.THRESHOLD + 1;
               }
             }
           }
@@ -483,9 +514,9 @@ console.log('* Second ' + secondImage);
           }
           var inner = keys[j];
           var similarTiles = 0;
-          var distances = illustrator.distances[outer][inner];
-          for (var k in distances) {
-            if (distances[k] <= illustrator.THRESHOLD) {
+          var distance = illustrator.distances[outer][inner];
+          for (var k in distance) {
+            if (distance[k] <= illustrator.THRESHOLD) {
               similarTiles++;
             }
           }
@@ -502,23 +533,30 @@ console.log('* Second ' + secondImage);
               }
             } else {
               if (!distanceToOuter[similarTiles]) {
-                distanceToOuter[similarTiles] = [j];
+                distanceToOuter[similarTiles] = [parseInt(j, 10)];
               } else {
-                distanceToOuter[similarTiles].push(j);
+                distanceToOuter[similarTiles].push(parseInt(j, 10));
               }
             }
           }
         }
+        Object.keys(distanceToOuter).forEach(function(key) {
+          distanceToOuter[key].forEach(function(index) {
+            illustrator.clusters[outer].push(keys[index]);
+            keys[index] = false;
+          });
+        });
+        /*
+        var maximum = max.apply(null, Object.keys(distanceToOuter));
+
         if (Object.keys(distanceToOuter).length) {
-          var mostSimilar = distanceToOuter[max.apply(null,
-                Object.keys(distanceToOuter).map(function(num) {
-                  return parseInt(num, 10);
-                }))];
+          var mostSimilar = distanceToOuter[max];
           mostSimilar.forEach(function(index) {
             illustrator.clusters[outer].push(keys[index]);
             keys[index] = false;
           });
         }
+        */
       }
       illustrator.display();
     },

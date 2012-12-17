@@ -81,8 +81,8 @@ var ccv = {
     if (image.tagName.toLowerCase() == "img") {
       var canvas = document.createElement("canvas");
       document.body.appendChild(image);
-      canvas.width = image.offsetWidth;
-      canvas.height = image.offsetHeight;
+      canvas.width = 100; // image.offsetWidth;
+      canvas.height = 100; // image.offsetHeight;
       document.body.removeChild(image);
       canvas.style.width = image.offsetWidth.toString() + "px";
       canvas.style.height = image.offsetHeight.toString() + "px";
