@@ -1,6 +1,6 @@
 (function() {
   var illustrator = {
-    DEBUG: false,
+    DEBUG: true,
     MEDIA_SERVER: 'http://localhost:8001/search/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     THRESHOLD: 10,
@@ -20,13 +20,17 @@
     faces: {},
     socket: null,
     // checks if all media items are of the given status
-    checkIfAllMediaItems: function(status) {
+    checkMediaItemStatuses: function(status) {
       for (var key in illustrator.statuses) {
         if (illustrator.statuses[key] !== status) {
           return false;
         }
       }
       return true;
+    },
+    calculateSimilarTiles: function() {
+      return Math.ceil(illustrator.ROWS * illustrator.COLS *
+          illustrator.SIMILAR_TILES_FACTOR);
     },
     /**
      * Initialzes the application
@@ -42,48 +46,61 @@
 
       var firstImage = null;
       var secondImage = null;
+
+      // left click selects the left comparison image
       resultsDiv.addEventListener('click', function(e) {
         if (e.target.nodeName.toLowerCase() !== 'img') {
           return;
         };
         var img = e.target;
-        var src = img.src;
-        if (!firstImage) {
-          firstImage = src;
-        } else {
-          secondImage = src;
-        }
+        firstImage = img.src;
+        drawDebugCanvas(img);
+      });
+
+      // right click selects the right comparison image
+      resultsDiv.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        if (e.target.nodeName.toLowerCase() !== 'img') {
+          return;
+        };
+        var img = e.target;
+        secondImage = img.src;
+        drawDebugCanvas(img);
+
         if (firstImage && secondImage) {
           var distance = illustrator.distances[firstImage][secondImage];
-console.log(distance);
           var similarTiles = 0;
+          var nulls = 0;
           for (var k in distance) {
-            if (distance[k] <= illustrator.THRESHOLD) {
+            if ((distance[k] !== null) &&
+                (distance[k] <= illustrator.THRESHOLD)) {
               similarTiles++;
+            }
+            if (distance[k] === null) {
+              nulls++;
             }
           }
           console.log('Similar tiles: ' + similarTiles +
-              ' (' + ((similarTiles / (illustrator.COLS * illustrator.ROWS))
-              * 100) + '%)');
+              '\nMinimum required: ' + (Math.ceil(illustrator.ROWS *
+              illustrator.COLS * illustrator.SIMILAR_TILES_FACTOR)) +
+              '\nOverall: ' + (illustrator.COLS * illustrator.ROWS) +
+              '\nNulls: ' + (nulls) +
+              '\nPercent: ' +
+              ((similarTiles / (illustrator.COLS * illustrator.ROWS)) * 100) +
+              '%\n------------');
           if (similarTiles >= illustrator.SIMILAR_TILES) {
             if (illustrator.CONSIDER_FACES) {
               var outerFaces = illustrator.faces[firstImage].length;
               var innerFaces = illustrator.faces[secondImage].length;
               if (innerFaces === outerFaces) {
-                console.log('Detected faces: ' + innerFaces);
+                console.log('Detected faces: ' + innerFaces + '\n------------');
               }
             }
           }
-          firstImage = null;
-          secondImage = null;
         }
       });
 
-      resultsDiv.addEventListener('click', function(e) {
-        if (e.target.nodeName.toLowerCase() !== 'img') {
-          return;
-        };
-        var img = e.target;
+      var drawDebugCanvas = function drawDebugCanvas(img) {
         var src = img.src;
         var canvas = document.createElement('canvas');
         canvas.width = 100;
@@ -116,7 +133,7 @@ console.log(distance);
         canvas.addEventListener('click', function() {
           canvas.parentNode.replaceChild(img, canvas);
         });
-      });
+      };
 
       var luminance = document.getElementById('luminance');
       luminance.checked = illustrator.ACCOUNT_FOR_LUMINANCE;
@@ -132,6 +149,9 @@ console.log(distance);
       rows.min = 1;
       var rowsLabel = document.getElementById('rowsLabel');
       rowsLabel.innerHTML = rows.value;
+      rows.addEventListener('change', function() {
+        rowsLabel.innerHTML = rows.value;
+      });
       rows.addEventListener('mouseup', function() {
         for (var key in illustrator.statuses) {
           illustrator.statuses[key] = 'loaded';
@@ -142,9 +162,7 @@ console.log(distance);
         rowsLabel.innerHTML = rows.value;
         illustrator.ROWS = rows.value;
         similarTiles.max = illustrator.ROWS * illustrator.COLS;
-        similarTiles.value =
-            Math.ceil(illustrator.ROWS * illustrator.COLS *
-            illustrator.SIMILAR_TILES_FACTOR);
+        similarTiles.value = illustrator.calculateSimilarTiles();
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.images.forEach(function(image) {
@@ -158,6 +176,9 @@ console.log(distance);
       cols.min = 1;
       var colsLabel = document.getElementById('colsLabel');
       colsLabel.innerHTML = cols.value;
+      cols.addEventListener('change', function() {
+        colsLabel.innerHTML = cols.value;
+      });
       cols.addEventListener('mouseup', function() {
         for (var key in illustrator.statuses) {
           illustrator.statuses[key] = 'loaded';
@@ -168,9 +189,7 @@ console.log(distance);
         colsLabel.innerHTML = cols.value;
         illustrator.COLS = cols.value;
         similarTiles.max = illustrator.ROWS * illustrator.COLS;
-        similarTiles.value =
-            Math.ceil(illustrator.ROWS * illustrator.COLS *
-            illustrator.SIMILAR_TILES_FACTOR);
+        similarTiles.value = illustrator.calculateSimilarTiles();
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.images.forEach(function(image) {
@@ -184,8 +203,11 @@ console.log(distance);
       thresholdLabel.innerHTML = threshold.value;
       threshold.addEventListener('change', function() {
         thresholdLabel.innerHTML = threshold.value;
+      });
+      threshold.addEventListener('mouseup', function() {
+        thresholdLabel.innerHTML = threshold.value;
         illustrator.THRESHOLD = threshold.value;
-        if (illustrator.checkIfAllMediaItems('histogram')) {
+        if (illustrator.checkMediaItemStatuses('histogram')) {
           illustrator.sort();
         };
       });
@@ -193,17 +215,18 @@ console.log(distance);
       var similarTiles = document.getElementById('similarTiles');
       similarTiles.min = 1;
       similarTiles.max = illustrator.ROWS * illustrator.COLS;
-      similarTiles.value =
-          Math.ceil(illustrator.ROWS * illustrator.COLS *
-          illustrator.SIMILAR_TILES_FACTOR);
+      similarTiles.value = illustrator.calculateSimilarTiles();
       illustrator.SIMILAR_TILES = similarTiles.value;
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
       similarTilesLabel.innerHTML = similarTiles.value;
       similarTiles.addEventListener('change', function() {
         similarTilesLabel.innerHTML = similarTiles.value;
+      });
+      similarTiles.addEventListener('mouseup', function() {
+        similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.SIMILAR_TILES = similarTiles.value;
-        if (illustrator.checkIfAllMediaItems('histogram')) {
+        if (illustrator.checkMediaItemStatuses('histogram')) {
           illustrator.sort();
         };
       });
@@ -217,8 +240,13 @@ console.log(distance);
       bwToleranceLabel.innerHTML = bwTolerance.value;
       bwTolerance.addEventListener('change', function() {
         bwToleranceLabel.innerHTML = bwTolerance.value;
+      });
+      bwTolerance.addEventListener('mouseup', function() {
+        bwToleranceLabel.innerHTML = bwTolerance.value;
         illustrator.BW_TOLERANCE = bwTolerance.value;
-        if (illustrator.checkIfAllMediaItems('histogram')) {
+        if (illustrator.checkMediaItemStatuses('histogram')) {
+          illustrator.clusters = {};
+          illustrator.distances = {};
           illustrator.calculateDistances();
         };
       });
@@ -263,7 +291,7 @@ console.log(distance);
       // sort by similarity
       var similaritySort = document.getElementById('similaritySort');
       similaritySort.addEventListener('click', function() {
-        if (illustrator.checkIfAllMediaItems('histogram')) {
+        if (illustrator.checkMediaItemStatuses('histogram')) {
           illustrator.sort();
         };
       });
@@ -419,7 +447,7 @@ console.log(distance);
       }
 
       illustrator.statuses[img.src] = 'histogram';
-      if (illustrator.checkIfAllMediaItems('histogram')) {
+      if (illustrator.checkMediaItemStatuses('histogram')) {
         illustrator.calculateDistances();
       };
     },
@@ -466,7 +494,6 @@ console.log(distance);
               var outerR = outerHisto[k].r;
               var outerG = outerHisto[k].g;
               var outerB = outerHisto[k].b;
-
               if ((innerR >= blackTolerance &&
                    innerG >= blackTolerance &&
                    innerB >= blackTolerance) &&
@@ -484,8 +511,7 @@ console.log(distance);
                       abs(gFactor * (innerG - outerG)) +
                       abs(bFactor * (innerB - outerB))) / 3);
               } else {
-                illustrator.distances[outer][inner][k] =
-                    illustrator.THRESHOLD + 1;
+                illustrator.distances[outer][inner][k] = null;
               }
             }
           }
@@ -516,7 +542,8 @@ console.log(distance);
           var similarTiles = 0;
           var distance = illustrator.distances[outer][inner];
           for (var k in distance) {
-            if (distance[k] <= illustrator.THRESHOLD) {
+            if ((distance[k] !== null) &&
+                (distance[k] <= illustrator.THRESHOLD)) {
               similarTiles++;
             }
           }
@@ -533,9 +560,9 @@ console.log(distance);
               }
             } else {
               if (!distanceToOuter[similarTiles]) {
-                distanceToOuter[similarTiles] = [parseInt(j, 10)];
+                distanceToOuter[similarTiles] = [j];
               } else {
-                distanceToOuter[similarTiles].push(parseInt(j, 10));
+                distanceToOuter[similarTiles].push(j);
               }
             }
           }
@@ -546,17 +573,6 @@ console.log(distance);
             keys[index] = false;
           });
         });
-        /*
-        var maximum = max.apply(null, Object.keys(distanceToOuter));
-
-        if (Object.keys(distanceToOuter).length) {
-          var mostSimilar = distanceToOuter[max];
-          mostSimilar.forEach(function(index) {
-            illustrator.clusters[outer].push(keys[index]);
-            keys[index] = false;
-          });
-        }
-        */
       }
       illustrator.display();
     },
@@ -564,7 +580,7 @@ console.log(distance);
       if (illustrator.DEBUG) console.log('display');
       var resultsDiv = document.getElementById('results');
       var clusterSizes = {};
-      for (key in illustrator.clusters) {
+      for (var key in illustrator.clusters) {
         if (!clusterSizes[illustrator.clusters[key].length]) {
           clusterSizes[illustrator.clusters[key].length] = [key];
         } else {
@@ -573,12 +589,17 @@ console.log(distance);
       }
 
       var html = [];
-      Object.keys(clusterSizes).sort().reverse().forEach(function(index) {
+      Object.keys(clusterSizes).map(function(size) {
+        return parseInt(size, 10);
+      }).sort(function(a, b) {
+        return b - a;
+      }).forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
           html.push('<img style="margin-left:50px;" class="photo" src="' +
               key +'"/>' + illustrator.clusters[key].map(function(url) {
                 return '<img class="photo" src="' + url +'"/>';
-              }).join(''));
+              }).join('') + ' (' + (illustrator.clusters[key].length + 1) +
+              ')');
         });
       });
       resultsDiv.innerHTML = '';
