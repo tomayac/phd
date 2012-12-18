@@ -81,8 +81,7 @@
             }
           }
           console.log('Similar tiles: ' + similarTiles +
-              '\nMinimum required: ' + (Math.ceil(illustrator.ROWS *
-              illustrator.COLS * illustrator.SIMILAR_TILES_FACTOR)) +
+              '\nMinimum required: ' + (illustrator.SIMILAR_TILES) +
               '\nOverall: ' + (illustrator.COLS * illustrator.ROWS) +
               '\nNulls: ' + (nulls) +
               '\nPercent: ' +
