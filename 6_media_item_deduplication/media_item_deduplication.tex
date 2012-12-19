@@ -13,14 +13,14 @@
 In the previous \autoref{cha:media-item-extraction}
 in \autoref{sec:the-need-for-media-item-deduplication},
 we have motivated the need for media item deduplication.
-By clustering media items, we get a~higher level view on
+By clustering media items, we get a~higher-level view on
 a~media item cluster's overall performance on different networks.
 As detailed in \autoref{sec:definition}, media items can be
 photos or videos.
 WordNet~\cite{fellbaum1998wordnet,miller1995wordnet} defines
 the term \emph{duplicate} as
 \textit{``a copy that corresponds to an original exactly''}.
-the corresponding verb \emph{to duplicate} is defined as to
+The corresponding verb \emph{to duplicate} is defined as to
 \textit{``make a~duplicate or duplicates of''}.
 The derived term \emph{deduplication} in consequence refers to
 the act of eliminating duplicate or redundant information.
@@ -29,7 +29,7 @@ the act of eliminating duplicate or redundant information.
 
 We define two media items of type photo as \emph{exact duplicate},
 if their pixel contents are exactly the same.
-This implies that by our definition, a~scaled version
+This implies that by our definition, a~scaled or recompressed version
 of the same photo is \emph{not} an exact duplicate. 
 Similarly, a~rotated version of a~photo is also \emph{not}
 an exact duplicate. 
@@ -47,7 +47,7 @@ if one user posts a~photo on Instagram that then someone else
 \subsection{Definition of Near-Duplicate for Photos}
 
 We define two media items of type photo as \emph{near-duplicate},
-if their pixel contents differ no more than a~given threshold.
+if their pixel contents differ no more than a~given threshold after resampling.
 Examples of near-duplicate photos are scaled versions
 of the same photo, photos shot from a~slightly different angle,
 rotated photos up to a~certain degree, \emph{etc.}
@@ -55,7 +55,7 @@ Near-duplicate photos typically occur if event attendants
 stand close to each other and thus take photos
 from a~similar standpoint.
 Another scenario is a~user applying a~photo effect to a~photo
-(like an Instagram filter) and then sharing both, the modified,
+(like an Instagram filter) and then sharing both the modified
 and the unmodified version.
 
 \subsection{Definition of Exact Duplicate for Videos}
@@ -81,7 +81,7 @@ only consider frames at shot boundaries.
 Typical scenarios where near-duplicate videos can occur is through
 logo or subtitle insertion, resizing, re-encoding,
 or aspect-ration changes.
-Note, we do not consider video subsegments near-duplicates.
+Note that we do not consider video subsegments near-duplicates.
 
 \subsection{Special Case of Photo Contained in a~Video}
 

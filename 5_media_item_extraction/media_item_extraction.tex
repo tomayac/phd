@@ -43,7 +43,7 @@ In this section, we tackle the challenge of reconciling
 social media that illustrates known events,
 but that is spread over various social networks
 with the objective of creating visual summaries of them.
-We propose a~social network agnostic
+We propose a~social-network-agnostic
 approach to the extraction of photos and videos covering events.
 We want to emphasize that we do \emph{not} perform event detection: 
 the events we are dealing with are known beforehand
@@ -71,7 +71,7 @@ Approaches to alignment use visual, temporal,
 and spacial similarity measures to map multiple photo streams of
 the same events~\cite{yang2011photostream}.
 Other ways to collect and order media from social networks use
-user-driven metadata such as geospatial
+media-driven metadata such as geospatial
 information~\cite{crandall2009mappingphotos}.
 Becker \emph{et al.}\ show in~\cite{becker2010eventidentification}
 how to exploit the rich context associated with social media
@@ -121,44 +121,54 @@ as follows.
        An event is defined as a~phenomenon that has happened
        or that is scheduled to happen.
        It is an observable occurrence grouping persons,
-       places, times and activities while being often
+       places, times, and activities while being often
        documented by people through different media.
   \item[Media Item Extraction:]
        The process of leveraging search functionalities of
        social networks to find references to media items,
        which allows for storing those media items in binary form.       
+  \item[Application Programming Interface (API):]
+       An API is a~programmatic specification intended to be used
+       as an interface by software components on client and server
+       to communicate with each other.
+  \item[Web scraping]
+       The term Web scraping means the process of
+       automatically extracting information from Web pages.
+       Web scraping involves practical solutions based on
+       existing technologies that are often entirely \emph{ad hoc}.
+       Examples of such technologies are regular expressions,
+       Document Object Model (DOM)
+       parsing~\cite{lehors2004dom},
+       or CSS selectors~\cite{hunt2012cssselectors}.
+       The difference between \emph{Web scraping}
+       and the related concept of \emph{screen scraping}
+       is that screen scraping relies on the visual layout of a~Web page,
+       while Web scraping relies on the textual
+       and/or hierarchical structure of Web pages.
 \end{description}
 
-An \emph{Application Programming Interface (API)}
-is a~programmatic specification intended to be used
-as an interface by software components on client and server
-to communicate with each other.
-\emph{Web scraping} is the process of
-automatically extracting information from Web pages.
-Web scraping involves practical solutions based on
-existing technologies that are often entirely \emph{ad hoc}.
-Examples of such technologies are regular expressions,
-Document Object Model (DOM)
-parsing~\cite{lehors2004dom},
-or CSS selectors~\cite{hunt2012cssselectors}.
-The difference between \emph{Web scraping}
-and the related concept of \emph{screen scraping}
-is that screen scraping relies on the visual layout of a~Web page,
-while Web scraping relies on the textual
-and/or hierarchical structure of Web pages.
-
 Social networks are often perceived as
-\emph{walled gardens}~\cite{simonds2008walledgarden},
-as illustrated by David Simonds in \autoref{fig:walled-gardens}.
+\emph{walled gardens}~\cite{simonds2008walledgarden}
+due to the full control of the network operator
+over content and media on the social network,
+oftentimes accessible exclusively by social network members.
+This network lock-in effect was excellently illustrated
+by David Simonds in a~cartoon that first appeared
+in the English-language weekly news and
+international affairs publication \emph{The Economist},
+reproduced in \autoref{fig:walled-gardens}.
 While some social networks (\emph{e.g.}, Twitter)
 have full read and write access via specified APIs,
 other social networks (\emph{e.g.}, \googleplus)
 currently only have read APIs access.
-In some cases, however, API access is too limited,
+In some cases, however, API access is limited,
 so that not all desired information gets exposed
 (\emph{e.g.}, view counts with Img.ly),
 which forces people interested in that data
 to fall back to Web scraping.
+It is to be noted that Web scraping \emph{per se}
+is not an illegal practice, as only public information is being accessed,
+comparable to the level of access that common Web search engines have.
 
 \begin{figure}[h!]
   \centering
@@ -198,7 +208,7 @@ on top of the native data formats of all considered social networks
 outlined in \autoref{tab:platforms} in order to gain
 an agnostic view on the underlying social networks.
 Naturally, any abstraction can only represent the
-least common multiple of all social networks.
+greatest common divisor of all social networks.
 We explain the abstraction layer in the following
 with the help of a~concrete example,
 stemming from a~query to the media extractor
@@ -210,42 +220,43 @@ that match the search term \emph{hamburg}.
 for a~Facebook post, which was processed
 with named-entity extraction and disambiguation 
 as detailed in \autoref{cha:micropost-annotation}.
+Below, we explain the data format of our media extractor.
 
 \begin{description}
-  \item[\texttt{mediaUrl}] Deep link to a~media item.
+  \item[\texttt{mediaUrl}] Deep link to a~media item
   \item[\texttt{posterUrl}] Deep link to a~thumbnail for photos
-    or still frame for videos.
+    or still frame for videos
   \item[\texttt{micropostUrl}] Deep link to the micropost on
-    the social network.
-  \item[\texttt{micropost}] Container for a~micropost.
+    the social network
+  \item[\texttt{micropost}] Container for a~micropost
   \begin{description}
-    \item[\texttt{html}] Text of the micropost with potential HTML
-      markup.
+    \item[\texttt{html}] Text of the micropost,
+      possibly with HTML      markup
     \item[\texttt{plainText}] Text of the micropost with
-      potential HTML markup removed.
+      potential HTML markup removed
     \item[\texttt{entities}] Extracted and disambiguated
-      named entities from the micropost text.
+      named entities from the micropost text
   \end{description}      
   \item[\texttt{userProfileUrl}] Deep link to the user's
-    profile on the social network.
+    profile on the social network
   \item[\texttt{type}] Type of the media item,
-    can be \texttt{photo} or \texttt{video}.
+    can be \texttt{photo} or \texttt{video}
   \item[\texttt{timestamp}] Number of milliseconds since
     1 January 1970 00:00:00 UTC when the micropost was
-    published.
+    published
   \item[\texttt{publicationDate}] Date in ISO 8601
-    format when the micropost was published. 
+    format when the micropost was published
   \item[\texttt{socialInteractions}] Container for social
-    interactions.
+    interactions
   \begin{description}  
   \item[\texttt{likes}] Number of times a~micropost was liked, or
-    \texttt{null}.
+    \texttt{null}
   \item[\texttt{shares}] Number of times a~micropost was shared, or
-    \texttt{null}.
+    \texttt{null}
   \item[\texttt{comments}] Number of comments a~micropost
-    received, or \texttt{null}.
+    received, or \texttt{null}
   \item[\texttt{views}] Number of views a~micropost reached, or
-    \texttt{null}.
+    \texttt{null}
   \end{description}    
 \end{description}
 
@@ -310,10 +321,15 @@ the available results are represented according to the data format
 defined in \autoref{sec:data-format}.
 Media items and the relevant metadata like view count, comments,
 \emph{etc.} are retrieved either directly, or via Web scraping.
-For some social networks, \emph{e.g.}, Img.ly
-a combination of Web scraping and API access is required
+For some social networks, \emph{e.g.}, Img.ly,
+a~combination of Web scraping and API access is required
 since the API does not return all necessary fields
 of our data format.
+While we could simply default to Web scraping
+to obtain all relevant data,
+it is more robust to use API access wherever possible,
+and only fall back to the more brittle Web scraping
+for the parts not covered by API access.
 
 \subsubsection{Special Role of Twitter}
 
@@ -347,7 +363,9 @@ architectural diagram in \autoref{fig:architecture}.
 As a~side note, Twitter on its website now has its limited own
 media extractor~\cite{wang2012twitter}
 with support for some of of the media platforms,
-however, our own media extractor goes beyond Twitter's offer.
+however, our own media extractor goes beyond Twitter's offer,
+especially since Facebook-owned Instagram's latest break-up with
+Twitter\footnote{\url{http://techcrunch.com/2012/12/05/kevin-systrom-on-pulling-twitter-cards-integration-we-want-images-viewed-on-instagram-com/}}.
 
 \begin{figure}
   \centering
@@ -465,14 +483,14 @@ numbers of retrieved photos and videos of the media extractor.
 Column values marked with $n+$ signify that there were more 
 results, but that only $n$ results were considered. 
 We have calculated the precisions for each event for both video 
-and photo separately, the overall photo precision was $0.73$,
+and photo separately; the overall photo precision was $0.73$,
 and the overall video precision was $0.54$.
 We note that these values were calculated \emph{before}
 any pruning at all, \emph{i.e.}, before taking into account
 the additional textual information from microposts like
 potential extracted named entities.
 The dataset is very diverse with respect to photo quality,
-photo format, and naturally content.
+photo format, and naturally, content.
 It ranges from entirely sharp screenshots
 in all sorts of formats (\emph{e.g.},
 screenshots of the Google homepage for the Blackout SOPA event
@@ -482,7 +500,7 @@ to blurry cell phone photos in standard photo formats
 for the Free Mobile Launch event).
 \autoref{fig:sequences} shows sample photos for
 some of the considered nine events.
-We have observed that more than one search sessions are necessary
+We have observed that more than one search session is necessary
 in order to obtain a~satisfactory recall.
 Query strategies developed by Becker~\cite{becker2012plannedevents}
 that combine different combinations of event title,
@@ -675,11 +693,12 @@ cross-post to several social networks.
 Instead of trying to filter out cross-posted items,
 we rather keep them and instead cluster them.
 We are especially interested in social interactions
-that media items trigger, for example, one and the same 
-photo, if cross-posted to separate networks, can retrieve
-shares, likes, views, or comments independently
-on each of those networks.
-By clustering media items, we get a~higher level view on
+that media items can trigger.
+For example, if one and the same photo
+is cross-posted to separate networks,
+it can retrieve shares, likes, views, or comments
+independently on each of those networks.
+By clustering media items, we get a~higher-level view on
 a~media item cluster's overall performance on different networks.
 We also observed media items that were near-duplicates,
 for example, from people who attended the same event like a~concert
@@ -687,7 +706,7 @@ and who took photos of the stage from almost the same angle.
 Similar to exact duplicates,
 by clustering near-duplicate media items,
 we can treat them like exact duplicates to get the same
-network-agnostic view point.
+network-agnostic viewpoint.
 We will examine media item deduplication and near-deduplication
 in \autoref{sec:media-item-deduplication}
 
@@ -695,7 +714,7 @@ in \autoref{sec:media-item-deduplication}
 
 Our ultimate goal is to generate media galleries
 to create visual event summaries.
-Especially given high recall search terms,
+Especially given high-recall search terms,
 we need a~way to rank and prune media items.
 Popular media items can be displayed bigger, longer,
 or with a~special decoration like a~thicker border
@@ -703,7 +722,8 @@ in comparison to less popular media items.
 For videos, the audio part poses a~challenge.
 In our experiments, we observe that intermixing the audio
 of all videos of an event often generates
-a very characteristic \emph{noise cloud}.
+a very characteristic \emph{noise cloud}
+that conveys the event's atmosphere very well.
 A~good example is the Assad Speech event,
 where a~mix of Arabic voices blends nicely
 with the speech of a~US politician.
@@ -774,7 +794,7 @@ would not have revealed---oftentimes,
 and especially in the concrete case,
 at the expense of neutrality.
 We are confident, however, that the additional coverage
-from more angles helps sharpen one's own view point of an event,
+from more angles helps sharpen one's own viewpoint of an event,
 especially with the option of back-translating microposts
 in foreign languages, which our approach supports,
 as mentioned in \autoref{sec:machine-translation}.
