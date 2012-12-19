@@ -142,13 +142,14 @@
                  hyperindex = true,
                  hyperfigures
                  ]{hyperref}
-     \def\figureautorefname{Figure}
-     \def\tableautorefname{Table}
      \def\appendixautorefname{Appendix}
      \def\chapterautorefname{Chapter}
      \def\sectionautorefname{Section}
+     \def\subsectionautorefname{Subsection}
      \def\subsubsectionautorefname{Subsection}
+     \def\figureautorefname{Figure}
      \def\subfloatautorefname{Subfigure}
+     \def\tableautorefname{Table}
 
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
     %\usepackage[pdftex]{graphicx}

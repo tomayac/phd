@@ -125,20 +125,20 @@ and exact duplicate detection are founded
 on a~tile-wise histogram-based pixel comparison algorithm.
 
 \section{Video Shot Boundary Detection}
-Video shot boundary detection is the processor-intensive task
+Video shot boundary detection is the for machines processor-intensive task
 of splitting a~video into continuous camera shots,
 with hard or soft cuts as the boundaries.
 In this section, we present a~browser-based, client-side, and
 on-the-fly approach to this challenge
 based on modern HTML5~\cite{berjon2012html5} Web APIs.
 Once a~video has been split into shots,
-shot-based video navigation gets enabled,
+shot-based video navigation becomes enabled,
 more fine-grained playing statistics can be created,
 and finally, shot-based video comparison is possible.
 \autoref{fig:screenshot} shows detected camera
 shots for a~sample video.
 The algorithm has been incorporated in a~browser extension
-such that it can run transparently on a~major online video portal.
+so that it can run transparently on a~major online video portal.
 
 \begin{figure}
   \begin{center}
@@ -222,6 +222,7 @@ rows and columns, \emph{i.e.}, lay a~grid of tiles over each frame.
 The user interface, as can be seen in \autoref{fig:algorithm},
 currently allows for anything from a~$\mathit{1} \times \mathit{1}$ 
 grid to a~$\mathit{20} \times \mathit{20}$ grid.
+The limits are imposed by still reasonable processing time on consumer PCs.
 For each step, we examine a~frame $\mathit{f}$ and its direct
 predecessor frame $\mathit{f - 1}$.
 
@@ -359,7 +360,7 @@ this can be very demanding.
 We do not attach the analysis \texttt{<video>} tag
 to the DOM tree~\cite{lehors2004dom} to save some CPU cycles,
 however, the video still needs to be sought to each frame
-in one second-steps and be processed.
+in one-second steps and be processed.
 Even on a~higher-end computer (our experiments ran on a~MacBook
 Pro, Intel Core 2 Duo 2,66 GHz, 8 GB RAM),
 the process of analyzing and displaying in parallel
@@ -393,10 +394,11 @@ detecting near- or exact duplicate videos.
 Optimization potential lies in
 improving the analysis speed by dynamically selecting
 lower quality analysis video files,
-given that videos are oftentimes available in several resolutions
-(both LD and HD).
-We will check in how far analysis results differ
-for the various qualities.
+given that videos are oftentimes available in several resolutions,
+like Standard Definition (SD) or High Definition (HD).
+We have checked in how far analysis results differ
+for the various qualities,
+with the result that SD quality is sufficient.
 Second, more advanced heuristics for the various user-definable
 options in the analysis process are needed.
 While there is no optimal configuration for all types of videos,
@@ -516,18 +518,19 @@ to improve framing, accentuate subject matter or change aspect ratio.
 Cropping either happens manually via an image editing application,
 or, more often, the social networks themselves crop photos
 to better fit in the timeline view of users.
-Typically photos are automatically cropped to have a~square aspect ratio,
+Typically, photos are automatically cropped by social networks
+to have a~square aspect ratio that fits well in a~user's timeline view,
 as can be seen in the example in \autoref{fig:cropping}.
 
 \begin{figure}[h!]
   \centering
   \subfloat[Original]{
-    \includegraphics[width=0.2\textwidth]{kid1.jpg}
+    \includegraphics[width=0.26\textwidth]{kid1.jpg}
   }                
   \subfloat[Cropped]{
-    \includegraphics[width=0.137\textwidth]{kid2.jpg}
+    \includegraphics[width=0.18\textwidth]{kid2.jpg}
   }
-  \caption{Original and cropped version of a~photo.}
+  \caption{Original and cropped version of a~photo (including a~slight color variation).}
   \label{fig:cropping}  
 \end{figure}
 
@@ -535,7 +538,7 @@ as can be seen in the example in \autoref{fig:cropping}.
 
 We have shown camera shot detection earlier in this chapter.
 Different frames stemming from the same camera shot
-can occur on social networks when they try to auto-select
+can occur on social networks when the social networks attempt to auto-select
 a~well-identifying poster frame with different heuristics,
 typically resulting in different frames for different social networks.
 \autoref{fig:camera-shot} shows an example of this phenomenon.
@@ -548,7 +551,9 @@ typically resulting in different frames for different social networks.
   \subfloat[Frame 2]{
     \includegraphics[width=0.2\textwidth]{camera2.jpg}
   }
-  \caption{Two different frames stemming from the same camera shot.}
+  \caption[Two different frames stemming from the same camera shot]
+    {Two different frames stemming from the same camera shot,
+    with the left photo appearing slightly earlier in the video.}
   \label{fig:camera-shot}  
 \end{figure}
 
@@ -563,7 +568,7 @@ both cropped and bulged.
 \begin{figure}[h!]
   \centering
   \subfloat[Original]{
-    \includegraphics[width=0.2\textwidth]{singer1.jpg}
+    \includegraphics[width=0.225\textwidth]{singer1.jpg}
   }                
   \subfloat[Stretched and bulged]{
     \includegraphics[width=0.3\textwidth]{singer2.jpg}
@@ -602,7 +607,7 @@ We start with a~description of its face detection component.
 
 Face detection is a~computer vision technology
 that determines the regions of faces in photos.
-Rotation invariant face detection aims to detect faces with arbitrary
+Rotation-invariant face detection aims to detect faces with arbitrary
 rotation angles and is crucial as the first step in automatic face detection
 for general applications, as face photos are seldom upright and frontal.
 Face detection is a~subclass of the broader class of object detection.
@@ -617,7 +622,7 @@ and Abramson \emph{et al.}~\cite{abramson2007yef},
 in a~JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
 This algorithm is fast enough to be applied to hundreds of photos
 in well less than a~second overall processing time on a~standard laptop
-(mid 2010 MacBook~Pro).
+(mid-2010 MacBook~Pro).
 
 \subsubsection{Algorithm Design Goals}
 
@@ -646,7 +651,7 @@ the following conditions have to be fulfilled.
     have to be the same, ($f_1, f_2 \geq 0$).
     We note that we do \emph{not} recognize faces.
   \item Out of $m$ tiles of a~photo with $n$ tiles, ($m \leq n$),
-    at most $TILES\_THRESHOLD$ tiles may differ not more than $SIMILARITY\_THRESHOLD$
+    at most $tiles\_threshold$ tiles may differ not more than $similarity\_threshold$
     from their corresponding counterpart tiles.
 \end{enumerate}
 
@@ -655,7 +660,7 @@ In the actual implementation some speed improvements have been applied,
 these were omitted in the listing for legibility reasons.
 We calculate the histograms and distances only once.
 The clusters are recalculated dynamically
-whenever either $TILES\_THRESHOLD$ or $SIMILARITY\_THRESHOLD$ change.
+whenever either $tiles\_threshold$ or $similarity\_threshold$ change.
 
 \begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
     photo clustering algorithm.},
@@ -746,7 +751,7 @@ with special performers and acts every year.
 The 2012 edition of the show,
 which was previously taped on November 7, 2012
 was aired on December 4, 2012 on CBS
-with an audience of 9.48 million viewers.
+to an audience of 9.48 million viewers.
 CBS suggested the hashtag \texttt{\#VSFashionShow} for the event.
 
 \subsection{Evaluation}
@@ -777,11 +782,11 @@ In the following, we discuss the clustering and deduplication results.
 
 \subsection{Related Work}
 
-In addition to the before-mentioned  combined approach
+In addition to the aforementioned  combined approach
 for video and photo near-duplicate
-detection~\cite{yang2009nearduplicate}, also more
-specialized methods for video deduplication exist,
-for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate},
+detection~\cite{yang2009nearduplicate},
+more specialized methods for video deduplication exist,
+for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate}
 by Min \emph{et al.}\ who, given the observation that 
 transformations tend to preserve the semantic information conveyed
 by the video content, propose a~novel approach for identifying
