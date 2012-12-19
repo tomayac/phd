@@ -77,19 +77,17 @@ function get_named_arguments(params, names) {
 }
 
 var ccv = {
-  pre : function (image) {
-    if (image.tagName.toLowerCase() == "img") {
-      var canvas = document.createElement("canvas");
-      document.body.appendChild(image);
-      canvas.width = 100; // image.offsetWidth;
-      canvas.height = 100; // image.offsetHeight;
-      document.body.removeChild(image);
-      canvas.style.width = image.offsetWidth.toString() + "px";
-      canvas.style.height = image.offsetHeight.toString() + "px";
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(image, 0, 0);
-      return canvas;
-    }
+  pre : function (image, width, height) {
+    // Using static canvas width and height, instead of the actual width and
+    // height of the image. This for performance reasons and to equalize the
+    // chance of detecting images with different thumbnail sizes.
+    var canvas = document.createElement("canvas");
+    canvas.height = 100;
+    canvas.width = Math.ceil(width / (height / canvas.height));
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return canvas;
+
     return image;
   },
 

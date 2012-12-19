@@ -5,7 +5,7 @@
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     THRESHOLD: 10,
     ACCOUNT_FOR_LUMINANCE: true,
-    BW_TOLERANCE: 3,
+    BW_TOLERANCE: 1,
     COLS: 10,
     ROWS: 10,
     SIMILAR_TILES: 0,
@@ -19,6 +19,8 @@
     tileHistograms: {},
     faces: {},
     socket: null,
+    canvas: null,
+    ctx: null,
     // checks if all media items are of the given status
     checkMediaItemStatuses: function(status) {
       for (var key in illustrator.statuses) {
@@ -32,12 +34,20 @@
       return Math.ceil(illustrator.ROWS * illustrator.COLS *
           illustrator.SIMILAR_TILES_FACTOR);
     },
+    calculateMinimumSimilarTiles: function() {
+      return Math.ceil(illustrator.ROWS * illustrator.COLS / 2);
+    },
     /**
      * Initialzes the application
      */
     init: function() {
       illustrator.socket = io.connect('http://localhost:8001/');
       illustrator.initSockets();
+
+      illustrator.canvas = document.createElement('canvas');
+      illustrator.canvas.width = 100;
+      illustrator.canvas.height = 100;
+      illustrator.ctx = illustrator.canvas.getContext('2d');
 
       if (illustrator.DEBUG) console.log('init');
       illustrator.reset();
@@ -72,22 +82,29 @@
           var similarTiles = 0;
           var nulls = 0;
           for (var k in distance) {
-            if ((distance[k] !== null) &&
-                (distance[k] <= illustrator.THRESHOLD)) {
-              similarTiles++;
-            }
-            if (distance[k] === null) {
+            if (distance[k] !== null) {
+              if (distance[k] <= illustrator.THRESHOLD) {
+                similarTiles++;
+              }
+            } else {
               nulls++;
             }
           }
+          var minimumRequired;
+          var minimumSimilarTiles = illustrator.calculateMinimumSimilarTiles();
+          if (illustrator.SIMILAR_TILES - nulls >= minimumSimilarTiles) {
+            minimumRequired = illustrator.SIMILAR_TILES - nulls;
+          } else {
+            minimumRequired = minimumSimilarTiles;
+          }
           console.log('Similar tiles: ' + similarTiles +
-              '\nMinimum required: ' + (illustrator.SIMILAR_TILES) +
+              '\nMinimum required: ' + minimumRequired +
               '\nOverall: ' + (illustrator.COLS * illustrator.ROWS) +
-              '\nNulls: ' + (nulls) +
+              '\nNulls: ' + nulls +
               '\nPercent: ' +
               ((similarTiles / (illustrator.COLS * illustrator.ROWS)) * 100) +
               '%\n------------');
-          if (similarTiles >= illustrator.SIMILAR_TILES) {
+          if (similarTiles >= minimumRequired) {
             if (illustrator.CONSIDER_FACES) {
               var outerFaces = illustrator.faces[firstImage].length;
               var innerFaces = illustrator.faces[secondImage].length;
@@ -134,12 +151,22 @@
         });
       };
 
+      var faces = document.getElementById('faces');
+      faces.checked = illustrator.CONSIDER_FACES;
+      faces.addEventListener('change', function() {
+        illustrator.CONSIDER_FACES = faces.checked;
+        illustrator.clusters = {};
+        if (illustrator.DEBUG) console.log('sort');
+        illustrator.sort();
+      });
+
       var luminance = document.getElementById('luminance');
       luminance.checked = illustrator.ACCOUNT_FOR_LUMINANCE;
       luminance.addEventListener('change', function() {
         illustrator.ACCOUNT_FOR_LUMINANCE = luminance.checked;
+        illustrator.clusters = {};
         illustrator.distances = {};
-        illustrator.sort();
+        illustrator.calculateDistances();
       });
 
       var rows = document.getElementById('rows');
@@ -160,10 +187,12 @@
         illustrator.distances = {};
         rowsLabel.innerHTML = rows.value;
         illustrator.ROWS = rows.value;
+        similarTiles.min = illustrator.calculateMinimumSimilarTiles();
         similarTiles.max = illustrator.ROWS * illustrator.COLS;
         similarTiles.value = illustrator.calculateSimilarTiles();
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
+        if (illustrator.DEBUG) console.log('calculate histograms');
         illustrator.images.forEach(function(image) {
           illustrator.calculateHistogram(image);
         });
@@ -187,10 +216,12 @@
         illustrator.distances = {};
         colsLabel.innerHTML = cols.value;
         illustrator.COLS = cols.value;
+        similarTiles.min = illustrator.calculateMinimumSimilarTiles();
         similarTiles.max = illustrator.ROWS * illustrator.COLS;
         similarTiles.value = illustrator.calculateSimilarTiles();
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
+        if (illustrator.DEBUG) console.log('calculate histograms');
         illustrator.images.forEach(function(image) {
           illustrator.calculateHistogram(image);
         });
@@ -206,13 +237,14 @@
       threshold.addEventListener('mouseup', function() {
         thresholdLabel.innerHTML = threshold.value;
         illustrator.THRESHOLD = threshold.value;
+        illustrator.clusters = {};
         if (illustrator.checkMediaItemStatuses('histogram')) {
           illustrator.sort();
         };
       });
 
       var similarTiles = document.getElementById('similarTiles');
-      similarTiles.min = 1;
+      similarTiles.min = illustrator.calculateMinimumSimilarTiles();
       similarTiles.max = illustrator.ROWS * illustrator.COLS;
       similarTiles.value = illustrator.calculateSimilarTiles();
       illustrator.SIMILAR_TILES = similarTiles.value;
@@ -298,11 +330,11 @@
     initSockets: function() {
       if (illustrator.DEBUG) console.log('init sockets');
       illustrator.socket.on('proxy', function(data) {
-        var socketData = document.getElementById('socket_data');
+        var socketData = document.getElementById('socketData');
         socketData.innerHTML = 'Loading file ' + data.url;
       });
       illustrator.socket.on('mediaResults', function(data) {
-        var socketData = document.getElementById('socket_data');
+        var socketData = document.getElementById('socketData');
         socketData.innerHTML = 'Receiving results from ' + data.service;
       });
     },
@@ -311,12 +343,10 @@
      */
     reset: function reset() {
       if (illustrator.DEBUG) console.log('reset');
-      var resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';
-      var queryLogDiv = document.getElementById('queryLog');
-      queryLogDiv.innerHTML = '';
-      var query = document.getElementById('query');
-      query.value = '';
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('queryLog').innerHTML = '';
+      document.getElementById('socketData').innerHTML = '';
+      document.getElementById('query').value = '';
       illustrator.statuses = {};
       illustrator.tileHistograms = {};
       illustrator.distances = {};
@@ -359,6 +389,8 @@
     processSearchResults: function(results, queryId) {
       if (illustrator.DEBUG) console.log('receive search results');
       illustrator.distances = {};
+      if (illustrator.DEBUG) console.log('detect faces');
+      if (illustrator.DEBUG) console.log('calculate histograms');
       for (var service in results) {
         results[service].forEach(function(item) {
           // media asset
@@ -368,7 +400,7 @@
               encodeURIComponent(item.posterUrl);
 
           image.onerror = function() {
-            try{
+            try {
               image.parentNode.removeChild(image);
             } catch(e) {
               // noop
@@ -387,7 +419,7 @@
             } else {
               illustrator.origins[queryId].push(source);
             }
-            illustrator.detectFaces(image);
+            illustrator.detectFaces(image, image.width, image.height);
             illustrator.calculateHistogram(image);
           };
 
@@ -399,10 +431,9 @@
         });
       }
     },
-    detectFaces: function(img) {
-      if (illustrator.DEBUG) console.log('detect faces');
+    detectFaces: function(img, width, height) {
       var comp = ccv.detect_objects({
-        canvas: ccv.grayscale(ccv.pre(img)),
+        canvas: ccv.grayscale(ccv.pre(img, width, height)),
         cascade: cascade,
         interval: 5,
         min_neighbors: 1
@@ -410,19 +441,17 @@
       illustrator.faces[img.src] = comp;
     },
     calculateHistogram: function(img) {
-      if (illustrator.DEBUG) console.log('calculate histograms');
+      illustrator.ctx.clearRect (0, 0, illustrator.canvas.width,
+          illustrator.canvas.height);
       // draw the image on the canvas
-      var canvas = document.createElement('canvas');
-      canvas.width = 100;
-      canvas.height = 100;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      illustrator.ctx.drawImage(img, 0, 0, illustrator.canvas.width,
+          illustrator.canvas.height);
 
       // calculate the histograms tile-wise
       var sw = ~~(img.width / illustrator.COLS);
       var sh = ~~(img.height / illustrator.ROWS);
-      var dw = ~~(canvas.width / illustrator.COLS);
-      var dh = ~~(canvas.height / illustrator.ROWS);
+      var dw = ~~(illustrator.canvas.width / illustrator.COLS);
+      var dh = ~~(illustrator.canvas.height / illustrator.ROWS);
 
       illustrator.tileHistograms[img.src] = {};
       var len = illustrator.COLS * illustrator.ROWS;
@@ -437,7 +466,7 @@
         var dy = div * dh;
         // calculate the histogram of the current tile
         var histogram =
-            Histogram.getHistogram(ctx, dx, dy, dw, dh, false);
+            Histogram.getHistogram(illustrator.ctx, dx, dy, dw, dh, false);
         illustrator.tileHistograms[img.src][i] = {
           r: histogram.pixel.r,
           g: histogram.pixel.g,
@@ -525,7 +554,7 @@
       var len = keys.length;
       var abs = Math.abs;
       var max = Math.max;
-
+      var minimumSimilarTiles = illustrator.calculateMinimumSimilarTiles();
       // the actual sorting
       for (var i = 0; i < len; i++) {
         if (!keys[i]) continue;
@@ -540,13 +569,23 @@
           var inner = keys[j];
           var similarTiles = 0;
           var distance = illustrator.distances[outer][inner];
+          var nulls = 0;
           for (var k in distance) {
-            if ((distance[k] !== null) &&
-                (distance[k] <= illustrator.THRESHOLD)) {
-              similarTiles++;
+            if (distance[k] !== null) {
+              if (distance[k] <= illustrator.THRESHOLD) {
+                similarTiles++;
+              }
+            } else {
+              nulls++;
             }
           }
-          if (similarTiles >= illustrator.SIMILAR_TILES) {
+          var minimumRequired;
+          if (illustrator.SIMILAR_TILES - nulls >= minimumSimilarTiles) {
+            minimumRequired = illustrator.SIMILAR_TILES - nulls;
+          } else {
+            minimumRequired = minimumSimilarTiles;
+          }
+          if (similarTiles >= minimumRequired) {
             if (illustrator.CONSIDER_FACES) {
               var outerFaces = illustrator.faces[outer].length;
               var innerFaces = illustrator.faces[inner].length;
@@ -566,7 +605,9 @@
             }
           }
         }
-        Object.keys(distanceToOuter).forEach(function(key) {
+        Object.keys(distanceToOuter).sort(function(a, b) {
+          return b - a;
+        }).forEach(function(key) {
           distanceToOuter[key].forEach(function(index) {
             illustrator.clusters[outer].push(keys[index]);
             keys[index] = false;
@@ -588,9 +629,7 @@
       }
 
       var html = [];
-      Object.keys(clusterSizes).map(function(size) {
-        return parseInt(size, 10);
-      }).sort(function(a, b) {
+      Object.keys(clusterSizes).sort(function(a, b) {
         return b - a;
       }).forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
@@ -615,7 +654,7 @@
   var debug = document.getElementById('debug');
   window.setInterval(function() {
     var images = document.getElementsByClassName('photo');
-    debug.innerHTML = 'Images ' + images.length;
+    debug.innerHTML = 'Images: ' + images.length;
   }, 2000);
 
   // init

@@ -15,6 +15,20 @@ H2 {
   color: blue;
 }
 
+#socketData {
+  position: absolute;
+  top:10px;
+  background-color: red;
+  color: white;
+  font-size: 0.7em;
+}
+
+#debug {
+  position: absolute;
+  top: 10px;
+  right: 100px;
+}
+
 DIV.item {
   padding-top: 2em;
   width: 100%;
