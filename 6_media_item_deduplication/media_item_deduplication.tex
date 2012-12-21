@@ -27,17 +27,17 @@ the act of eliminating duplicate or redundant information.
 
 \subsection{Definition of Exact Duplicate for Photos}
 
-We define two media items of type photo as \emph{exact duplicate},
+We define two media items of type photo as \emph{exact duplicate}
 if their pixel contents are exactly the same.
 This implies that by our definition, a~scaled or recompressed version
 of the same photo is \emph{not} an exact duplicate. 
 Similarly, a~rotated version of a~photo is also \emph{not}
 an exact duplicate. 
-In contrast, two photo files with different file names,
+In contrast, two photo files with different file names
 or different Exchangeable image file
 format\footnote{\url{http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2010_E.pdf},
 accessed November 22, 2012}
-(Exif) data, are considered exact duplicate,
+(Exif) data are considered exact duplicate
 if their pixel contents are exactly the same.
 Exact duplicate photos typically occur if users share content 
 from one social network on another, for example,
@@ -46,7 +46,7 @@ if one user posts a~photo on Instagram that then someone else
 
 \subsection{Definition of Near-Duplicate for Photos}
 
-We define two media items of type photo as \emph{near-duplicate},
+We define two media items of type photo as \emph{near-duplicate}
 if their pixel contents differ no more than a~given threshold after resampling.
 Examples of near-duplicate photos are scaled versions
 of the same photo, photos shot from a~slightly different angle,
@@ -60,7 +60,7 @@ and the unmodified version.
 
 \subsection{Definition of Exact Duplicate for Videos}
 
-We define two media items of type video as \emph{exact duplicate},
+We define two media items of type video as \emph{exact duplicate}
 if their pixel contents are frame by frame exactly the same.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
@@ -442,7 +442,7 @@ weighting~\cite{chum2008nearduplicate}.
 The proposed method uses a~visual vocabulary of
 vector quantized local feature descriptors based on
 Scale Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
-A~method for both photos and video~\cite{yang2009nearduplicate}
+A~method for both photos and videos~\cite{yang2009nearduplicate}
 has been proposed by Yang \emph{et al.}
 
 \subsection{Duplicate Content}
@@ -514,12 +514,12 @@ can be seen in \autoref{fig:logo}.
 \paragraph{Cropping}
 
 Cropping refers to the removal of the outer parts of a~photo
-to improve framing, accentuate subject matter or change aspect ratio.
+to improve framing, accentuate subject matter,
+or to (lossily) change the aspect ratio.
 Cropping either happens manually via an image editing application,
 or, more often, the social networks themselves crop photos
-to better fit in the timeline view of users.
-Typically, photos are automatically cropped by social networks
-to have a~square aspect ratio that fits well in a~user's timeline view,
+to have a~square aspect ratio
+that better fits the timeline view of users,
 as can be seen in the example in \autoref{fig:cropping}.
 
 \begin{figure}[h!]
@@ -665,9 +665,9 @@ whenever either $tiles\_threshold$ or $similarity\_threshold$ change.
 \begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
     photo clustering algorithm.},
   label={code:clustering},escapechar=§]
-ROWS = 5
-COLS = 5
-TILES_THRESHOLD = floor(ROWS * COLS * 0.9)
+ROWS = 10
+COLS = 10
+TILES_THRESHOLD = ceil(ROWS * COLS * 0.8)
 SIMILARITY_THRESHOLD = 10
 
 histograms = {}
@@ -698,12 +698,13 @@ for outerPhoto in photos
     if outerPhoto == innerPhoto continue
     
     similarTiles = 0
-    for tile in distances[outerPhoto][innerPhoto]
-      if distances[outerPhoto][innerPhoto] <= SIMILARITY_THRESHOLD
+    distance = distances[outerPhoto][innerPhoto]
+    for tile in distance      
+      if distance[tile] <= SIMILARITY_THRESHOLD
         similarTiles++
       end if   
     end for
-     
+         
     if similarTiles >= TILES_THRESHOLD
       if faces[outerPhoto] == faces[innerPhoto]
         clusters[outerPhoto].push(innerPhoto)
