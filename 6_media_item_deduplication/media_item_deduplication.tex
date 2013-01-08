@@ -799,7 +799,7 @@ and have a~closer look at the clustering algorithm's strengths and weaknesses.
 \end{figure}
 
 \autoref{fig:personclose} has a~brunette fashion model in a~pink robe
-and a~heart-shaped pink spotlight as central photo elements. 
+and a~heart-shaped pink spotlight as central elements of both photos. 
 Even though the model is shot from different angles and at different times,
 the photos are successfully clustered due to the very identifying colors
 and the high tile similarity. 
@@ -807,36 +807,58 @@ and the high tile similarity.
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.4\linewidth]{./person.png}
-  \caption[]{}
+  \caption{High tile-wise similarity of a~dominating color}
   \label{fig:personclose}
 \end{figure}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=1.0\linewidth]{./scene.png}
-  \caption[]{}
-  \label{fig:}
-\end{figure}
+\autoref{fig:scenecrop} shows two different views on a~stage
+taken at slightly different times.
+The left photo covers a~detail of the scene,
+whereas the right photo covers the entire stage.
+Due to the high tile-wise similarity of the detailed scene,
+the photos are successfully clustered.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\linewidth]{./viewing_angle.png}
-  \caption[]{}
-  \label{fig:}
+  \includegraphics[width=0.5\linewidth]{./scene.png}
+  \caption{Cropped view of a~stage scene}
+  \label{fig:scenecrop}
 \end{figure}
+
+\autoref{fig:lightingconditions} shows two views of a~stage
+under different lighting conditions.
+Due to the tile color tolerances and the high tile-wise similarity,
+the photos are successfully clustered.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\linewidth]{./zoom.png}
-  \caption[]{}
-  \label{fig:}
+  \includegraphics[width=0.5\linewidth]{./viewing_angle.png}
+  \caption{Stage and detail of a~stage under different lighting conditions}
+  \label{fig:lightingconditions}
 \end{figure}
+
+\autoref{fig:zoomed} shows two photos of the same model
+where the left photo is a zoomed version of the right photo 
+with added black bars so that the resulting photo
+has a~square aspect ratio.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\linewidth]{./stage.png}
-  \caption[]{}
-  \label{fig:}
+  \includegraphics[width=0.4\linewidth]{./zoom.png}
+  \caption{Zoomed view of a~model with black bars left and right}
+  \label{fig:zoomed}
+\end{figure}
+
+\autoref{fig:stageperson} shows two views of the same stage,
+however, with a~different person.
+Due to the dominating tile-wise similarity of the stage tiles,
+the photos are correctly clustered.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{./stage.png}
+  \caption{Two views of the same stage with different person}
+  \label{fig:stageperson}
 \end{figure}
 
 \begin{figure}[h!]
