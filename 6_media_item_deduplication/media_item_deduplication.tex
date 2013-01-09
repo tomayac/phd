@@ -784,6 +784,8 @@ for the \emph{Victoria's Secret Fashion Show 2012} and the
 We will then pick some representative examples from both events
 and have a~closer look at the clustering algorithm's strengths and weaknesses.
 
+\subsubsection{Algorithm Strengths} 
+
 \begin{figure}[h!]
   \centering
   \includegraphics[width=1.0\linewidth]{./vsfashionshow_clusters.png}
@@ -861,25 +863,55 @@ the photos are correctly clustered.
   \label{fig:stageperson}
 \end{figure}
 
+\subsubsection{Algorithm Weaknesses}
+
+\autoref{fig:white} shows five Web page screenshots with pure white
+as the dominating color and black font.
+The algorithm in its previously described form clusters such photos.
+This may or may not be desired.
+Likewise at the other end of the color spectrum,
+\autoref{fig:bwtolerance} shows two photos of a woman,
+one time with, and the other time without added black bars
+to fit a letterbox aspect ratio.
+In its previously described form, the algorithm
+does not cluster such photos (unless a~really small number
+of required similar tiles is selected).
+In the majority of cases, though, clustering will be desired.
+Our response to both issues is to ignore a~certain amount
+of the color spectrum in the algorithm's similarity measure,
+\emph{e.g.}, ignoring pure white and pure black correctly fixed
+the clustering in our chosen example events in all but one cases.
+
+Finally, \autoref{fig:weakness} shows two entirely different photos
+that were incorrectly clustered as the tile histograms
+were similar enough under the chosen similarity threshold.
+We have experienced in our experiments that there is no perfect
+combination of algorithm parameters,
+so the only way to address this issue is to make the parameters flexible.
+In our graphical user interface we have created sliders
+that let the user interactively preview clustering changes. 
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\linewidth]{./bieber.png}
-  \caption[]{}
-  \label{fig:}
+  \includegraphics[width=0.8\linewidth]{./white.png}
+  \caption{Pure white as dominating color stemming from screenshots}
+  \label{fig:white}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\linewidth]{./close_duplicate.png}
-  \caption[]{}
-  \label{fig:}
+  \includegraphics[width=0.55\linewidth]{./bwtolerance.png}
+  \caption[Black bars added to fit a~16:9 image in a~4:3 letterbox]
+    {Black bars added to fit a~16:9 image in a~4:3 letterbox
+    (the white border is part of the original photo)}
+  \label{fig:bwtolerance}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\linewidth]{./bwtolerance.png}
-  \caption[]{}
-  \label{fig:}
+  \includegraphics[width=0.4\linewidth]{./weakness.png}
+  \caption{Entirely different photos with similar tile histograms}
+  \label{fig:weakness}
 \end{figure}
 
 \section{Video Deduplication}
