@@ -124,7 +124,7 @@ Our approaches to video and photo near-duplicate
 and exact duplicate detection are founded
 on a~tile-wise histogram-based pixel comparison algorithm.
 
-\section{Video Shot Boundary Detection}
+\section{Video Shot Boundary Detection} \label{sec:videoshotboundarydetection}
 Video shot boundary detection is the for machines processor-intensive task
 of splitting a~video into continuous camera shots,
 with hard or soft cuts as the boundaries.
@@ -530,7 +530,8 @@ as can be seen in the example in \autoref{fig:cropping}.
   \subfloat[Cropped]{
     \includegraphics[width=0.18\textwidth]{kid2.jpg}
   }
-  \caption{Original and cropped version of a~photo (including a~slight color variation).}
+  \caption[Original and cropped version of a~photo]
+  {Original and cropped version of a~photo (including a~slight color variation).}
   \label{fig:cropping}  
 \end{figure}
 
@@ -772,8 +773,8 @@ is on media item deduplication and clustering.
 The concrete clustering parameters for the algorithm were set as listed below.
 
 \begin{small_itemize}
-  \item[] $ROWS$ = $COLS$ = $5$
-  \item[] $TILES\_THRESHOLD$ = $22$
+  \item[] $ROWS$ = $COLS$ = $10$
+  \item[] $TILES\_THRESHOLD$ = $80$
   \item[] $SIMILARITY\_THRESHOLD$ = $10$
 \end{small_itemize}
 
@@ -783,8 +784,6 @@ for the \emph{Victoria's Secret Fashion Show 2012} and the
 \emph{Grammy Awards Nominations 2013} events respectively.
 We will then pick some representative examples from both events
 and have a~closer look at the clustering algorithm's strengths and weaknesses.
-
-\subsubsection{Algorithm Strengths} 
 
 \begin{figure}[h!]
   \centering
@@ -800,6 +799,23 @@ and have a~closer look at the clustering algorithm's strengths and weaknesses.
   \label{fig:topgrammy}
 \end{figure}
 
+\subsubsection{Algorithm Debug View}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.45\linewidth]{./algorithmdebug.png}
+  \caption[Algorithm debug view for two clustered photos]
+  {Algorithm debug view for two clustered photos related to the \emph{Grammy Awards Nominations 2013} event (red border indicates detected faces)}
+  \label{fig:algorithmdebug}
+\end{figure}
+
+Similar tiles: 85
+Minimum required: 80
+Overall: 100
+Detected faces: 1
+
+\subsubsection{Algorithm Strengths} 
+
 \autoref{fig:personclose} has a~brunette fashion model in a~pink robe
 and a~heart-shaped pink spotlight as central elements of both photos. 
 Even though the model is shot from different angles and at different times,
@@ -813,11 +829,11 @@ and the high tile similarity.
   \label{fig:personclose}
 \end{figure}
 
-\autoref{fig:scenecrop} shows two different views on a~stage
+\autoref{fig:scenecrop} shows two different views of a~stage
 taken at slightly different times.
 The left photo covers a~detail of the scene,
 whereas the right photo covers the entire stage.
-Due to the high tile-wise similarity of the detailed scene,
+Due to the high tile-wise similarity of the scene detail,
 the photos are successfully clustered.
 
 \begin{figure}[h!]
@@ -843,10 +859,11 @@ the photos are successfully clustered.
 where the left photo is a zoomed version of the right photo 
 with added black bars so that the resulting photo
 has a~square aspect ratio.
+Despite the differences, the photos are successfully clustered.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.4\linewidth]{./zoom.png}
+  \includegraphics[width=0.35\linewidth]{./zoom.png}
   \caption{Zoomed view of a~model with black bars left and right}
   \label{fig:zoomed}
 \end{figure}
@@ -916,6 +933,15 @@ that let the user interactively preview clustering changes.
 
 \section{Video Deduplication}
 
+In the previous subsection, we have introduced
+an algorithm for photo deduplication.
+In this section, we will briefly show how this algorithm
+can be combined with the previously introduced
+video shot boundary detection algorithm to on the one hand
+directly deduplicate videos on a shot boundary frame basis,
+or to on the other hand detect
+whether a~given photo is contained in a~video.
+
 \subsection{Related Work}
 
 In addition to the aforementioned  combined approach
@@ -941,9 +967,49 @@ most research still focuses mostly on the non-semantic features.
 A~survey of video deduplication methods has been conducted by
 Lian \emph{et al.}\ in~\cite{lian2010survey}.
 
-\subsection{Experiments}
+\subsection{Photo-contained-in-Video Workflow}
 
-\subsection{Evaluation}
+In a~first step, for a~given video, we detect shot boundaries
+as described before in \autoref{sec:videoshotboundarydetection}.
+To illustrate this,
+\autoref{fig:vsfashionshowboundaries} shows an excerpt
+of detected shot boundaries for a~video related to
+the \emph{Victoria's Secret Fashion Show 2012} event.
+The first photo of each shot boundary film stripe
+is selected as the particular shot's representative photo.
+To detect whether a~given photo stemming from social networks
+is contained in the video in question,
+the set of extracted shot representative photos gets compared
+with all social network photos,
+some of which shown in \autoref{fig:topvsfashionshow}.
+We note, however, that especially for longer videos
+(about 4 minutes and longer)
+this approach does not scale due to the sheer number of shot boundaries
+in common videos shared on social networks,
+which causes the process to consume too much time in practice.
+At the expense of exactness, (the few) poster still frames
+that are typically returned by video hosting platform APIs
+can be used, rather than extracting (all) shot boundaries manually.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1.0\linewidth]{./vsfashionshowboundaries.png}
+  \caption[Excerpt of detected shot boundaries in an event video]
+  {Excerpt of detected shot boundaries in a~\emph{Victoria's Secret Fashion Show 2012} event video}
+  \label{fig:vsfashionshowboundaries}
+\end{figure}
+
+\subsection{Video-contained-in-Video Workflow}
+
+To detect whether a~given video is contained in another,
+we follow a~similar approach as outlined in the previous subsection,
+with the sole difference being that we need to compare
+all detected shot boundary representative photos of the one video
+with the ones from the other.
+Naturally this approach is even less scalable
+with regards to system response time.
+The practicable work-around is, as before, to limit oneself
+to poster frames delivered by the video hosting platforms.
 
 \section{Conclusion}
 
