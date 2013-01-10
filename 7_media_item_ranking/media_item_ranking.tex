@@ -8,72 +8,30 @@
     \graphicspath{{7_media_item_ranking/figures/EPS/}{7_media_item_ranking/figures/}}
 \fi
 
-% ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
-% ----------------------------------------------------------------------
+\section{Introduction}
 
-\section{Aesthetic Principles for the Automatic Generation of Media Galleries}
-In this section, we present and define aesthetic principles
-for the automatic generation of media galleries
-based on media items retrieved from social networks
-that---after a ranking and pruning step---can serve to authentically
-summarize events and their atmosphere from a visual
-and an audial standpoint.
-Mobile devices such as smartphones, together with social networks,
-enable people to create, share, and consume media items
-like videos or photos.
-They accompany their owners almost everywhere
-and are thus omnipresent at all sorts of events.
-Given a~stable network connection, event-related media items
-and microposts are published on social networks
-during events and afterwards.
-Ranked media items stemming from multiple social networks
-can serve to create authentic media galleries
-that illustrate events and their atmosphere.
-A~key feature for this task is the semantic enrichment
-of media items and associated microposts
-and the extraction of \textbf{visual}, \textbf{audial},
-\textbf{textual}, and \textbf{social} features.
-Based on this set of features,
-additional \textbf{aesthetic} features
-can be defined and exploited to obtain appealing
-and harmonic media galleries.
+\section{Evaluating Subjective Data}
 
-\begin{figure}[htb]
-\centering
-\includegraphics[trim=20mm 40mm 20mm 10mm, clip, width=0.75\columnwidth]{media-gallery.pdf}
-\caption{Schematic media gallery with four photos and two videos.}
-\label{fig:media-gallery}
-\end{figure}
+Evaluating subjective data, like \emph{the} correct ranking
+for a~set of media items, is a~challenging task.
+For different users, there may be different optimal settings.
+A~common subjective evaluation technique
+is the Mean~Opinion Score (MOS)~\cite{mos1998}.
+Traditionally, MOS is used for conducting subjective evaluations
+of telephony network transmission quality,
+however, more recently, MOS has also found
+wider usage in the multimedia community
+for evaluating \emph{per se} subjective things
+like perceived quality from the users' perspective. 
+Therefore, a~set of standard, subjective tests are conducted,
+where a~number of users rate the quality of test samples
+with scores ranging from 1 (worst) to 5 (best).
+The actual MOS is then the arithmetic mean of all individual scores.
+Given a subjective evaluation criterion
+like the correctness of a~ranking,
+MOS provides a~meaningful way to judge the overall quality of our approach.
 
-\subsection{Related Work}
-While enormous efforts have been made to extract those features
-from media items and microposts on social networks in \emph{isolation},
-to the best knowledge of the authors, remarkably less initiatives 
-concern the extraction and the application
-of all those features \emph{in combination}
-for \emph{all} types of media items, including microposts.
-In~\cite{Photo2011}, Sandhaus \emph{et al.}\ consider visual and
-aesthetic features for the automatic creation of photo books.
-Obrador \emph{et al.}\ use visual and aesthetic features
-for a category-based approach to automatically assess
-the aesthetic appeal of photographs~\cite{Photo2012}.
-In~\cite{Playlist2006}, Knees \emph{et al.}\ use audial and textual
-features for the automatic generation of music playlists.
-Choudhury \emph{et al.}\ show in\cite{Sports2011} how social and textual
-features can be used to achieve precise detection results 
-of named entities and significant events in sports-related microposts.
-In~\cite{YouTube2010}, Davidson \emph{et al.}\ show how visual,
-textual, and social features can be used for personalized video recommendations.
-A service called Storify~\cite{Storify2011} lets users manually combine
-microposts, photos, videos, and other elements onto one page for the purpose
-of storytelling or summarizing an event,
-and share stories permanently on the Web.
-Finally, social networks present photos and videos
-often in grid-like galleries\footnote{\url{http://twitpic.com/904yka/full}}, sometimes scaled
-based on the amount of comments.
-
-\subsection{Media Item Ranking Criteria}
+\section{Media Item Ranking Criteria}
 In this section, we describe several feature categories that can serve to rank
 media items retrieved from social networks. 
 We assume (and are working on) media item extractors that,
@@ -121,252 +79,6 @@ photo aesthetics \emph{per se}~\cite{Photo2012},
 video and music playlist generation~\cite{YouTube2010,Playlist2006},
 however media gallery composition requires mixing video
 \emph{and} photo media items.
-
-%%%% BEGINNING %%%%% Need to clean this up %%%%%%%
-\subsection{Ranking Media Items}
-Looking at our dataset, it is obvious that the amount of exact duplicate photos and videos is largely inferior compared to the amount of loose duplicates. On the one hand, this is owed to applied search operators that exclude re-shared microposts such as Re-Tweets of the same tweet. Hence, the same media item can appear twice in our results only if two users authored different microposts referencing the same media item. On the other hand, it is also owed to our strict definition of exact duplicate which counts resized versions of the same media item as different. We argue that this makes sense as someone had to actively process the media item. A good example is the Blackout SOPA event where the text in the first sequence in \autoref{fig:sequences} is identical while the photos have different file sizes, resolutions and paddings. This implies that someone has taken the initial photo and applied some post-processing (\emph{e.g.} cropping) before re-sharing it. A similar example is the second sequence in \autoref{fig:sequences} of the Costa Concordia Disaster where the chimney got cut off.
-
-Long term access to the media items that have been extracted is fragile if only the reference is kept. Users can terminate their accounts on social networks,
-delete media items, or change their privacy settings at any time. In addition, social networks can themselves remove media items according to their policies or government order. Hence, in the context of the Assad Speech event, we experienced media items that were quickly no longer available.
-%To be on the safe side, only media items where explicitly the media item owner as well as the social network permit storage by third parties should be stored.
-%We did not consider legal requirements, however, do note that for potential future exploitation this is indispensable.
-
-By clustering loose duplicate media items in sequences, we aim at boosting diversity in the returned set of media items for a given event: if there are many media items for an event, in the long term we try to only show the most relevant ones from each sequence. This will require a media item ranking formula that will include a combination of different categories of ranking criteria:
-\newline
-\textbf{Visual Features.} Extracted visual features from media items can help judge their quality. Sharp is better than blurry, higher contrast is better than lower contrast, \emph{etc.} Interestingly, we observe that videos with less or just one camera shot are more likely produced by amateurs, while videos with more shots are more likely produced by professionals. Depending on the event, one might be preferred over the other.
-\newline
-\textbf{Low-level Features.} Common low-level features such as resolution, file size, but also the presence of EXIF metadata or geolocation are good quality indicators. Longer videos are better than shorter videos, higher resolution is better than lower resolution, \emph{etc.}
-\newline
-\textbf{Social Features.} Media items belonging to the same sequence can have different popularity, either globally across social networks, or on specific social networks. Combining network-specific signals (\emph{e.g.} number of Re-Tweets on Twitter, Likes on Facebook, \plusone on \googleplus, views on YouTube) and generic signals (\emph{e.g.} number of comments to a micropost) help to generate a good social popularity indicator. This can also include user diversity by featuring content from different users rather than just content from one user.
-\newline
-\textbf{Textual Features.} Media items are often surrounded by a textual description in a micropost. Named-entity disambiguation can reveal valuable insights which can be further combined with face recognition techniques in order to select media items. Assuming that a user sends a micropost containing a media item about a concert while mentioning the name of a singer. A framework such as NERD can map the singer's name to a Linked Data concept and help searching for known objects such as the singer's face.
-
-%%%% END %%%%% Need to clean this up %%%%%%%
-
-\subsection{Media Gallery Aesthetics}
-
-\noindent \textbf{Definition}
-A media gallery in our context is a compilation of photos or videos
-retrieved from social networks that are related to a given event.
-Given a set $M = \{m_1,..., m_n\}$ of media items related to a certain event,
-and given a ranking formula $f$,
-the subset $M^\prime \subset M$
-is the result after the application of $f$ to $M$: $f(M)=M^\prime$.
-Each media item $m_i$ can either be an instance of video or photo.
-For each point $t_x$ on a timeline $T$, the state of the media gallery
-at $t_x$ is defined for each media item $m_i$
-as a set $S_x$ of $n$ tuples $s_{x,i}$, where
-$s_{x,i}=\langle \mathit{left}$, $\mathit{top}$, $\mathit{width}$, $\mathit{height}$,
-$\mathit{alpha}$, $\mathit{z\mbox{-}index}$, $\mathit{animation}$,
-$\mathit{start}$, $\mathit{playing}$, $\mathit{volume} \rangle$.
-The first 6~properties are defined as in CSS, the $\mathit{animation}$ property
-allows for the definition of CSS transitions
-and transformations as defined in~\cite{CSSTransitions2009,CSSTransforms2012},
-the $\mathit{start}$ property defines the start time in a video.
-A schematic media gallery at $t_x$ can be seen in \autoref{fig:media-gallery}.
-
-\noindent \textbf{Audial aesthetics}
-We recall the purpose of our media galleries:
-to illustrate an event and its atmosphere.
-Audial aesthetics thus consist of aspects like volume level normalization,
-avoiding multiple videos playing music in parallel, smooth transitions, \emph{etc}.
-We remark that through selective mixing of audio tracks
-of event-related videos, ``noise clouds'' very characteristic
-for the event atmosphere can be observed.
-
-\noindent \textbf{Visual aesthetics}
-Visual aesthetics are determined by the composition, \emph{i.e.},
-the relation of photos to videos \emph{globally}, \emph{per coherent scene},
-and per \emph{point in time}.
-In order not to overcharge the perceptive capacity
-of viewers, the number of visible (moving) media items
-at a time should be limited.
-Depending on the event, a consistent or a contrasty overall
-appearance of items may be desired, also for transitions.
-
-\subsection{Conclusion}
-We have introduced media item ranking criteria, and
-aesthetic audial and visual principles for media galleries.
-In the coming months, we will apply those principles
-to a large collection of media items related to events,
-and, via multivariate tests, measure user engagement
-for different feature configurations.
-
-\section{Evaluating Subjective Data}
-Evaluating subjective data, like \emph{the} correct ranking
-for a~set of media items, is a~challenging task.
-For different users, there may be different optimal settings.
-In order to get familiar with subjective evaluation techniques,
-we have worked on a~side project with subjective data.
-
-In May 2012, the Web search engine Google has introduced the so-called Knowledge Graph,
-a~graph that understands real-world entities and their relationships to one another.
-With the introduction of the Knowledge Graph, the search engine Google
-has made a~significant paradigm shift towards \textit{``things, not strings''}~\cite{singhal2012},
-as a~post on the official Google blog states.
-Entities covered by the Knowledge Graph include landmarks, celebrities, cities, sports
-teams, buildings, movies, celestial objects, works of art, and more.
-The graph enhances Google search in three main ways:
-by disambiguation of search queries,
-by search log-based summarization of key facts,
-and by explorative search suggestions.
-With this work, we suggest a~fourth way of enhancing Web search:
-through the addition of real-time coverage
-of what people say about real-world entities on social networks.
-We report on a~browser extension that seamlessly adds relevant microposts
-from the social networking sites \googleplus, Facebook, and Twitter
-in form of a~panel to Knowledge Graph entities.
-In a~true Linked Data fashion, we interlink detected concepts in microposts
-with Freebase entities, and evaluate our approach for both relevance and usefulness.
-The extension is freely available,
-we invite the reader to reconstruct the examples of this work
-to see how real-time opinions may have changed since time of writing.
-
-Google News is a~news aggregator portal provided and operated by Google.
-Earlier this year, a~new feature called \emph{real-time coverage}
-was added to the portal~\cite{zuccarino2012}, providing signed in US \googleplus users
-with the latest relevant posts from the \googleplus community for news stories.
-
-We have implemented a~social-network-agnostic approach
-to add real-time coverage to Knowledge Graph results via a~browser extension.
-The extension is freely available on the Chrome Web
-Store\footnote{Knowledge Graph Socializer extension (\url{http://goo.gl/rzdVK})};
-an also free Google API key is required.
-
-\subsection{Methodology}
-Chrome extensions are small software programs that users can install
-to enrich their browsing experience.
-Via so-called \emph{content scripts}, extensions can inject and modify the contents of Web pages.
-We have implemented an extension that gets activated when a~user uses Google to search the Web.
-If the extension detects that the current search engine results page
-has an associated real-world entity in the Knowledge Graph,
-first, it extracts the entity's name and Wikipedia URL.
-Second, the extension performs full-text searches via the search APIs of
-the popular social networking sites \googleplus, Twitter, and Facebook
-and returns the top $n$ results (configurable) of each network.
-Third, all microposts get analyzed and annotated via part-of-speech tagging.
-For each (pair of) nouns, the Freebase search API is used
-to link these strings with entities,
-a~task commonly known as \emph{entity linking}~\cite{spitkovsky2012}.
-We follow a~context-free, most frequent sense approach,
-which, according to Agirre and Edmonds~\cite{agirre2007},
-serves as a~surprisingly strong baseline,
-an observation that we can confirm in our evaluation of micropost \emph{relevance}
-in \autoref{sec:relevance}.
-In a~final step, the resulting set of microposts is ordered chronologically
-and attached in form of a~separate panel to the Knowledge Graph result.
-A~screenshot with exemplary extension output for the entity
-\emph{``Isabella Stewart Gardner Museum''} in Boston, MA,
-can be seen in \autoref{fig:socializer}.
-
-\begin{figure}[htb]
-\centering
-\includegraphics[width=0.5\columnwidth]{knowledge_graph_socializer.png}
-\caption[The named entity \emph{``Isabella Stewart Gardner Museum''}]
-  {The named entity \emph{``Isabella Stewart Gardner Museum''}
-  in Boston, MA, annotated with social media.}
-\label{fig:socializer}
-\end{figure}
-
-\subsection{Evaluation}
-For the evaluation, we have considered 100 microposts from 94 unique users,
-out of which 72 microposts contained outbound links to overall 94 Web pages.
-We have evaluated the extension on 21 real-world entities starting from the concept
-\emph{``Boston,~MA''}, and then recursively following graph links to related concepts.
-Our evaluation criteria were \emph{usefulness} of the information
-contained in both the microposts and the potentially linked-to Web pages,
-and the \emph{relevance} of the microposts to the real-world entities in question.
-We have calculated the Mean~Opinion Score (MOS)~\cite{mos1998} for both criteria.
-
-Traditionally, MOS is used for conducting subjective evaluations
-of telephony network transmission quality,
-however, more recently, MOS has also found wider usage in the multimedia community
-for evaluating \emph{per se} subjective things
-like perceived quality from the users' perspective. 
-Therefore, a~set of standard, subjective tests are conducted,
-where a~number of users rate the quality of test samples
-with scores ranging from 1 (worst) to 5 (best).
-The actual MOS is then the arithmetic mean of all individual scores.
-Given our intrinsically subjective evaluation criteria,
-namely \emph{usefulness} and \emph{relevance},
-MOS provides a~meaningful way to judge the overall quality of our approach.
-
-For \emph{relevance}, the MOS was 4.38 out of 5.
-For \emph{usefulness}, we have calculated a~MOS of 3.75 out of 5.
-Our complete evaluation is available online\footnote{Evaluation (\url{http://goo.gl/dbvr4})}.
-In the following, we provide an interpretation of the MOS results for both criteria.
-
-\paragraph{Usefulness:}
-The MOS of 3.75 suggests potential for improvement,
-albeit the information from the microposts and linked-to Web pages
-was overall still considered useful.
-Positively rated revealed insights were, among others, recommended restaurants,
-suggested things to do, scheduled future or past events,
-special (not necessarily advertisement-like) offers, user-generated photos,
-news articles, travel tips, or stories of everyday life.
-On closer inspection, the microposts that teared down the \emph{usefulness} MOS
-were in the majority of cases still rated relatively high for \emph{relevance}.
-We could track down the relevant but not useful microposts to three categories:
-(i) long microposts (\googleplus, Facebook) that mentioned the concept somewhere,
-but that were too long to skim,
-(ii) so-called
-@Replies\footnote{``What are @Replies and Mentions?'' (\url{http://goo.gl/Ge2RG})}
-on Twitter that are messages to other Twitter users,
-but that lack the context of the conversation, and finally
-(iii) so-called native check-in messages on \googleplus,
-together with shared Foursquare check-in messages on Twitter and Facebook
-via connected user profiles\footnote{``Connecting/sharing to Facebook and Twitter'' (\url{http://goo.gl/NBuCr})}
-that are geotagged (and thus relevant), however,
-provide no other information besides the fact that a~user was at a~certain place.
-By disregarding all three types of microposts, the MOS could be increased to 3.94.
-
-\paragraph{Relevance:} \label{sec:relevance}
-The high MOS of 4.38 shows that the microposts
-were in the majority of cases considered very relevant.
-On the one hand, this is due to the well-chosen titles of concepts in the graph,
-which oftentimes are either unique enough (\emph{e.g.}, \emph{``\underline{Faneuil} Hall''}),
-or on the other hand, include some sort of disambiguation aid
-(\emph{e.g.}, \emph{``Museum of Science, \underline{Boston}''}).
-In~\cite{spitkovsky2012}, Spitkovsky and Chang have collected
-an extensive set of link titles for Wikipedia concepts
-and shown that an entirely context-free approach
-to linking strings with concepts does consistently well.
-Together with the observation above, this justifies
-our concept title-based full-text search approach on social networking sites,
-reflected by the MOS.
-
-\subsection{Future Work and Conclusion}
-Each concept in the Knowledge Graph has a~unique identifier~\cite{thalhammer2012}.
-Exploiting this fact and considering that Knowledge Graph results
-have already been interlinked via \texttt{owl:sameAs}
-with Freebase entities~\cite{glaser2012},
-we can imagine a~comments archive of things people said about real-world entities.
-The SIOC Ontology~\cite{breslin2005} by Breslin \emph{et al.}\
-provides an ideal vocabulary for such archive,
-as both the context of the comments and their provenance can be described.
-Taking it one step further, we can think of not only archiving user comments,
-but also adding meaning to them~\cite{steiner2013},
-which would allow for interesting use cases
-like searching for places that are frequented by celebrities.
-
-Concluding, in this work we have shown how real-time coverage
-can be added to Knowledge Graph results via a~browser extension.
-We have evaluated both the \emph{usefulness} and \emph{relevance}
-of the returned microposts and linked-to Web pages,
-and have given an outlook on how via a~potentially enriched comments archive
-about real-world entities, further use cases can be covered.
-Through this work, we have demonstrated how the rather static, structured world
-of real-world facts from the Knowledge Graph
-(with facts like foundation date, opening hours, spouse, \emph{etc.}),
-can be successfully combined for fun and profit
-with the rather dynamic, \emph{a~priori} unstructured world
-of social network microposts.
-
-\section{Ranking Formula}
-
-\section{State of the Art}
-
-\section{Evaluation}
 
 \section{Conclusion}
 
