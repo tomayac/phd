@@ -94,12 +94,87 @@ We will detail social aspects more later on in this chapter.
 This category regards the desired outcome after the ranking, \emph{i.e.},
 the media gallery that illustrates a~given event and its atmosphere.
 Studies exist for the aesthetics of
-automatic photo book layout~\cite{Photo2011},
-photo aesthetics \emph{per se}~\cite{Photo2012},
-video and music playlist generation~\cite{YouTube2010,Playlist2006},
-however media gallery composition aesthetics requires mixing video
-\emph{and} photo media items.
+automatic photo book layout~\cite{sandhaus2011photobook},
+photo aesthetics \emph{per se}~\cite{obrador2012photoaesthetics},
+video and music playlist generation~\cite{knees2006musicplaylist,davidson2010videorecommendation},
+however, to the best of our knowledge,
+no media gallery composition aesthetics studies exist
+that examine mixing video \emph{and} photo media items.
 
+\section{Social Interactions Abstraction Layer}
+
+As we have described in \autoref{cha:social-networks},
+social networks have different paradigms of social interactions.
+In \autoref{sec:data-format}, we have briefly presented the overall
+abstraction layer on top of the native data formats
+of all considered social networks in order to gain
+an agnostic view on the underlying social networks.
+In this section, we detail the part of the abstraction layer
+that models the network-specific social interaction patterns.
+Those interaction patterns must be exposed by the social network 
+via specific API calls in order to be considered,
+which only is the case for a~subset of the social networks we deal with.
+In the subsections below, we have listed
+how we abstract the social interactions in question on each social network.
+In our concrete implementation, we differ unknown values
+that are returned as \texttt{null}, \emph{i.e.},
+where the information is not exposed,
+from \texttt{0} values, where the value is known to be zero.
+When we merge the information from media items
+that are clustered in the same cluster, we treat \textt{null} as \texttt{0}.
+
+\subsection{Social Interaction ``Likes''}
+
+We abstract the social interaction of liking a~media item
+as instances of the following network-specific social interactions:
+
+\begin{small_itemize}
+  \item[] Facebook Like
+  \item[] \googleplus \plusone
+  \item[] Instagram Like
+  \item[] Flickr Favorite
+  \item[] YouTube Like, YouTube Favorite
+  \item[] Twitter Favorite
+\end{small_itemize}  
+
+\subsection{Social Interaction ``Shares''}
+
+We abstract the social interaction of resharing a~media item
+as instances of the following network-specific social interactions:
+
+\begin{small_itemize}
+  \item[] Facebook Share
+  \item[] \googleplus Share
+  \item[] Twitter native ReTweet
+\end{small_itemize}
+
+\subsection{Social Interaction ``Comments''}
+
+We abstract the social interaction of commenting on a~media item
+as instances of the following network-specific social interactions:
+
+\begin{small_itemize}
+  \item[] Facebook Comments
+  \item[] \googleplus Comments
+  \item[] Instagram Comments
+  \item[] Twitter manual, non-native ReTweet, @Replies
+  \item[] Twitpic Comments
+  \item[] MobyPicture Comments
+  \item[] Flickr Comments
+\end{small_itemize}
+
+\subsection{Social Interaction ``Views''}
+
+We abstract the social interaction of viewing a~media item
+as instances of the following network-specific social interactions:
+
+\begin{small_itemize}
+  \item[] YouTube Views
+  \item[] Flickr Views
+  \item[] Twitpic Views
+  \item[] Mobypicture Views
+\end{small_itemize}  
+  
 \section{Conclusion}
 
 \section*{Chapter Notes}
