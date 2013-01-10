@@ -32,7 +32,7 @@ Evaluating subjective data, like \emph{the} correct ranking
 for a~set of media items, is a~challenging task.
 For different users, there may be different optimal settings.
 A~common subjective evaluation technique
-is the Mean~Opinion Score (MOS)~\cite{mos1998}.
+is the Mean~Opinion Score (MOS)~\cite{itu1998mos}.
 Traditionally, MOS is used for conducting subjective evaluations
 of telephony network transmission quality,
 however, more recently, MOS has also found
@@ -48,52 +48,56 @@ like the correctness of a~ranking,
 MOS provides a~meaningful way to judge the overall quality of our approach.
 
 \section{Media Item Ranking Criteria}
-In this section, we describe several feature categories that can serve to rank
+In this section, we describe several criteria that can serve to rank
 media items retrieved from social networks. 
-We assume (and are working on) media item extractors that,
-given event-related search terms,
+We base these criteria on the information available from
+the media item extractors described in \autoref{cha:media-item-extraction},
+which given event-related search terms
 extract raw binary media items and associated microposts
 from multiple social networks.
 
-\noindent \textbf{Visual}
+\subsection{Visual Ranking Criteria}
 This category regards the contents of photos and videos.
 We distinguish \emph{low-} and \emph{high-level} visual ranking criteria.
 High-level criteria are, \emph{e.g.}, logo detection,
 face recognition, and camera shot separation.
 Low-level criteria are, \emph{e.g.}, size, resolution,
 duration, geolocation, and time.
-Via OCR, contained characters can be treated as textual features.
+Via OCR, contained characters can be treated as a~textual features.
 
-\noindent \textbf{Audial}
+\subsection{Audial Ranking Criteria}
 This category regards the audio track of videos.
 \emph{High-level} ranking criteria are the presence or absence
 of silence, music, speech, or a mixture thereof.
 Similar to visual features before,
 audial \emph{low-level} features are the average bit rate,
 volume, possibly distorted areas, \emph{etc}.
-Through audio-transcription, speech can be converted to a textual feature.
+Through audio-transcription, speech can be treated as a~textual feature.
 
-\noindent \textbf{Textual}
+\subsection{Textual Ranking Criteria}
 This category regards the microposts that accompany media items.
 Typically, microposts provide a~description of media items.
 Using named-entity disambiguation tools,
 textual content can be linked to LOD cloud concepts~\cite{Facebook2011}.
+We have described micropost annotation in detail in \autoref{cha:micropost-annotation}.
 
-\noindent \textbf{Social}
+\subsection{Social Ranking Criteria}
 This category regards social network effects like shares, mentions,
 view counts, expressions of (dis)likes, user diversity, \emph{etc}.
-Prior work~\cite{Khrouf2012} allows us to not only examine these effects
+Prior work~\cite{khrouf2012aggregatingsocialmedia}
+allows us to not only examine these effects
 on a~\emph{single} social network,
 but in a~\emph{network-agnostic} way across multiple social networks.
+We will detail social aspects more later on in this chapter.
 
-\noindent \textbf{Aesthetic}
+\subsection{Aesthetic Ranking Criteria}
 This category regards the desired outcome after the ranking, \emph{i.e.},
-the media gallery that illustrates a given event and its atmosphere.
+the media gallery that illustrates a~given event and its atmosphere.
 Studies exist for the aesthetics of
 automatic photo book layout~\cite{Photo2011},
 photo aesthetics \emph{per se}~\cite{Photo2012},
 video and music playlist generation~\cite{YouTube2010,Playlist2006},
-however media gallery composition requires mixing video
+however media gallery composition aesthetics requires mixing video
 \emph{and} photo media items.
 
 \section{Conclusion}
