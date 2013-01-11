@@ -42,7 +42,6 @@ DIV.cluster {
 DIV.micropost {
   font-size: 0.7em;
   height: 50px;
-
   overflow: auto;
   overflow-x: hidden;
 }
