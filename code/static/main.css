@@ -29,6 +29,12 @@ H2 {
   right: 100px;
 }
 
+IMG.favicon {
+  position: relative;
+  top: -8px;
+  left: -25px;
+}
+
 DIV.item {
   padding-top: 2em;
   width: 100%;

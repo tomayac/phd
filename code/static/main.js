@@ -12,6 +12,7 @@
     SIMILAR_TILES_FACTOR: 0.8,
     CONSIDER_FACES: true,
     images: [],
+    mediaItems: {},
     statuses: {},
     distances: {},
     origins: {},
@@ -354,6 +355,7 @@
       illustrator.clusters = {};
       illustrator.faces = {};
       illustrator.images = [];
+      illustrator.mediaItems = {};
      },
     /**
      * Searches for a term on a plethora of social media platforms
@@ -398,6 +400,7 @@
           image.setAttribute('class', 'photo');
           var source = illustrator.PROXY_SERVER +
               encodeURIComponent(item.posterUrl);
+          item.origin = service;
 
           image.onerror = function() {
             try {
@@ -413,6 +416,7 @@
           illustrator.statuses[source] = false;
           image.onload = function() {
             illustrator.statuses[source] = true;
+            illustrator.mediaItems[source] = item;
             illustrator.images.push(image);
             if (!illustrator.origins[queryId]) {
               illustrator.origins[queryId] = [source];
@@ -628,14 +632,21 @@
         }
       }
 
+      var faviconHtml = function(service) {
+        return '<img class="favicon" src="./resources/' +
+            service.toLowerCase() + '.png' + '"/>';
+      };
+
       var html = [];
       Object.keys(clusterSizes).sort(function(a, b) {
         return b - a;
       }).forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
           html.push('<img style="margin-left:50px;" class="photo" src="' +
-              key +'"/>' + illustrator.clusters[key].map(function(url) {
-                return '<img class="photo" src="' + url +'"/>';
+              key + '"/>' + faviconHtml(illustrator.mediaItems[key].origin) +
+              illustrator.clusters[key].map(function(url) {
+                return '<img class="photo" src="' + url + '"/>' +
+                    faviconHtml(illustrator.mediaItems[url].origin);
               }).join('') + ' (' + (illustrator.clusters[key].length + 1) +
               ')');
         });
