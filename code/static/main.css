@@ -35,28 +35,32 @@ IMG.favicon {
   left: -25px;
 }
 
-DIV.item {
-  padding-top: 2em;
-  width: 100%;
+DIV.cluster {
+  float: left;
 }
 
-TD.legend {
-  vertical-align: top;
-  background-color: lightgray;
-  width: 30em !important;
+DIV.micropost {
+  font-size: 0.7em;
+  height: 50px;
+
+  overflow: auto;
+  overflow-x: hidden;
 }
 
-TD.asset {
-  background-color: orange;
-  width: 60em !important;
+DIV.mediaItem {
+  float: left;
 }
 
-.photo {
+DIV.firstMediaItem {
+  margin-left: 50px;
+}
+
+IMG.photo {
   height: 100px !important;
   margin: 0.2em;
 }
 
-.photo:after {
+IMG.photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
   content: '';
   position: absolute;
@@ -64,58 +68,4 @@ TD.asset {
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-TD.asset > VIDEO {
-  height: 100px !important;
-}
-
-TD.mediaurl {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.type {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.storyurl {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.message {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.clean {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.translation {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.entities {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.message {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.user {
-  background-color: orange;
-  width: 60em !important;
-}
-
-TD.published {
-  background-color: orange;
-  width: 60em !important;
 }

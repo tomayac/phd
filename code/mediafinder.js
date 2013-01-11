@@ -226,6 +226,11 @@ var mediaFinder = {
           html: micropost.trim(),
           plainText: cleanedMicropost.trim()
         };
+      } else {
+        return {
+          html: '',
+          plainText: ''
+        };
       }
     }
 

@@ -11,8 +11,9 @@
     SIMILAR_TILES: 0,
     SIMILAR_TILES_FACTOR: 0.8,
     CONSIDER_FACES: true,
-    images: [],
+    images: {},
     mediaItems: {},
+    mediaItemUrls: {},
     statuses: {},
     distances: {},
     origins: {},
@@ -70,7 +71,6 @@
 
       // right click selects the right comparison image
       resultsDiv.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
         if (e.target.nodeName.toLowerCase() !== 'img') {
           return;
         };
@@ -194,9 +194,9 @@
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
         if (illustrator.DEBUG) console.log('calculate histograms');
-        illustrator.images.forEach(function(image) {
-          illustrator.calculateHistogram(image);
-        });
+        for (var url in illustrator.images) {
+          illustrator.calculateHistogram(illustrator.images[url]);
+        }
       });
 
       var cols = document.getElementById('cols');
@@ -223,9 +223,9 @@
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
         if (illustrator.DEBUG) console.log('calculate histograms');
-        illustrator.images.forEach(function(image) {
-          illustrator.calculateHistogram(image);
-        });
+        for (var url in illustrator.images) {
+          illustrator.calculateHistogram(illustrator.images[url]);
+        }
       });
 
       var threshold = document.getElementById('threshold');
@@ -258,6 +258,7 @@
       similarTiles.addEventListener('mouseup', function() {
         similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.SIMILAR_TILES = similarTiles.value;
+        illustrator.clusters = {};
         if (illustrator.checkMediaItemStatuses('histogram')) {
           illustrator.sort();
         };
@@ -314,7 +315,7 @@
           var sources = illustrator.origins[queryId].forEach(function(source) {
             var images = document.querySelectorAll('img[src="' + source + '"]');
             for (var i = 0, len = images.length; i < len; i++) {
-              images[i].style.display = displayState;
+              images[i].parentNode.style.display = displayState;
             }
           });
         }
@@ -354,8 +355,9 @@
       illustrator.origins = {};
       illustrator.clusters = {};
       illustrator.faces = {};
-      illustrator.images = [];
+      illustrator.images = {};
       illustrator.mediaItems = {};
+      illustrator.mediaItemUrls = {};
      },
     /**
      * Searches for a term on a plethora of social media platforms
@@ -396,32 +398,39 @@
       for (var service in results) {
         results[service].forEach(function(item) {
           // media asset
-          var image = new Image();
-          image.setAttribute('class', 'photo');
-          var source = illustrator.PROXY_SERVER +
+          var micropostUrl = item.micropostUrl;
+          // if we already have this media item, continue to the next one
+          // using the micropostUrl as the posterUrl isn't stable
+          if (illustrator.mediaItemUrls[micropostUrl] !== undefined) {
+            return;
+          }
+          var posterUrl = illustrator.PROXY_SERVER +
               encodeURIComponent(item.posterUrl);
           item.origin = service;
 
+          var image = new Image();
+          image.setAttribute('class', 'photo');
           image.onerror = function() {
             try {
               image.parentNode.removeChild(image);
             } catch(e) {
               // noop
             }
-            delete illustrator.statuses[source];
+            delete illustrator.statuses[posterUrl];
             console.log('Removed ' + image.src);
           };
 
-          image.src = source;
-          illustrator.statuses[source] = false;
+          image.src = posterUrl;
+          illustrator.statuses[posterUrl] = false;
           image.onload = function() {
-            illustrator.statuses[source] = true;
-            illustrator.mediaItems[source] = item;
-            illustrator.images.push(image);
+            illustrator.statuses[posterUrl] = true;
+            illustrator.mediaItems[posterUrl] = item;
+            illustrator.mediaItemUrls[micropostUrl] = true;
+            illustrator.images[posterUrl] = image;
             if (!illustrator.origins[queryId]) {
-              illustrator.origins[queryId] = [source];
+              illustrator.origins[queryId] = [posterUrl];
             } else {
-              illustrator.origins[queryId].push(source);
+              illustrator.origins[queryId].push(posterUrl);
             }
             illustrator.detectFaces(image, image.width, image.height);
             illustrator.calculateHistogram(image);
@@ -430,7 +439,7 @@
           // make sure the load event fires for cached images too
           if (image.complete || image.complete === undefined) {
             image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-            image.src = source;
+            image.src = posterUrl;
           }
         });
       }
@@ -637,18 +646,30 @@
             service.toLowerCase() + '.png' + '"/>';
       };
 
+      var micropostHtml = function(url) {
+        var img = illustrator.images[url];
+        var width = Math.ceil(100 / img.height * img.width);
+        return '<div class="micropost" style="width:' + width + 'px;">' +
+            illustrator.mediaItems[url].micropost.plainText +
+            '</div>';
+      };
+
       var html = [];
       Object.keys(clusterSizes).sort(function(a, b) {
         return b - a;
       }).forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
-          html.push('<img style="margin-left:50px;" class="photo" src="' +
+          html.push('<div class="cluster">' +
+              '<div class="firstMediaItem mediaItem">' +
+              '<img class="photo" src="' +
               key + '"/>' + faviconHtml(illustrator.mediaItems[key].origin) +
+              micropostHtml(key) + '</div>' +
               illustrator.clusters[key].map(function(url) {
-                return '<img class="photo" src="' + url + '"/>' +
-                    faviconHtml(illustrator.mediaItems[url].origin);
-              }).join('') + ' (' + (illustrator.clusters[key].length + 1) +
-              ')');
+                return '<div class="mediaItem">' +
+                    '<img class="photo" src="' + url + '"/>' +
+                    faviconHtml(illustrator.mediaItems[url].origin) +
+                    micropostHtml(url) + '</div>';
+              }).join('') + '</div>');
         });
       });
       resultsDiv.innerHTML = '';
@@ -656,7 +677,8 @@
       for (var key in illustrator.faces) {
         if (illustrator.faces[key].length > 0) {
           var image = document.querySelector('img[src="' + key + '"]');
-          image.style.border = 'solid red 2px';
+          image.style.borderLeft = 'solid red 2px';
+          image.style.borderRight = 'solid red 2px';
         }
       }
     }
