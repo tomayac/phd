@@ -63,7 +63,7 @@ This category regards the contents of photos and videos.
 We distinguish \emph{low-} and \emph{high-level} visual ranking criteria.
 High-level criteria are, \emph{e.g.}, logo detection,
 face recognition, and camera shot separation.
-Low-level criteria are, \emph{e.g.}, size, resolution,
+Low-level criteria are, \emph{e.g.}, file size, resolution,
 duration of a~video, geolocation, and time.
 Via OCR, contained characters can be treated as a~textual features.
 
@@ -209,11 +209,10 @@ in the particular cluster.
 \autoref{code:merging} shows the pseudocode of the merging algorithm.
 During the merging step,
 we treat unknown values represented as \texttt{null} as \texttt{0}.
-The algorithm simply accumulates individual social interactions
+The algorithm accumulates individual social interactions
 and assigns the accumulated social interactions to the cluster.
 
-\begin{lstlisting}[caption=Pseudocode of shot boundary detection
-  algorithm.,
+\begin{lstlisting}[caption=Pseudocode of the social interactions merging algorithm,
   label=code:merging, float]
 for cluster in clusters
   likes = shares = views = comments = 0
@@ -242,6 +241,32 @@ Naturally, through the way the clustering algorithm works,
 the contained media items are already visually similar. 
 In consequence, we fall back to using \emph{low-level}
 visual ranking criteria as defined in \autoref{sec:visualrankingcriteria}.
+\autoref{code:clusterrepresentative} shows the cluster representative
+selection algorithm, which is based on the low-level feature \emph{resolution}.
+The algorithm selects the media item with the highest megapixel resolution
+as the cluster representative.
+
+\begin{lstlisting}[caption=Pseudocode of the cluster representative selection algorithm,
+  label=code:clusterrepresentative, float]
+maxPixels = 0
+clusterRepresentative = null
+for mediaItem in cluster
+  resolution = mediaItem.width * mediaItem.height
+  if resolution >= maxPixels
+    maxPixels = resolution
+    clusterRepresentative = mediaItem
+  end if  
+end for
+return clusterRepresentative     
+\end{lstlisting}
+
+\section{Ranking Media Item Clusters}
+
+Up to now, we have shown how media item clusters are formed,
+how each cluster's social interactions data are accumulated,
+and how a~cluster representative media item is chosen.
+In this section, we finally describe a~ranking formula to rank
+a~set of media clusters that match a~given query.
 
 
 \section{Conclusion}
