@@ -37,7 +37,7 @@ IMG.favicon {
 
 DIV.cluster {
   float: left;
-  border: solid;
+
 }
 
 DIV.micropost {
@@ -59,6 +59,15 @@ IMG.photo {
   height: 100px !important;
   margin: 0.2em;
 }
+
+IMG.representative {
+  border-left: solid orange 3px;
+}
+
+IMG.face {
+  border-right: solid red 3px;
+}
+
 
 IMG.photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
