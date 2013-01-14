@@ -12,8 +12,8 @@
 In this chapter, we present and define aesthetic principles
 for the automatic generation of media galleries
 based on media items retrieved from social networks
-that---after a ranking and pruning step---can serve to authentically
-summarize events and their atmosphere from a visual
+that---after a~ranking and pruning step---can serve to authentically
+summarize events and their atmosphere from a~visual
 and an audial standpoint.
 Mobile devices such as smartphones, together with social networks,
 enable people to create, share, and consume media items
@@ -52,7 +52,7 @@ for \emph{all} types of media items, including microposts.
 In~\cite{Photo2011}, Sandhaus \emph{et al.}\ consider visual and
 aesthetic features for the automatic creation of photo books.
 Obrador \emph{et al.}\ use visual and aesthetic features
-for a category-based approach to automatically assess
+for a~category-based approach to automatically assess
 the aesthetic appeal of photographs~\cite{Photo2012}.
 In~\cite{Playlist2006}, Knees \emph{et al.}\ use audial and textual
 features for the automatic generation of music playlists.
@@ -73,23 +73,23 @@ When unique media items have been collected, the remaining task is to summarize 
 \section{Media Gallery Aesthetics}
 
 \noindent \textbf{Definition}
-A media gallery in our context is a compilation of photos or videos
-retrieved from social networks that are related to a given event.
-Given a set $M = \{m_1,..., m_n\}$ of media items related to a certain event,
-and given a ranking formula $f$,
+A media gallery in our context is a~compilation of photos or videos
+retrieved from social networks that are related to a~given event.
+Given a~set $M = \{m_1,..., m_n\}$ of media items related to a~certain event,
+and given a~ranking formula $f$,
 the subset $M^\prime \subset M$
 is the result after the application of $f$ to $M$: $f(M)=M^\prime$.
 Each media item $m_i$ can either be an instance of video or photo.
-For each point $t_x$ on a timeline $T$, the state of the media gallery
+For each point $t_x$ on a~timeline $T$, the state of the media gallery
 at $t_x$ is defined for each media item $m_i$
-as a set $S_x$ of $n$ tuples $s_{x,i}$, where
+as a~set $S_x$ of $n$ tuples $s_{x,i}$, where
 $s_{x,i}=\langle \mathit{left}$, $\mathit{top}$, $\mathit{width}$, $\mathit{height}$,
 $\mathit{alpha}$, $\mathit{z\mbox{-}index}$, $\mathit{animation}$,
 $\mathit{start}$, $\mathit{playing}$, $\mathit{volume} \rangle$.
 The first 6~properties are defined as in CSS, the $\mathit{animation}$ property
 allows for the definition of CSS transitions
 and transformations as defined in~\cite{CSSTransitions2009,CSSTransforms2012},
-the $\mathit{start}$ property defines the start time in a video.
+the $\mathit{start}$ property defines the start time in a~video.
 A schematic media gallery at $t_x$ can be seen in \autoref{fig:media-gallery}.
 
 \noindent \textbf{Audial aesthetics}
@@ -107,15 +107,15 @@ the relation of photos to videos \emph{globally}, \emph{per coherent scene},
 and per \emph{point in time}.
 In order not to overcharge the perceptive capacity
 of viewers, the number of visible (moving) media items
-at a time should be limited.
-Depending on the event, a consistent or a contrasty overall
+at a~time should be limited.
+Depending on the event, a~consistent or a~contrasty overall
 appearance of items may be desired, also for transitions.
 
 \section{Conclusion}
 We have introduced media item ranking criteria, and
 aesthetic audial and visual principles for media galleries.
 In the coming months, we will apply those principles
-to a large collection of media items related to events,
+to a~large collection of media items related to events,
 and, via multivariate tests, measure user engagement
 for different feature configurations.
 
