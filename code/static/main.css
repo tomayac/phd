@@ -37,6 +37,7 @@ IMG.favicon {
 
 DIV.cluster {
   float: left;
+  border: solid;
 }
 
 DIV.micropost {

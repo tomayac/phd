@@ -1362,11 +1362,15 @@ var mediaFinder = {
                         timestamp: timestamp,
                         publicationDate: getIsoDateString(timestamp),
                         socialInteractions: {
-                          likes: parseInt(item.likeCount, 10) +
-                              parseInt(item.favoriteCount, 10),
+                          likes: (parseInt((item.likeCount ?
+                              item.likeCount : 0), 10) +
+                              parseInt((item.favoriteCount ?
+                              item.favoriteCount : 0), 10)),
                           shares: null,
-                          comments: item.commentCount,
-                          views: item.viewCount
+                          comments: parseInt((item.commentCount ?
+                              item.commentCount : 0), 10),
+                          views: parseInt((item.viewCount ?
+                              item.viewCount : 0), 10)
                         }
                       });
                       cb(null);

@@ -627,11 +627,10 @@
           });
         });
       }
-      illustrator.display();
+      illustrator.mergeClusterData();
     },
-    display: function() {
-      if (illustrator.DEBUG) console.log('display');
-      var resultsDiv = document.getElementById('results');
+    mergeClusterData: function() {
+      if (illustrator.DEBUG) console.log('merge cluster data');
       var clusterSizes = {};
       for (var key in illustrator.clusters) {
         if (!clusterSizes[illustrator.clusters[key].length]) {
@@ -640,6 +639,40 @@
           clusterSizes[illustrator.clusters[key].length].push(key);
         }
       }
+      var clusterSizesKeys = Object.keys(clusterSizes).sort(function(a, b) {
+        return b - a;
+      });
+      var perClusterData = {};
+      clusterSizesKeys.forEach(function(index) {
+        clusterSizes[index].forEach(function(key) {
+          var likes = 0;
+          var shares = 0;
+          var comments = 0;
+          var views = 0;
+
+          likes += illustrator.mediaItems[key].socialInteractions.likes;
+          shares += illustrator.mediaItems[key].socialInteractions.shares;
+          comments += illustrator.mediaItems[key].socialInteractions.comments;
+          views += illustrator.mediaItems[key].socialInteractions.views;
+
+          illustrator.clusters[key].map(function(url) {
+            likes += illustrator.mediaItems[url].socialInteractions.likes;
+            shares += illustrator.mediaItems[url].socialInteractions.shares;
+            comments += illustrator.mediaItems[url].socialInteractions.comments;
+            views += illustrator.mediaItems[url].socialInteractions.views;
+          });
+          perClusterData[key] = {
+            likes: likes,
+            shares: shares,
+            comments: comments,
+            views: views
+          };
+        });
+      });
+      illustrator.display(clusterSizes, clusterSizesKeys, perClusterData);
+    },
+    display: function(clusterSizes, clusterSizesKeys, perClusterData) {
+      if (illustrator.DEBUG) console.log('display');
 
       var faviconHtml = function(service) {
         return '<img class="favicon" src="./resources/' +
@@ -650,20 +683,27 @@
         var img = illustrator.images[url];
         var width = Math.ceil(100 / img.height * img.width);
         return '<div class="micropost" style="width:' + width + 'px;">' +
-            illustrator.mediaItems[url].micropost.plainText +
+            illustrator.mediaItems[url].micropost.plainText + '<hr/>' +
+            '<a href="' + illustrator.mediaItems[url].micropostUrl + '">Permalink</a><hr/>' +
+            'Likes: ' + illustrator.mediaItems[url].socialInteractions.likes + '<br/>' +
+            'Shares: ' + illustrator.mediaItems[url].socialInteractions.shares + '<br/>' +
+            'Comments: ' + illustrator.mediaItems[url].socialInteractions.comments + '<br/>' +
+            'Views: ' + illustrator.mediaItems[url].socialInteractions.views + '<hr/>' +
+            'W/H: ' + illustrator.images[url].width + '/' + illustrator.images[url].height + '<br/>' +
+            'Aspect Ratio: ' + (Math.round(illustrator.images[url].width / illustrator.images[url].height * 100) / 100) + '<br/>' +
+            'Megapixels: ' + (illustrator.images[url].width * illustrator.images[url].height / 1000000) +
             '</div>';
       };
 
       var html = [];
-      Object.keys(clusterSizes).sort(function(a, b) {
-        return b - a;
-      }).forEach(function(index) {
+      clusterSizesKeys.forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
           html.push('<div class="cluster">' +
               '<div class="firstMediaItem mediaItem">' +
               '<img class="photo" src="' +
               key + '"/>' + faviconHtml(illustrator.mediaItems[key].origin) +
               micropostHtml(key) + '</div>' +
+              '<pre>' + JSON.stringify(perClusterData[key]) + '</pre>' +
               illustrator.clusters[key].map(function(url) {
                 return '<div class="mediaItem">' +
                     '<img class="photo" src="' + url + '"/>' +
@@ -672,6 +712,8 @@
               }).join('') + '</div>');
         });
       });
+
+      var resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = '';
       resultsDiv.innerHTML = html.join('');
       for (var key in illustrator.faces) {
