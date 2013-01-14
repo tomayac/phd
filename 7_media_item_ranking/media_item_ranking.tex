@@ -120,8 +120,23 @@ In our concrete implementation, we differ unknown values
 that are returned as \texttt{null}, \emph{i.e.},
 where the information is not exposed,
 from \texttt{0} values, where the value is known to be zero.
-When we merge the information from media items
-that are clustered in the same cluster, we treat \textt{null} as \texttt{0}.
+We briefly recall the social interactions part
+of the abstraction layer's data format:
+
+\begin{description}
+  \item[\texttt{socialInteractions}] Container for social
+    interactions
+  \begin{description}  
+  \item[\texttt{likes}] Number of times a~micropost was liked, or
+    \texttt{null}
+  \item[\texttt{shares}] Number of times a~micropost was shared, or
+    \texttt{null}
+  \item[\texttt{comments}] Number of comments a~micropost
+    received, or \texttt{null}
+  \item[\texttt{views}] Number of views a~micropost reached, or
+    \texttt{null}
+  \end{description}    
+\end{description}
 
 \subsection{Social Interaction ``Likes''}
 
@@ -177,8 +192,43 @@ as instances of the following network-specific social interactions:
 
 \section{Merging Social Interactions}
 
-  
-  
+If a~set of media items is similar enough to be clustered
+under the criteria that were detailed in
+\autoref{cha:media-item-deduplication},
+we can treat the whole of the cluster
+as if it were just one media item.
+Therefore, we need to specify a~merging strategy
+for the associated data of the individual media items
+in the particular cluster.
+\autoref{code:merging} shows the pseudocode of the merging algorithm.
+During the merging step,
+we treat unknown values represented as \texttt{null} as \texttt{0}.
+The algorithm simply accumulates individual social interactions
+and assigns the accumulated social interactions to the cluster.
+
+\begin{lstlisting}[caption=Pseudocode of shot boundary detection
+  algorithm.,
+  label=code:merging, float]
+for cluster in clusters
+  likes = shares = views = comments = 0
+  for mediaItem in cluster
+    likes += mediaItem.likes ? mediaItem.likes : 0
+    shares += mediaItem.shares ? mediaItem.shares : 0
+    comments += mediaItem.comments ? mediaItem.comments : 0
+    views += mediaItem.views ? mediaItem.views : 0
+  end for
+  cluster.socialInteractions.likes = likes
+  cluster.socialInteractions.shares = shares
+  cluster.socialInteractions.comments = comments
+  cluster.socialInteractions.views = views
+end for     
+\end{lstlisting}
+
+
+\section{Selection of a Cluster Representative}  
+
+
+
 \section{Conclusion}
 
 \section*{Chapter Notes}
