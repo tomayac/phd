@@ -1523,7 +1523,6 @@ console.log(url);
                                     mediaUrl = size.source;
                                   }
                                 });
-
                                 var params = {
                                   method: 'flickr.photos.getFavorites',
                                   api_key: GLOBAL_config.FLICKR_KEY,
@@ -1559,12 +1558,12 @@ console.log(url);
                                         views: parseInt(photo2.views, 10)
                                       }
                                     });
+                                    cb();
                                   } catch(e) {
                                     cb();
                                   }
                                 });
                               }
-                              cb();
                             } catch(e) {
                               cb();
                             }
