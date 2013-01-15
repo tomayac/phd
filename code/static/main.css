@@ -25,7 +25,7 @@ H2 {
 
 #debug {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 100px;
 }
 
@@ -37,7 +37,10 @@ IMG.favicon {
 
 DIV.cluster {
   float: left;
+}
 
+.clearBoth {
+  clear: both;
 }
 
 DIV.micropost {
@@ -61,15 +64,6 @@ IMG.photo {
   margin: 0.2em;
 }
 
-IMG.representative {
-  border-left: solid orange 3px;
-}
-
-IMG.face {
-  border-right: solid red 3px;
-}
-
-
 IMG.photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
   content: '';
@@ -78,6 +72,19 @@ IMG.photo:after {
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+VIDEO.photo {
+  height: 100px !important;
+  margin: 0.2em;
+}
+
+IMG.representative {
+  border-left: solid orange 3px;
+}
+
+IMG.face {
+  border-right: solid red 3px;
 }
 
 SPAN.close {
@@ -90,4 +97,5 @@ SPAN.close {
   right: 20px;
   width: 15px;
   text-align: center;
+  cursor: pointer;
 }

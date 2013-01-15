@@ -145,17 +145,18 @@
         var close = e.target;
         var img = close.parentNode.querySelector('img.photo');
         var posterUrl = img.src;
+        var micropostUrl = illustrator.mediaItems[posterUrl].micropostUrl;
 
         delete illustrator.statuses[posterUrl];
         delete illustrator.images[posterUrl];
-        delete illustrator.mediaItemUrls[illustrator.mediaItemUrls[posterUrl]];
-        delete illustrator.mediaItemUrls[posterUrl];
+        delete illustrator.mediaItems[posterUrl];
+        delete illustrator.mediaItemUrls[micropostUrl];
         delete illustrator.distances[posterUrl];
+        delete illustrator.tileHistograms[posterUrl];
+        delete illustrator.faces[posterUrl];
         for (var key in illustrator.distances) {
           delete illustrator.distances[key][posterUrl];
         }
-        delete illustrator.tileHistograms[posterUrl];
-        delete illustrator.faces[posterUrl];
         for (var key in illustrator.origins) {
           for (var i = 0, len = illustrator.origins[key].length; i < len; i++) {
             if (illustrator.origins[key][i] === posterUrl) {
@@ -391,6 +392,7 @@
       document.getElementById('results').innerHTML = '';
       document.getElementById('queryLog').innerHTML = '';
       document.getElementById('socketData').innerHTML = '';
+      document.getElementById('rankedList').innerHTML = '';
       document.getElementById('query').value = '';
       illustrator.statuses = {};
       illustrator.tileHistograms = {};
@@ -464,11 +466,15 @@
           };
 
           image.src = posterUrl;
+          if (!posterUrl) {
+            alert('Undefined Poster URL');
+            console.log(item);
+          }
           illustrator.statuses[posterUrl] = false;
           image.onload = function() {
             illustrator.statuses[posterUrl] = true;
             illustrator.mediaItems[posterUrl] = item;
-            illustrator.mediaItemUrls[micropostUrl] = true;
+            illustrator.mediaItemUrls[micropostUrl] = posterUrl;
             illustrator.images[posterUrl] = image;
             if (!illustrator.origins[queryId]) {
               illustrator.origins[queryId] = [posterUrl];
@@ -712,8 +718,10 @@
             var pixels =
                 illustrator.images[url].width * illustrator.images[url].height;
             if (pixels >= maxPixels.pixels) {
-              maxPixels.url = url;
-              maxPixels.pixels = pixels;
+              maxPixels = {
+                url: url,
+                pixels: pixels
+              };
             }
           });
           perClusterData[key] = {
@@ -782,16 +790,45 @@
       });
 
       var resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';
       resultsDiv.innerHTML = html.join('');
+
+      illustrator.rank(clusterSizes, clusterSizesKeys, perClusterData);
+    },
+    rank: function(clusterSizes, clusterSizesKeys, perClusterData) {
+      var rankedList = {};
+      clusterSizesKeys.forEach(function(index) {
+        clusterSizes[index].forEach(function(key) {
+          var representative = perClusterData[key].maxPixels.url;
+          rankedList[representative] = {
+            mediaUrl: illustrator.mediaItems[representative].mediaUrl,
+            posterUrl: illustrator.mediaItems[representative].posterUrl,
+            type: illustrator.mediaItems[representative].type,
+            statistics: perClusterData[key]
+          };
+        });
+      });
+      var html = [];
+      for (var key in rankedList) {
+        var item = rankedList[key];
+        if (item.type === 'photo') {
+          html.push('<img class="photo" src="' + item.mediaUrl + '"/>');
+        } else if (item.type === 'video') {
+          html.push('<video class="photo" poster="' + item.posterUrl + '" controls autoplay src="' + item.mediaUrl + '"></video>');
+        }
+      }
+      var rankedList = document.getElementById('rankedList');
+      rankedList.innerHTML = html.join('');
     }
   };
 
   var debug = document.getElementById('debug');
   window.setInterval(function() {
-    var images = document.getElementsByClassName('photo');
-    debug.innerHTML = 'Images: ' + images.length;
-  }, 2000);
+    var div = document.getElementById('results');
+    var images = div.getElementsByClassName('photo');
+    var clusters = div.getElementsByClassName('cluster');
+    debug.innerHTML = 'Images: ' + images.length + '<br/>' +
+        'Clusters: ' + clusters.length;
+  }, 1000);
 
   // init
   illustrator.init();

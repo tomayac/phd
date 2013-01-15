@@ -80,7 +80,6 @@ var mediaFinder = {
      * Core bits adapted from https://github.com/endlesshack/youtube-video
      */
     function cleanVideoUrl(url, callback) {
-console.log(url);
       var decodeQueryString = function(queryString) {
         var key, keyValPair, keyValPairs, r, val, _i, _len;
         r = {};
