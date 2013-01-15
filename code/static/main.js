@@ -813,7 +813,7 @@
         if (item.type === 'photo') {
           html.push('<img class="photo" src="' + item.mediaUrl + '"/>');
         } else if (item.type === 'video') {
-          html.push('<video class="photo" poster="' + item.posterUrl + '" controls autoplay src="' + item.mediaUrl + '"></video>');
+          html.push('<video class="photo" poster="' + item.posterUrl + '" controls loop autoplay src="' + item.mediaUrl + '"></video>');
         }
       }
       var rankedList = document.getElementById('rankedList');
