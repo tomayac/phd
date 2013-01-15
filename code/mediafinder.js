@@ -77,8 +77,39 @@ var mediaFinder = {
 
     /**
      * Cleans video URLs, tries to convert YouTube URLS to HTML5 versions
+     * Core bits adapted from https://github.com/endlesshack/youtube-video
      */
     function cleanVideoUrl(url, callback) {
+
+      var decodeQueryString = function(queryString) {
+        var key, keyValPair, keyValPairs, r, val, _i, _len;
+        r = {};
+        keyValPairs = queryString.split('&');
+        for (_i = 0, _len = keyValPairs.length; _i < _len; _i++) {
+          keyValPair = keyValPairs[_i];
+          key = decodeURIComponent(keyValPair.split('=')[0]);
+          val = decodeURIComponent(keyValPair.split('=')[1] || '');
+          r[key] = val;
+        }
+        return r;
+      };
+
+      var decodeStreamMap = function(url_encoded_fmt_stream_map) {
+        var quality, sources, stream, type, urlEncodedStream, _i, _len, _ref;
+        sources = {};
+        _ref = url_encoded_fmt_stream_map.split(',');
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          urlEncodedStream = _ref[_i];
+          stream = decodeQueryString(urlEncodedStream);
+          type = stream.type.split(';')[0];
+          quality = stream.quality.split(',')[0];
+          stream.original_url = stream.url;
+          stream.url = '' + stream.url + '&signature=' + stream.sig;
+          sources['' + type + ' ' + quality] = stream;
+        }
+        return sources;
+      };
+
       // if is YouTube URL
       if ((url.indexOf('http://www.youtube.com') === 0) ||
           (url.indexOf('https://www.youtube.com') === 0)) {
@@ -103,39 +134,35 @@ var mediaFinder = {
             });
           }
           // Translate to HTML5 video URL, try at least
-          Step(
-            function() {
-              var that = this;
-              var options = {
-                url: 'http://tomayac.com/youpr0n/getVideoInfo.php?video=' +
-                    videoId
-              };
-              request.get(options, function(err, res, body) {
-                that(null, body);
-              });
-            },
-            function(err, body) {
-              var html5Url = false;
-              try {
-                var response = JSON.parse(body);
-                for (var i = 0, len = response.length; i < len; i++) {
-                  var data = response[i];
-                  if (data.type.indexOf('video/webm') === 0) {
-                    html5Url = data.url;
-                    break;
+          var options = {
+            url: 'http://www.youtube.com/get_video_info?video_id=' + videoId
+          };
+          request.get(options, function(err, reply, body) {
+            var video;
+            video = decodeQueryString(body);
+            if (video.status === "fail") {
+              callback(url);
+            }
+            video.sources = decodeStreamMap(video.url_encoded_fmt_stream_map);
+            video.getSource = function(type, quality) {
+              var exact, key, lowest, source, _ref;
+              lowest = null;
+              exact = null;
+              _ref = this.sources;
+              for (key in _ref) {
+                source = _ref[key];
+                if (source.type.match(type)) {
+                  if (source.quality.match(quality)) {
+                    exact = source;
+                  } else {
+                    lowest = source;
                   }
                 }
-                // if either embedding forbidden or no HTML5 version available,
-                // use the normalized YouTube URL
-                if (!html5Url) {
-                  html5Url = 'http://www.youtube.com/watch?v=' + videoId;
-                }
-                callback(html5Url);
-              } catch(e) {
-                callback(html5Url);
               }
-            }
-          );
+              return exact || lowest;
+            };
+            callback(video.getSource('video/webm', 'medium').url);
+          });
         } catch(e) {
           callback(url);
         }
