@@ -49,6 +49,7 @@ DIV.micropost {
 
 DIV.mediaItem {
   float: left;
+  position: relative;
 }
 
 DIV.firstMediaItem {
@@ -77,4 +78,16 @@ IMG.photo:after {
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+SPAN.close {
+  display: none;
+  background-color: black;
+  color: red;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 15px;
+  text-align: center;
 }

@@ -117,6 +117,57 @@
         }
       });
 
+      resultsDiv.addEventListener('mouseover', function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'img') &&
+            (e.target.nodeName.toLowerCase() !== 'span')) {
+          return;
+        };
+        var img = e.target.parentNode.querySelector('img');
+        var close = img.parentNode.querySelector('span.close');
+        close.style.display = 'block';
+      });
+
+      resultsDiv.addEventListener('mouseout', function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'img') &&
+            (e.target.nodeName.toLowerCase() !== 'span')) {
+          return;
+        };
+        var img = e.target.parentNode.querySelector('img');
+        var close = img.parentNode.querySelector('span.close');
+        close.style.display = 'none';
+      });
+
+      resultsDiv.addEventListener('click', function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'span') &&
+            (!e.target.classList.contains('close'))) {
+          return;
+        }
+        var close = e.target;
+        var img = close.parentNode.querySelector('img.photo');
+        var posterUrl = img.src;
+
+        delete illustrator.statuses[posterUrl];
+        delete illustrator.images[posterUrl];
+        delete illustrator.mediaItemUrls[illustrator.mediaItemUrls[posterUrl]];
+        delete illustrator.mediaItemUrls[posterUrl];
+        delete illustrator.distances[posterUrl];
+        for (var key in illustrator.distances) {
+          delete illustrator.distances[key][posterUrl];
+        }
+        delete illustrator.tileHistograms[posterUrl];
+        delete illustrator.faces[posterUrl];
+        for (var key in illustrator.origins) {
+          for (var i = 0, len = illustrator.origins[key].length; i < len; i++) {
+            if (illustrator.origins[key][i] === posterUrl) {
+              illustrator.origins[key].splice(i, 1);
+              break;
+            }
+          }
+        }
+        illustrator.clusters = {};
+        illustrator.sort();
+      });
+
       var drawDebugCanvas = function drawDebugCanvas(img) {
         var src = img.src;
         var canvas = document.createElement('canvas');
@@ -319,14 +370,6 @@
             }
           });
         }
-      });
-
-      // sort by similarity
-      var similaritySort = document.getElementById('similaritySort');
-      similaritySort.addEventListener('click', function() {
-        if (illustrator.checkMediaItemStatuses('histogram')) {
-          illustrator.sort();
-        };
       });
     },
     initSockets: function() {
@@ -689,7 +732,8 @@
 
       var faviconHtml = function(service) {
         return '<img class="favicon" src="./resources/' +
-            service.toLowerCase() + '.png' + '"/>';
+            service.toLowerCase() + '.png' + '"/>' +
+            '<span class="close">X</span>';
       };
 
       var micropostHtml = function(url) {
@@ -702,7 +746,7 @@
             'Shares: ' + illustrator.mediaItems[url].socialInteractions.shares + '<br/>' +
             'Comments: ' + illustrator.mediaItems[url].socialInteractions.comments + '<br/>' +
             'Views: ' + illustrator.mediaItems[url].socialInteractions.views + '<hr/>' +
-            'W/H: ' + illustrator.images[url].width + '/' + illustrator.images[url].height + '<br/>' +
+            'Dimensions: ' + illustrator.images[url].width + '/' + illustrator.images[url].height + '<br/>' +
             'Aspect Ratio: ' + (Math.round(illustrator.images[url].width / illustrator.images[url].height * 100) / 100) + '<br/>' +
             'Megapixels: ' + (illustrator.images[url].width * illustrator.images[url].height / 1000000) +
             '</div>';
