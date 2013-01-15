@@ -161,7 +161,15 @@ console.log(url);
               }
               return exact || lowest;
             };
-            return callback(video.getSource('video/webm', 'medium').url);
+            var webm = video.getSource('video/webm', 'medium');
+            var mp4 =  video.getSource('video/mp4', 'medium');
+            if (webm) {
+              return callback(webm.url);
+            } else if (mp4) {
+              return callback(mp4.url);
+            } else {
+              return callback(url);
+            }
           });
         } catch(e) {
           callback(url);
