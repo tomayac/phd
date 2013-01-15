@@ -80,7 +80,7 @@ var mediaFinder = {
      * Core bits adapted from https://github.com/endlesshack/youtube-video
      */
     function cleanVideoUrl(url, callback) {
-
+console.log(url);
       var decodeQueryString = function(queryString) {
         var key, keyValPair, keyValPairs, r, val, _i, _len;
         r = {};
@@ -140,8 +140,8 @@ var mediaFinder = {
           request.get(options, function(err, reply, body) {
             var video;
             video = decodeQueryString(body);
-            if (video.status === "fail") {
-              callback(url);
+            if (video.status === 'fail') {
+              return callback(url);
             }
             video.sources = decodeStreamMap(video.url_encoded_fmt_stream_map);
             video.getSource = function(type, quality) {
@@ -161,7 +161,7 @@ var mediaFinder = {
               }
               return exact || lowest;
             };
-            callback(video.getSource('video/webm', 'medium').url);
+            return callback(video.getSource('video/webm', 'medium').url);
           });
         } catch(e) {
           callback(url);
