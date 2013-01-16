@@ -39,7 +39,12 @@ DIV.cluster {
   float: left;
 }
 
-.clearBoth {
+.step1 {
+  display: block;
+}
+
+.step2 {
+  display: none;
   clear: both;
 }
 
