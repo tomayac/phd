@@ -29,16 +29,6 @@ H2 {
   right: 100px;
 }
 
-IMG.favicon {
-  position: relative;
-  top: -8px;
-  left: -25px;
-}
-
-DIV.cluster {
-  float: left;
-}
-
 .step1 {
   display: block;
 }
@@ -48,28 +38,34 @@ DIV.cluster {
   clear: both;
 }
 
-DIV.micropost {
-  font-size: 0.7em;
-  height: 50px;
-  overflow: auto;
-  overflow-x: hidden;
+.cluster {
+  float: left;
 }
 
-DIV.mediaItem {
+.mediaItem {
   float: left;
   position: relative;
+  margin-left: -16px;
 }
 
-DIV.firstMediaItem {
+.firstMediaItem {
   margin-left: 50px;
 }
 
-IMG.photo {
+.photo {
   height: 100px !important;
-  margin: 0.2em;
+  margin: 0.05em;
 }
 
-IMG.photo:after {
+.representative {
+  border-left: solid orange 3px;
+}
+
+.face {
+  border-right: solid red 3px;
+}
+
+.photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
   content: '';
   position: absolute;
@@ -79,20 +75,13 @@ IMG.photo:after {
   left: 0;
 }
 
-VIDEO.photo {
-  height: 100px !important;
-  margin: 0.2em;
+.favicon {
+  position: relative;
+  top: -8px;
+  left: -25px;
 }
 
-IMG.representative {
-  border-left: solid orange 3px;
-}
-
-IMG.face {
-  border-right: solid red 3px;
-}
-
-SPAN.close {
+.close {
   display: none;
   background-color: black;
   color: red;
@@ -103,4 +92,11 @@ SPAN.close {
   width: 15px;
   text-align: center;
   cursor: pointer;
+}
+
+.micropost {
+  font-size: 0.7em;
+  height: 50px;
+  overflow: auto;
+  overflow-x: hidden;
 }

@@ -376,8 +376,48 @@
           });
         }
       });
+
+      var toggleVideoPlayStateButton = document.getElementById('playAllVideos');
+      toggleVideoPlayStateButton.addEventListener('click', function(e) {
+        var videos = document.querySelectorAll('video');
+        for (var i = 0, len = videos.length; i < len; i++) {
+          var video = videos[i];
+          if (video.paused) {
+            video.play();
+            this.innerHTML = 'Pause all videos';
+          } else {
+            video.pause();
+            this.innerHTML = 'Play all videos';
+          }
+        }
+      });
+
+      var muteVideosButton = document.getElementById('muteAllVideos');
+      muteAllVideos.addEventListener('click', function(e) {
+        var videos = document.querySelectorAll('video');
+        for (var i = 0, len = videos.length; i < len; i++) {
+          var video = videos[i];
+          if (video.muted) {
+            video.muted = false;
+            this.innerHTML = 'Mute all videos';
+          } else {
+            video.muted = true;
+            this.innerHTML = 'Unmute all videos';
+          }
+        }
+      });
+
+
+
     },
     deleteMediaItem: function(posterUrl) {
+      if (illustrator.DEBUG) console.log('Deleting ' + posterUrl);
+      if (illustrator.clusters[posterUrl]) {
+        illustrator.clusters[posterUrl].forEach(function(key) {
+          if (illustrator.DEBUG) console.log('Recursive Deleting ' + key);
+          illustrator.deleteMediaItem(key);
+        });
+      }
       var micropostUrl = illustrator.mediaItems[posterUrl].micropostUrl;
       delete illustrator.statuses[posterUrl];
       delete illustrator.images[posterUrl];
@@ -876,7 +916,7 @@
       var rankedList = document.getElementById('rankedList');
       rankedList.innerHTML = html.join('');
       document.querySelector('.step2').style.display = 'block';
-      document.querySelector('.step1').style.display = 'none';
+//      document.querySelector('.step1').style.display = 'none';
 
     }
   };
