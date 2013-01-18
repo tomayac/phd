@@ -694,9 +694,10 @@ var mediaFinder = {
                     (item.object.attachments) &&
                     (Array.isArray(item.object.attachments))) {
                   item.object.attachments.forEach(function(attachment) {
-                    // only treat photos and videos, skip articles
+                    // only treat photos, videos, and articles
                     if ((attachment.objectType !== 'photo') &&
-                        (attachment.objectType !== 'video')) {
+                        (attachment.objectType !== 'video') &&
+                        (attachment.objectType !== 'article')) {
                       return;
                     }
                     // the micropost can consist of different parts, dependent on
@@ -725,7 +726,8 @@ var mediaFinder = {
                             micropostUrl: item.url,
                             micropost: micropost,
                             userProfileUrl: item.actor.url,
-                            type: attachment.objectType,
+                            type: attachment.objectType === 'video' ?
+                                'video' : 'photo',
                             timestamp: (new Date(item.published)).getTime(),
                             publicationDate: item.published,
                             socialInteractions: {
