@@ -886,7 +886,7 @@ var mediaFinder = {
                     var mediaUrl = item.type === 'video' ?
                         item.source : item.picture;
                     cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
-                      if (cleanedMediaUrl) {
+                      if (cleanedMediaUrl && item.picture) {
                         results.push({
                           mediaUrl: cleanedMediaUrl.replace(/s\.jpg$/gi, 'n.jpg'),
                           posterUrl: item.picture,

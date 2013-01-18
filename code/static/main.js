@@ -153,7 +153,11 @@
         var img = close.parentNode.querySelector(
             'img.photo, video.photo, img.gallery, video.gallery');
         var posterUrl = img.dataset.posterurl;
-        illustrator.deleteMediaItem(posterUrl);
+        var deleteThisOneOnly = false;
+        if (close.parentNode.parentNode.classList.contains('cluster')) {
+          deleteThisOneOnly = true;
+        };
+        illustrator.deleteMediaItem(posterUrl, deleteThisOneOnly);
       };
 
       resultsDiv.addEventListener('mouseover', function(e) {
@@ -414,23 +418,42 @@
 
 
     },
-    deleteMediaItem: function(posterUrl) {
-      if (illustrator.DEBUG) console.log('Deleting ' + posterUrl);
-      if (illustrator.clusters[posterUrl]) {
-        illustrator.clusters[posterUrl].forEach(function(key) {
-          illustrator.deleteMediaItem(key);
+    deleteMediaItem: function(posterUrl, deleteThisOneOnly) {
+      var deleteObject = function(objects) {
+        objects.forEach(function(array) {
+          var object = array[0];
+          var key = array[1];
+          console.log(key + ' before ' + Object.keys(object).length);
+          delete object[key];
+          console.log(key + ' after ' + Object.keys(object).length);
         });
+      };
+
+      if (!deleteThisOneOnly) {
+        if (illustrator.DEBUG) console.log('Deleting the whole cluster of ' +
+            posterUrl);
+        if (illustrator.clusters[posterUrl]) {
+          illustrator.clusters[posterUrl].forEach(function(key) {
+            illustrator.deleteMediaItem(key, true);
+          });
+        }
       }
+      if (illustrator.DEBUG) console.log('Deleting ' + posterUrl);
       var micropostUrl = illustrator.mediaItems[posterUrl].micropostUrl;
-      delete illustrator.statuses[posterUrl];
-      delete illustrator.thumbnails[posterUrl];
-      delete illustrator.mediaItems[posterUrl];
-      delete illustrator.mediaItemUrls[micropostUrl];
-      delete illustrator.distances[posterUrl];
-      delete illustrator.tileHistograms[posterUrl];
-      delete illustrator.faces[posterUrl];
+      deleteObject([
+        [illustrator.mediaItemUrls, micropostUrl],
+        [illustrator.clusters, posterUrl],
+        [illustrator.statuses, posterUrl],
+        [illustrator.thumbnails, posterUrl],
+        [illustrator.mediaItems, posterUrl],
+        [illustrator.distances, posterUrl],
+        [illustrator.tileHistograms, posterUrl],
+        [illustrator.faces, posterUrl]
+      ]);
       for (var key in illustrator.distances) {
-        delete illustrator.distances[key][posterUrl];
+        deleteObject([
+          [illustrator.distances[key], posterUrl]
+        ]);
       }
       for (var key in illustrator.origins) {
         for (var i = 0, len = illustrator.origins[key].length; i < len; i++) {
@@ -440,7 +463,10 @@
           }
         }
       }
+      illustrator.rankedClusters = {};
+      illustrator.ranking = {};
       illustrator.clusters = {};
+console.log(illustrator);
       illustrator.sort();
     },
     initSockets: function() {
@@ -798,6 +824,7 @@
       }
 
       var urlsToPreload = {};
+      if (illustrator.DEBUG) console.log('Preloading full-size media items');
       clusterSizesKeys.forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
           var likes = 0;
@@ -909,6 +936,10 @@
       var html = [];
       clusterSizesKeys.forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
+if (!illustrator.rankedClusters[key]) {
+   console.log('Ficken')
+   console.log(key);
+}
           var representativeUrl =
               illustrator.rankedClusters[key].statistics.maxPixels.url;
           html.push('<div class="cluster">' +
@@ -951,7 +982,6 @@
           video.setAttribute('poster', item.posterUrl);
           video.setAttribute('controls', 'controls');
           video.setAttribute('loop', 'loop');
-          video.setAttribute('autoplay', 'autoplay');
           var poster = illustrator.images[item.posterUrl];
           video.dataset.width = poster.width;
           video.dataset.height = poster.height;
