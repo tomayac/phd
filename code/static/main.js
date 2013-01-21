@@ -424,12 +424,7 @@
         objects.forEach(function(array) {
           var object = array[0];
           var key = array[1];
-          var before = Object.keys(object).length;
           delete object[key];
-          var after  = Object.keys(object).length;
-          if (before === after) {
-            console.log('DELETE fail ' + array[2] + ': ' + Object.keys(object).length);
-          }
         });
       };
 
@@ -457,22 +452,22 @@
         var noProxyMediaUrl = illustrator.mediaItems[posterUrl].mediaUrl;
         var noProxyPosterUrl = illustrator.mediaItems[posterUrl].posterUrl;
         deleteObject([
-          [illustrator.mediaItemUrls, micropostUrl, 'mediaItemUrls'],
-          [illustrator.images, noProxyPosterUrl, 'images'],
-          [illustrator.images, noProxyMediaUrl, 'images']
+          [illustrator.mediaItemUrls, micropostUrl],
+          [illustrator.images, noProxyPosterUrl],
+          [illustrator.images, noProxyMediaUrl]
         ]);
       }
       deleteObject([
-        [illustrator.statuses, posterUrl, 'statuses'],
-        [illustrator.thumbnails, posterUrl, 'thumbnails'],
-        [illustrator.mediaItems, posterUrl, 'mediaItems'],
-        [illustrator.distances, posterUrl, 'distances'],
-        [illustrator.tileHistograms, posterUrl, 'tileHistograms'],
-        [illustrator.faces, posterUrl, 'faces']
+        [illustrator.statuses, posterUrl],
+        [illustrator.thumbnails, posterUrl],
+        [illustrator.mediaItems, posterUrl],
+        [illustrator.distances, posterUrl],
+        [illustrator.tileHistograms, posterUrl],
+        [illustrator.faces, posterUrl]
       ]);
       for (var key in illustrator.distances) {
         deleteObject([
-          [illustrator.distances[key], posterUrl, 'distances[' + key + ']']
+          [illustrator.distances[key], posterUrl]
         ]);
       }
       for (var key in illustrator.queries) {
@@ -592,10 +587,6 @@
             return;
           }
 
-          if (item.posterUrl === undefined) {
-            alert('Undefined Poster URL');
-            console.log(item);
-          }
           var posterUrl = illustrator.PROXY_SERVER +
               encodeURIComponent(item.posterUrl);
           item.origin = service;
@@ -1023,7 +1014,7 @@
           video.dataset.posterurl = item.clusterIdentifier;
           video.dataset.origin = item.origin;
           video.setAttribute('poster', item.posterUrl);
-          video.setAttribute('controls', 'controls');
+          // video.setAttribute('controls', 'controls');
           video.setAttribute('loop', 'loop');
           var poster = illustrator.images[item.posterUrl];
           video.dataset.width = poster.width;
@@ -1038,7 +1029,7 @@
       if (illustrator.DEBUG) console.log('Drawing media gallery');
 
       document.querySelector('.step2').style.display = 'block';
-      document.querySelector('.step1').style.display = 'block';
+      document.querySelector('.step1').style.display = 'none';
 
       // media gallery algorithm credits to
       // http://blog.vjeux.com/2012/image/-
@@ -1075,18 +1066,17 @@
       }
 
       function getHeight(images, width) {
-        width -= images.length * 5;
         var h = 0;
         for (var i = 0; i < images.length; ++i) {
           h += images[i].dataset.width / images[i].dataset.height;
         }
-        return ~~(width / h);
+        return (width / h);
       }
 
       function setHeight(images, height) {
         heights.push(height);
         for (var i = 0; i < images.length; ++i) {
-          images[i].style.width = Math.round(height * images[i].dataset.width /
+          images[i].style.width = (height * images[i].dataset.width /
               images[i].dataset.height);
           images[i].style.height = height;
         }
