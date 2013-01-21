@@ -24,9 +24,13 @@ H2 {
 }
 
 #debug {
-  position: absolute;
-  top: 5px;
-  right: 100px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  padding: 5px;
+  border: solid;
+  z-index: 1000;
 }
 
 .step1 {

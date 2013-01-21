@@ -47,6 +47,8 @@
      * Initialzes the application
      */
     init: function() {
+      if (illustrator.DEBUG) illustrator.debug();
+
       illustrator.socket = io.connect('http://localhost:8001/');
       illustrator.initSockets();
 
@@ -153,11 +155,12 @@
         var img = close.parentNode.querySelector(
             'img.photo, video.photo, img.gallery, video.gallery');
         var posterUrl = img.dataset.posterurl;
-        var deleteThisOneOnly = false;
+        var cascadingDeletion = true;
         if (close.parentNode.parentNode.classList.contains('cluster')) {
-          deleteThisOneOnly = true;
+          cascadingDeletion = false;
         };
-        illustrator.deleteMediaItem(posterUrl, deleteThisOneOnly);
+        illustrator.deleteMediaItem(posterUrl, cascadingDeletion, posterUrl,
+            true);
       };
 
       resultsDiv.addEventListener('mouseover', function(e) {
@@ -376,7 +379,7 @@
           } else {
             displayState = 'none';
           }
-          var sources = illustrator.origins[queryId].forEach(function(source) {
+          var sources = illustrator.queries[queryId].forEach(function(source) {
             var images = document.querySelectorAll('img[src="' + source + '"]');
             for (var i = 0, len = images.length; i < len; i++) {
               images[i].parentNode.style.display = displayState;
@@ -414,60 +417,87 @@
           }
         }
       });
-
-
-
     },
-    deleteMediaItem: function(posterUrl, deleteThisOneOnly) {
+    deleteMediaItem: function(posterUrl, cascadingDeletion, originalPosterUrl,
+        isFirstRun) {
       var deleteObject = function(objects) {
         objects.forEach(function(array) {
           var object = array[0];
           var key = array[1];
-          console.log(key + ' before ' + Object.keys(object).length);
+          var before = Object.keys(object).length;
           delete object[key];
-          console.log(key + ' after ' + Object.keys(object).length);
+          var after  = Object.keys(object).length;
+          if (before === after) {
+            console.log('DELETE fail ' + array[2] + ': ' + Object.keys(object).length);
+          }
         });
       };
 
-      if (!deleteThisOneOnly) {
-        if (illustrator.DEBUG) console.log('Deleting the whole cluster of ' +
-            posterUrl);
-        if (illustrator.clusters[posterUrl]) {
-          illustrator.clusters[posterUrl].forEach(function(key) {
-            illustrator.deleteMediaItem(key, true);
+      if (isFirstRun && cascadingDeletion) {
+        if (illustrator.clusters[originalPosterUrl]) {
+          if (illustrator.DEBUG) console.log('Deleting the whole cluster of ' +
+              originalPosterUrl + ' and ' +
+              illustrator.clusters[originalPosterUrl].length +
+              ' cascading media items');
+          // mutating the array below, so working on a copy here
+          var copy = [];
+          var len = illustrator.clusters[originalPosterUrl].length;
+          for (var i = 0; i < len; i++) {
+            copy[i] = illustrator.clusters[originalPosterUrl][i];
+          }
+          copy.forEach(function(key) {
+            illustrator.deleteMediaItem(key, true, originalPosterUrl, false);
           });
         }
       }
+
       if (illustrator.DEBUG) console.log('Deleting ' + posterUrl);
-      var micropostUrl = illustrator.mediaItems[posterUrl].micropostUrl;
+      if (illustrator.mediaItems[posterUrl]) {
+        var micropostUrl = illustrator.mediaItems[posterUrl].micropostUrl;
+        var noProxyMediaUrl = illustrator.mediaItems[posterUrl].mediaUrl;
+        var noProxyPosterUrl = illustrator.mediaItems[posterUrl].posterUrl;
+        deleteObject([
+          [illustrator.mediaItemUrls, micropostUrl, 'mediaItemUrls'],
+          [illustrator.images, noProxyPosterUrl, 'images'],
+          [illustrator.images, noProxyMediaUrl, 'images']
+        ]);
+      }
       deleteObject([
-        [illustrator.mediaItemUrls, micropostUrl],
-        [illustrator.clusters, posterUrl],
-        [illustrator.statuses, posterUrl],
-        [illustrator.thumbnails, posterUrl],
-        [illustrator.mediaItems, posterUrl],
-        [illustrator.distances, posterUrl],
-        [illustrator.tileHistograms, posterUrl],
-        [illustrator.faces, posterUrl]
+        [illustrator.statuses, posterUrl, 'statuses'],
+        [illustrator.thumbnails, posterUrl, 'thumbnails'],
+        [illustrator.mediaItems, posterUrl, 'mediaItems'],
+        [illustrator.distances, posterUrl, 'distances'],
+        [illustrator.tileHistograms, posterUrl, 'tileHistograms'],
+        [illustrator.faces, posterUrl, 'faces']
       ]);
       for (var key in illustrator.distances) {
         deleteObject([
-          [illustrator.distances[key], posterUrl]
+          [illustrator.distances[key], posterUrl, 'distances[' + key + ']']
         ]);
       }
-      for (var key in illustrator.origins) {
-        for (var i = 0, len = illustrator.origins[key].length; i < len; i++) {
-          if (illustrator.origins[key][i] === posterUrl) {
-            illustrator.origins[key].splice(i, 1);
+      for (var key in illustrator.queries) {
+        for (var i = 0, len = illustrator.queries[key].length; i < len; i++) {
+          if (illustrator.queries[key][i] === posterUrl) {
+            illustrator.queries[key].splice(i, 1);
             break;
           }
         }
       }
-      illustrator.rankedClusters = {};
-      illustrator.ranking = {};
-      illustrator.clusters = {};
-console.log(illustrator);
-      illustrator.sort();
+      if (!cascadingDeletion) {
+        illustrator.rankedClusters = {};
+        illustrator.ranking = {};
+        illustrator.clusters = {};
+        illustrator.sort();
+      } else {
+        if (illustrator.clusters[originalPosterUrl].length === 0) {
+          illustrator.rankedClusters = {};
+          illustrator.ranking = {};
+          illustrator.clusters = {};
+          illustrator.sort();
+        } else {
+          illustrator.clusters[originalPosterUrl].pop();
+        }
+      }
     },
     initSockets: function() {
       if (illustrator.DEBUG) console.log('Initializing WebSockets');
@@ -495,7 +525,7 @@ console.log(illustrator);
       illustrator.statuses = {};
       illustrator.tileHistograms = {};
       illustrator.distances = {};
-      illustrator.origins = {};
+      illustrator.queries = {};
       illustrator.clusters = {};
       illustrator.rankedClusters = {};
       illustrator.ranking = {};
@@ -556,8 +586,8 @@ console.log(illustrator);
       for (var service in results) {
         results[service].forEach(function(item) {
           var micropostUrl = item.micropostUrl;
-          // if we already have this media item, continue to the next one
-          // using the micropostUrl as the posterUrl isn't stable
+          // if we already have this media item, continue to the next one.
+          // using the micropostUrl as id as the posterUrl isn't stable.
           if (illustrator.mediaItemUrls[micropostUrl] !== undefined) {
             return;
           }
@@ -576,10 +606,10 @@ console.log(illustrator);
             illustrator.mediaItems[posterUrl] = item;
             illustrator.mediaItemUrls[micropostUrl] = posterUrl;
             illustrator.thumbnails[posterUrl] = image;
-            if (!illustrator.origins[queryId]) {
-              illustrator.origins[queryId] = [posterUrl];
+            if (!illustrator.queries[queryId]) {
+              illustrator.queries[queryId] = [posterUrl];
             } else {
-              illustrator.origins[queryId].push(posterUrl);
+              illustrator.queries[queryId].push(posterUrl);
             }
             illustrator.detectFaces(image, image.width, image.height);
             illustrator.calculateHistogram(image);
@@ -820,7 +850,7 @@ console.log(illustrator);
             return;
           }
         }
-        return illustrator.display(clusterSizes, clusterSizesKeys);
+        return illustrator.display();
       }
 
       var urlsToPreload = {};
@@ -884,9 +914,26 @@ console.log(illustrator);
           i++;
         });
       });
+      // when no clusters, display nothing
+      if (clusterSizesKeys.length === 0) {
+        illustrator.display();
+      }
     },
-    display: function(clusterSizes, clusterSizesKeys) {
+    display: function() {
       if (illustrator.DEBUG) console.log('Displaying clustered media items');
+
+      var clusterSizes = {};
+      for (var key in illustrator.clusters) {
+        if (!clusterSizes[illustrator.clusters[key].length]) {
+          clusterSizes[illustrator.clusters[key].length] = [key];
+        } else {
+          clusterSizes[illustrator.clusters[key].length].push(key);
+        }
+      }
+
+      var clusterSizesKeys = Object.keys(clusterSizes).sort(function(a, b) {
+        return b - a;
+      });
 
       var faviconHtml = function(service) {
         return '<img class="favicon" src="./resources/' +
@@ -936,10 +983,6 @@ console.log(illustrator);
       var html = [];
       clusterSizesKeys.forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
-if (!illustrator.rankedClusters[key]) {
-   console.log('Ficken')
-   console.log(key);
-}
           var representativeUrl =
               illustrator.rankedClusters[key].statistics.maxPixels.url;
           html.push('<div class="cluster">' +
@@ -1037,7 +1080,7 @@ if (!illustrator.rankedClusters[key]) {
         for (var i = 0; i < images.length; ++i) {
           h += images[i].dataset.width / images[i].dataset.height;
         }
-        return Math.round(width / h);
+        return ~~(width / h);
       }
 
       function setHeight(images, height) {
@@ -1074,21 +1117,33 @@ if (!illustrator.rankedClusters[key]) {
         run(illustrator.MAX_LINE_HEIGHT);
       })();
 
-      window.addEventListener('resize', function() {
+      var resizeWindow = function() {
         run(illustrator.MAX_LINE_HEIGHT);
-      });
+      };
+      window.removeEventListener('resize', resizeWindow, false);
+      window.addEventListener('resize', resizeWindow, false);
+    },
+    debug: function() {
+      var debug = document.getElementById('debug');
+      setInterval(function() {
+        var html = '';
+        html += 'thumbnails: ' + Object.keys(illustrator.thumbnails).length + '<br/>';
 
+        html += 'mediaItems: ' + Object.keys(illustrator.mediaItems).length + '<br/>';
+        html += 'mediaItemUrls: ' + Object.keys(illustrator.mediaItemUrls).length + '<br/>';
+        html += 'statuses: ' + Object.keys(illustrator.statuses).length + '<br/>';
+        html += 'tileHistograms: ' + Object.keys(illustrator.tileHistograms).length + '<br/>';
+        html += 'faces: ' + Object.keys(illustrator.faces).length + '<br/>';
+        html += 'distances: ' + Object.keys(illustrator.distances).length + '<hr/>';
+        html += 'clusters: ' + Object.keys(illustrator.clusters).length + '<br/>';
+        html += 'ranking: ' + Object.keys(illustrator.ranking).length + '<br/>';
+        html += 'rankedClusters: ' + Object.keys(illustrator.rankedClusters).length + '<br/>';
+        html += 'images: ' + Object.keys(illustrator.images).length + '<hr/>';
+        html += 'queries: ' + Object.keys(illustrator.queries).length;
+        debug.innerHTML = html;
+      }, 500);
     }
   };
-
-  var debug = document.getElementById('debug');
-  window.setInterval(function() {
-    var div = document.getElementById('results');
-    var images = div.getElementsByClassName('photo');
-    var clusters = div.getElementsByClassName('cluster');
-    debug.innerHTML = 'Images: ' + images.length + '<br/>' +
-        'Clusters: ' + clusters.length;
-  }, 1000);
 
   // init
   illustrator.init();
