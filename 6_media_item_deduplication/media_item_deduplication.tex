@@ -971,8 +971,8 @@ that let the user interactively preview clustering changes.
 
 In the previous subsection, we have introduced
 an algorithm for photo deduplication.
-In this section, we will briefly show how this algorithm
-can be combined with the previously introduced
+In the upcoming section, we will outline the conceptual framework
+of how this algorithm can be combined with the previously introduced
 video shot boundary detection algorithm to on the one hand
 directly deduplicate videos on a~shot boundary frame basis,
 or to on the other hand detect
@@ -991,12 +991,12 @@ by the video content, propose a~novel approach for identifying
 near-duplicate videos by making use of both low-level visual
 features and high-level semantic features
 detected using trained classifiers.
-Further, there is~\cite{oliveira2010nearduplicate} by Oliveira
-\emph{et al.}\ who look at near-duplicate video detection
+Furthermore, there is~\cite{oliveira2010nearduplicate} by Oliveira
+\emph{et al.},\ who look at near-duplicate video detection
 from a~human angle.  
 The authors have conducted four large-scale surveys
 and have confirmed that humans perceive videos as near-duplicates
-both based on non-semantic features like different photo or audio
+based on both non-semantic features like different photo or audio
 quality, but also based on semantic features like different
 videos of similar content, where, according to the authors,
 most research still focuses mostly on the non-semantic features.
@@ -1015,9 +1015,9 @@ The first photo of each shot boundary film stripe
 is selected as the particular shot's representative photo.
 To detect whether a~given photo stemming from social networks
 is contained in the video in question,
-the set of extracted shot representative photos gets compared
+the set of extracted shot representative photos is compared
 with all social network photos,
-some of which shown in \autoref{fig:topvsfashionshow}.
+some of which are shown in \autoref{fig:topvsfashionshow}.
 We note, however, that especially for longer videos
 (about 4 minutes and longer)
 this approach does not scale due to the sheer number of shot boundaries
@@ -1046,15 +1046,27 @@ Naturally this approach is even less scalable
 with regards to system response time.
 The practicable work-around is, as before, to limit oneself
 to poster frames delivered by the video hosting platforms.
+Our experiments have shown that this approach works very well
+for common social network user behavior.
+For example, the 3:19 minutes long video of Mark Zuckerberg explaining
+the design and engineering challenges behind Facebook's
+recently announced Graph Search product was initially published
+on Facebook\footnote{\url{https://www.facebook.com/about/graphsearch},
+accessed January 22, 2013}, however, people republished the same video 
+multiple times on YouTube.
+As the YouTube-generated poster frames were similar enough,
+and even if the other video meta data like title and description
+were different, with the described work-around approach,
+we were able to effectively deduplicate the videos.
 
 \section{Conclusion}
 
 In this chapter, we have treated the topic of media item deduplication
 from different angles.
-We have first defined the meaning of exact and near-duplicate 
+We have first defined the meaning of \emph{exact} and \emph{near-duplicate} 
 for both photos and videos,
 including the special case of a~photo being contained in a~video.
-In the continuation, we have introduced an algorithm and application
+Thereafter, we have introduced an algorithm and application
 for video shot boundary detection
 whose foundations then served for a~more general
 photo deduplication algorithm with semantic features.
@@ -1066,7 +1078,7 @@ albeit minimum system response time requirements
 hinder its full applicability in practice.
 
 Media item deduplication of both exact and near-duplicate media items
-is a~fundamental step in dealing with huge amounts of social media,
+is a~fundamental step in dealing with huge amounts of social media
 and media overload in general.
 Highly popular media items not only tend
 to retrieve many social interactions on the social network
