@@ -10,8 +10,7 @@
 
 \section{Introduction}
 
-In the previous \autoref{cha:media-item-extraction}
-in \autoref{sec:the-need-for-media-item-deduplication},
+In the previous \autoref{cha:media-item-extraction},
 we have motivated the need for media item deduplication.
 By clustering media items, we get a~higher-level view on
 a~media item cluster's overall performance on different networks.
@@ -103,7 +102,7 @@ and photo deduplication separately.
 Our goal is to deduplicate media items on-the-fly
 at the very moment they are extracted from social networks.
 Due to this limitation, we cannot rely on any preprocessing
-at all that state-of-the-art algorithms rely on.
+that state-of-the-art algorithms rely on.
 This is why we dedicate a~whole section entirely to on-the-fly
 shot boundary detection for online video,
 which is by no means a~solved problem.
@@ -125,20 +124,26 @@ and exact duplicate detection are founded
 on a~tile-wise histogram-based pixel comparison algorithm.
 
 \section{Video Shot Boundary Detection} \label{sec:videoshotboundarydetection}
-Video shot boundary detection is the for machines processor-intensive task
-of splitting a~video into continuous camera shots,
-with hard or soft cuts as the boundaries.
+In video production and filmmaking, a~shot is a~series of frames
+that runs for an uninterrupted period of time.
+Shots are always filmed with a~single camera and can be of any duration. 
+Shot boundary detection (also called cut detection or shot transition detection
+or simply shot detection) is a~field of research of video processing.
+Its subject is the automated detection of transitions between shots
+with hard or soft cuts as the boundaries
+in digital video with the purpose of temporal segmentation of videos.
+
 In this section, we present a~browser-based, client-side, and
 on-the-fly approach to this challenge
 based on modern HTML5~\cite{berjon2012html5} Web APIs.
 Once a~video has been split into shots,
-shot-based video navigation becomes enabled,
+shot-based video navigation becomes possible,
 more fine-grained playing statistics can be created,
 and finally, shot-based video comparison is possible.
-\autoref{fig:screenshot} shows detected camera
-shots for a~sample video.
 The algorithm has been incorporated in a~browser extension
 so that it can run transparently on a~major online video portal.
+\autoref{fig:screenshot} shows detected camera
+shots for a~sample video.
 
 \begin{figure}
   \begin{center}
@@ -160,7 +165,7 @@ representing a~continuous action in time and space.
 The topic of shot boundary detection has already been described
 extensively in literature.
 While some specific issues still remain
-(notably gradual transitions and false positives
+(notably detecting gradual transitions and detected false positives
 due to large movement or illumination changes),
 the problem is considered resolved for many
 cases~\cite{yuan2007shotboundary,hanjalic2002shotboundary}.
@@ -175,8 +180,8 @@ This dependency on spatial location makes this technique
 very sensitive to (even global) motion.
 Various improvements have been suggested, such as prefiltering
 frames~\cite{zhang1995videoparsing},
-but pixel-by-pixel comparison methods proved inferior in the end
-and have steered research towards other directions.
+but pixel-by-pixel comparison methods proved inferior,
+which has steered research towards other directions.
 
 A~related method is
 \emph{histogram analysis}~\cite{otoole1999shotboundary},
@@ -188,7 +193,7 @@ and global movements in a~shot.
 
 As a~compromise, a~third group of methods consists of
 a~\emph{trade-off between the above two
-techniques}~\cite{ahmed1999keyframe}.
+categories}~\cite{ahmed1999keyframe}.
 Different histograms of several, non-overlapping blocks
 are calculated for each frame,
 thereby categorizing different regions of the frame
@@ -216,7 +221,7 @@ In this section, we discuss our shot boundary detection algorithm,
 which falls in the category of histogram-based algorithms.
 Since visually dissimilar video frames
 can have similar global histograms,
-instead we take local histograms into account. 
+we take local histograms into account instead. 
 We therefore split video frames in freely configurable
 rows and columns, \emph{i.e.}, lay a~grid of tiles over each frame.
 The user interface, as can be seen in \autoref{fig:algorithm},
@@ -224,7 +229,7 @@ currently allows for anything from a~$\mathit{1} \times \mathit{1}$
 grid to a~$\mathit{20} \times \mathit{20}$ grid.
 The limits are imposed by still reasonable processing time on consumer PCs.
 For each step, we examine a~frame $\mathit{f}$ and its direct
-predecessor frame $\mathit{f - 1}$.
+predecessor $\mathit{f - 1}$.
 
 Apart from the per-tile average histogram distance,
 the frame distance function further considers
@@ -246,11 +251,10 @@ and a~plant on the right.
 In contrast, the speaker desk, the white background,
 and the upper part of his body remain static,
 resulting in red boxes.
-For this example, we use a~grid layout of
-$\mathit{20} \times \mathit{20}$ tiles
-($\mathit{nTiles} = \mathit{400}$),
-and an empirically determined  number
-$\mathit{tileLimit}$ of most different or similar tiles,
+We use a~grid layout of $\mathit{20} \times \mathit{20}$ tiles
+($\mathit{nTiles} = \mathit{400}$), and
+a~$\mathit{tileLimit = 133 = \mathit{20} \times \mathit{20} * 1/3}$
+of most different or similar tiles,
 \emph{i.e.}, we treat one third of all tiles
 as most different tiles, one third as normal tiles,
 and one third as most similar tiles,
@@ -261,25 +265,30 @@ $\mathit{boostingFactor}$, which slightly increases
 the impact of the most different tiles,
 and $\mathit{0.9}$ for the $\mathit{limitingFactor}$,
 which slightly decreases the impact of the most similar tiles.
+These algorithm parameters were empirically determined
+to deliver solid results on a~large corpus of videos,
+albeit for each individual video the optimal settings
+can be manually tweaked to take into account the
+particular video's special characteristics.
 The algorithm pseudo code can be seen in \autoref{code:algorithm}.
 
 We define the average histogram distance between two frames
-$\mathit{f}$ and $\mathit{f - 1}$ as $\mathit{avgHisto}_{f}$.
+$\mathit{f}$ and $\mathit{f - 1}$ as $\mathit{avgHisto_{f}}$.
 In a~first step, we have examined the histogram distance
 data statistically, and observed that while
-the overall average frame distance $\mathit{avgDist}_{f}$,
-defined as $$\mathit{avgDist}_{f} =
+the overall average frame distance $\mathit{avgDist_{f}}$,
+defined as $$\mathit{avgDist_{f}} =
 \frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}
-\mathit{avgHisto}_{f, t}$$ is very intuitive to human beings,
+\mathit{avgHisto_{f, t}}$$ is very intuitive to human beings,
 far more value lies in the standard deviation
-$\mathit{stdDev}_{f}$, based on the definition of the overall
-average frame distance $\mathit{avgDist}_{f}$
-$$\mathit{stdDev}_{f} =
+$\mathit{stdDev_{f}}$, based on the definition of the overall
+average frame distance $\mathit{avgDist_{f}}$
+$$\mathit{stdDev_{f}} =
 \sqrt{\frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}
-(\mathit{avgHisto}_{f, t} - \mathit{avgDist}_{f})^{2}}$$
+(\mathit{avgHisto_{f, t}} - \mathit{avgDist_{f}})^{2}}$$
 We use the standard deviation as a~value for the shot splitting
 threshold~\cite{lienhart1999comparison}
-to come to very accurate shot splitting results.
+to obtain very accurate shot splitting results.
 We found the boosting and limiting factors to have an overall
 positive quality impact on more lively videos,
 and a~negative quality impact on more monotone videos.
@@ -288,7 +297,7 @@ after changing either the boosting or the limiting factors
 for the most similar or different tiles,
 the value of the shot splitting threshold is adapted
 to the new resulting standard deviation.
-The user interface optionally does this automatically.
+The user interface can do this automatically.
 
 \begin{figure}
   \begin{center}
@@ -296,7 +305,7 @@ The user interface optionally does this automatically.
   \end{center}
   \caption[Debug view of the shot boundary detection process]
     {Debug view of the shot boundary detection process.
-    Blue boxes highlight tiles with the most differences
+    Blue boxes highlight tiles with most differences
     to the previous frame, red boxes those with most similarities.}
   \label{fig:algorithm}
 \end{figure}
@@ -327,13 +336,13 @@ for frame in frames
 
 The complete video analysis process happens fully
 on the client side.
-We use HTML5 JavaScript APIs of the \texttt{<video>} and
+We use the HTML5 JavaScript APIs of the \texttt{<video>} and
 \texttt{<canvas>} tags.
 In order to obtain a~video still frame
 from the \texttt{<video>} tag at the current video position,
 we use the \texttt{drawImage()} function of the 2D context of the
 \texttt{<canvas>} tag,
-which as its first parameter accepts a~video.
+which accepts a~video as its first parameter.
 We then analyze the video frame's pixels tile-wise
 and calculate the histograms.
 In order to retrieve the tile-wise pixel data
@@ -359,8 +368,8 @@ Especially with high-definition (HD) video,
 this can be very demanding.
 We do not attach the analysis \texttt{<video>} tag
 to the DOM tree~\cite{lehors2004dom} to save some CPU cycles,
-however, the video still needs to be sought to each frame
-in one-second steps and be processed.
+however, the video playing logic still has to seek the video position
+ahead in one-second steps  and process the encountered still frame.
 Even on a~higher-end computer (our experiments ran on a~MacBook
 Pro, Intel Core 2 Duo 2,66 GHz, 8 GB RAM),
 the process of analyzing and displaying in parallel
@@ -399,6 +408,12 @@ like Standard Definition (SD) or High Definition (HD).
 We have checked in how far analysis results differ
 for the various qualities,
 with the result that SD quality is sufficient.
+We have made available the shot detection application online at
+\url{http://tomayac.com/youpr0n/} and invite the reader to compare
+the results, \emph{e.g.}, the SD video
+\url{http://tomayac.com/youpr0n/videos/vsfashionshow_sd.mp4} with
+the HD version \url{http://tomayac.com/youpr0n/videos/vsfashionshow_hd.mp4}.
+
 Second, more advanced heuristics for the various user-definable
 options in the analysis process are needed.
 While there is no optimal configuration for all types of videos,
@@ -408,7 +423,7 @@ based on the standard deviation $\mathit{stdDev_{f}}$
 and the overall average frame distance $\mathit{avgDist_{f}}$.
 Both are dependent on the values of $\mathit{boostingFactor}$,
 $\mathit{limitingFactor}$, $\mathit{rows}$, and $\mathit{columns}$. 
-Interpreting our results so far, there is evidence
+Interpreting our results, there is evidence
 that low complexity settings are sufficient in most cases,
 \emph{i.e.}, a~number of $\mathit{rows}$ and $\mathit{columns}$
 higher than~$\mathit{2}$ does not necessarily
@@ -418,7 +433,11 @@ or similar tiles $\mathit{tileLimit}$.
 We had cases where not treating those tiles differently
 at all, \emph{i.e.}, setting
 $\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, 
-led to better results.
+led to better results; for example with screencast-type videos,
+typically used to demonstrate and teach the use of software features,
+that were not recorded with a real camera,
+but directly recorded from the computer's screen, with ``camera shots''
+then later added with video editing software.
 
 \section{Photo Deduplication}
 
@@ -441,7 +460,7 @@ using min-Hash and term frequency--inverse document frequency (tf--idf)
 weighting~\cite{chum2008nearduplicate}.
 The proposed method uses a~visual vocabulary of
 vector quantized local feature descriptors based on
-Scale Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
+Scale-Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
 A~method for both photos and videos~\cite{yang2009nearduplicate}
 has been proposed by Yang \emph{et al.}
 
@@ -478,10 +497,10 @@ and only differ in the viewing angle.
 \begin{figure}[h!]
   \centering
   \subfloat[Viewing angle 1]{
-    \includegraphics[width=0.25\textwidth]{stage1.jpg}
+    \includegraphics[width=0.3\textwidth]{stage1.jpg}
   }                
   \subfloat[Viewing angle 2]{
-    \includegraphics[width=0.25\textwidth]{stage2.jpg}
+    \includegraphics[width=0.3\textwidth]{stage2.jpg}
   }
   \caption{Slightly different viewing angles of a~concert stage.}
   \label{fig:viewing-angle}  
@@ -489,7 +508,7 @@ and only differ in the viewing angle.
 
 \paragraph{Logo, Watermark, Lower Third, or Caption Insertion}
 
-Oftentimes organizations or individuals insert
+Oftentimes, organizations or individuals insert
 logos, watermarks, or captions into media items
 to highlight their origin or convey related information,
 or to claim ownership of a~media item.
@@ -499,13 +518,13 @@ can be seen in \autoref{fig:logo}.
 \begin{figure}[h!]
   \centering
   \subfloat[Blank]{
-    \includegraphics[width=0.2\textwidth]{speaker1.jpg}
+    \includegraphics[width=0.25\textwidth]{speaker1.jpg}
   }                
   \subfloat[Caption]{
-    \includegraphics[width=0.2\textwidth]{speaker2.jpg}
+    \includegraphics[width=0.25\textwidth]{speaker2.jpg}
   }
   \subfloat[Logo, lower third]{
-    \includegraphics[width=0.2\textwidth]{speaker3.jpg}
+    \includegraphics[width=0.25\textwidth]{speaker3.jpg}
   }
   \caption{Caption, logo, and lower third insertion for a~speaker.}
   \label{fig:logo}  
@@ -535,7 +554,7 @@ as can be seen in the example in \autoref{fig:cropping}.
   \label{fig:cropping}  
 \end{figure}
 
-\paragraph{Camera Shots}
+\paragraph{Different Keyframes}
 
 We have shown camera shot detection earlier in this chapter.
 Different frames stemming from the same camera shot
@@ -569,12 +588,12 @@ both cropped and bulged.
 \begin{figure}[h!]
   \centering
   \subfloat[Original]{
-    \includegraphics[width=0.225\textwidth]{singer1.jpg}
+    \includegraphics[width=0.155\textwidth]{lordoftherings.jpg}
   }                
   \subfloat[Stretched and bulged]{
-    \includegraphics[width=0.3\textwidth]{singer2.jpg}
+    \includegraphics[width=0.3\textwidth]{lordoftheringsstretched.jpg}
   }
-  \caption{Original, and stretched and cropped version of a~photo.}
+  \caption{Original, and stretched version of a~photo.}
   \label{fig:bulged}  
 \end{figure}
 
@@ -587,10 +606,10 @@ are a~considerable reason for near-duplicate media content.
 \begin{figure}[h!]
   \centering
   \subfloat[Original]{
-    \includegraphics[width=0.2\textwidth]{clickclickdecker1.jpg}
+    \includegraphics[width=0.25\textwidth]{clickclickdecker1.jpg}
   }                
   \subfloat[With photo filter]{
-    \includegraphics[width=0.2\textwidth]{clickclickdecker2.jpg}
+    \includegraphics[width=0.25\textwidth]{clickclickdecker2.jpg}
   }
   \caption{Original, and version with an applied photo filter of a~photo.}
   \label{fig:photo-filter}  
@@ -657,11 +676,20 @@ the following conditions have to be fulfilled.
 \end{enumerate}
 
 The simplified algorithm pseudocode can be seen in \autoref{code:clustering}.
-In the actual implementation some speed improvements have been applied,
+In the actual implementation, some speed improvements,
+like, for example, looking up already calculated
+distances\footnote{\texttt{distances[outerPhoto][innerPhoto] =
+distances[innerPhoto][outerPhoto]}}
+have been applied,
 these were omitted in the listing for legibility reasons.
-We calculate the histograms and distances only once.
-The clusters are recalculated dynamically
+We calculate the histograms and distances only once initially.
+The clusters are then recalculated dynamically
 whenever either $tiles\_threshold$ or $similarity\_threshold$ change.
+The given values of $rows = cols = 10$ and
+$tiles\_threshold = 80 = \lceil rows * cols * 0.8 \rceil$ where determined empirically on a~large corpus of event-related media items
+and deliver solid results.
+The corpus is available, see \autoref{sec:evaluation-chpater6} for the details.
+
 
 \begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
     photo clustering algorithm},
@@ -727,7 +755,7 @@ that we will briefly describe in the following.
 The Grammy Award---or short Grammy---is an award by
 the National Academy of Recording Arts and Sciences of the United States
 to recognize outstanding achievement in the music industry.
-The annual presentation ceremony features performances by prominent artists,
+The annual ceremony features performances by prominent artists,
 and some of the awards are presented in a~widely viewed televised ceremony.
 On December 5, 2012, the nominees for the 55\superscript{th} Annual Grammy Awards
 were announced at an event broadcasted live by CBS
@@ -773,13 +801,13 @@ In both photos there was $1$ face detected.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.4\linewidth]{./algorithmdebug.png}
+  \includegraphics[width=0.5\linewidth]{./algorithmdebug.png}
   \caption[Algorithm debug view for two clustered photos]
   {Algorithm debug view for two clustered photos related to the \emph{Grammy Awards Nominations 2013} event (red border indicates detected faces)}
   \label{fig:algorithmdebug}
 \end{figure}
 
-\subsection{Evaluation}
+\subsection{Evaluation}\label{sec:evaluation-chpater6}
 
 We have collected and made available \todo{make available}
 datasets for both events with
@@ -791,7 +819,7 @@ using a~mix of hashtag searches with the official event hashtags combined
 with full-text searches for event titles and variations thereof.
 Due to the short-lived nature of social networks,
 the returned results of the media item extraction process itself
-are not reproducible, our focus in this chapter
+are not reproducible; our focus in this chapter
 is on media item deduplication and clustering.
 The concrete clustering parameters for the algorithm were set as listed below.
 
