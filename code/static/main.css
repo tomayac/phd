@@ -80,13 +80,14 @@ fieldset {
 .cluster {
   float: left;
   white-space: nowrap;
+  padding: 0.5em 0;
 }
 
 .mediaItem {
   float: left;
   position: relative;
   margin-left: -16px;
-  padding: 0.5em 0;
+
 }
 
 .firstMediaItem {

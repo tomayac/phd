@@ -13,6 +13,7 @@
     CONSIDER_FACES: true,
     MAX_LINE_HEIGHT: 200,
     PHOTOS_ONLY: false,
+    MAX_INT: 9007199254740992,
     notificationTimeout: null,
     thumbnails: {},
     images: {},
@@ -241,8 +242,8 @@
       faces.addEventListener('change', function() {
         illustrator.CONSIDER_FACES = faces.checked;
         illustrator.clusters = {};
-        illustrator.showStatusMessage('Sorting media items');
-        illustrator.sort();
+        illustrator.showStatusMessage('Clustering media items');
+        illustrator.clusterMediaItems();
       });
 
       var luminance = document.getElementById('luminance');
@@ -324,7 +325,7 @@
         illustrator.THRESHOLD = threshold.value;
         illustrator.clusters = {};
         if (illustrator.checkMediaItemStatuses('histogram')) {
-          illustrator.sort();
+          illustrator.clusterMediaItems();
         };
       });
 
@@ -344,7 +345,7 @@
         illustrator.SIMILAR_TILES = similarTiles.value;
         illustrator.clusters = {};
         if (illustrator.checkMediaItemStatuses('histogram')) {
-          illustrator.sort();
+          illustrator.clusterMediaItems();
         };
       });
 
@@ -499,13 +500,13 @@
         illustrator.rankedClusters = {};
         illustrator.ranking = {};
         illustrator.clusters = {};
-        illustrator.sort();
+        illustrator.clusterMediaItems();
       } else {
         if (illustrator.clusters[originalPosterUrl].length === 0) {
           illustrator.rankedClusters = {};
           illustrator.ranking = {};
           illustrator.clusters = {};
-          illustrator.sort();
+          illustrator.clusterMediaItems();
         } else {
           illustrator.clusters[originalPosterUrl].pop();
         }
@@ -766,10 +767,10 @@
           }
         }
       }
-      illustrator.sort();
+      illustrator.clusterMediaItems();
     },
-    sort: function() {
-      illustrator.showStatusMessage('Sorting media items');
+    clusterMediaItems: function() {
+      illustrator.showStatusMessage('Clustering media items');
 
       var keys = Object.keys(illustrator.tileHistograms);
       var len = keys.length;
@@ -872,7 +873,7 @@
             return;
           }
         }
-        return illustrator.display();
+        return illustrator.rankClusters();
       }
 
       var urlsToPreload = {};
@@ -889,11 +890,14 @@
           shares += illustrator.mediaItems[key].socialInteractions.shares;
           comments += illustrator.mediaItems[key].socialInteractions.comments;
           views += illustrator.mediaItems[key].socialInteractions.views;
+          // always prefer video over photo, so set the dimension of videos
+          // to MAX_INT
           maxPixels = {
             url: key,
-            pixels:
+            pixels: (illustrator.mediaItems[key].type === 'video' ?
+                illustrator.MAX_INT :
                 illustrator.thumbnails[key].width *
-                illustrator.thumbnails[key].height
+                illustrator.thumbnails[key].height)
           };
 
           illustrator.clusters[key].map(function(url) {
@@ -901,9 +905,12 @@
             shares += illustrator.mediaItems[url].socialInteractions.shares;
             comments += illustrator.mediaItems[url].socialInteractions.comments;
             views += illustrator.mediaItems[url].socialInteractions.views;
-            var pixels =
+            // always prefer video over photo, so set the dimension of videos
+            // to MAX_INT
+            var pixels = (illustrator.mediaItems[url].type === 'video' ?
+                illustrator.MAX_INT :
                 illustrator.thumbnails[url].width *
-                illustrator.thumbnails[url].height;
+                illustrator.thumbnails[url].height);
             if (pixels >= maxPixels.pixels) {
               maxPixels = {
                 url: url,
@@ -938,10 +945,41 @@
       });
       // when no clusters, display nothing
       if (clusterSizesKeys.length === 0) {
-        illustrator.display();
+        illustrator.rankClusters();
       }
     },
-    display: function() {
+    rankClusters: function() {
+      illustrator.showStatusMessage('Ranking clusters');
+      var mediaItems = [];
+      Object.keys(illustrator.ranking).sort(function(a, b) {
+        return a - b;
+      }).forEach(function(i) {
+        var item = illustrator.rankedClusters[illustrator.ranking[i]];
+        if (item.type === 'photo') {
+          var image = illustrator.images[item.mediaUrl];
+          image.dataset.posterurl = item.clusterIdentifier;
+          image.dataset.origin = item.origin;
+          image.dataset.width = image.width;
+          image.dataset.height = image.height;
+          var clone = image.cloneNode();
+          mediaItems.push(clone);
+        } else if (item.type === 'video') {
+          var video = document.createElement('video');
+          video.src = item.mediaUrl;
+          video.dataset.posterurl = item.clusterIdentifier;
+          video.dataset.origin = item.origin;
+          video.setAttribute('poster', item.posterUrl);
+          video.setAttribute('loop', 'loop');
+          var poster = illustrator.images[item.posterUrl];
+          video.dataset.width = poster.width;
+          video.dataset.height = poster.height;
+          var clone = video.cloneNode();
+          mediaItems.push(clone);
+        }
+      });
+      illustrator.displayClusters(mediaItems);
+    },
+    displayClusters: function(mediaItems) {
       illustrator.showStatusMessage('Displaying clustered media items');
 
       var clusterSizes = {};
@@ -1021,37 +1059,6 @@
 
       var resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = html.join('');
-      illustrator.rank();
-    },
-    rank: function() {
-      illustrator.showStatusMessage('Ranking clusters');
-      var mediaItems = [];
-      Object.keys(illustrator.ranking).sort(function(a, b) {
-        return a - b;
-      }).forEach(function(i) {
-        var item = illustrator.rankedClusters[illustrator.ranking[i]];
-        if (item.type === 'photo') {
-          var image = illustrator.images[item.mediaUrl];
-          image.dataset.posterurl = item.clusterIdentifier;
-          image.dataset.origin = item.origin;
-          image.dataset.width = image.width;
-          image.dataset.height = image.height;
-          var clone = image.cloneNode();
-          mediaItems.push(clone);
-        } else if (item.type === 'video') {
-          var video = document.createElement('video');
-          video.src = item.mediaUrl;
-          video.dataset.posterurl = item.clusterIdentifier;
-          video.dataset.origin = item.origin;
-          video.setAttribute('poster', item.posterUrl);
-          video.setAttribute('loop', 'loop');
-          var poster = illustrator.images[item.posterUrl];
-          video.dataset.width = poster.width;
-          video.dataset.height = poster.height;
-          var clone = video.cloneNode();
-          mediaItems.push(clone);
-        }
-      });
       illustrator.drawGallery(mediaItems);
     },
     drawGallery: function(mediaItems) {
