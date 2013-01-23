@@ -7,62 +7,75 @@
   <body>
     <h1>Social Media Illustrator</h1>
 
-    <form method="get" id="search_form">
-      <fieldset>
-        <input name="query" id="query" autofocus="autofocus" placeholder="Query"/>
-        <label for="query">Query</label>
-        <input type="submit" value="OK" />
-
-        <button id="reset">Clear</button>
-      </fieldset>
-
-      <fieldset>
-        <input type="range" id="threshold"/>
-        <label for="threshold" id="thresholdLabel"></label> Similarity Threshold
-        <br/>
-
-        <input type="range" id="similarTiles"/>
-        <label for="similarTiles" id="similarTilesLabel"></label> Similar Tiles
-        <br/>
-
-        <input type="range" id="bwTolerance"/>
-        <label for="bwTolerance" id="bwToleranceLabel"></label> Black/White Tolerance
-        <br/>
-
-        <input type="range" id="rows"/>
-        <label for="rows" id="rowsLabel"></label> Rows
-        <br/>
-
-        <input type="range" id="cols"/>
-        <label for="cols" id="colsLabel"></label> Columns
-        <br/>
-
-        <input type="checkbox" id="luminance"/>
-        <label id="luminanceLabel" for="luminance">Account for Luminance</label>
-        <br/>
-
-        <input type="checkbox" id="faces"/>
-        <label id="facesLabel" for="faces">Account for Faces</label>
-      </fieldset>
-    </form>
-
-    <h2>Queries</h2>
-    <div id="queryLog"></div>
-
-    <div id="debug"></div>
-
     <div id="socketData"></div>
 
-    <div class="step1">
-      <h2>Clusters</h2>
-      <div id="results"></div>
-    </div>
+    <div id="tabs" class="tabs">
 
-    <div class="step2">
-      <h2>Gallery</h2>
-      <button id="playAllVideos">Pause all videos</button>
-      <button id="muteAllVideos">Mute all videos</button>
-      <div id="rankedList"></div>
+      <div class="tab">
+        <input type="radio" id="tab1" name="tabGroup">
+        <label for="tab1">Media Item Clusters</label>
+        <div class="content">
+          <form method="get" id="search_form">
+            <fieldset>
+              <input name="query" id="query" autofocus="autofocus" placeholder="Query"/>
+              <label for="query">Query</label>
+              <input type="submit" value="OK" />
+
+              <button id="reset">Reset</button>
+            </fieldset>
+            <fieldset>
+              <input type="range" id="threshold"/>
+              <label for="threshold" id="thresholdLabel"></label> Similarity Threshold
+              <br/>
+
+              <input type="range" id="similarTiles"/>
+              <label for="similarTiles" id="similarTilesLabel"></label> Similar Tiles
+              <br/>
+
+              <input type="range" id="bwTolerance"/>
+              <label for="bwTolerance" id="bwToleranceLabel"></label> Black/White Tolerance
+              <br/>
+
+              <input type="range" id="rows"/>
+              <label for="rows" id="rowsLabel"></label> Rows
+              <br/>
+
+              <input type="range" id="cols"/>
+              <label for="cols" id="colsLabel"></label> Columns
+              <br/>
+
+              <input type="checkbox" id="luminance"/>
+              <label id="luminanceLabel" for="luminance">Account for Luminance</label>
+              <br/>
+
+              <input type="checkbox" id="faces"/>
+              <label id="facesLabel" for="faces">Account for Faces</label>
+            </fieldset>
+          </form>
+
+          <div id="queryLog"></div>
+          <div id="results"></div>
+        </div>
+      </div>
+
+      <div class="tab">
+        <input type="radio" id="tab2" name="tabGroup">
+        <label for="tab2">Media Gallery</label>
+        <div class="content">
+          <button id="playAllVideos">Play all videos</button>
+          <button id="muteAllVideos">Mute all videos</button>
+          <div id="rankedList"></div>
+        </div>
+      </div>
+
+      <div class="tab">
+        <input type="radio" id="tab3" name="tabGroup">
+        <label for="tab3">Debug</label>
+        <div class="content">
+          <div id="debug"></div>
+        </div>
+      </div>
+
     </div>
 
     <script src="ccv.js"></script>

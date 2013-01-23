@@ -12,6 +12,8 @@
     SIMILAR_TILES_FACTOR: 0.8,
     CONSIDER_FACES: true,
     MAX_LINE_HEIGHT: 200,
+    PHOTOS_ONLY: false,
+    notificationTimeout: null,
     thumbnails: {},
     images: {},
     mediaItems: {},
@@ -47,6 +49,15 @@
      * Initialzes the application
      */
     init: function() {
+
+      var resizeTabsDiv = function() {
+        var tabs = document.getElementById('tabs');
+        tabs.style.minHeight = (window.innerHeight - tabs.offsetTop - 15) +
+            'px';
+      };
+      window.addEventListener('resize', resizeTabsDiv, false);
+      resizeTabsDiv();
+
       if (illustrator.DEBUG) illustrator.debug();
 
       illustrator.socket = io.connect('http://localhost:8001/');
@@ -133,6 +144,9 @@
         var img = e.target.parentNode.querySelector('img, video');
         var close = img.parentNode.querySelector('span.close');
         close.style.display = 'block';
+        if (e.target.nodeName.toLowerCase() === 'video') {
+          e.target.setAttribute('controls', 'controls');
+        }
       };
 
       var mouseout = function(e) {
@@ -144,6 +158,9 @@
         var img = e.target.parentNode.querySelector('img, video');
         var close = img.parentNode.querySelector('span.close');
         close.style.display = 'none';
+        if (e.target.nodeName.toLowerCase() === 'video') {
+          e.target.removeAttribute('controls');
+        }
       };
 
       var click = function(e) {
@@ -224,7 +241,7 @@
       faces.addEventListener('change', function() {
         illustrator.CONSIDER_FACES = faces.checked;
         illustrator.clusters = {};
-        if (illustrator.DEBUG) console.log('Sorting media items');
+        illustrator.showStatusMessage('Sorting media items');
         illustrator.sort();
       });
 
@@ -260,7 +277,7 @@
         similarTiles.value = illustrator.calculateSimilarTiles();
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
-        if (illustrator.DEBUG) console.log('Calculating histograms');
+        illustrator.showStatusMessage('Calculating histograms');
         for (var url in illustrator.thumbnails) {
           illustrator.calculateHistogram(illustrator.thumbnails[url]);
         }
@@ -289,7 +306,7 @@
         similarTiles.value = illustrator.calculateSimilarTiles();
         illustrator.SIMILAR_TILES = similarTiles.value;
         similarTilesLabel.innerHTML = similarTiles.value;
-        if (illustrator.DEBUG) console.log('Calculating histograms');
+        illustrator.showStatusMessage('Calculating histograms');
         for (var url in illustrator.thumbnails) {
           illustrator.calculateHistogram(illustrator.thumbnails[url]);
         }
@@ -430,7 +447,7 @@
 
       if (isFirstRun && cascadingDeletion) {
         if (illustrator.clusters[originalPosterUrl]) {
-          if (illustrator.DEBUG) console.log('Deleting the whole cluster of ' +
+          illustrator.showStatusMessage('Deleting the whole cluster of ' +
               originalPosterUrl + ' and ' +
               illustrator.clusters[originalPosterUrl].length +
               ' cascading media items');
@@ -446,7 +463,7 @@
         }
       }
 
-      if (illustrator.DEBUG) console.log('Deleting ' + posterUrl);
+      illustrator.showStatusMessage('Deleting ' + posterUrl);
       if (illustrator.mediaItems[posterUrl]) {
         var micropostUrl = illustrator.mediaItems[posterUrl].micropostUrl;
         var noProxyMediaUrl = illustrator.mediaItems[posterUrl].mediaUrl;
@@ -497,26 +514,34 @@
     initSockets: function() {
       if (illustrator.DEBUG) console.log('Initializing WebSockets');
       illustrator.socket.on('proxy', function(data) {
-        var socketData = document.getElementById('socketData');
-        socketData.innerHTML = 'Loading file ' + data.url;
+        illustrator.showStatusMessage('Loading file ' + data.url);
       });
       illustrator.socket.on('mediaResults', function(data) {
-        var socketData = document.getElementById('socketData');
-        socketData.innerHTML = 'Receiving results from ' + data.service;
+        illustrator.showStatusMessage('Receiving data from ' + data.service);
       });
+    },
+    showStatusMessage: function(message) {
+      if (illustrator.DEBUG) console.log(message);
+      var socketData = document.getElementById('socketData');
+      socketData.innerHTML = message.substring(0, 100) + '…';
+      if (illustrator.notificationTimeout) {
+        clearTimeout(illustrator.notificationTimeout);
+      }
+      illustrator.notificationTimeout = setTimeout(function() {
+        socketData.innerHTML = '';
+      }, 3000);
     },
     /**
      * Resets all GUI elements
      */
     reset: function reset() {
       if (illustrator.DEBUG) console.log('Resetting app');
-      document.querySelector('.step1').style.display = 'block';
-      document.querySelector('.step2').style.display = 'none';
       document.getElementById('results').innerHTML = '';
       document.getElementById('queryLog').innerHTML = '';
       document.getElementById('socketData').innerHTML = '';
       document.getElementById('rankedList').innerHTML = '';
       document.getElementById('query').value = '';
+      document.getElementById('tab1').checked = true;
       illustrator.statuses = {};
       illustrator.tileHistograms = {};
       illustrator.distances = {};
@@ -537,12 +562,13 @@
       if (!query) {
         return false;
       }
-      if (illustrator.DEBUG) console.log('Searching for "' + query + '"');
+      illustrator.showStatusMessage('Searching for "' + query + '"');
       var queryLogDiv = document.getElementById('queryLog');
       var queryId = new Date().getTime();
       queryLogDiv.innerHTML +=
-          '<div><input type="checkbox" checked="checked" id="' + queryId +
-          '"> <label for="' + queryId + '">' + query + '</label></div>';
+          '<div class="queryLog"><input type="checkbox" checked="checked" ' +
+          'id="' + queryId + '"> <label for="' + queryId + '">' + query +
+          '</label></div>';
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4) {
@@ -574,12 +600,17 @@
      * Processes the results
      */
     processSearchResults: function(results, queryId) {
-      if (illustrator.DEBUG) console.log('Receiving search results');
+      illustrator.showStatusMessage('Receiving search results');
       illustrator.distances = {};
-      if (illustrator.DEBUG) console.log('Detecting faces');
-      if (illustrator.DEBUG) console.log('Calculating histograms');
+      illustrator.showStatusMessage('Detecting faces');
+      illustrator.showStatusMessage('Calculating histograms');
       for (var service in results) {
         results[service].forEach(function(item) {
+          if (illustrator.PHOTOS_ONLY) {
+            if (item.type === 'video') {
+              return;
+            }
+          }
           var micropostUrl = item.micropostUrl;
           // if we already have this media item, continue to the next one.
           // using the micropostUrl as id as the posterUrl isn't stable.
@@ -670,7 +701,7 @@
       };
     },
     calculateDistances: function() {
-      if (illustrator.DEBUG) console.log('Calculating distances');
+      illustrator.showStatusMessage('Calculating distances');
       var keys = Object.keys(illustrator.tileHistograms);
       var len = keys.length;
       var abs = Math.abs;
@@ -738,7 +769,7 @@
       illustrator.sort();
     },
     sort: function() {
-      if (illustrator.DEBUG) console.log('Sorting media items');
+      illustrator.showStatusMessage('Sorting media items');
 
       var keys = Object.keys(illustrator.tileHistograms);
       var len = keys.length;
@@ -807,7 +838,7 @@
       illustrator.mergeClusterData();
     },
     mergeClusterData: function() {
-      if (illustrator.DEBUG) console.log('Merging cluster data');
+      illustrator.showStatusMessage('Merging cluster data');
       var clusterSizes = {};
       for (var key in illustrator.clusters) {
         if (!clusterSizes[illustrator.clusters[key].length]) {
@@ -845,7 +876,7 @@
       }
 
       var urlsToPreload = {};
-      if (illustrator.DEBUG) console.log('Preloading full-size media items');
+      illustrator.showStatusMessage('Preloading full-size media items');
       clusterSizesKeys.forEach(function(index) {
         clusterSizes[index].forEach(function(key) {
           var likes = 0;
@@ -911,7 +942,7 @@
       }
     },
     display: function() {
-      if (illustrator.DEBUG) console.log('Displaying clustered media items');
+      illustrator.showStatusMessage('Displaying clustered media items');
 
       var clusterSizes = {};
       for (var key in illustrator.clusters) {
@@ -990,11 +1021,10 @@
 
       var resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = html.join('');
-
       illustrator.rank();
     },
     rank: function() {
-      if (illustrator.DEBUG) console.log('Ranking clusters');
+      illustrator.showStatusMessage('Ranking clusters');
       var mediaItems = [];
       Object.keys(illustrator.ranking).sort(function(a, b) {
         return a - b;
@@ -1014,7 +1044,6 @@
           video.dataset.posterurl = item.clusterIdentifier;
           video.dataset.origin = item.origin;
           video.setAttribute('poster', item.posterUrl);
-          // video.setAttribute('controls', 'controls');
           video.setAttribute('loop', 'loop');
           var poster = illustrator.images[item.posterUrl];
           video.dataset.width = poster.width;
@@ -1026,10 +1055,7 @@
       illustrator.drawGallery(mediaItems);
     },
     drawGallery: function(mediaItems) {
-      if (illustrator.DEBUG) console.log('Drawing media gallery');
-
-      document.querySelector('.step2').style.display = 'block';
-      document.querySelector('.step1').style.display = 'none';
+      illustrator.showStatusMessage('Creating media gallery');
 
       // media gallery algorithm credits to
       // http://blog.vjeux.com/2012/image/-
@@ -1037,8 +1063,8 @@
       var heights = [];
 
       function run(maxHeight) {
-        if (illustrator.DEBUG) console.log('Styling media gallery');
-        var size = window.innerWidth - 50;
+        illustrator.showStatusMessage('Styling media gallery');
+        var size = rankedList.offsetWidth;
 
         var n = 0;
         var images = document.querySelectorAll('.gallery');
@@ -1110,7 +1136,6 @@
       var resizeWindow = function() {
         run(illustrator.MAX_LINE_HEIGHT);
       };
-      window.removeEventListener('resize', resizeWindow, false);
       window.addEventListener('resize', resizeWindow, false);
     },
     debug: function() {
@@ -1134,7 +1159,6 @@
       }, 500);
     }
   };
-
   // init
   illustrator.init();
 })();
