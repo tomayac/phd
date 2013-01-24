@@ -486,18 +486,18 @@
             dimension = newDimension;
             cluster.identifier = url;
           }
-          cluster.statistics = {
-            likes: likes,
-            shares: shares,
-            comments: comments,
-            views: views
-          };
         });
+        cluster.statistics = {
+          likes: likes,
+          shares: shares,
+          comments: comments,
+          views: views
+        };
       });
       illustrator.rankClusters();
     },
     rankingFormulas: {
-      popularity: function(a, b) {
+      size: function(a, b) {
         return b.members.length - a.members.length;
       },
 
@@ -511,9 +511,7 @@
 
     },
     rankClusters: function() {
-      console.log(illustrator.clusters.sort(illustrator.rankingFormulas.popularity));
-      console.log(illustrator.clusters.sort(illustrator.rankingFormulas.likes));
-      console.log(illustrator.clusters.sort(illustrator.rankingFormulas.views));
+
     },
     createClusterPreview: function() {
 
