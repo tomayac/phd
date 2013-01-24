@@ -49,7 +49,8 @@ var GLOBAL_config = {
     'twitgoo.com',
     'vimeo.com',
     'img.ly',
-    'mypict.me'],
+    'mypict.me',
+    'vine.co'],
   URL_REGEX: /\b((?:[a-z][\w\-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig,
   HASHTAG_REGEX: /(^|\s)\#(\S+)/g,
   USER_REGEX: /(^|\W)\@([a-zA-Z0-9_]+)/g,
@@ -265,6 +266,45 @@ var mediaFinder = {
           html: '',
           plainText: ''
         };
+      }
+    }
+
+    /**
+     * Scrapes Vine
+     */
+    function scrapeVine(body, callback) {
+      var mediaUrl = false;
+      var posterUrl = false;
+      if (!body) {
+        callback(false);
+      }
+      try {
+        jsdom.env(body, function(errors, window) {
+          var $ = window.document;
+          try {
+            var metas = $.getElementsByTagName('META');
+            if (metas.length > 0) {
+              for (var i = 0, len = metas.length; i < len; i++) {
+                var meta = metas[i];
+                if (meta.getAttribute('property') === 'twitter:image') {
+                  posterUrl = meta.getAttribute('content');
+                }
+                if (meta.getAttribute('property') === 'twitter:player:stream') {
+                  mediaUrl = meta.getAttribute('content');
+                }
+              }
+            }
+            if (posterUrl && mediaUrl) {
+              callback(mediaUrl, posterUrl);
+            } else {
+              callback(false);
+            }
+          } catch(e) {
+            callback(false);
+          }
+        });
+      } catch(e) {
+        callback(false);
       }
     }
 
@@ -931,7 +971,7 @@ var mediaFinder = {
           q: query + ' -"RT "',
           result_type: 'recent',
           include_entities: true,
-          rpp: 100
+          rpp: 20
         };
         params = querystring.stringify(params);
         var options = {
@@ -1017,7 +1057,7 @@ var mediaFinder = {
         if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
         var params = {
           q: query + ' ' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ' -"RT "',
-          rpp: 100,
+          rpp: 20,
           result_type: 'recent'
         };
         params = querystring.stringify(params);
@@ -1133,8 +1173,42 @@ var mediaFinder = {
                         var mediaUrl = locations[locationIndex];
                         var micropostUrl = 'http://twitter.com/' +
                             item.from_user + '/status/' + item.id_str;
+                        // vine.co
+                        if (mediaUrl.indexOf('http://vine.co') === 0) {
+                          var options = {
+                            url: mediaUrl
+                          };
+                          (function(micropost, userProfileUrl, timestamp, publicationDate) {
+                            request.get(options, function(err, result, body) {
+                              scrapeVine(body, function(videoUrl, posterUrl) {
+                                if (videoUrl && posterUrl) {
+                                  results.push({
+                                    mediaUrl: videoUrl,
+                                    posterUrl: posterUrl,
+                                    micropostUrl: micropostUrl,
+                                    micropost: micropost,
+                                    userProfileUrl: userProfileUrl,
+                                    type: 'video',
+                                    timestamp: timestamp,
+                                    publicationDate: publicationDate,
+                                    socialInteractions: {
+                                      likes: null,
+                                      shares: null,
+                                      comments: null,
+                                      views: null
+                                    }
+                                  });
+                                }
+                                pendingUrls++;
+                                if (pendingUrls === numberOfUrls) {
+                                  collectResults(
+                                      results, currentService, pendingRequests);
+                                }
+                              });
+                            });
+                          })(micropost, userProfileUrl, timestamp, publicationDate);
                         // yfrog
-                        if (mediaUrl.indexOf('http://yfrog.com') === 0) {
+                        } else if (mediaUrl.indexOf('http://yfrog.com') === 0) {
                           var id = mediaUrl.replace('http://yfrog.com/', '');
                           var options = {
                             url: 'http://yfrog.com/api/xmlInfo?path=' + id

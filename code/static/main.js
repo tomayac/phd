@@ -5,6 +5,7 @@
     MEDIA_SERVER: 'http://localhost:8001/search/combined/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     MAX_INT: 9007199254740992,
+    MAX_MEDIA_GALLERY_ROW_HEIGHT: 200,
 
     // global state
     statusMessageTimeout: null,
@@ -578,7 +579,96 @@
       illustrator.createMediaGallery();
     },
     createMediaGallery: function() {
+      illustrator.showStatusMessage('Creating media gallery');
 
+      // media gallery algorithm credits to
+      // http://blog.vjeux.com/2012/image/-
+      // image-layout-algorithm-google-plus.html
+      var heights = [];
+
+      var calculateSizes = function(images, maxHeight) {
+        var size = mediaGallery.offsetWidth - 20;
+        var n = 0;
+        w: while (images.length > 0) {
+          for (var i = 1; i < images.length + 1; ++i) {
+            var slice = images.slice(0, i);
+            var h = getHeight(slice, size);
+            if (h < maxHeight) {
+              setHeight(slice, h);
+              n++;
+              images = images.slice(i);
+              continue w;
+            }
+          }
+          setHeight(slice, Math.min(maxHeight, h));
+          n++;
+          break;
+        }
+      };
+
+      var getHeight = function(images, width) {
+        var h = 0;
+        for (var i = 0; i < images.length; ++i) {
+          h += images[i].dataset.width / images[i].dataset.height;
+        }
+        return (width / h);
+      };
+
+      var setHeight = function(images, height) {
+        heights.push(height);
+        for (var i = 0; i < images.length; ++i) {
+          images[i].style.width = (height * images[i].dataset.width /
+              images[i].dataset.height);
+          images[i].style.height = height;
+        }
+      };
+
+      var mediaItems = [];
+      illustrator.clusters.forEach(function(cluster) {
+        var mediaItem = illustrator.mediaItems[cluster.identifier];
+        var item;
+        if (mediaItem.type === 'photo') {
+          item = mediaItem.fullImage;
+        } else {
+          item = document.createElement('video');
+          item.src = mediaItem.mediaUrl;
+          item.setAttribute('poster', mediaItem.posterUrl);
+          item.setAttribute('loop', 'loop');
+          item.setAttribute('controls', 'controls');
+        }
+        item.dataset.width = mediaItem.fullImage.width;
+        item.dataset.height = mediaItem.fullImage.height;
+        item.dataset.posterurl = mediaItem.posterUrl;
+        item.dataset.origin = mediaItem.origin;
+        mediaItems.push(item);
+      });
+
+      var fragment = document.createDocumentFragment();
+      mediaItems.forEach(function(mediaItem) {
+        var div = document.createElement('div');
+        fragment.appendChild(div);
+        div.setAttribute('class', 'mediaItem');
+        mediaItem.classList.add('gallery');
+        div.appendChild(mediaItem);
+        var favicon = document.createElement('img');
+        favicon.classList.add('favicon');
+        favicon.src = './resources/' + mediaItem.dataset.origin.toLowerCase() +
+            '.png';
+        div.appendChild(favicon);
+        var close = document.createElement('span');
+        close.setAttribute('class', 'close');
+        close.innerHTML = 'X';
+        div.appendChild(close);
+      });
+      var mediaGallery = document.getElementById('mediaGallery');
+      calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
+      mediaGallery.innerHTML = '';
+      mediaGallery.appendChild(fragment);
+
+      var resizeWindow = function() {
+        calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
+      };
+      window.addEventListener('resize', resizeWindow, false);
     }
   };
 
