@@ -20,13 +20,17 @@ fieldset {
   margin: 0;
 }
 
-#socketData {
+#statusMessages {
   position: absolute;
   top:10px;
   right: 10px;
   background-color: red;
   color: white;
   font-size: 0.7em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 25em;
 }
 
 .tabs {
@@ -99,14 +103,6 @@ fieldset {
   margin: 0.05em;
 }
 
-.representative {
-  border-left: solid orange 3px;
-}
-
-.face {
-  border-right: solid red 3px;
-}
-
 .photo:after {
   border: 1px solid rgba(0, 0, 0, 0.1);
   content: '';
@@ -115,6 +111,14 @@ fieldset {
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.representative {
+  border-left: solid orange 3px;
+}
+
+.face {
+  border-right: solid red 3px;
 }
 
 .favicon {

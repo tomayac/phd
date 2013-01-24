@@ -7,7 +7,7 @@
   <body>
     <h1>Social Media Illustrator</h1>
 
-    <div id="socketData"></div>
+    <div id="statusMessages"></div>
 
     <div id="tabs" class="tabs">
 
@@ -15,7 +15,7 @@
         <input type="radio" id="tab1" name="tabGroup">
         <label for="tab1">Media Item Clusters</label>
         <div class="content">
-          <form method="get" id="search_form">
+          <form method="get" id="searchForm">
             <fieldset>
               <input name="query" id="query" autofocus="autofocus" placeholder="Query"/>
               <label for="query">Query</label>
@@ -54,7 +54,7 @@
           </form>
 
           <div id="queryLog"></div>
-          <div id="results"></div>
+          <div id="mediaItemClusters"></div>
         </div>
       </div>
 
@@ -64,7 +64,7 @@
         <div class="content">
           <button id="playAllVideos">Play all videos</button>
           <button id="muteAllVideos">Mute all videos</button>
-          <div id="rankedList"></div>
+          <div id="mediaGallery"></div>
         </div>
       </div>
 
