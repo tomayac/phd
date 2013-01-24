@@ -13,13 +13,19 @@
 
     // app logic
     queries: {},
-    mediaItems: {}, // the object key is always the proxied poster url
     micropostUrls: {}, // the object key is always the micropost url
+    mediaItems: {}, // the object key is always the proxied poster url
+    clusters: [],
 
     // settings
     photosOnly: false,
     cols: 10,
     rows: 10,
+    accountForLuminance: true,
+    bwTolerance: 1,
+    threshold: 10,
+    similarTiles: 80,
+    considerFaces: true,
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -86,6 +92,7 @@
       illustrator.queries = {};
       illustrator.mediaItems = {};
       illustrator.micropostUrls = {};
+      illustrator.clusters = [];
     },
 
     showStatusMessage: function(message) {
@@ -119,7 +126,7 @@
           if (xhr.status == 200) {
             try {
               var results = JSON.parse(xhr.responseText);
-              illustrator.retrieveMediaItems(results, queryId);
+              illustrator.retrieveMediaItems(results, query, queryId);
             } catch(e) {
               if (illustrator.DEBUG) console.log(e);
               handleXhrError(url);
@@ -137,7 +144,7 @@
       return false;
     },
 
-    retrieveMediaItems: function(results, queryId) {
+    retrieveMediaItems: function(results, query, queryId) {
 
       illustrator.showStatusMessage('Retrieving media items');
 
@@ -262,6 +269,8 @@
         if (illustrator.DEBUG) console.log('Removing ' + posterUrl);
       };
 
+      // assume the worst, set false once we have at least one result
+      var noResults = true;
       for (var service in results) {
         results[service].forEach(function(item) {
           if (illustrator.photosOnly) {
@@ -269,7 +278,7 @@
               return;
             }
           }
-
+          noResults = false;
           var micropostUrl = item.micropostUrl;
           // if we already have this media item, continue to the next one.
           // using the micropostUrl as id as the posterUrl isn't stable.
@@ -288,15 +297,223 @@
           }, errorThumbnail);
         });
       }
+      if (noResults) {
+        illustrator.showStatusMessage('No results for "' + query + '"')
+      }
     },
     calculateDistances: function() {
+      illustrator.showStatusMessage('Calculating distances');
 
+      var keys = Object.keys(illustrator.mediaItems);
+      var len = keys.length;
+      var abs = Math.abs;
+
+      if (illustrator.accountForLuminance) {
+        var rFactor = 0.3;
+        var gFactor = 0.59;
+        var bFactor = 0.11;
+      } else {
+        var rFactor = 1;
+        var gFactor = 1;
+        var bFactor = 1;
+      }
+
+      var blackTolerance = illustrator.bwTolerance;
+      var whiteTolerance = 255 - illustrator.bwTolerance;
+
+      for (var i = 0; i < len; i++) {
+        var outer = keys[i];
+        illustrator.mediaItems[outer].distances = {};
+        var outerHisto = illustrator.mediaItems[outer].tileHistograms;
+        for (var j = 0; j < len; j++) {
+          if (j === i) continue;
+          var inner = keys[j];
+          var innerHisto = illustrator.mediaItems[inner].tileHistograms;
+          illustrator.mediaItems[outer].distances[inner] = {};
+          // recycle because of symmetry of distances:
+          // dist(A<=>B) =  dist(B<=>A)
+          if ((illustrator.mediaItems[inner].distances) &&
+              (illustrator.mediaItems[inner].distances[outer])) {
+            illustrator.mediaItems[outer].distances[inner] =
+                illustrator.mediaItems[inner].distances[outer];
+          // calculate new
+          } else {
+            for (var k in innerHisto) {
+              var innerR = innerHisto[k].r;
+              var innerG = innerHisto[k].g;
+              var innerB = innerHisto[k].b;
+              var outerR = outerHisto[k].r;
+              var outerG = outerHisto[k].g;
+              var outerB = outerHisto[k].b;
+              if ((innerR >= blackTolerance &&
+                   innerG >= blackTolerance &&
+                   innerB >= blackTolerance) &&
+                  (outerR >= blackTolerance &&
+                   outerG >= blackTolerance &&
+                   outerB >= blackTolerance) &&
+                  (innerR <= whiteTolerance &&
+                   innerG <= whiteTolerance &&
+                   innerB <= whiteTolerance) &&
+                  (outerR <= whiteTolerance &&
+                   outerG <= whiteTolerance &&
+                   outerB <= whiteTolerance)) {
+                illustrator.mediaItems[outer].distances[inner][k] =
+                    ~~((abs(rFactor * (innerR - outerR)) +
+                        abs(gFactor * (innerG - outerG)) +
+                        abs(bFactor * (innerB - outerB))) / 3);
+              } else {
+                illustrator.mediaItems[outer].distances[inner][k] = null;
+              }
+            }
+          }
+        }
+      }
+      illustrator.clusterMediaItems();
+    },
+    calculateMinimumSimilarTiles: function() {
+      return Math.ceil(illustrator.rows * illustrator.cols / 2);
     },
     clusterMediaItems: function() {
+      illustrator.showStatusMessage('Clustering media items');
+
+      var keys = Object.keys(illustrator.mediaItems);
+      var len = keys.length;
+      var abs = Math.abs;
+      var max = Math.max;
+      var minimumSimilarTiles = illustrator.calculateMinimumSimilarTiles();
+      // the actual clustering
+      for (var i = 0; i < len; i++) {
+        if (!keys[i]) continue;
+        var outer = keys[i];
+        keys[i] = false;
+        var distanceToOuter = {};
+        for (var j = 0; j < len; j++) {
+          if (j === i) {
+            continue;
+          }
+          var inner = keys[j];
+          var similarTiles = 0;
+          var nulls = 0;
+          var distance = illustrator.mediaItems[outer].distances[inner];
+          for (var k in distance) {
+            if (distance[k] !== null) {
+              if (distance[k] <= illustrator.threshold) {
+                similarTiles++;
+              }
+            } else {
+              nulls++;
+            }
+          }
+          var minimumRequired;
+          var similarTilesWithoutNulls = illustrator.similarTiles - nulls;
+          if (similarTilesWithoutNulls >= minimumSimilarTiles) {
+            minimumRequired = similarTilesWithoutNulls;
+          } else {
+            minimumRequired = minimumSimilarTiles;
+          }
+          if (similarTiles >= minimumRequired) {
+            if (illustrator.considerFaces) {
+              var outerFaces = illustrator.mediaItems[outer].faces.length;
+              var innerFaces = illustrator.mediaItems[inner].faces.length;
+              if (innerFaces === outerFaces) {
+                if (!distanceToOuter[similarTiles]) {
+                  distanceToOuter[similarTiles] = [j];
+                } else {
+                  distanceToOuter[similarTiles].push(j);
+                }
+              }
+            } else {
+              if (!distanceToOuter[similarTiles]) {
+                distanceToOuter[similarTiles] = [j];
+              } else {
+                distanceToOuter[similarTiles].push(j);
+              }
+            }
+          }
+        }
+        var members = [];
+        Object.keys(distanceToOuter).sort(function(a, b) {
+          return b - a;
+        }).forEach(function(numSimilarTiles) {
+          distanceToOuter[numSimilarTiles].forEach(function(key) {
+            members.push(keys[key]);
+            keys[key] = false;
+          });
+        });
+        illustrator.clusters.push({
+          identifier: outer,
+          members: members
+        });
+      }
+      illustrator.mergeClusterData();
+    },
+    mergeClusterData: function() {
+      illustrator.showStatusMessage('Merging cluster data');
+
+      illustrator.clusters.forEach(function(cluster, i) {
+        var mediaItem = illustrator.mediaItems[cluster.identifier];
+        var socialInteractions = mediaItem.socialInteractions;
+        var likes = socialInteractions.likes;
+        var shares = socialInteractions.shares;
+        var comments = socialInteractions.comments;
+        var views = socialInteractions.views;
+        cluster.statistics = {
+          likes: likes,
+          shares: shares,
+          comments: comments,
+          views: views
+        };
+        // always prefer video over photo, so set the dimension of videos
+        // to MAX_INT
+        var dimension = (mediaItem.type === 'video' ?
+            illustrator.MAX_INT :
+            mediaItem.fullImage.width * mediaItem.fullImage.height);
+
+        cluster.members.forEach(function(url) {
+          var member = illustrator.mediaItems[url];
+          var memberSocialInteractions = member.socialInteractions;
+          likes += memberSocialInteractions.likes;
+          shares += memberSocialInteractions.shares;
+          comments += memberSocialInteractions.comments;
+          views += memberSocialInteractions.views;
+          // always prefer video over photo, so set the dimension of videos
+          // to MAX_INT
+          var newDimension = (member.type === 'video' ?
+              illustrator.MAX_INT :
+              member.fullImage.width * member.fullImage.height);
+          // we have a new cluster identifier
+          if (newDimension >= dimension) {
+            dimension = newDimension;
+            cluster.identifier = url;
+          }
+          cluster.statistics = {
+            likes: likes,
+            shares: shares,
+            comments: comments,
+            views: views
+          };
+        });
+      });
+      illustrator.rankClusters();
+    },
+    rankingFormulas: {
+      popularity: function(a, b) {
+        return b.members.length - a.members.length;
+      },
+
+      likes: function(a, b) {
+        return b.statistics.likes - a.statistics.likes;
+      },
+
+      views: function(a, b) {
+        return b.statistics.views - a.statistics.views;
+      }
 
     },
-    rankMediaItems: function() {
-
+    rankClusters: function() {
+      console.log(illustrator.clusters.sort(illustrator.rankingFormulas.popularity));
+      console.log(illustrator.clusters.sort(illustrator.rankingFormulas.likes));
+      console.log(illustrator.clusters.sort(illustrator.rankingFormulas.views));
     },
     createClusterPreview: function() {
 
