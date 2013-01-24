@@ -1,6 +1,6 @@
 (function() {
   var illustrator = {
-    DEBUG: true,
+    DEBUG: false,
     MEDIA_SERVER: 'http://localhost:8001/search/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     THRESHOLD: 10,
@@ -1149,19 +1149,30 @@
       var debug = document.getElementById('debug');
       setInterval(function() {
         var html = '';
-        html += 'thumbnails: ' + Object.keys(illustrator.thumbnails).length + '<br/>';
-
-        html += 'mediaItems: ' + Object.keys(illustrator.mediaItems).length + '<br/>';
-        html += 'mediaItemUrls: ' + Object.keys(illustrator.mediaItemUrls).length + '<br/>';
-        html += 'statuses: ' + Object.keys(illustrator.statuses).length + '<br/>';
-        html += 'tileHistograms: ' + Object.keys(illustrator.tileHistograms).length + '<br/>';
-        html += 'faces: ' + Object.keys(illustrator.faces).length + '<br/>';
-        html += 'distances: ' + Object.keys(illustrator.distances).length + '<hr/>';
-        html += 'clusters: ' + Object.keys(illustrator.clusters).length + '<br/>';
-        html += 'ranking: ' + Object.keys(illustrator.ranking).length + '<br/>';
-        html += 'rankedClusters: ' + Object.keys(illustrator.rankedClusters).length + '<br/>';
-        html += 'images: ' + Object.keys(illustrator.images).length + '<hr/>';
-        html += 'queries: ' + Object.keys(illustrator.queries).length;
+        html += 'thumbnails: ' +
+            Object.keys(illustrator.thumbnails).length + '<br/>';
+        html += 'mediaItems: ' +
+            Object.keys(illustrator.mediaItems).length + '<br/>';
+        html += 'mediaItemUrls: ' +
+            Object.keys(illustrator.mediaItemUrls).length + '<br/>';
+        html += 'statuses: ' +
+            Object.keys(illustrator.statuses).length + '<br/>';
+        html += 'tileHistograms: ' +
+            Object.keys(illustrator.tileHistograms).length + '<br/>';
+        html += 'faces: ' +
+            Object.keys(illustrator.faces).length + '<br/>';
+        html += 'distances: ' +
+            Object.keys(illustrator.distances).length + '<hr/>';
+        html += 'clusters: ' +
+            Object.keys(illustrator.clusters).length + '<br/>';
+        html += 'ranking: ' +
+            Object.keys(illustrator.ranking).length + '<br/>';
+        html += 'rankedClusters: ' +
+            Object.keys(illustrator.rankedClusters).length + '<br/>';
+        html += 'images: ' +
+            Object.keys(illustrator.images).length + '<hr/>';
+        html += 'queries: ' +
+            Object.keys(illustrator.queries).length;
         debug.innerHTML = html;
       }, 500);
     }
