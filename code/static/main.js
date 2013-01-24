@@ -238,7 +238,6 @@
       };
 
       var successThumbnail = function(image, micropostUrl) {
-        image.setAttribute('class', 'photo');
         illustrator.mediaItems[image.src].thumbnail = image;
         detectFaces(image, image.width, image.height);
         calculateHistograms(image);
@@ -450,7 +449,7 @@
     mergeClusterData: function() {
       illustrator.showStatusMessage('Merging cluster data');
 
-      illustrator.clusters.forEach(function(cluster, i) {
+      illustrator.clusters.forEach(function(cluster) {
         var mediaItem = illustrator.mediaItems[cluster.identifier];
         var socialInteractions = mediaItem.socialInteractions;
         var likes = socialInteractions.likes;
@@ -469,7 +468,7 @@
             illustrator.MAX_INT :
             mediaItem.fullImage.width * mediaItem.fullImage.height);
 
-        cluster.members.forEach(function(url) {
+        cluster.members.forEach(function(url, i) {
           var member = illustrator.mediaItems[url];
           var memberSocialInteractions = member.socialInteractions;
           likes += memberSocialInteractions.likes;
@@ -484,7 +483,9 @@
           // we have a new cluster identifier
           if (newDimension >= dimension) {
             dimension = newDimension;
+            var oldIdentifier = cluster.identifier;
             cluster.identifier = url;
+            cluster.members[i] = oldIdentifier;
           }
         });
         cluster.statistics = {
@@ -511,10 +512,70 @@
 
     },
     rankClusters: function() {
+      illustrator.showStatusMessage('Ranking clusters');
 
+      illustrator.clusters.sort(illustrator.rankingFormulas.size);
+
+      illustrator.createClusterPreview();
     },
     createClusterPreview: function() {
+      illustrator.showStatusMessage('Creating cluster preview');
 
+      var getMediaItemHtml = function(mediaItem, opt_isFirst) {
+        var firstMediaItem = opt_isFirst ? ' firstMediaItem' : '';
+        var isRepresentative = opt_isFirst ? ' representative' : '';
+        var hasFaces = mediaItem.faces.length ? ' face' : '';
+        var url = mediaItem.posterUrl;
+        var micropostWidth = Math.ceil(100 / mediaItem.thumbnail.height *
+            mediaItem.thumbnail.width) + 'px;';
+        var service = mediaItem.origin.toLowerCase() + '.png';
+        return '' +
+            '<div class="mediaItem' + firstMediaItem + '">' +
+              '<img class="photo' + isRepresentative + hasFaces + '" src="' +
+                  url + '" data-posterurl="' + url + '"/>' +
+              '<img class="favicon" src="./resources/' + service + '"/>' +
+              '<span class="close">X</span>' +
+              '<div class="micropost" style="width:' + micropostWidth + '">' +
+                mediaItem.micropost.plainText +
+                '<hr/>' +
+                '<a href="' + mediaItem.micropostUrl + '">Permalink</a>' +
+                '<hr/>' +
+                'Likes: ' + mediaItem.socialInteractions.likes + '<br/>' +
+                'Shares: ' + mediaItem.socialInteractions.shares + '<br/>' +
+                'Comments: ' + mediaItem.socialInteractions.comments + '<br/>' +
+                'Views: ' + mediaItem.socialInteractions.views +
+                '<hr/>' +
+                'Aspect Ratio: ' + (Math.round(mediaItem.fullImage.width /
+                    mediaItem.fullImage.height * 100) / 100) + '<br/>' +
+                'Megapixels: ' + (Math.round(mediaItem.fullImage.width *
+                    mediaItem.fullImage.height / 1000000 * 100) / 100) +
+              '</div>' +
+            '</div>';
+      };
+
+      var getClusterHtml = function(mediaItemHtml) {
+        return '' +
+            '<div class="cluster">' +
+              mediaItemHtml +
+            '</div>';
+      };
+
+      var html = '';
+      illustrator.clusters.forEach(function(cluster) {
+        var mediaItemHtml = '';
+        var mediaItem = illustrator.mediaItems[cluster.identifier];
+        mediaItemHtml += getMediaItemHtml(mediaItem, true);
+
+        cluster.members.forEach(function(url) {
+          var member = illustrator.mediaItems[url];
+          mediaItemHtml += getMediaItemHtml(member);
+        });
+        html += getClusterHtml(mediaItemHtml);
+      });
+
+      var mediaItemClusters = document.getElementById('mediaItemClusters');
+      mediaItemClusters.innerHTML = html;
+      illustrator.createMediaGallery();
     },
     createMediaGallery: function() {
 
