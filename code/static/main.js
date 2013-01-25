@@ -6,6 +6,7 @@
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     MAX_INT: 9007199254740992,
     MAX_MEDIA_GALLERY_ROW_HEIGHT: 200,
+    SIMILAR_TILES_FACTOR: 0.8,
 
     // global state
     statusMessageTimeout: null,
@@ -22,11 +23,11 @@
     photosOnly: false,
     cols: 10,
     rows: 10,
-    accountForLuminance: true,
     bwTolerance: 1,
     threshold: 10,
     similarTiles: 80,
     considerFaces: true,
+    considerLuminance: true,
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -131,6 +132,103 @@
             this.innerHTML = 'Unmute all videos';
           }
         }
+      });
+
+      var threshold = document.getElementById('threshold');
+      threshold.value = illustrator.threshold;
+      var thresholdLabel = document.getElementById('thresholdLabel');
+      thresholdLabel.innerHTML = threshold.value;
+      threshold.addEventListener('change', function() {
+        thresholdLabel.innerHTML = threshold.value;
+      });
+      threshold.addEventListener('mouseup', function() {
+        thresholdLabel.innerHTML = threshold.value;
+        illustrator.threshold = threshold.value;
+        illustrator.clusterMediaItems();
+      });
+
+      var similarTiles = document.getElementById('similarTiles');
+      similarTiles.min = illustrator.calculateMinimumSimilarTiles();
+      similarTiles.max = illustrator.rows * illustrator.cols;
+      similarTiles.value = illustrator.calculateSimilarTiles();
+      illustrator.similarTiles = similarTiles.value;
+      var similarTilesLabel =
+          document.getElementById('similarTilesLabel');
+      similarTilesLabel.innerHTML = similarTiles.value;
+      similarTiles.addEventListener('change', function() {
+        similarTilesLabel.innerHTML = similarTiles.value;
+      });
+      similarTiles.addEventListener('mouseup', function() {
+        similarTilesLabel.innerHTML = similarTiles.value;
+        illustrator.similarTiles = similarTiles.value;
+        illustrator.clusterMediaItems();
+      });
+
+      var bwTolerance = document.getElementById('bwTolerance');
+      bwTolerance.max = 10;
+      bwTolerance.min = 0;
+      bwTolerance.value = illustrator.bwTolerance;
+      var bwToleranceLabel =
+          document.getElementById('bwToleranceLabel');
+      bwToleranceLabel.innerHTML = bwTolerance.value;
+      bwTolerance.addEventListener('change', function() {
+        bwToleranceLabel.innerHTML = bwTolerance.value;
+      });
+      bwTolerance.addEventListener('mouseup', function() {
+        bwToleranceLabel.innerHTML = bwTolerance.value;
+        illustrator.bwTolerance = bwTolerance.value;
+        illustrator.calculateDistances();
+      });
+
+      var rows = document.getElementById('rows');
+      rows.value = illustrator.rows;
+      rows.max = 50;
+      rows.min = 1;
+      var rowsLabel = document.getElementById('rowsLabel');
+      rowsLabel.innerHTML = rows.value;
+      rows.addEventListener('change', function() {
+        rowsLabel.innerHTML = rows.value;
+        illustrator.rows = rows.value;
+      });
+
+      var cols = document.getElementById('cols');
+      cols.value = illustrator.cols;
+      cols.max = 50;
+      cols.min = 1;
+      var colsLabel = document.getElementById('colsLabel');
+      colsLabel.innerHTML = cols.value;
+      cols.addEventListener('change', function() {
+        colsLabel.innerHTML = cols.value;
+        illustrator.cols = cols.value;
+      });
+
+      var rowsColsChange = function() {
+        similarTiles.min = illustrator.calculateMinimumSimilarTiles();
+        similarTiles.max = illustrator.rows * illustrator.cols;
+        similarTiles.value = illustrator.calculateSimilarTiles();
+        illustrator.similarTiles = similarTiles.value;
+        similarTilesLabel.innerHTML = similarTiles.value;
+        for (var key in illustrator.mediaItems) {
+          var mediaItem = illustrator.mediaItems[key];
+          illustrator.calculateHistograms(mediaItem.thumbnail);
+        }
+        illustrator.calculateDistances();
+      };
+      rows.addEventListener('mouseup', rowsColsChange);
+      cols.addEventListener('mouseup', rowsColsChange);
+
+      var faces = document.getElementById('faces');
+      faces.checked = illustrator.considerFaces;
+      faces.addEventListener('change', function() {
+        illustrator.considerFaces = faces.checked;
+        illustrator.clusterMediaItems();
+      });
+
+      var luminance = document.getElementById('luminance');
+      luminance.checked = illustrator.considerLuminance;
+      luminance.addEventListener('change', function() {
+        illustrator.considerLuminance = luminance.checked;
+        illustrator.calculateDistances();
       });
 
       var searchForm = document.getElementById('searchForm');
@@ -308,13 +406,6 @@
 
       var url = illustrator.MEDIA_SERVER + encodeURIComponent(query);
       var queryId = new Date().getTime();
-      var queryLogDiv = document.getElementById('queryLog');
-      queryLogDiv.innerHTML += '' +
-          '<div class="queryLog">' +
-            '<input type="checkbox" checked="checked" ' + 'id="' +
-                queryId + '">' +
-            '<label for="' + queryId + '">' + query + '</label>' +
-          '</div>';
 
       var handleXhrError = function(url) {
         illustrator.showStatusMessage('Error while loading ' + url);
@@ -341,6 +432,41 @@
       xhr.open("GET", url, true);
       xhr.send(null);
       return false;
+    },
+
+    calculateHistograms: function(img) {
+      var canvasWidth = illustrator.canvas.width;
+      var canvasHeight = illustrator.canvas.height;
+      illustrator.ctx.clearRect (0, 0, canvasWidth, canvasHeight);
+      // draw the image on the canvas
+      illustrator.ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+      // calculate the histograms tile-wise
+      var sw = ~~(img.width / illustrator.cols);
+      var sh = ~~(img.height / illustrator.rows);
+      var dw = ~~(canvasWidth / illustrator.cols);
+      var dh = ~~(canvasHeight / illustrator.rows);
+
+      illustrator.mediaItems[img.src].tileHistograms = {};
+      var len = illustrator.cols * illustrator.rows;
+      for (var i = 0; i < len; i++) {
+        // calculate the boundaries for the current tile from the
+        // image and translate it to boundaries on the main canvas
+        var mod = (i % illustrator.cols);
+        var div = ~~(i / illustrator.cols);
+        var sx = mod * sw;
+        var sy = div * sh;
+        var dx = mod * dw;
+        var dy = div * dh;
+        // calculate the histogram of the current tile
+        var histogram =
+            Histogram.getHistogram(illustrator.ctx, dx, dy, dw, dh, false);
+        illustrator.mediaItems[img.src].tileHistograms[i] = {
+          r: histogram.pixel.r,
+          g: histogram.pixel.g,
+          b: histogram.pixel.b
+        };
+      }
     },
 
     retrieveMediaItems: function(results, query, queryId) {
@@ -383,41 +509,6 @@
         illustrator.mediaItems[img.src].faces = comp;
       };
 
-      var calculateHistograms = function(img) {
-        var canvasWidth = illustrator.canvas.width;
-        var canvasHeight = illustrator.canvas.height;
-        illustrator.ctx.clearRect (0, 0, canvasWidth, canvasHeight);
-        // draw the image on the canvas
-        illustrator.ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-
-        // calculate the histograms tile-wise
-        var sw = ~~(img.width / illustrator.cols);
-        var sh = ~~(img.height / illustrator.rows);
-        var dw = ~~(canvasWidth / illustrator.cols);
-        var dh = ~~(canvasHeight / illustrator.rows);
-
-        illustrator.mediaItems[img.src].tileHistograms = {};
-        var len = illustrator.cols * illustrator.rows;
-        for (var i = 0; i < len; i++) {
-          // calculate the boundaries for the current tile from the
-          // image and translate it to boundaries on the main canvas
-          var mod = (i % illustrator.cols);
-          var div = ~~(i / illustrator.cols);
-          var sx = mod * sw;
-          var sy = div * sh;
-          var dx = mod * dw;
-          var dy = div * dh;
-          // calculate the histogram of the current tile
-          var histogram =
-              Histogram.getHistogram(illustrator.ctx, dx, dy, dw, dh, false);
-          illustrator.mediaItems[img.src].tileHistograms[i] = {
-            r: histogram.pixel.r,
-            g: histogram.pixel.g,
-            b: histogram.pixel.b
-          };
-        }
-      };
-
       var preloadFullImage = function(posterUrl, micropostUrl) {
         // for photos, load the media url as full image
         // for videos, load the (already cached) thumbnail as full image
@@ -439,7 +530,7 @@
       var successThumbnail = function(image, micropostUrl) {
         illustrator.mediaItems[image.src].thumbnail = image;
         detectFaces(image, image.width, image.height);
-        calculateHistograms(image);
+        illustrator.calculateHistograms(image);
         preloadFullImage(image.src, micropostUrl);
       };
 
@@ -468,7 +559,7 @@
       };
 
       // assume the worst, set false once we have at least one result
-      var noResults = true;
+      var numResults = 0;
       for (var service in results) {
         results[service].forEach(function(item) {
           if (illustrator.photosOnly) {
@@ -476,7 +567,7 @@
               return;
             }
           }
-          noResults = false;
+          numResults++;
           var micropostUrl = item.micropostUrl;
           // if we already have this media item, continue to the next one.
           // using the micropostUrl as id as the posterUrl isn't stable.
@@ -495,8 +586,17 @@
           }, errorThumbnail);
         });
       }
-      if (noResults) {
+      if (numResults === 0) {
         illustrator.showStatusMessage('No results for "' + query + '"')
+      } else {
+        var queryLogDiv = document.getElementById('queryLog');
+        queryLogDiv.innerHTML += '' +
+            '<div class="queryLog">' +
+              '<input type="checkbox" checked="checked" ' + 'id="' +
+                  queryId + '">' +
+              '<label for="' + queryId + '"><strong>' + query + '</strong> ' +
+                  '(' + numResults + ' Results)</label>' +
+            '</div>';
       }
     },
     calculateDistances: function() {
@@ -571,6 +671,10 @@
     calculateMinimumSimilarTiles: function() {
       return Math.ceil(illustrator.rows * illustrator.cols / 2);
     },
+    calculateSimilarTiles: function() {
+      return Math.ceil(illustrator.rows * illustrator.cols *
+          illustrator.SIMILAR_TILES_FACTOR);
+    },
     calculateDimensions: function(mediaItem) {
       // always prefer video over photo, so set the dimensions of videos
       // to MAX_INT, which overrules even high-res photos
@@ -581,6 +685,7 @@
     clusterMediaItems: function() {
       illustrator.showStatusMessage('Clustering media items');
 
+      illustrator.clusters = [];
       var keys = Object.keys(illustrator.mediaItems);
       var len = keys.length;
       var abs = Math.abs;
