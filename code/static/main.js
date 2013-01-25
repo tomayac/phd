@@ -32,11 +32,143 @@
       if (illustrator.DEBUG) console.log('Initializing app');
 
       var resizeTabsDiv = function() {
-        var tabs = document.getElementById('tabs');
-        tabs.style.minHeight = (window.innerHeight - tabs.offsetTop - 5) + 'px';
+        var tab = document.getElementById('tabs');
+        tab.style.minHeight = (window.innerHeight - tabs.offsetTop - 10) + 'px';
       };
       window.addEventListener('resize', resizeTabsDiv, false);
       resizeTabsDiv();
+
+      var mouseover = function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'img') &&
+            (e.target.nodeName.toLowerCase() !== 'video') &&
+            (e.target.nodeName.toLowerCase() !== 'span')) {
+          return;
+        };
+        var img = e.target.parentNode.querySelector('img, video');
+        var close = img.parentNode.parentNode.querySelector('span.close');
+        close.style.display = 'block';
+        if (e.target.nodeName.toLowerCase() === 'video') {
+          e.target.setAttribute('controls', 'controls');
+        }
+      };
+
+      var mouseout = function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'img') &&
+            (e.target.nodeName.toLowerCase() !== 'video') &&
+            (e.target.nodeName.toLowerCase() !== 'span')) {
+          return;
+        };
+        var img = e.target.parentNode.querySelector('img, video');
+        var close = img.parentNode.parentNode.querySelector('span.close');
+        close.style.display = 'none';
+        if (e.target.nodeName.toLowerCase() === 'video') {
+          e.target.removeAttribute('controls');
+        }
+      };
+
+      var click = function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'span') &&
+            (!e.target.classList.contains('close'))) {
+          return;
+        }
+        var close = e.target;
+        var img = close.parentNode.querySelector(
+            'img.photo, video.photo, img.gallery, video.gallery');
+        var posterUrl = img.dataset.posterurl;
+        var cascading = true;
+        if (close.parentNode.parentNode.classList.contains('cluster')) {
+          cascading = false;
+        };
+        illustrator.deleteMediaItem(posterUrl, cascading);
+      };
+
+      var mediaItemClusters = document.getElementById('mediaItemClusters');
+      mediaItemClusters.addEventListener('mouseover', function(e) {
+        mouseover(e);
+      });
+      mediaItemClusters.addEventListener('mouseout', function(e) {
+        mouseout(e);
+      });
+      mediaItemClusters.addEventListener('click', function(e) {
+        click(e);
+      });
+      var mediaGallery = document.getElementById('mediaGallery');
+      mediaGallery.addEventListener('mouseover', function(e) {
+        mouseover(e);
+      });
+      mediaGallery.addEventListener('mouseout', function(e) {
+        mouseout(e);
+      });
+      mediaGallery.addEventListener('click', function(e) {
+        click(e);
+      });
+
+      var toggleVideoPlayStateButton = document.getElementById('playAllVideos');
+      toggleVideoPlayStateButton.addEventListener('click', function(e) {
+        var videos = document.querySelectorAll('video');
+        for (var i = 0, len = videos.length; i < len; i++) {
+          var video = videos[i];
+          if (video.paused) {
+            video.play();
+            this.innerHTML = 'Pause all videos';
+          } else {
+            video.pause();
+            this.innerHTML = 'Play all videos';
+          }
+        }
+      });
+
+      var muteVideosButton = document.getElementById('muteAllVideos');
+      muteAllVideos.addEventListener('click', function(e) {
+        var videos = document.querySelectorAll('video');
+        for (var i = 0, len = videos.length; i < len; i++) {
+          var video = videos[i];
+          if (video.muted) {
+            video.muted = false;
+            this.innerHTML = 'Mute all videos';
+          } else {
+            video.muted = true;
+            this.innerHTML = 'Unmute all videos';
+          }
+        }
+      });
+
+      var searchForm = document.getElementById('searchForm');
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var query = document.getElementById('query').value;
+        illustrator.searchMediaItems(query);
+      }, false);
+
+      var queryLogDiv = document.getElementById('queryLog');
+      queryLog.addEventListener('click', function(e) {
+        if ((e.target.nodeName.toLowerCase() === 'input') ||
+            (e.target.nodeName.toLowerCase() === 'label')) {
+          // can use checkbox, even if the label was clicked
+          var target = e.target;
+          var queryId = target.parentNode.getElementsByTagName('label')[0]
+              .getAttribute('for');
+          var checkbox = target.parentNode.getElementsByTagName('input')[0];
+          var displayState;
+          if (checkbox.checked) {
+            displayState = 'inline';
+          } else {
+            displayState = 'none';
+          }
+          var sources = illustrator.queries[queryId].forEach(function(source) {
+            var images = document.querySelectorAll('img[src="' + source + '"]');
+            for (var i = 0, len = images.length; i < len; i++) {
+              images[i].parentNode.parentNode.style.display = displayState;
+            }
+          });
+        }
+      });
+
+      // reset button
+      var resetButton = document.getElementById('reset');
+      resetButton.addEventListener('click', function() {
+        illustrator.reset();
+      });
 
       if (illustrator.DEBUG) illustrator.debug();
 
@@ -49,31 +181,90 @@
       illustrator.ctx = illustrator.canvas.getContext('2d');
 
       illustrator.reset();
-
-      var searchForm = document.getElementById('searchForm');
-      searchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var query = document.getElementById('query').value;
-        illustrator.searchMediaItems(query);
-      }, false);
-
-      // reset button
-      var resetButton = document.getElementById('reset');
-      resetButton.addEventListener('click', function() {
-        illustrator.reset();
-      });
-
     },
 
     debug: function() {
 
     },
 
+    deleteMediaItem: function(posterUrl, cascading) {
+      var deleteIndividualMediaItem = function(individualPosterUrl) {
+        // delete the corresponding micropost
+        var micropostUrl =
+            illustrator.mediaItems[individualPosterUrl].micropostUrl;
+        delete illustrator.micropostUrls[micropostUrl];
+
+        // delete the media item itself
+        delete illustrator.mediaItems[individualPosterUrl];
+
+        // delete the media item from all distances
+        for (var key in illustrator.mediaItems) {
+          delete illustrator.mediaItems[key].distances[individualPosterUrl];
+        }
+
+        // delete the media item from all queries
+        for (var key in illustrator.queries) {
+          for (var i = 0, len = illustrator.queries[key].length; i < len; i++) {
+            if (illustrator.queries[key][i] === individualPosterUrl) {
+              illustrator.queries[key].splice(i, 1);
+              break;
+            }
+          }
+        }
+      };
+
+      for (var i = 0, len = illustrator.clusters.length; i < len; i++) {
+        var cluster = illustrator.clusters[i];
+        // if cascading, we can delete the entire cluster
+        if (cascading) {
+          if (cluster.identifier === posterUrl) {
+            cluster.members.forEach(function(member) {
+              deleteIndividualMediaItem(member);
+            });
+            illustrator.clusters.splice(i, 1);
+            break;
+          }
+        // else we need to find the cluster the media item is in
+        } else {
+          // the media item can either be a cluster of its own
+          if (cluster.identifier === posterUrl) {
+            // we can delete the entire cluster, as it has no members
+            if (cluster.members.length === 0) {
+              illustrator.clusters.splice(i, 1);
+              break;
+            // we need to find a new cluster identifier within all members
+            } else {
+              var dimensions = -1;
+              var maxDimensionsIndex = -1;
+              cluster.members.forEach(function(member, index) {
+                var mediaItem = illustrator.mediaItems[member];
+                var newDimensions = illustrator.calculateDimensions(mediaItem);
+                if (newDimensions >= dimensions) {
+                  dimensions = newDimensions;
+                  maxDimensionsIndex = index;
+                }
+              });
+              cluster.identifier = cluster.members[maxDimensionsIndex];
+              cluster.members.splice(maxDimensionsIndex, 1);
+            }
+          }
+          // or it can be in another cluster
+          var index = cluster.members.indexOf(posterUrl);
+          if (index !== -1) {
+            cluster.members.splice(index, 1);
+            break;
+          }
+        }
+      }
+      deleteIndividualMediaItem(posterUrl);
+      illustrator.mergeClusterData();
+    },
+
     initSockets: function() {
       if (illustrator.DEBUG) console.log('Initializing WebSockets');
 
       illustrator.socket.on('proxy', function(data) {
-        illustrator.showStatusMessage('Loading file ' + data.url);
+        illustrator.showStatusMessage('Proxying file ' + data.url);
       });
 
       illustrator.socket.on('mediaResults', function(data) {
@@ -117,6 +308,13 @@
 
       var url = illustrator.MEDIA_SERVER + encodeURIComponent(query);
       var queryId = new Date().getTime();
+      var queryLogDiv = document.getElementById('queryLog');
+      queryLogDiv.innerHTML += '' +
+          '<div class="queryLog">' +
+            '<input type="checkbox" checked="checked" ' + 'id="' +
+                queryId + '">' +
+            '<label for="' + queryId + '">' + query + '</label>' +
+          '</div>';
 
       var handleXhrError = function(url) {
         illustrator.showStatusMessage('Error while loading ' + url);
@@ -255,9 +453,9 @@
         illustrator.mediaItems[posterUrl].fullImage = image;
         illustrator.micropostUrls[micropostUrl] = posterUrl;
         if (!illustrator.queries[queryId]) {
-          illustrator.queries[queryId] = [image.src];
+          illustrator.queries[queryId] = [posterUrl];
         } else {
-          illustrator.queries[queryId].push(image.src);
+          illustrator.queries[queryId].push(posterUrl);
         }
         if (checkMediaItemStatuses('loaded')) {
           illustrator.calculateDistances();
@@ -373,6 +571,13 @@
     calculateMinimumSimilarTiles: function() {
       return Math.ceil(illustrator.rows * illustrator.cols / 2);
     },
+    calculateDimensions: function(mediaItem) {
+      // always prefer video over photo, so set the dimensions of videos
+      // to MAX_INT, which overrules even high-res photos
+      return (mediaItem.type === 'video' ?
+          illustrator.MAX_INT :
+          mediaItem.fullImage.width * mediaItem.fullImage.height);
+    },
     clusterMediaItems: function() {
       illustrator.showStatusMessage('Clustering media items');
 
@@ -463,11 +668,7 @@
           comments: comments,
           views: views
         };
-        // always prefer video over photo, so set the dimension of videos
-        // to MAX_INT
-        var dimension = (mediaItem.type === 'video' ?
-            illustrator.MAX_INT :
-            mediaItem.fullImage.width * mediaItem.fullImage.height);
+        var dimensions = illustrator.calculateDimensions(mediaItem);
 
         cluster.members.forEach(function(url, i) {
           var member = illustrator.mediaItems[url];
@@ -476,14 +677,10 @@
           shares += memberSocialInteractions.shares;
           comments += memberSocialInteractions.comments;
           views += memberSocialInteractions.views;
-          // always prefer video over photo, so set the dimension of videos
-          // to MAX_INT
-          var newDimension = (member.type === 'video' ?
-              illustrator.MAX_INT :
-              member.fullImage.width * member.fullImage.height);
+          var newDimensions = illustrator.calculateDimensions(member);
           // we have a new cluster identifier
-          if (newDimension >= dimension) {
-            dimension = newDimension;
+          if (newDimensions >= dimensions) {
+            dimensions = newDimensions;
             var oldIdentifier = cluster.identifier;
             cluster.identifier = url;
             cluster.members[i] = oldIdentifier;
@@ -526,26 +723,26 @@
         var firstMediaItem = opt_isFirst ? ' firstMediaItem' : '';
         var isRepresentative = opt_isFirst ? ' representative' : '';
         var hasFaces = mediaItem.faces.length ? ' face' : '';
-        var url = mediaItem.posterUrl;
+        var url = illustrator.PROXY_SERVER +
+            encodeURIComponent(mediaItem.posterUrl);
         var micropostWidth = Math.ceil(100 / mediaItem.thumbnail.height *
             mediaItem.thumbnail.width) + 'px;';
         var service = mediaItem.origin.toLowerCase() + '.png';
         return '' +
             '<div class="mediaItem' + firstMediaItem + '">' +
-              '<img class="photo' + isRepresentative + hasFaces + '" src="' +
-                  url + '" data-posterurl="' + url + '"/>' +
+              '<a target="_newtab" href="' + mediaItem.micropostUrl + '">' +
+                '<img class="photo photoBorder' + isRepresentative + hasFaces +
+                    '" src="' + url + '" data-posterurl="' + url + '"/>' +
+              '</a>' +
               '<img class="favicon" src="./resources/' + service + '"/>' +
               '<span class="close">X</span>' +
               '<div class="micropost" style="width:' + micropostWidth + '">' +
                 mediaItem.micropost.plainText +
                 '<hr/>' +
-                '<a href="' + mediaItem.micropostUrl + '">Permalink</a>' +
-                '<hr/>' +
                 'Likes: ' + mediaItem.socialInteractions.likes + '<br/>' +
                 'Shares: ' + mediaItem.socialInteractions.shares + '<br/>' +
                 'Comments: ' + mediaItem.socialInteractions.comments + '<br/>' +
                 'Views: ' + mediaItem.socialInteractions.views +
-                '<hr/>' +
                 'Aspect Ratio: ' + (Math.round(mediaItem.fullImage.width /
                     mediaItem.fullImage.height * 100) / 100) + '<br/>' +
                 'Megapixels: ' + (Math.round(mediaItem.fullImage.width *
@@ -634,29 +831,34 @@
           item.src = mediaItem.mediaUrl;
           item.setAttribute('poster', mediaItem.posterUrl);
           item.setAttribute('loop', 'loop');
-          item.setAttribute('controls', 'controls');
         }
         item.dataset.width = mediaItem.fullImage.width;
         item.dataset.height = mediaItem.fullImage.height;
-        item.dataset.posterurl = mediaItem.posterUrl;
+        item.dataset.posterurl = cluster.identifier;
         item.dataset.origin = mediaItem.origin;
+        item.dataset.microposturl = mediaItem.micropostUrl;
         mediaItems.push(item);
       });
 
       var fragment = document.createDocumentFragment();
-      mediaItems.forEach(function(mediaItem) {
+      mediaItems.forEach(function(item) {
         var div = document.createElement('div');
         fragment.appendChild(div);
-        div.setAttribute('class', 'mediaItem');
-        mediaItem.classList.add('gallery');
-        div.appendChild(mediaItem);
+        div.classList.add('mediaItem');
+        item.classList.add('photoBorder');
+        item.classList.add('gallery');
+        var anchor = document.createElement('a');
+        anchor.href = item.dataset.microposturl;
+        anchor.setAttribute('target', '_newtab');
+        anchor.appendChild(item);
+        div.appendChild(anchor);
         var favicon = document.createElement('img');
         favicon.classList.add('favicon');
-        favicon.src = './resources/' + mediaItem.dataset.origin.toLowerCase() +
+        favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
             '.png';
         div.appendChild(favicon);
         var close = document.createElement('span');
-        close.setAttribute('class', 'close');
+        close.classList.add('close');
         close.innerHTML = 'X';
         div.appendChild(close);
       });
