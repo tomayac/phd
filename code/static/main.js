@@ -85,6 +85,22 @@
 
       var mediaItemClusters = document.getElementById('mediaItemClusters');
       mediaItemClusters.addEventListener('mouseover', function(e) {
+        if (e.target.nodeName.toLowerCase() === 'img') {
+          var img = e.target;
+          illustrator.calculateHistograms(img, true);
+          var dataUrl = illustrator.canvas.toDataURL('image/png');
+          img.style.width = img.offsetWidth + 'px';
+          img.style.height = img.offsetHeight + 'px';
+          img.src = dataUrl;
+        }
+      });
+      mediaItemClusters.addEventListener('mouseout', function(e) {
+        if (e.target.nodeName.toLowerCase() === 'img') {
+          var img = e.target;
+          img.src = img.dataset.posterurl;
+        }
+      });
+      mediaItemClusters.addEventListener('mouseover', function(e) {
         mouseover(e);
       });
       mediaItemClusters.addEventListener('mouseout', function(e) {
@@ -434,7 +450,7 @@
       return false;
     },
 
-    calculateHistograms: function(img) {
+    calculateHistograms: function(img, opt_debug) {
       var canvasWidth = illustrator.canvas.width;
       var canvasHeight = illustrator.canvas.height;
       illustrator.ctx.clearRect (0, 0, canvasWidth, canvasHeight);
@@ -461,6 +477,11 @@
         // calculate the histogram of the current tile
         var histogram =
             Histogram.getHistogram(illustrator.ctx, dx, dy, dw, dh, false);
+        if (opt_debug) {
+          illustrator.ctx.fillStyle = 'rgb(' + histogram.pixel.r + ',' +
+              histogram.pixel.g + ',' + histogram.pixel.b + ')';
+          illustrator.ctx.fillRect(dx, dy, dw, dh);
+        }
         illustrator.mediaItems[img.src].tileHistograms[i] = {
           r: histogram.pixel.r,
           g: histogram.pixel.g,
