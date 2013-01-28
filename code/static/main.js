@@ -945,20 +945,6 @@
         }
       },
 
-      likes: {
-        name: 'Likes',
-        func: function(a, b) {
-          return b.statistics.likes - a.statistics.likes;
-        }
-      },
-
-      views: {
-        name: 'Views',
-        func: function(a, b) {
-          return b.statistics.views - a.statistics.views;
-        }
-      },
-
       popularity: {
         name: 'Popularity',
         func: function(a, b) {
@@ -977,8 +963,35 @@
               weights.crossNetwork * b.members.length;
           return combinedStatsB - combinedStatsA;
         }
-      }
+      },
 
+      likes: {
+        name: 'Likes',
+        func: function(a, b) {
+          return b.statistics.likes - a.statistics.likes;
+        }
+      },
+
+      shares: {
+        name: 'Shares',
+        func: function(a, b) {
+          return b.statistics.shares - a.statistics.shares;
+        }
+      },
+
+      comments: {
+        name: 'Comments',
+        func: function(a, b) {
+          return b.statistics.comments - a.statistics.comments;
+        }
+      },
+
+      views: {
+        name: 'Views',
+        func: function(a, b) {
+          return b.statistics.views - a.statistics.views;
+        }
+      }
     },
     rankClusters: function() {
       var rankBySelect = document.getElementById('rankBy');
