@@ -129,17 +129,19 @@
 
       var mediaItemClusters = document.getElementById('mediaItemClusters');
       mediaItemClusters.addEventListener('mouseover', function(e) {
-        if (e.target.nodeName.toLowerCase() === 'img') {
+        if ((e.target.nodeName.toLowerCase() === 'img') &&
+            (e.target.classList.contains('photo'))) {
           var img = e.target;
           illustrator.calculateHistograms(img, true);
           var dataUrl = illustrator.canvas.toDataURL('image/png');
-          img.style.width = img.offsetWidth + 'px';
-          img.style.height = img.offsetHeight + 'px';
+          img.style.width = img.clientWidth + 'px';
+          img.style.height = img.clientHeight + 'px';
           img.src = dataUrl;
         }
       });
       mediaItemClusters.addEventListener('mouseout', function(e) {
-        if (e.target.nodeName.toLowerCase() === 'img') {
+        if ((e.target.nodeName.toLowerCase() === 'img') &&
+            (e.target.classList.contains('photo'))) {
           var img = e.target;
           img.src = img.dataset.posterurl;
         }
