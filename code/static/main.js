@@ -47,11 +47,11 @@
       resizeTabsDiv();
 
       var rankBySelect = document.getElementById('rankBy');
-      for (var name in illustrator.rankingFormulas) {
+      for (var formula in illustrator.rankingFormulas) {
         var option = document.createElement('option');
-        option.innerHTML = name.substr(0, 1).toUpperCase() + name.substr(1);
-        option.value = name;
-        option.selected = name === 'popularity' ? 'selected' : '';
+        option.innerHTML = illustrator.rankingFormulas[formula].name;
+        option.value = formula;
+        option.selected = formula === 'popularity' ? 'selected' : '';
         rankBySelect.appendChild(option);
       }
       rankBySelect.addEventListener('change', function() {
@@ -871,33 +871,45 @@
       illustrator.rankClusters();
     },
     rankingFormulas: {
-      size: function(a, b) {
-        return b.members.length - a.members.length;
+      crossNetwork: {
+        name: 'Cross-Network',
+        func: function(a, b) {
+          return b.members.length - a.members.length;
+        }
       },
 
-      likes: function(a, b) {
-        return b.statistics.likes - a.statistics.likes;
+      likes: {
+        name: 'Likes',
+        func: function(a, b) {
+          return b.statistics.likes - a.statistics.likes;
+        }
       },
 
-      views: function(a, b) {
-        return b.statistics.views - a.statistics.views;
+      views: {
+        name: 'Views',
+        func: function(a, b) {
+          return b.statistics.views - a.statistics.views;
+        }
       },
 
-      popularity: function(a, b) {
-        var weights = illustrator.weights;
-        var combinedStatsA =
-            weights.likes * a.likes +
-            weights.shares * a.shares +
-            weights.comments * a.comments +
-            weights.views * a.views +
-            weights.crossNetwork * a.members.length;
-        var combinedStatsB =
-            weights.likes * b.likes +
-            weights.shares * b.shares +
-            weights.comments * b.comments +
-            weights.views * b.views +
-            weights.crossNetwork * b.members.length;
-        return combinedStatsB - combinedStatsA;
+      popularity: {
+        name: 'Popularity',
+        func: function(a, b) {
+          var weights = illustrator.weights;
+          var combinedStatsA =
+              weights.likes * a.likes +
+              weights.shares * a.shares +
+              weights.comments * a.comments +
+              weights.views * a.views +
+              weights.crossNetwork * a.members.length;
+          var combinedStatsB =
+              weights.likes * b.likes +
+              weights.shares * b.shares +
+              weights.comments * b.comments +
+              weights.views * b.views +
+              weights.crossNetwork * b.members.length;
+          return combinedStatsB - combinedStatsA;
+        }
       }
 
     },
@@ -905,8 +917,8 @@
       illustrator.showStatusMessage('Ranking clusters');
 
       var rankBySelect = document.getElementById('rankBy');
-      var rankingFormula = rankBySelect.selectedOptions[0].value;
-      illustrator.clusters.sort(illustrator.rankingFormulas[rankingFormula]);
+      var formula = rankBySelect.selectedOptions[0].value;
+      illustrator.clusters.sort(illustrator.rankingFormulas[formula].func);
 
       illustrator.createClusterPreview();
     },
