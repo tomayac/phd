@@ -39,6 +39,17 @@
       window.addEventListener('resize', resizeTabsDiv, false);
       resizeTabsDiv();
 
+      var rankBySelect = document.getElementById('rankBy');
+      for (var name in illustrator.rankingFormulas) {
+        var option = document.createElement('option');
+        option.innerHTML = name.substr(0, 1).toUpperCase() + name.substr(1);
+        option.value = name;
+        rankBySelect.appendChild(option);
+      }
+      rankBySelect.addEventListener('change', function() {
+        illustrator.rankClusters();
+      });
+
       var mouseover = function(e) {
         if ((e.target.nodeName.toLowerCase() !== 'img') &&
             (e.target.nodeName.toLowerCase() !== 'video') &&
@@ -276,6 +287,11 @@
             }
           });
         }
+      });
+
+      var mediaGalleryTab = document.getElementById('tab2');
+      mediaGalleryTab.addEventListener('click', function() {
+        illustrator.createMediaGallery();
       });
 
       // reset button
@@ -838,7 +854,9 @@
     rankClusters: function() {
       illustrator.showStatusMessage('Ranking clusters');
 
-      illustrator.clusters.sort(illustrator.rankingFormulas.size);
+      var rankBySelect = document.getElementById('rankBy');
+      var rankingFormula = rankBySelect.selectedOptions[0].value;
+      illustrator.clusters.sort(illustrator.rankingFormulas[rankingFormula]);
 
       illustrator.createClusterPreview();
     },
@@ -899,7 +917,6 @@
 
       var mediaItemClusters = document.getElementById('mediaItemClusters');
       mediaItemClusters.innerHTML = html;
-      illustrator.createMediaGallery();
     },
     createMediaGallery: function() {
       illustrator.showStatusMessage('Creating media gallery');
@@ -958,9 +975,9 @@
           item.setAttribute('poster', mediaItem.posterUrl);
           item.setAttribute('loop', 'loop');
         }
+        item.dataset.posterurl = cluster.identifier;
         item.dataset.width = mediaItem.fullImage.width;
         item.dataset.height = mediaItem.fullImage.height;
-        item.dataset.posterurl = cluster.identifier;
         item.dataset.origin = mediaItem.origin;
         item.dataset.microposturl = mediaItem.micropostUrl;
         mediaItems.push(item);
