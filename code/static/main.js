@@ -464,6 +464,7 @@
       if (illustrator.DEBUG) console.log('Resetting app');
       document.getElementById('mediaItemClusters').innerHTML = '';
       document.getElementById('queryLog').innerHTML = '';
+      document.getElementById('statistics').innerHTML = '';
       document.getElementById('statusMessages').innerHTML = '';
       document.getElementById('mediaGallery').innerHTML = '';
       document.getElementById('query').value = '';

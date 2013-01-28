@@ -37,13 +37,31 @@ input.number {
   width: 35em;
 }
 
+#statistics {
+  position: absolute;
+  top: 1em;
+  right: 2em;
+}
+
 #querylog {
   margin: 0 0.75em;
   float: left;
 }
 
-.mediaItemClusters {
+#mediaItemClusters {
   clear: both;
+  margin-top: 22em;
+  height: calc(100% - 22em);
+  height: -webkit-calc(100% - 22em);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#settings {
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  width: 97%;
 }
 
 .tabs {
