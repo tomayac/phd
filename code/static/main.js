@@ -779,6 +779,7 @@
     },
     clusterMediaItems: function(opt_outer, opt_inner) {
       illustrator.showStatusMessage('Clustering media items');
+
       var debugOnly = opt_outer && opt_inner ? true : false;
       var keys;
       if (!debugOnly) {
@@ -867,7 +868,30 @@
           return;
         }
       }
+
+      illustrator.displayClusterStatistics();
+
       illustrator.mergeClusterData();
+    },
+    displayClusterStatistics: function() {
+      var numClusters = illustrator.clusters.length;
+      var clusterStatistics = {};
+      illustrator.clusters.forEach(function(cluster) {
+        var clusterSize = cluster.members.length + 1;
+        if (clusterStatistics[clusterSize]) {
+          clusterStatistics[clusterSize]++;
+        } else {
+          clusterStatistics[clusterSize] = 1;
+        }
+      });
+      var html = '<strong>Clusters Overall:</strong> ' + numClusters + '.<br/>';
+      Object.keys(clusterStatistics).sort(function(a, b) {
+        return b - a;
+      }).forEach(function(size) {
+        html += ' <strong>Clusters with ' + size +
+            ' Members:</strong> ' + clusterStatistics[size] + '.<br/>';
+      });
+      document.getElementById('statistics').innerHTML = html;
     },
     mergeClusterData: function() {
       illustrator.showStatusMessage('Merging cluster data');

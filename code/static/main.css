@@ -149,5 +149,10 @@ input.number {
 }
 
 .queryLog {
-  margin-left: 0.75em;
+  margin: 0 0.75em;
+  float: left;
+}
+
+.mediaItemClusters {
+  clear: both;
 }
