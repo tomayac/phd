@@ -50,10 +50,26 @@
 
               <input type="checkbox" id="faces"/>
               <label id="facesLabel" for="faces">Account for Faces</label>
-
-              <br/>
+            </fieldset>
+            <fieldset>
               <select id="rankBy"></select>
               <label for="rankBy">Cluster Ranking Criterion</label>
+
+              <br/>
+              <input class="number" name="likes" id="likesWeight" type="number"/>
+              <label for="likesWeight">Likes</label>
+
+              <input class="number" name="shares" id="sharesWeight" type="number"/>
+              <label for="sharesWeight">Shares</label>
+
+              <input class="number" name="comments" id="commentsWeight" type="number"/>
+              <label for="commentsWeight">Comments</label>
+
+              <input class="number" name="views" id="viewsWeight" type="number"/>
+              <label for="viewsWeight">Views</label>
+
+              <input class="number" name="crossNetwork" id="crossNetworkWeight" type="number"/>
+              <label for="crossNetworkWeight">Cross-Network</label>
             </fieldset>
           </form>
 

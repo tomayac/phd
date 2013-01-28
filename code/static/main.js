@@ -28,6 +28,13 @@
     similarTiles: 80,
     considerFaces: true,
     considerLuminance: true,
+    weights: {
+      likes: 1,
+      shares: 1,
+      comments: 1,
+      views: 1,
+      crossNetwork: 1
+    },
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -44,11 +51,37 @@
         var option = document.createElement('option');
         option.innerHTML = name.substr(0, 1).toUpperCase() + name.substr(1);
         option.value = name;
+        option.selected = name === 'popularity' ? 'selected' : '';
         rankBySelect.appendChild(option);
       }
       rankBySelect.addEventListener('change', function() {
         illustrator.rankClusters();
       });
+
+      var weightChanged = function(e) {
+        illustrator.weights[e.target.name] = e.target.value;
+        illustrator.rankClusters();
+      };
+
+      var likesWeight = document.getElementById('likesWeight');
+      likesWeight.value = illustrator.weights.likes;
+      likesWeight.addEventListener('change', weightChanged);
+
+      var sharesWeight = document.getElementById('sharesWeight');
+      sharesWeight.value = illustrator.weights.shares;
+      sharesWeight.addEventListener('change', weightChanged);
+
+      var commentsWeight = document.getElementById('commentsWeight');
+      commentsWeight.value = illustrator.weights.comments;
+      commentsWeight.addEventListener('change', weightChanged);
+
+      var viewsWeight = document.getElementById('viewsWeight');
+      viewsWeight.value = illustrator.weights.views;
+      viewsWeight.addEventListener('change', weightChanged);
+
+      var crossNetworkWeight = document.getElementById('crossNetworkWeight');
+      crossNetworkWeight.value = illustrator.weights.crossNetwork;
+      crossNetworkWeight.addEventListener('change', weightChanged);
 
       var mouseover = function(e) {
         if ((e.target.nodeName.toLowerCase() !== 'img') &&
@@ -848,6 +881,23 @@
 
       views: function(a, b) {
         return b.statistics.views - a.statistics.views;
+      },
+
+      popularity: function(a, b) {
+        var weights = illustrator.weights;
+        var combinedStatsA =
+            weights.likes * a.likes +
+            weights.shares * a.shares +
+            weights.comments * a.comments +
+            weights.views * a.views +
+            weights.crossNetwork * a.members.length;
+        var combinedStatsB =
+            weights.likes * b.likes +
+            weights.shares * b.shares +
+            weights.comments * b.comments +
+            weights.views * b.views +
+            weights.crossNetwork * b.members.length;
+        return combinedStatsB - combinedStatsA;
       }
 
     },

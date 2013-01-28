@@ -20,6 +20,10 @@ fieldset {
   margin: 0;
 }
 
+input.number {
+  width: 4em;
+}
+
 #statusMessages {
   position: absolute;
   top:10px;
