@@ -51,7 +51,9 @@
         var option = document.createElement('option');
         option.innerHTML = illustrator.rankingFormulas[formula].name;
         option.value = formula;
-        option.selected = formula === 'popularity' ? 'selected' : '';
+        if (formula === 'crossNetwork') {
+          option.setAttribute('selected', 'selected');
+        }
         rankBySelect.appendChild(option);
       }
       rankBySelect.addEventListener('change', function() {
@@ -128,6 +130,27 @@
       };
 
       var mediaItemClusters = document.getElementById('mediaItemClusters');
+      var image1;
+      var image2;
+      mediaItemClusters.addEventListener('contextmenu', function(e) {
+        if ((e.target.nodeName.toLowerCase() === 'img') &&
+            (e.target.classList.contains('photo'))) {
+          e.preventDefault();
+          var img = e.target;
+          if (!image1) {
+            image1 = img;
+          } else if (!image2) {
+            image2 = img;
+          }
+          if (image1 && image2) {
+            illustrator.clusterMediaItems(image1.dataset.posterurl,
+                image2.dataset.posterurl);
+            image1 = null;
+            image2 = null;
+          }
+        }
+      });
+
       mediaItemClusters.addEventListener('mouseover', function(e) {
         if ((e.target.nodeName.toLowerCase() === 'img') &&
             (e.target.classList.contains('photo'))) {
@@ -754,11 +777,16 @@
           illustrator.MAX_INT :
           mediaItem.fullImage.width * mediaItem.fullImage.height);
     },
-    clusterMediaItems: function() {
+    clusterMediaItems: function(opt_outer, opt_inner) {
       illustrator.showStatusMessage('Clustering media items');
-
-      illustrator.clusters = [];
-      var keys = Object.keys(illustrator.mediaItems);
+      var debugOnly = opt_outer && opt_inner ? true : false;
+      var keys;
+      if (!debugOnly) {
+        illustrator.clusters = [];
+        keys = Object.keys(illustrator.mediaItems);
+      } else {
+        keys = [opt_outer, opt_inner];
+      }
       var len = keys.length;
       var abs = Math.abs;
       var max = Math.max;
@@ -822,10 +850,22 @@
             keys[key] = false;
           });
         });
-        illustrator.clusters.push({
-          identifier: outer,
-          members: members
-        });
+        if (!debugOnly) {
+          illustrator.clusters.push({
+            identifier: outer,
+            members: members
+          });
+        } else {
+          if (debugOnly) {
+            if (illustrator.DEBUG) console.log('Similar tiles: ' +
+                similarTiles + '\nMinimum required: ' + minimumRequired +
+                '\nOverall: ' + (illustrator.cols * illustrator.rows) +
+                '\nNulls: ' + nulls + '\nPercent: ' +
+                ((similarTiles / (illustrator.cols * illustrator.rows)) * 100) +
+                '%');
+          }
+          return;
+        }
       }
       illustrator.mergeClusterData();
     },
@@ -916,10 +956,9 @@
 
     },
     rankClusters: function() {
-      illustrator.showStatusMessage('Ranking clusters');
-
       var rankBySelect = document.getElementById('rankBy');
       var formula = rankBySelect.selectedOptions[0].value;
+      illustrator.showStatusMessage('Ranking clusters by ' + formula);
       illustrator.clusters.sort(illustrator.rankingFormulas[formula].func);
 
       illustrator.createClusterPreview();
@@ -950,7 +989,7 @@
                 'Likes: ' + mediaItem.socialInteractions.likes + '<br/>' +
                 'Shares: ' + mediaItem.socialInteractions.shares + '<br/>' +
                 'Comments: ' + mediaItem.socialInteractions.comments + '<br/>' +
-                'Views: ' + mediaItem.socialInteractions.views +
+                'Views: ' + mediaItem.socialInteractions.views + '<br/>' +
                 'Aspect Ratio: ' + (Math.round(mediaItem.fullImage.width /
                     mediaItem.fullImage.height * 100) / 100) + '<br/>' +
                 'Megapixels: ' + (Math.round(mediaItem.fullImage.width *
@@ -981,6 +1020,11 @@
 
       var mediaItemClusters = document.getElementById('mediaItemClusters');
       mediaItemClusters.innerHTML = html;
+
+      var mediaGalleryTab = document.getElementById('tab2');
+      if (mediaGalleryTab.checked) {
+        illustrator.createMediaGallery();
+      }
     },
     createMediaGallery: function() {
       illustrator.showStatusMessage('Creating media gallery');
