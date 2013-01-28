@@ -884,12 +884,12 @@
           clusterStatistics[clusterSize] = 1;
         }
       });
-      var html = '<strong>Clusters Overall:</strong> ' + numClusters + '.<br/>';
+      var html = '<strong>Clusters Overall:</strong> ' + numClusters + '<br/>';
       Object.keys(clusterStatistics).sort(function(a, b) {
         return b - a;
       }).forEach(function(size) {
         html += ' <strong>Clusters with ' + size +
-            ' Members:</strong> ' + clusterStatistics[size] + '.<br/>';
+            ' Members:</strong> ' + clusterStatistics[size] + '<br/>';
       });
       document.getElementById('statistics').innerHTML = html;
     },

@@ -37,6 +37,15 @@ input.number {
   width: 35em;
 }
 
+#querylog {
+  margin: 0 0.75em;
+  float: left;
+}
+
+.mediaItemClusters {
+  clear: both;
+}
+
 .tabs {
   position: relative;
   clear: both;
@@ -146,13 +155,4 @@ input.number {
   overflow-x: hidden;
   border: solid 1px #ccc;
   white-space: normal;
-}
-
-.queryLog {
-  margin: 0 0.75em;
-  float: left;
-}
-
-.mediaItemClusters {
-  clear: both;
 }
