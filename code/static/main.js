@@ -227,7 +227,6 @@
         thresholdLabel.innerHTML = threshold.value;
       });
       threshold.addEventListener('mouseup', function() {
-        thresholdLabel.innerHTML = threshold.value;
         illustrator.threshold = threshold.value;
         illustrator.clusterMediaItems();
       });
@@ -244,7 +243,6 @@
         similarTilesLabel.innerHTML = similarTiles.value;
       });
       similarTiles.addEventListener('mouseup', function() {
-        similarTilesLabel.innerHTML = similarTiles.value;
         illustrator.similarTiles = similarTiles.value;
         illustrator.clusterMediaItems();
       });
@@ -260,7 +258,6 @@
         bwToleranceLabel.innerHTML = bwTolerance.value;
       });
       bwTolerance.addEventListener('mouseup', function() {
-        bwToleranceLabel.innerHTML = bwTolerance.value;
         illustrator.bwTolerance = bwTolerance.value;
         illustrator.calculateDistances();
       });
@@ -273,7 +270,6 @@
       rowsLabel.innerHTML = rows.value;
       rows.addEventListener('change', function() {
         rowsLabel.innerHTML = rows.value;
-        illustrator.rows = rows.value;
       });
 
       var cols = document.getElementById('cols');
@@ -284,10 +280,11 @@
       colsLabel.innerHTML = cols.value;
       cols.addEventListener('change', function() {
         colsLabel.innerHTML = cols.value;
-        illustrator.cols = cols.value;
       });
 
       var rowsColsChange = function() {
+        illustrator.rows = rows.value;
+        illustrator.cols = cols.value;
         similarTiles.min = illustrator.calculateMinimumSimilarTiles();
         similarTiles.max = illustrator.rows * illustrator.cols;
         similarTiles.value = illustrator.calculateSimilarTiles();
@@ -702,6 +699,11 @@
       var len = keys.length;
       var abs = Math.abs;
 
+      // reset distances
+      for (var i = 0; i < len; i++) {
+        illustrator.mediaItems[keys[i]].distances = {};
+      }
+
       if (illustrator.accountForLuminance) {
         var rFactor = 0.3;
         var gFactor = 0.59;
@@ -765,7 +767,7 @@
       illustrator.clusterMediaItems();
     },
     calculateMinimumSimilarTiles: function() {
-      return Math.ceil(illustrator.rows * illustrator.cols / 2);
+      return Math.ceil(illustrator.rows * illustrator.cols / 3);
     },
     calculateSimilarTiles: function() {
       return Math.ceil(illustrator.rows * illustrator.cols *

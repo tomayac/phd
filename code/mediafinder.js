@@ -28,7 +28,7 @@ var GLOBAL_config = {
     "Connection": "keep-alive",
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     "Referer": "http://www.google.com/",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.854.0 Safari/535.2",
+    "User-Agent": null
   },
   MEDIA_PLATFORMS: [
     'yfrog.com',
@@ -59,8 +59,8 @@ var GLOBAL_config = {
 };
 
 var mediaFinder = {
-  search: function search(service, query, callback) {
-
+  search: function search(service, query, userAgent, callback) {
+    GLOBAL_config.HEADERS['User-Agent'] = userAgent;
     /**
      * Stolen from https://developer.mozilla.org/en/JavaScript/Reference/Global_-
      * Objects/Date#Example:_ISO_8601_formatted_dates
@@ -135,6 +135,9 @@ var mediaFinder = {
           }
           // Translate to HTML5 video URL, try at least
           var options = {
+            headers: {
+              'User-Agent': GLOBAL_config.HEADERS['User-Agent']
+            },
             url: 'http://www.youtube.com/get_video_info?video_id=' + videoId
           };
           request.get(options, function(err, reply, body) {

@@ -80,7 +80,8 @@ function search(req, res, next) {
   var pathname = require('url').parse(req.url).pathname;
   var service = pathname.replace(path, '$1');
   var query = decodeURIComponent(pathname.replace(path, '$2'));
-  mediaFinder.search(service, query, function(json) {
+  var userAgent = req.headers['user-agent'];
+  mediaFinder.search(service, query, userAgent, function(json) {
     res.setHeader('Content-Type', 'application/json; charset=UTF-8');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
