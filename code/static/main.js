@@ -35,6 +35,7 @@
       views: 1,
       crossNetwork: 1
     },
+    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -217,6 +218,22 @@
             this.innerHTML = 'Unmute all videos';
           }
         }
+      });
+
+      var maxAge = document.getElementById('maxAge');
+      maxAge.max = 7 * 24 * 60 * 60 * 1000; // 7 days
+      maxAge.min = 1 * 60 * 1000; // 1 minute
+      maxAge.value = illustrator.maxAge;
+      var maxAgeLabel = document.getElementById('maxAgeLabel');
+      maxAgeLabel.innerHTML = humaneDate(new Date((new Date().getTime() -
+          maxAge.value)));
+      maxAge.addEventListener('change', function() {
+        maxAgeLabel.innerHTML = humaneDate(new Date((new Date().getTime() -
+            maxAge.value)));
+      });
+      maxAge.addEventListener('mouseup', function() {
+        illustrator.maxAge = maxAge.value;
+        illustrator.filterForMaxAge();
       });
 
       var threshold = document.getElementById('threshold');
@@ -420,6 +437,7 @@
             // we need to find a new cluster identifier within all members
             } else {
               var dimensions = -1;
+              var timestamp = illustrator.MAX_INT;
               var maxDimensionsIndex = -1;
               cluster.members.forEach(function(member, index) {
                 var mediaItem = illustrator.mediaItems[member];
@@ -428,8 +446,12 @@
                   dimensions = newDimensions;
                   maxDimensionsIndex = index;
                 }
+                if (mediaItem.timestamp < timestamp) {
+                  timestamp = mediaItem.timestamp;
+                }
               });
               cluster.identifier = cluster.members[maxDimensionsIndex];
+              cluster.timestamp = timestamp;
               cluster.members.splice(maxDimensionsIndex, 1);
             }
           }
@@ -672,6 +694,7 @@
               encodeURIComponent(item.posterUrl);
           item.origin = service;
           item.status = false;
+          item.considerMediaItem = true;
           illustrator.mediaItems[posterUrl] = item;
           // load the poster url as thumbnail
           preloadImage(posterUrl, function(image) {
@@ -764,6 +787,20 @@
           }
         }
       }
+      illustrator.filterForMaxAge();
+    },
+    filterForMaxAge: function() {
+      illustrator.showStatusMessage('Filtering media items for maximum age');
+
+      var now = new Date().getTime();
+      for (var key in illustrator.mediaItems) {
+        var mediaItem = illustrator.mediaItems[key];
+        if (now - mediaItem.timestamp <= illustrator.maxAge) {
+          mediaItem.considerMediaItem = true;
+        } else {
+          mediaItem.considerMediaItem = false;
+        }
+      }
       illustrator.clusterMediaItems();
     },
     calculateMinimumSimilarTiles: function() {
@@ -787,7 +824,13 @@
       var keys;
       if (!debugOnly) {
         illustrator.clusters = [];
-        keys = Object.keys(illustrator.mediaItems);
+        // filter to only consider the, well, considered media items
+        keys = Object.keys(illustrator.mediaItems).filter(function(key) {
+          return illustrator.mediaItems[key].considerMediaItem;
+        });
+        if (illustrator.DEBUG) console.log(
+            Object.keys(illustrator.mediaItems).length +
+            ' media items in total, considering ' + keys.length + ' of them');
       } else {
         keys = [opt_outer, opt_inner];
       }
@@ -878,16 +921,19 @@
     },
     displayClusterStatistics: function() {
       var numClusters = illustrator.clusters.length;
+      var numMediaItems = 0;
       var clusterStatistics = {};
       illustrator.clusters.forEach(function(cluster) {
         var clusterSize = cluster.members.length + 1;
+        numMediaItems += clusterSize;
         if (clusterStatistics[clusterSize]) {
           clusterStatistics[clusterSize]++;
         } else {
           clusterStatistics[clusterSize] = 1;
         }
       });
-      var html = '<strong>Clusters Overall:</strong> ' + numClusters + '<br/>';
+      var html = '<strong>Clusters:</strong> ' + numClusters + '<br/>';
+      html += '<strong>Media Items:</strong> ' + numMediaItems + '<br/>';
       Object.keys(clusterStatistics).sort(function(a, b) {
         return b - a;
       }).forEach(function(size) {
@@ -912,6 +958,7 @@
           comments: comments,
           views: views
         };
+        cluster.timestamp = mediaItem.timestamp;
         var dimensions = illustrator.calculateDimensions(mediaItem);
 
         cluster.members.forEach(function(url, i) {
@@ -929,6 +976,10 @@
             cluster.identifier = url;
             cluster.members[i] = oldIdentifier;
           }
+          // always use the youngest cluster member's timestamp
+          if (member.timestamp < cluster.timestamp) {
+            cluster.timestamp = member.timestamp;
+          }
         });
         cluster.statistics = {
           likes: likes,
@@ -944,6 +995,13 @@
         name: 'Cross-Network',
         func: function(a, b) {
           return b.members.length - a.members.length;
+        }
+      },
+
+      age: {
+        name: 'Age',
+        func: function(a, b) {
+          return b.timestamp - a.timestamp;
         }
       },
 
@@ -1026,6 +1084,8 @@
               '<div class="micropost" style="width:' + micropostWidth + '">' +
                 mediaItem.micropost.plainText +
                 '<hr/>' +
+                'Age: ' + humaneDate(new Date(mediaItem.timestamp)) +
+                    ' ago<br/>' +
                 'Likes: ' + mediaItem.socialInteractions.likes + '<br/>' +
                 'Shares: ' + mediaItem.socialInteractions.shares + '<br/>' +
                 'Comments: ' + mediaItem.socialInteractions.comments + '<br/>' +
