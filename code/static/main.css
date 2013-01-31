@@ -121,8 +121,7 @@ input.number {
 .mediaItem {
   float: left;
   position: relative;
-  margin-left: -16px;
-
+  margin: 2px -14px 2px 2px;
 }
 
 .firstMediaItem {

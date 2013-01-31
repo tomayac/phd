@@ -932,8 +932,8 @@
           clusterStatistics[clusterSize] = 1;
         }
       });
-      var html = '<strong>Clusters:</strong> ' + numClusters + '<br/>';
-      html += '<strong>Media Items:</strong> ' + numMediaItems + '<br/>';
+      var html = '<strong>Media Items:</strong> ' + numMediaItems + '<br/>';
+      html += '<strong>Clusters:</strong> ' + numClusters + '<br/>';
       Object.keys(clusterStatistics).sort(function(a, b) {
         return b - a;
       }).forEach(function(size) {
