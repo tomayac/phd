@@ -1129,48 +1129,6 @@
     createMediaGallery: function() {
       illustrator.showStatusMessage('Creating media gallery');
 
-      // media gallery algorithm credits to
-      // http://blog.vjeux.com/2012/image/-
-      // image-layout-algorithm-google-plus.html
-      var heights = [];
-
-      var calculateSizes = function(images, maxHeight) {
-        var size = mediaGallery.offsetWidth - 20;
-        var n = 0;
-        w: while (images.length > 0) {
-          for (var i = 1; i < images.length + 1; ++i) {
-            var slice = images.slice(0, i);
-            var h = getHeight(slice, size);
-            if (h < maxHeight) {
-              setHeight(slice, h);
-              n++;
-              images = images.slice(i);
-              continue w;
-            }
-          }
-          setHeight(slice, Math.min(maxHeight, h));
-          n++;
-          break;
-        }
-      };
-
-      var getHeight = function(images, width) {
-        var h = 0;
-        for (var i = 0; i < images.length; ++i) {
-          h += images[i].dataset.width / images[i].dataset.height;
-        }
-        return (width / h);
-      };
-
-      var setHeight = function(images, height) {
-        heights.push(height);
-        for (var i = 0; i < images.length; ++i) {
-          images[i].style.width = (height * images[i].dataset.width /
-              images[i].dataset.height);
-          images[i].style.height = height;
-        }
-      };
-
       var mediaItems = [];
       illustrator.clusters.forEach(function(cluster) {
         var mediaItem = illustrator.mediaItems[cluster.identifier];
@@ -1191,37 +1149,182 @@
         mediaItems.push(item);
       });
 
-      var fragment = document.createDocumentFragment();
-      mediaItems.forEach(function(item) {
-        var div = document.createElement('div');
-        fragment.appendChild(div);
-        div.classList.add('mediaItem');
-        item.classList.add('photoBorder');
-        item.classList.add('gallery');
-        var anchor = document.createElement('a');
-        anchor.href = item.dataset.microposturl;
-        anchor.setAttribute('target', '_newtab');
-        anchor.appendChild(item);
-        div.appendChild(anchor);
-        var favicon = document.createElement('img');
-        favicon.classList.add('favicon');
-        favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
-            '.png';
-        div.appendChild(favicon);
-        var close = document.createElement('span');
-        close.classList.add('close');
-        close.innerHTML = 'X';
-        div.appendChild(close);
-      });
-      var mediaGallery = document.getElementById('mediaGallery');
-      calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
-      mediaGallery.innerHTML = '';
-      mediaGallery.appendChild(fragment);
 
-      var resizeWindow = function() {
+      function googlePlus() {
+        // media gallery algorithm credits to
+        // http://blog.vjeux.com/2012/image/-
+        // image-layout-algorithm-google-plus.html
+        var heights = [];
+
+        var calculateSizes = function(images, maxHeight) {
+          var size = mediaGallery.clientWidth - 20;
+          var n = 0;
+          w: while (images.length > 0) {
+            for (var i = 1; i < images.length + 1; ++i) {
+              var slice = images.slice(0, i);
+              var h = getHeight(slice, size);
+              if (h < maxHeight) {
+                setHeight(slice, h);
+                n++;
+                images = images.slice(i);
+                continue w;
+              }
+            }
+            setHeight(slice, Math.min(maxHeight, h));
+            n++;
+            break;
+          }
+        };
+
+        var getHeight = function(images, width) {
+          var h = 0;
+          for (var i = 0; i < images.length; ++i) {
+            h += images[i].dataset.width / images[i].dataset.height;
+          }
+          return (width / h);
+        };
+
+        var setHeight = function(images, height) {
+          heights.push(height);
+          for (var i = 0; i < images.length; ++i) {
+            images[i].style.width = (height * images[i].dataset.width /
+                images[i].dataset.height);
+            images[i].style.height = height;
+          }
+        };
+
+        var fragment = document.createDocumentFragment();
+        mediaItems.forEach(function(item) {
+          var div = document.createElement('div');
+          fragment.appendChild(div);
+          div.classList.add('mediaItem');
+          item.classList.add('photoBorder');
+          item.classList.add('gallery');
+          var anchor = document.createElement('a');
+          anchor.href = item.dataset.microposturl;
+          anchor.setAttribute('target', '_newtab');
+          anchor.appendChild(item);
+          div.appendChild(anchor);
+          var favicon = document.createElement('img');
+          favicon.classList.add('favicon');
+          favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
+              '.png';
+          div.appendChild(favicon);
+          var close = document.createElement('span');
+          close.classList.add('close');
+          close.innerHTML = 'X';
+          div.appendChild(close);
+        });
+        var mediaGallery = document.getElementById('mediaGallery');
         calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
-      };
-      window.addEventListener('resize', resizeWindow, false);
+        mediaGallery.innerHTML = '';
+        mediaGallery.appendChild(fragment);
+
+        var resizeWindow = function() {
+          calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
+        };
+        window.addEventListener('resize', resizeWindow, false);
+      }
+
+      function facebook() {
+console.log('Running Facebook');
+        var heights = [];
+        var columnWidth = 200;
+        var margin = 5;
+        var delta = 20;
+
+        function createColumns(n) {
+          heights = [];
+          for (var i = 0; i < n; ++i) {
+            heights.push(0);
+          }
+        }
+
+        function getMinColumn() {
+          var minHeight = Infinity;
+          var iMin = -1;
+          for (var i = 0; i < heights.length; ++i) {
+            if (heights[i] < minHeight) {
+              minHeight = heights[i];
+              iMin = i;
+            }
+          }
+          return iMin;
+        }
+
+        function addColumnElem(i, elem, isBig) {
+          elem.style.marginLeft = margin + (columnWidth + margin) * i;
+          elem.style.marginTop = heights[Math.floor(i / 2)] * (columnWidth + margin);
+          elem.style.width = isBig ? columnWidth * 2 + margin : columnWidth;
+          elem.style.height = isBig ? columnWidth * 2 + margin : columnWidth;
+        }
+
+        function calculateSizes(images) {
+console.log('Running Facebook calculateSizes');
+          var size = mediaGallery.clientWidth - 50;
+          var nColumns = Math.floor(size / (2 * (columnWidth + margin)));
+          createColumns(nColumns);
+
+          var smallImages = [];
+          for (var i = 0; i < images.length; ++i) {
+            var image = images[i];
+            var column = getMinColumn();
+            if (Math.random() > 0.8) { // is big?
+              addColumnElem(column * 2, image, true);
+              heights[column] += 2;
+            } else {
+              smallImages.push(image);
+              if (smallImages.length === 2) {
+                addColumnElem(column * 2, smallImages[0], false);
+                addColumnElem(column * 2 + 1, smallImages[1], false);
+                heights[column] += 1;
+                smallImages = [];
+              }
+            }
+          }
+          if (smallImages.length) {
+            column = getMinColumn();
+            addColumnElem(column * 2, smallImages[0], false);
+          }
+        }
+
+        var fragment = document.createDocumentFragment();
+        var divs = [];
+        mediaItems.forEach(function(item) {
+          var div = document.createElement('div');
+          div.classList.add('mediaItem');
+          div.style.position = 'absolute'
+          item.classList.add('photoBorder');
+          item.classList.add('gallery');
+          /*
+          var anchor = document.createElement('a');
+          anchor.href = item.dataset.microposturl;
+          anchor.setAttribute('target', '_newtab');
+          anchor.appendChild(div);
+          fragment.appendChild(anchor);
+          */
+          div.style.backgroundImage = 'url(' + item.dataset.posterurl + ')';
+          div.style.backgroundSize = 'cover';
+          /*
+          var favicon = document.createElement('img');
+          favicon.classList.add('favicon');
+          favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
+              '.png';
+          div.appendChild(favicon);
+          var close = document.createElement('span');
+          close.classList.add('close');
+          close.innerHTML = 'X';
+          div.appendChild(close);
+          */
+          fragment.appendChild(div);
+          divs.push(div);
+        });
+        var mediaGallery = document.getElementById('mediaGallery');
+        mediaGallery.innerHTML = '';
+        mediaGallery.appendChild(fragment);
+        calculateSizes(divs);
+      }
+      facebook();
     }
   };
 
