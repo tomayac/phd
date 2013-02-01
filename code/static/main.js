@@ -11,6 +11,7 @@
     statusMessageTimeout: null,
     canvas: null,
     ctx: null,
+    mediaGalleryResizeFunction: null,
 
     // app logic
     queries: {},
@@ -378,6 +379,13 @@
       var mediaGalleryTab = document.getElementById('tab2');
       mediaGalleryTab.addEventListener('click', function() {
         illustrator.createMediaGallery();
+      });
+
+      // whenever we don't look at the media gallery, make it empty
+      var mediaClustersTab = document.getElementById('tab1');
+      mediaClustersTab.addEventListener('click', function() {
+        var mediaGallery = document.getElementById('mediaGallery');
+        mediaGallery.innerHTML = '';
       });
 
       // reset button
@@ -1170,6 +1178,7 @@
           };
 
           var getHeight = function(images, width) {
+            width -= images.length * 5;
             var h = 0;
             for (var i = 0; i < images.length; ++i) {
               h += images[i].dataset.width / images[i].dataset.height;
@@ -1213,10 +1222,13 @@
           mediaGallery.appendChild(fragment);
           calculateSizes(mediaItems);
 
-          var resizeWindow = function() {
+          window.removeEventListener('resize',
+              illustrator.mediaGalleryResizeFunction);
+          illustrator.mediaGalleryResizeFunction = function() {
             calculateSizes(mediaItems);
           };
-          window.addEventListener('resize', resizeWindow, false);
+          window.addEventListener('resize',
+              illustrator.mediaGalleryResizeFunction);
         }
       },
       looseOrder: {
@@ -1230,14 +1242,14 @@
           var dimensions = columnSize * columnSize;
           var margin = 5;
 
-          function createColumns(n) {
+          var createColumns = function(n) {
             heights = [];
             for (var i = 0; i < n; ++i) {
               heights.push(0);
             }
-          }
+          };
 
-          function getMinColumn() {
+          var getMinColumn = function() {
             var minHeight = Infinity;
             var iMin = -1;
             for (var i = 0; i < heights.length; ++i) {
@@ -1247,9 +1259,9 @@
               }
             }
             return iMin;
-          }
+          };
 
-          function addColumnElem(i, elem, isBig) {
+          var addColumnElem = function(i, elem, isBig) {
             elem.style.marginLeft = margin + (columnSize + margin) * i;
             elem.style.marginTop = heights[Math.floor(i / 2)] *
                 (columnSize + margin);
@@ -1269,10 +1281,10 @@
               mediaItem.style.height = height;
               mediaItem.style.width = height * aspectRatio;
             }
-          }
+          };
 
-          function calculateSizes(images) {
-            var size = mediaGallery.clientWidth - 50;
+          var calculateSizes = function(images) {
+            var size = mediaGallery.clientWidth - 20;
             var nColumns = Math.floor(size / (2 * (columnSize + margin)));
             createColumns(nColumns);
 
@@ -1298,7 +1310,7 @@
               column = getMinColumn();
               addColumnElem(column * 2, smallImages[0], false);
             }
-          }
+          };
 
           var fragment = document.createDocumentFragment();
           var divs = [];
@@ -1337,10 +1349,13 @@
           mediaGallery.appendChild(fragment);
           calculateSizes(divs);
 
-          var resizeWindow = function() {
+          window.removeEventListener('resize',
+              illustrator.mediaGalleryResizeFunction);
+          illustrator.mediaGalleryResizeFunction = function() {
             calculateSizes(divs);
           };
-          window.addEventListener('resize', resizeWindow, false);
+          window.addEventListener('resize',
+              illustrator.mediaGalleryResizeFunction);
         }
       }
     },
