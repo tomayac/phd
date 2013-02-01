@@ -174,8 +174,8 @@ input.number {
 
 .favicon {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  top: 10px;
+  left: 10px;
 }
 
 .close {
