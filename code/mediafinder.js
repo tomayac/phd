@@ -1466,7 +1466,7 @@ var mediaFinder = {
                     cleanVideoUrl(url, function(cleanedVideoUrl) {
                       results.push({
                         mediaUrl: cleanedVideoUrl,
-                        posterUrl: item.thumbnail.sqDefault,
+                        posterUrl: item.thumbnail.hqDefault,
                         micropostUrl: url,
                         micropost: cleanMicropost(
                             item.title + '. ' + item.description),

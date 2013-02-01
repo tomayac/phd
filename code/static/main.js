@@ -4,8 +4,7 @@
     DEBUG: true,
     MEDIA_SERVER: 'http://localhost:8001/search/combined/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
-    MAX_INT: 9007199254740992,
-    MAX_MEDIA_GALLERY_ROW_HEIGHT: 200,
+    MAX_ROW_HEIGHT: 200,
     SIMILAR_TILES_FACTOR: 0.8,
 
     // global state
@@ -59,6 +58,21 @@
       }
       rankBySelect.addEventListener('change', function() {
         illustrator.rankClusters();
+      });
+
+      var mediaGalleryAlgorithmSelect =
+          document.getElementById('mediaGalleryAlgorithm');
+      for (var algorithm in illustrator.mediaGalleryAlgorithms) {
+        var option = document.createElement('option');
+        option.innerHTML = illustrator.mediaGalleryAlgorithms[algorithm].name;
+        option.value = algorithm;
+        if (algorithm === 'looseOrder') {
+          option.setAttribute('selected', 'selected');
+        }
+        mediaGalleryAlgorithmSelect.appendChild(option);
+      }
+      mediaGalleryAlgorithmSelect.addEventListener('change', function() {
+        illustrator.createMediaGallery();
       });
 
       var weightChanged = function(e) {
@@ -437,7 +451,7 @@
             // we need to find a new cluster identifier within all members
             } else {
               var dimensions = -1;
-              var timestamp = illustrator.MAX_INT;
+              var timestamp = Infinity;
               var maxDimensionsIndex = -1;
               cluster.members.forEach(function(member, index) {
                 var mediaItem = illustrator.mediaItems[member];
@@ -812,10 +826,9 @@
     },
     calculateDimensions: function(mediaItem) {
       // always prefer video over photo, so set the dimensions of videos
-      // to MAX_INT, which overrules even high-res photos
+      // to Infinity, which overrules even high-res photos
       return (mediaItem.type === 'video' ?
-          illustrator.MAX_INT :
-          mediaItem.fullImage.width * mediaItem.fullImage.height);
+          Infinity : mediaItem.fullImage.width * mediaItem.fullImage.height);
     },
     clusterMediaItems: function(opt_outer, opt_inner) {
       illustrator.showStatusMessage('Clustering media items');
@@ -932,14 +945,15 @@
           clusterStatistics[clusterSize] = 1;
         }
       });
-      var html = '<strong>Media Items:</strong> ' + numMediaItems + '<br/>';
-      html += '<strong>Clusters:</strong> ' + numClusters + '<br/>';
+      var html = '<small><strong>Media Items:</strong> ' + numMediaItems;
+      html += '<br/><strong>Clusters:</strong> ' + numClusters + '<br/>';
       Object.keys(clusterStatistics).sort(function(a, b) {
         return b - a;
       }).forEach(function(size) {
         html += ' <strong>Clusters with ' + size +
             ' Members:</strong> ' + clusterStatistics[size] + '<br/>';
       });
+      html += '</small>';
       document.getElementById('statistics').innerHTML = html;
     },
     mergeClusterData: function() {
@@ -1064,9 +1078,8 @@
     createClusterPreview: function() {
       illustrator.showStatusMessage('Creating cluster preview');
 
-      var getMediaItemHtml = function(mediaItem, opt_isFirst) {
-        var firstMediaItem = opt_isFirst ? ' firstMediaItem' : '';
-        var isRepresentative = opt_isFirst ? ' representative' : '';
+      var getMediaItemHtml = function(mediaItem, opt_isLast) {
+        var lastMediaItem = opt_isLast ? ' lastMediaItem' : '';
         var hasFaces = mediaItem.faces.length ? ' face' : '';
         var url = illustrator.PROXY_SERVER +
             encodeURIComponent(mediaItem.posterUrl);
@@ -1074,9 +1087,9 @@
             mediaItem.thumbnail.width) + 'px;';
         var service = mediaItem.origin.toLowerCase() + '.png';
         return '' +
-            '<div class="mediaItem' + firstMediaItem + '">' +
+            '<div class="mediaItem' + lastMediaItem + '">' +
               '<a target="_newtab" href="' + mediaItem.micropostUrl + '">' +
-                '<img class="photo photoBorder' + isRepresentative + hasFaces +
+                '<img class="photo photoBorder' + hasFaces +
                     '" src="' + url + '" data-posterurl="' + url + '"/>' +
               '</a>' +
               '<img class="favicon" src="./resources/' + service + '"/>' +
@@ -1109,11 +1122,12 @@
       illustrator.clusters.forEach(function(cluster) {
         var mediaItemHtml = '';
         var mediaItem = illustrator.mediaItems[cluster.identifier];
-        mediaItemHtml += getMediaItemHtml(mediaItem, true);
+        var length = cluster.members.length - 1;
+        mediaItemHtml += getMediaItemHtml(mediaItem, length === -1);
 
-        cluster.members.forEach(function(url) {
+        cluster.members.forEach(function(url, i) {
           var member = illustrator.mediaItems[url];
-          mediaItemHtml += getMediaItemHtml(member);
+          mediaItemHtml += getMediaItemHtml(member, i === length);
         });
         html += getClusterHtml(mediaItemHtml);
       });
@@ -1126,9 +1140,211 @@
         illustrator.createMediaGallery();
       }
     },
-    createMediaGallery: function() {
-      illustrator.showStatusMessage('Creating media gallery');
+    mediaGalleryAlgorithms: {
+      strictOrder: {
+        name: 'Strict order, equal size',
+        func: function(mediaItems) {
+          // media gallery algorithm credits to
+          // http://blog.vjeux.com/2012/image/-
+          // image-layout-algorithm-google-plus.html
+          var heights = [];
 
+          var calculateSizes = function(images) {
+            var size = mediaGallery.clientWidth - 20;
+            var n = 0;
+            w: while (images.length > 0) {
+              for (var i = 1; i < images.length + 1; ++i) {
+                var slice = images.slice(0, i);
+                var h = getHeight(slice, size);
+                if (h < illustrator.MAX_ROW_HEIGHT) {
+                  setHeight(slice, h);
+                  n++;
+                  images = images.slice(i);
+                  continue w;
+                }
+              }
+              setHeight(slice, Math.min(illustrator.MAX_ROW_HEIGHT, h));
+              n++;
+              break;
+            }
+          };
+
+          var getHeight = function(images, width) {
+            var h = 0;
+            for (var i = 0; i < images.length; ++i) {
+              h += images[i].dataset.width / images[i].dataset.height;
+            }
+            return (width / h);
+          };
+
+          var setHeight = function(images, height) {
+            heights.push(height);
+            for (var i = 0; i < images.length; ++i) {
+              images[i].style.width = (height * images[i].dataset.width /
+                  images[i].dataset.height);
+              images[i].style.height = height;
+            }
+          };
+
+          var fragment = document.createDocumentFragment();
+          mediaItems.forEach(function(item) {
+            var div = document.createElement('div');
+            fragment.appendChild(div);
+            div.classList.add('mediaItem');
+            item.classList.add('photoBorder');
+            item.classList.add('gallery');
+            var anchor = document.createElement('a');
+            anchor.href = item.dataset.microposturl;
+            anchor.setAttribute('target', '_newtab');
+            anchor.appendChild(item);
+            div.appendChild(anchor);
+            var favicon = document.createElement('img');
+            favicon.classList.add('favicon');
+            favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
+                '.png';
+            div.appendChild(favicon);
+            var close = document.createElement('span');
+            close.classList.add('close');
+            close.innerHTML = 'X';
+            div.appendChild(close);
+          });
+          var mediaGallery = document.getElementById('mediaGallery');
+          mediaGallery.innerHTML = '';
+          mediaGallery.appendChild(fragment);
+          calculateSizes(mediaItems);
+
+          var resizeWindow = function() {
+            calculateSizes(mediaItems);
+          };
+          window.addEventListener('resize', resizeWindow, false);
+        }
+      },
+      looseOrder: {
+        name: 'Loose order, varying size',
+        func: function(mediaItems) {
+          // media gallery algorithm credits to
+          // http://blog.vjeux.com/2012/image/-
+          // image-layout-algorithm-facebook.html
+          var heights = [];
+          var columnSize = illustrator.MAX_ROW_HEIGHT;
+          var dimensions = columnSize * columnSize;
+          var margin = 5;
+
+          function createColumns(n) {
+            heights = [];
+            for (var i = 0; i < n; ++i) {
+              heights.push(0);
+            }
+          }
+
+          function getMinColumn() {
+            var minHeight = Infinity;
+            var iMin = -1;
+            for (var i = 0; i < heights.length; ++i) {
+              if (heights[i] < minHeight) {
+                minHeight = heights[i];
+                iMin = i;
+              }
+            }
+            return iMin;
+          }
+
+          function addColumnElem(i, elem, isBig) {
+            elem.style.marginLeft = margin + (columnSize + margin) * i;
+            elem.style.marginTop = heights[Math.floor(i / 2)] *
+                (columnSize + margin);
+            var width = isBig ? columnSize * 2 + margin : columnSize;
+            var height = isBig ? columnSize * 2 + margin : columnSize;
+            elem.style.width = width;
+            elem.style.height = height;
+            var mediaItem = elem.firstChild.firstChild;
+            var mediaItemWidth = parseInt(mediaItem.dataset.width, 10);
+            var mediaItemHeight = parseInt(mediaItem.dataset.height, 10);
+            var aspectRatio = mediaItemWidth / mediaItemHeight;
+            var min = Math.min(mediaItemHeight, mediaItemWidth);
+            if (min === mediaItemWidth) {
+              mediaItem.style.width = width;
+              mediaItem.style.height = width / aspectRatio;
+            } else {
+              mediaItem.style.height = height;
+              mediaItem.style.width = height * aspectRatio;
+            }
+          }
+
+          function calculateSizes(images) {
+            var size = mediaGallery.clientWidth - 50;
+            var nColumns = Math.floor(size / (2 * (columnSize + margin)));
+            createColumns(nColumns);
+
+            var smallImages = [];
+            for (var i = 0; i < images.length; ++i) {
+              var image = images[i];
+              var column = getMinColumn();
+              if ((image.dataset.width * image.dataset.height > dimensions) &&
+                  (Math.random() > 0.5)) {
+                addColumnElem(column * 2, image, true);
+                heights[column] += 2;
+              } else {
+                smallImages.push(image);
+                if (smallImages.length === 2) {
+                  addColumnElem(column * 2, smallImages[0], false);
+                  addColumnElem(column * 2 + 1, smallImages[1], false);
+                  heights[column] += 1;
+                  smallImages = [];
+                }
+              }
+            }
+            if (smallImages.length) {
+              column = getMinColumn();
+              addColumnElem(column * 2, smallImages[0], false);
+            }
+          }
+
+          var fragment = document.createDocumentFragment();
+          var divs = [];
+          mediaItems.forEach(function(item) {
+            var div = document.createElement('div');
+            div.classList.add('mediaItem');
+            div.classList.add('gallery');
+            div.style.position = 'absolute';
+            div.style.overflow = 'hidden';
+            div.dataset.width = item.dataset.width;
+            div.dataset.height = item.dataset.height;
+            item.classList.add('photoBorder');
+            item.classList.add('gallery');
+
+            var anchor = document.createElement('a');
+            anchor.href = item.dataset.microposturl;
+            anchor.setAttribute('target', '_newtab');
+            div.appendChild(anchor);
+            anchor.appendChild(item);
+
+            var favicon = document.createElement('img');
+            favicon.classList.add('favicon');
+            favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
+                '.png';
+            div.appendChild(favicon);
+
+            var close = document.createElement('span');
+            close.classList.add('close');
+            close.innerHTML = 'X';
+            div.appendChild(close);
+            fragment.appendChild(div);
+            divs.push(div);
+          });
+          var mediaGallery = document.getElementById('mediaGallery');
+          mediaGallery.innerHTML = '';
+          mediaGallery.appendChild(fragment);
+          calculateSizes(divs);
+
+          var resizeWindow = function() {
+            calculateSizes(divs);
+          };
+          window.addEventListener('resize', resizeWindow, false);
+        }
+      }
+    },
+    createMediaGallery: function() {
       var mediaItems = [];
       illustrator.clusters.forEach(function(cluster) {
         var mediaItem = illustrator.mediaItems[cluster.identifier];
@@ -1149,182 +1365,12 @@
         mediaItems.push(item);
       });
 
-
-      function googlePlus() {
-        // media gallery algorithm credits to
-        // http://blog.vjeux.com/2012/image/-
-        // image-layout-algorithm-google-plus.html
-        var heights = [];
-
-        var calculateSizes = function(images, maxHeight) {
-          var size = mediaGallery.clientWidth - 20;
-          var n = 0;
-          w: while (images.length > 0) {
-            for (var i = 1; i < images.length + 1; ++i) {
-              var slice = images.slice(0, i);
-              var h = getHeight(slice, size);
-              if (h < maxHeight) {
-                setHeight(slice, h);
-                n++;
-                images = images.slice(i);
-                continue w;
-              }
-            }
-            setHeight(slice, Math.min(maxHeight, h));
-            n++;
-            break;
-          }
-        };
-
-        var getHeight = function(images, width) {
-          var h = 0;
-          for (var i = 0; i < images.length; ++i) {
-            h += images[i].dataset.width / images[i].dataset.height;
-          }
-          return (width / h);
-        };
-
-        var setHeight = function(images, height) {
-          heights.push(height);
-          for (var i = 0; i < images.length; ++i) {
-            images[i].style.width = (height * images[i].dataset.width /
-                images[i].dataset.height);
-            images[i].style.height = height;
-          }
-        };
-
-        var fragment = document.createDocumentFragment();
-        mediaItems.forEach(function(item) {
-          var div = document.createElement('div');
-          fragment.appendChild(div);
-          div.classList.add('mediaItem');
-          item.classList.add('photoBorder');
-          item.classList.add('gallery');
-          var anchor = document.createElement('a');
-          anchor.href = item.dataset.microposturl;
-          anchor.setAttribute('target', '_newtab');
-          anchor.appendChild(item);
-          div.appendChild(anchor);
-          var favicon = document.createElement('img');
-          favicon.classList.add('favicon');
-          favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
-              '.png';
-          div.appendChild(favicon);
-          var close = document.createElement('span');
-          close.classList.add('close');
-          close.innerHTML = 'X';
-          div.appendChild(close);
-        });
-        var mediaGallery = document.getElementById('mediaGallery');
-        calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
-        mediaGallery.innerHTML = '';
-        mediaGallery.appendChild(fragment);
-
-        var resizeWindow = function() {
-          calculateSizes(mediaItems, illustrator.MAX_MEDIA_GALLERY_ROW_HEIGHT);
-        };
-        window.addEventListener('resize', resizeWindow, false);
-      }
-
-      function facebook() {
-console.log('Running Facebook');
-        var heights = [];
-        var columnWidth = 200;
-        var margin = 5;
-        var delta = 20;
-
-        function createColumns(n) {
-          heights = [];
-          for (var i = 0; i < n; ++i) {
-            heights.push(0);
-          }
-        }
-
-        function getMinColumn() {
-          var minHeight = Infinity;
-          var iMin = -1;
-          for (var i = 0; i < heights.length; ++i) {
-            if (heights[i] < minHeight) {
-              minHeight = heights[i];
-              iMin = i;
-            }
-          }
-          return iMin;
-        }
-
-        function addColumnElem(i, elem, isBig) {
-          elem.style.marginLeft = margin + (columnWidth + margin) * i;
-          elem.style.marginTop = heights[Math.floor(i / 2)] * (columnWidth + margin);
-          elem.style.width = isBig ? columnWidth * 2 + margin : columnWidth;
-          elem.style.height = isBig ? columnWidth * 2 + margin : columnWidth;
-        }
-
-        function calculateSizes(images) {
-console.log('Running Facebook calculateSizes');
-          var size = mediaGallery.clientWidth - 50;
-          var nColumns = Math.floor(size / (2 * (columnWidth + margin)));
-          createColumns(nColumns);
-
-          var smallImages = [];
-          for (var i = 0; i < images.length; ++i) {
-            var image = images[i];
-            var column = getMinColumn();
-            if (Math.random() > 0.8) { // is big?
-              addColumnElem(column * 2, image, true);
-              heights[column] += 2;
-            } else {
-              smallImages.push(image);
-              if (smallImages.length === 2) {
-                addColumnElem(column * 2, smallImages[0], false);
-                addColumnElem(column * 2 + 1, smallImages[1], false);
-                heights[column] += 1;
-                smallImages = [];
-              }
-            }
-          }
-          if (smallImages.length) {
-            column = getMinColumn();
-            addColumnElem(column * 2, smallImages[0], false);
-          }
-        }
-
-        var fragment = document.createDocumentFragment();
-        var divs = [];
-        mediaItems.forEach(function(item) {
-          var div = document.createElement('div');
-          div.classList.add('mediaItem');
-          div.style.position = 'absolute'
-          item.classList.add('photoBorder');
-          item.classList.add('gallery');
-          /*
-          var anchor = document.createElement('a');
-          anchor.href = item.dataset.microposturl;
-          anchor.setAttribute('target', '_newtab');
-          anchor.appendChild(div);
-          fragment.appendChild(anchor);
-          */
-          div.style.backgroundImage = 'url(' + item.dataset.posterurl + ')';
-          div.style.backgroundSize = 'cover';
-          /*
-          var favicon = document.createElement('img');
-          favicon.classList.add('favicon');
-          favicon.src = './resources/' + item.dataset.origin.toLowerCase() +
-              '.png';
-          div.appendChild(favicon);
-          var close = document.createElement('span');
-          close.classList.add('close');
-          close.innerHTML = 'X';
-          div.appendChild(close);
-          */
-          fragment.appendChild(div);
-          divs.push(div);
-        });
-        var mediaGallery = document.getElementById('mediaGallery');
-        mediaGallery.innerHTML = '';
-        mediaGallery.appendChild(fragment);
-        calculateSizes(divs);
-      }
-      facebook();
+      var mediaGalleryAlgorithmSelect =
+          document.getElementById('mediaGalleryAlgorithm');
+      var algorithm = mediaGalleryAlgorithmSelect.selectedOptions[0].value;
+      illustrator.showStatusMessage('Creating media gallery of type ' +
+          algorithm);
+      illustrator.mediaGalleryAlgorithms[algorithm].func(mediaItems);
     }
   };
 

@@ -15,7 +15,7 @@
         <input type="radio" id="tab1" name="tabGroup">
         <label for="tab1">Media Item Clusters</label>
         <div class="content">
-          <div id="settings">
+          <div id="mediaClusterSettings">
             <form method="get" id="searchForm">
               <fieldset>
                 <input name="query" id="query" autofocus="autofocus" placeholder="Query"/>
@@ -24,7 +24,7 @@
 
                 <button id="reset">Reset</button>
               </fieldset>
-              <fieldset>
+              <fieldset style="float:left;">
                 <input type="range" id="threshold"/>
                 <label for="threshold" id="thresholdLabel"></label> Similarity Threshold
                 <br/>
@@ -43,20 +43,20 @@
 
                 <input type="range" id="cols"/>
                 <label for="cols" id="colsLabel"></label> Columns
-                <br/>
-
+              </fieldset>
+              <fieldset>
                 <input type="checkbox" id="luminance"/>
                 <label id="luminanceLabel" for="luminance">Account for Luminance</label>
                 <br/>
 
                 <input type="checkbox" id="faces"/>
                 <label id="facesLabel" for="faces">Account for Faces</label>
-              </fieldset>
-              <fieldset>
+                <br/>
+
                 <select id="rankBy"></select>
                 <label for="rankBy">Cluster Ranking Criterion</label>
-
                 <br/>
+
                 <input class="number" name="likes" id="likesWeight" type="number"/>
                 <label for="likesWeight">Likes</label>
 
@@ -71,8 +71,8 @@
 
                 <input class="number" name="crossNetwork" id="crossNetworkWeight" type="number"/>
                 <label for="crossNetworkWeight">Cross-Network</label>
-
                 <br/>
+
                 <input type="range" id="maxAge"/>
                 <label id="maxAgeLabel" for="maxAge"></label> Maximum Age
               </fieldset>
@@ -89,17 +89,14 @@
         <input type="radio" id="tab2" name="tabGroup">
         <label for="tab2">Media Gallery</label>
         <div class="content">
-          <button id="playAllVideos">Play all videos</button>
-          <button id="muteAllVideos">Mute all videos</button>
-          <div id="mediaGallery"></div>
-        </div>
-      </div>
+          <div id="mediaGallerySettings">
+            <button id="playAllVideos">Play all videos</button>
+            <button id="muteAllVideos">Mute all videos</button>
+            <select id="mediaGalleryAlgorithm"></select>
+            <label for="mediaGalleryAlgorithm">Media Gallery Algorithm</label>
+          </div>
 
-      <div class="tab">
-        <input type="radio" id="tab3" name="tabGroup">
-        <label for="tab3">Debug</label>
-        <div class="content">
-          <div id="debug"></div>
+          <div id="mediaGallery"></div>
         </div>
       </div>
 

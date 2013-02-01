@@ -21,12 +21,12 @@ fieldset {
 }
 
 input.number {
-  width: 4em;
+  width: 3em;
 }
 
 #statusMessages {
   position: absolute;
-  top:10px;
+  top: 10px;
   right: 10px;
   background-color: red;
   color: white;
@@ -46,18 +46,43 @@ input.number {
 #querylog {
   margin: 0 0.75em;
   float: left;
+  height: 4em;
+  width: 100%;
+  overflow: auto;
 }
 
 #mediaItemClusters {
   clear: both;
-  margin-top: 22em;
-  height: calc(100% - 22em);
-  height: -webkit-calc(100% - 22em);
+  margin-top: 15em;
+  height: calc(100% - 15em);
+  height: -webkit-calc(100% - 15em);
+  width: calc(100% - 5px);
+  width: -webkit-calc(100% - 5px);
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-#settings {
+#mediaGallery {
+  clear: both;
+  margin-top: 3em;
+  height: calc(100% - 4em);
+  height: -webkit-calc(100% - 4em);
+  width: calc(100% - 5px);
+  width: -webkit-calc(100% - 5px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position:absolute;
+}
+
+#mediaClusterSettings {
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  width: calc(100% - 5px);
+  width: -webkit-calc(100% - 5px);
+}
+
+#mediaGallerySettings {
   position: fixed;
   background-color: white;
   z-index: 1;
@@ -95,7 +120,7 @@ input.number {
   bottom: 0;
   padding: 0.1em;
   border: 1px solid #ccc;
-  overflow: auto;
+  overflow: hidden;
 }
 
 [type=radio]:checked ~ label {
@@ -105,7 +130,7 @@ input.number {
 }
 
 [type=radio]:checked ~ label ~ .content {
-  z-index: 1;
+  z-index: 2;
 }
 
 [type=radio]:unchecked ~ label ~ .content {
@@ -121,11 +146,15 @@ input.number {
 .mediaItem {
   float: left;
   position: relative;
-  margin: 2px -14px 2px 2px;
+  margin: 2px;
 }
 
-.firstMediaItem {
-  margin-left: 50px;
+.lastMediaItem {
+  margin-right: 50px;
+}
+
+.gallery {
+  background-color: black;
 }
 
 .photo {
@@ -138,18 +167,14 @@ input.number {
   outline-offset: -1px;
 }
 
-.representative {
-  border-left: solid orange 3px;
-}
-
 .face {
   border-right: solid red 3px;
 }
 
 .favicon {
-  position: relative;
-  top: -8px;
-  left: -25px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 .close {
@@ -159,7 +184,7 @@ input.number {
   border-radius: 5px;
   position: absolute;
   top: 10px;
-  right: 20px;
+  right: 10px;
   width: 15px;
   text-align: center;
   cursor: pointer;
