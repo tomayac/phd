@@ -8,9 +8,10 @@
     SIMILAR_TILES_FACTOR: 0.8,
 
     // global state
-    statusMessageTimeout: null,
     canvas: null,
     ctx: null,
+    statusMessagesTimeout: null,
+    statusMessages: document.getElementById('statusMessages'),
     mediaGalleryResizeFunction: null,
 
     // app logic
@@ -506,11 +507,11 @@
       document.getElementById('mediaItemClusters').innerHTML = '';
       document.getElementById('queryLog').innerHTML = '';
       document.getElementById('statistics').innerHTML = '';
-      document.getElementById('statusMessages').innerHTML = '';
       document.getElementById('mediaGallery').innerHTML = '';
       document.getElementById('query').value = '';
       document.getElementById('tab1').checked = true;
-      illustrator.statusMessageTimeout = null;
+      illustrator.statusMessages.innerHTML = '';
+      illustrator.statusMessagesTimeout = null;
       illustrator.queries = {};
       illustrator.mediaItems = {};
       illustrator.micropostUrls = {};
@@ -519,13 +520,13 @@
 
     showStatusMessage: function(message) {
       if (illustrator.DEBUG) console.log(message);
-      var statusMessage = document.getElementById('statusMessages');
-      statusMessage.innerHTML = message;
-      if (illustrator.statusMessageTimeout) {
-        clearTimeout(illustrator.statusMessageTimeout);
+      illustrator.statusMessages.innerHTML = message;
+      if (illustrator.statusMessagesTimeout) {
+        clearTimeout(illustrator.statusMessagesTimeout);
+        illustrator.statusMessagesTimeout = null;
       }
-      illustrator.statusMessageTimeout = setTimeout(function() {
-        statusMessage.innerHTML = '';
+      illustrator.statusMessagesTimeout = setTimeout(function() {
+        illustrator.statusMessages.innerHTML = '';
       }, 3000);
     },
 
@@ -1178,7 +1179,7 @@
           };
 
           var getHeight = function(images, width) {
-            width -= images.length * 5;
+            width -= images.length * 4;
             var h = 0;
             for (var i = 0; i < images.length; ++i) {
               h += images[i].dataset.width / images[i].dataset.height;
@@ -1240,7 +1241,7 @@
           var heights = [];
           var columnSize = illustrator.MAX_ROW_HEIGHT;
           var dimensions = columnSize * columnSize;
-          var margin = 5;
+          var margin = 4;
 
           var createColumns = function(n) {
             heights = [];
