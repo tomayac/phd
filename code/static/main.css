@@ -47,7 +47,7 @@ input.number {
   margin: 0 0.75em;
   float: left;
   height: 4em;
-  width: 100%;
+  width: -webkit-calc(100% - 15em);
   overflow: auto;
 }
 
