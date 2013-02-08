@@ -15,12 +15,13 @@ to deduplicate exact duplicate and near-duplicate media items.
 In this chapter, we introduce ranking criteria and methods
 to put deduplicated media clusters in a~well-defined order.
 The application screenshots that can be seen in \autoref{fig:topvsfashionshow}
-and \autoref{fig:topgrammy} show the most intuitive ranking criterion
-one can imagine: ranking by occurrence popularity.
+and \autoref{fig:topgrammy} show the---besides publication time (or recency)---%
+most intuitive ranking criterion one can imagine:
+ranking by occurrence popularity.
 The more often a~media item (or a~near-duplicate of it)
 appears in any of the considered social networks, 
 the higher it should be ranked.
-Essentially, ranking by occurrence popularity (or media item cluster size)
+However, ranking by occurrence popularity (or media item cluster size)
 disregards one of the most valuable features of social networks: 
 the social aspects.
 In consequence, in this chapter, we will introduce
@@ -108,6 +109,14 @@ video and music playlist generation~\cite{knees2006musicplaylist,davidson2010vid
 however, to the best of our knowledge,
 no media gallery composition aesthetics studies exist
 that examine mixing video \emph{and} photo media items.
+
+\subsection{Temporal Ranking Criteria}
+
+This category regards the publication date of media items.
+If media items are clustered, we use the youngest media item
+as cluster representative.
+Media items can be ranked by recency, as oftentimes more recent items
+are more interesting in the streaming context of social networks.
 
 \section{Social Interactions Abstraction Layer}
 

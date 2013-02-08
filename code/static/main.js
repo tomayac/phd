@@ -37,6 +37,7 @@
       crossNetwork: 1
     },
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+    mediaGallerySize: 25,
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -234,6 +235,21 @@
             this.innerHTML = 'Unmute all videos';
           }
         }
+      });
+
+      var mediaGallerySize = document.getElementById('mediaGallerySize');
+      var mediaGallerySizeLabel =
+          document.getElementById('mediaGallerySizeLabel');
+      mediaGallerySize.min = 5;
+      mediaGallerySize.max = 100;
+      mediaGallerySize.value = illustrator.mediaGallerySize;
+      mediaGallerySizeLabel.innerHTML = illustrator.mediaGallerySize;
+      mediaGallerySize.addEventListener('change', function() {
+        mediaGallerySizeLabel.innerHTML = mediaGallerySize.value;
+      });
+      mediaGallerySize.addEventListener('mouseup', function() {
+        illustrator.mediaGallerySize = mediaGallerySize.value;
+        illustrator.createMediaGallery();
       });
 
       var maxAge = document.getElementById('maxAge');
@@ -1362,7 +1378,10 @@
     },
     createMediaGallery: function() {
       var mediaItems = [];
-      illustrator.clusters.forEach(function(cluster) {
+      illustrator.clusters.forEach(function(cluster, counter) {
+        if (counter >= illustrator.mediaGallerySize) {
+          return;
+        }
         var mediaItem = illustrator.mediaItems[cluster.identifier];
         var item;
         if (mediaItem.type === 'photo') {

@@ -6,7 +6,8 @@
     "request": "2.11.x",
     "socket.io": "0.9.x",
     "jsdom": "0.2.x",
-    "pos": "0.1.x"
+    "pos": "0.1.x",
+    "natural": "0.1.x"
   },
   "engines": {
     "node": "0.8.x",
