@@ -119,6 +119,7 @@ Media items can be ranked by recency, as oftentimes more recent items
 are more interesting in the streaming context of social networks.
 
 \section{Social Interactions Abstraction Layer}
+\label{sec:social-interactions-abstraction-layer}
 
 As we have described in \autoref{cha:social-networks},
 social networks have different paradigms of social interactions.
@@ -208,6 +209,7 @@ as instances of the following network-specific social interactions:
 \end{small_itemize}
 
 \section{Merging Social Interactions}
+\label{sec:merging-social-interactions}
 
 If a~set of media items is similar enough to be clustered
 under the criteria that were detailed in
@@ -280,7 +282,20 @@ In this section, we finally describe a~ranking formula to rank
 a~set of media clusters that match a~given query.
 
 In the ranking formula, we consider all the previously defined ranking criteria,
-namely these are visual, audial, textual, social, and aesthetic.
+namely these are visual, audial, textual, temporal, social, and aesthetic.
+For a~given set of media item clusters, a~ranking is calculated as follows.
+$$ \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
+\gamma \times \mathit{comments} + \delta \times \mathit{views} +
+\epsilon \times \mathit{crossNetwork} + \zeta \times \mathit{recency} $$
+With the weight factors
+$$ \alpha, \beta, \gamma, \delta, \epsilon, \zeta \in \mathbb{N} $$
+The values $ \mathit{likes}, \mathit{shares}, \mathit{comments}, \mathit{views} $
+stem from the individual media items as defined in \autoref{sec:data-format} and 
+were accumulated as defined in \autoref{sec:merging-social-interactions}.
+The value of $ \mathit{crossNetwork} $ corresponds to the length of the current cluster. 
+Finally, the value of $ \mathit{recency} $ is calculated as follows.
+If the youngest media item in the cluster is less than or exactly one day old, the value of
+$ mathit{recency} $ is 8, for two days it is 4, for three days it is 2, and for each day more, the value is 1. 
 
 \section{Evaluation}
 
@@ -365,13 +380,17 @@ on the following topics (in no particular order):
   \item[] the Super Bowl watchers  
 \end{small_itemize}
 
-\autoref{fig:loose_order} and \autoref{fig:strict_order} 
+\autoref{fig:loose_order} and \autoref{fig:strict_order} show media items
+for the two queries 49ers and Baltimore Ravens arranged
+in two different media gallery styles, loose order and strict order.
+For details on media gallery generation, we refer the reader to the upcoming
+\autoref{cha:media-item-compilation}.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.75\linewidth]{loose_order.png}
   \caption[Ranked Super Bowl media gallery in loose order]
-  {Ranked Super Bowl media gallery in loose order \todo{Check final orientation}}
+  {Ranked Super Bowl media gallery in loose order}
   \label{fig:loose_order}
 \end{figure}
 

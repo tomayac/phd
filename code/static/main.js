@@ -34,7 +34,8 @@
       shares: 1,
       comments: 1,
       views: 1,
-      crossNetwork: 1
+      crossNetwork: 1,
+      recency: 1
     },
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
     mediaGallerySize: 25,
@@ -102,6 +103,10 @@
       var crossNetworkWeight = document.getElementById('crossNetworkWeight');
       crossNetworkWeight.value = illustrator.weights.crossNetwork;
       crossNetworkWeight.addEventListener('change', weightChanged);
+
+      var recencyWeight = document.getElementById('recencyWeight');
+      recencyWeight.value = illustrator.weights.recency;
+      recencyWeight.addEventListener('change', weightChanged);
 
       var mouseover = function(e) {
         if ((e.target.nodeName.toLowerCase() !== 'img') &&
@@ -1047,19 +1052,35 @@
       popularity: {
         name: 'Popularity',
         func: function(a, b) {
+          var now = new Date().getTime();
+          var getAgeFactor = function(timestamp) {
+            /* 86400000 = 24 * 60 * 60 * 1000 */
+            var ageInDays = Math.floor((now - timestamp) / 86400000);
+            if (ageInDays <= 1) {
+              return 8;
+            } else if (ageInDays <= 2) {
+              return 4;
+            } else if (ageInDays <= 3) {
+              return 2
+            } else {
+              return 1;
+            }
+          };
           var weights = illustrator.weights;
           var combinedStatsA =
-              weights.likes * a.likes +
-              weights.shares * a.shares +
-              weights.comments * a.comments +
-              weights.views * a.views +
-              weights.crossNetwork * a.members.length;
+              weights.likes * a.statistics.likes +
+              weights.shares * a.statistics.shares +
+              weights.comments * a.statistics.comments +
+              weights.views * a.statistics.views +
+              weights.crossNetwork * a.members.length +
+              weights.recency * getAgeFactor(a.timestamp);
           var combinedStatsB =
-              weights.likes * b.likes +
-              weights.shares * b.shares +
-              weights.comments * b.comments +
-              weights.views * b.views +
-              weights.crossNetwork * b.members.length;
+              weights.likes * b.statistics.likes +
+              weights.shares * b.statistics.shares +
+              weights.comments * b.statistics.comments +
+              weights.views * b.statistics.views +
+              weights.crossNetwork * b.members.length +
+              weights.recency * getAgeFactor(b.timestamp);
           return combinedStatsB - combinedStatsA;
         }
       },
