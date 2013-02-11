@@ -5,7 +5,7 @@
     MEDIA_SERVER: 'http://localhost:8001/search/combined/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     MAX_ROW_HEIGHT: 200,
-    SIMILAR_TILES_FACTOR: 0.8,
+    SIMILAR_TILES_FACTOR: 2/3,
 
     // global state
     canvas: null,
@@ -25,17 +25,17 @@
     cols: 10,
     rows: 10,
     bwTolerance: 1,
-    threshold: 10,
-    similarTiles: 80,
+    threshold: 15,
+    similarTiles: 66,
     considerFaces: true,
     considerLuminance: true,
     weights: {
-      likes: 1,
-      shares: 1,
-      comments: 1,
+      likes: 2,
+      shares: 4,
+      comments: 8,
       views: 1,
-      crossNetwork: 1,
-      recency: 1
+      crossNetwork: 32,
+      recency: 2
     },
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
     mediaGallerySize: 25,
@@ -55,7 +55,7 @@
         var option = document.createElement('option');
         option.innerHTML = illustrator.rankingFormulas[formula].name;
         option.value = formula;
-        if (formula === 'crossNetwork') {
+        if (formula === 'popularity') {
           option.setAttribute('selected', 'selected');
         }
         rankBySelect.appendChild(option);

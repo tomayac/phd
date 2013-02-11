@@ -22,6 +22,7 @@ fieldset {
 
 input.number {
   width: 3em;
+  margin-left: 3em;
 }
 
 #statusMessages {
