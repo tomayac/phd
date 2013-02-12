@@ -274,6 +274,7 @@ return clusterRepresentative
 \end{lstlisting}
 
 \section{Ranking Media Item Clusters}
+\label{sec:ranking-media-item-clusters}
 
 Up to now, we have shown how media item clusters are formed,
 how each cluster's social interactions social interactions data is accumulated,
@@ -376,8 +377,8 @@ on the following topics (in no particular order):
   \item[] the power outage
   \item[] the performances of Beyoncé and Alicia Keys
   \item[] the advertisements
-  \item[] the match itself
-  \item[] the Super Bowl watchers  
+  \item[] the match itself from people at the stadium
+  \item[] the Super Bowl watchers around the world 
 \end{small_itemize}
 
 \autoref{fig:loose_order} and \autoref{fig:strict_order} show media items
@@ -402,6 +403,18 @@ For details on media gallery generation, we refer the reader to the upcoming
   \label{fig:strict_order}
 \end{sidewaysfigure}  
 
+\subsubsection{Evaluation Approach}
+
+We asked three human raters to agree on a~rating for the media items
+that were retrieved for the two queries 49ers and Baltimore Ravens.
+We have made the dataset of media items available%
+\footnote{\url{https://www.dropbox.com/sh/30qwuvphcv49max/ilsaMbSdf6},
+accessed February 12, 2013}.
+We then fine-tuned the weight factors $ \alpha, \beta, \gamma, \delta, \epsilon, \zeta $ of the ranking formula
+that was introduced in \autoref{sec:ranking-media-item-clusters}
+until the highest possible agreement between the human ranking
+and the system-generated ranking was reached.
+Afterwards, we tested the 
 
 \section{Conclusion}
 
