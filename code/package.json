@@ -1,16 +1,17 @@
 {
-  "name": "",
-  "version": "0.0.1",
-  "dependencies": {
-    "express": "3.0.x",
-    "request": "2.11.x",
-    "socket.io": "0.9.x",
-    "jsdom": "0.2.x",
-    "pos": "0.1.x",
-    "natural": "0.1.x"
-  },
-  "engines": {
-    "node": "0.8.x",
-    "npm": "1.1.x"
-  }
+    "name": "social-media-illustrator",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": "3.0.x",
+        "jsdom": "0.2.x",
+        "natural": "0.1.x",
+        "pos": "0.1.x",
+        "request": "2.11.x",
+        "socket.io": "0.9.x",
+        "supervisor": "0.3.x"
+    },
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.1.x"
+    }
 }
