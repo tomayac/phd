@@ -156,7 +156,7 @@ input.number {
 }
 
 .gallery {
-  background-color: black;
+
 }
 
 .photo {
@@ -165,8 +165,7 @@ input.number {
 }
 
 .photoBorder {
-  outline: 1px solid rgba(0, 0, 0, 0.1);
-  outline-offset: -1px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .face {

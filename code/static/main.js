@@ -1238,7 +1238,7 @@
             var div = document.createElement('div');
             fragment.appendChild(div);
             div.classList.add('mediaItem');
-            item.classList.add('photoBorder');
+            div.classList.add('photoBorder');
             item.classList.add('gallery');
             var anchor = document.createElement('a');
             anchor.href = item.dataset.microposturl;
@@ -1360,7 +1360,7 @@
             div.style.overflow = 'hidden';
             div.dataset.width = item.dataset.width;
             div.dataset.height = item.dataset.height;
-            item.classList.add('photoBorder');
+            div.classList.add('photoBorder');
             item.classList.add('gallery');
 
             var anchor = document.createElement('a');

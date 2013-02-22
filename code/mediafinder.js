@@ -1901,7 +1901,7 @@ var mediaFinder = {
 
       var length = serviceNames.length;
       var intervalTimeout = 500;
-      var timeout = 60 * intervalTimeout;
+      var timeout = 40 * intervalTimeout; // 20 seconds
       var passedTime = 0;
       var interval = setInterval(function() {
         passedTime += intervalTimeout;
