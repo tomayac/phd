@@ -132,7 +132,7 @@ that models the network-specific social interaction patterns.
 Those interaction patterns must be exposed by the social network 
 via specific API calls in order to be considered,
 which only is the case for a~subset of the social networks we deal with.
-In the subsections below, we have listed
+In \autoref{table:social-interactions}, we have listed
 how we abstract the social interactions in question on each social network.
 In our concrete implementation, we differ unknown values
 that are returned as \texttt{null}, \emph{i.e.},
@@ -156,57 +156,20 @@ of the abstraction layer's data format:
   \end{description}    
 \end{description}
 
-\subsection{Social Interaction ``Likes''}
-
-We abstract the social interaction of liking a~media item
-as instances of the following network-specific social interactions:
-
-\begin{small_itemize}
-  \item[] Facebook Like
-  \item[] \googleplus \plusone
-  \item[] Instagram Like
-  \item[] Flickr Favorite
-  \item[] YouTube Like, YouTube Favorite
-  \item[] Twitter Favorite
-\end{small_itemize}  
-
-\subsection{Social Interaction ``Shares''}
-
-We abstract the social interaction of resharing a~media item
-as instances of the following network-specific social interactions:
-
-\begin{small_itemize}
-  \item[] Facebook Share
-  \item[] \googleplus Share
-  \item[] Twitter native ReTweet
-\end{small_itemize}
-
-\subsection{Social Interaction ``Comments''}
-
-We abstract the social interaction of commenting on a~media item
-as instances of the following network-specific social interactions:
-
-\begin{small_itemize}
-  \item[] Facebook Comments
-  \item[] \googleplus Comments
-  \item[] Instagram Comments
-  \item[] Twitter manual, non-native ReTweet, @Replies
-  \item[] Twitpic Comments
-  \item[] MobyPicture Comments
-  \item[] Flickr Comments
-\end{small_itemize}
-
-\subsection{Social Interaction ``Views''}
-
-We abstract the social interaction of viewing a~media item
-as instances of the following network-specific social interactions:
-
-\begin{small_itemize}
-  \item[] YouTube Views
-  \item[] Flickr Views
-  \item[] Twitpic Views
-  \item[] Mobypicture Views
-\end{small_itemize}
+\begin{table}[h!]
+  \centering
+  \small
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    Likes & Shares & Comments & Views\\ \hline
+    \pbox[t][4.5cm]{0.2\linewidth}{Facebook Like\\ \googleplus \plusone\\ Instagram Like\\ Flickr Favorite\\ YouTube Like\\ YouTube Favorite\\ Twitter Favorite} & \pbox[t][4.5cm]{0.2\linewidth}{Facebook Share\\ \googleplus Share\\ Twitter ReTweet} & \pbox[t][4.5cm]{0.4\linewidth}{Facebook Comments\\ \googleplus Comments\\ Instagram Comments\\ Twitter manual RT\\ Twitter @Replies\\ Twitpic Comments\\ MobyPicture Comments\\ Flickr Comments} & \pbox[t][4.5cm]{0.2\linewidth}{YouTube Views\\ Flickr Views\\ Twitpic Views\\ MobyPicture Views}\\
+      \hline
+    \end{tabular}
+    \caption[Abstract social network interaction paradigms]
+      {Abstract social network interaction paradigms
+      and their underlying native social network counterparts}
+  \label{table:social-interactions}
+\end{table}
 
 \section{Merging Social Interactions}
 \label{sec:merging-social-interactions}
@@ -279,26 +242,39 @@ return clusterRepresentative
 Up to now, we have shown how media item clusters are formed,
 how each cluster's social interactions social interactions data is accumulated,
 and how a~cluster's representative media item is selected.
-In this section, we finally describe a~ranking formula to rank
+In this section, we describe a~ranking formula to rank
 a~set of media clusters that match a~given query.
-
-In the ranking formula, we consider all the previously defined ranking criteria,
+In the ranking formula, we consider several well-defined ranking criteria
+that were detailed in~\cite{steiner2012definingaesthetic},
 namely these are visual, audial, textual, temporal, social, and aesthetic.
 For a~given set of media item clusters, a~ranking is calculated as follows.
-$$ \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
-\gamma \times \mathit{comments} + \delta \times \mathit{views} +
-\epsilon \times \mathit{crossNetwork} + \zeta \times \mathit{recency} $$
-With the weight factors
-$$ \alpha, \beta, \gamma, \delta, \epsilon, \zeta \in \mathbb{N} $$
-The values $ \mathit{likes}, \mathit{shares}, \mathit{comments}, \mathit{views} $
-stem from the individual media items as defined in \autoref{sec:data-format} and 
-were accumulated as defined in \autoref{sec:merging-social-interactions}.
-The value of $ \mathit{crossNetwork} $ corresponds to the length of the current cluster. 
-Finally, the value of $ \mathit{recency} $ is calculated as follows.
-If the youngest media item in the cluster is less than or exactly one day old, the value of
-$ mathit{recency} $ is 8, for two days it is 4, for three days it is 2, and for each day more, the value is 1.
+
+\begin{gather}
+  \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
+  \gamma \times \mathit{comments} + \delta \times \mathit{views} + \nonumber\\
+  \epsilon \times \mathit{crossNetwork} + \zeta \times \mathit{recency} +
+  \eta \times \mathit{quality}
+\end{gather}
+
+The factors $ \mathit{likes}, \mathit{shares}, \mathit{comments},$ and $ \mathit{views} $
+stem from the individual media items as described in \autoref{sec:social-interactions-abstraction-layer}
+and \autoref{sec:merging-social-interactions}.
+The factor $ \mathit{crossNetwork} $ corresponds to the size of the current cluster. 
+The factor $ \mathit{recency} $ is calculated as follows.
+If the youngest media item in the cluster is less than or exactly one day old,
+the value is 8, for two days it is 4, for three days it is 2,
+and for each day more, the value is 1.
+The factor $ \mathit{quality} $ is a~representation of the
+presence of faces and a~media item's photo or video quality.
+Empirically optimized default values
+that can be fine-tuned for a~concrete media item set
+were determined as follows:
+$ \alpha = 2 $, $ \beta = 4 $ , $ \gamma = 8 $, $ \delta = 1 $,
+$ \epsilon = 32 $, $ \zeta = 2 $, and $ \eta = 8 $.
+We describe the chosen evaluation approach in the upcoming section.
 
 \section{Evaluation}
+\label{sec-chapter7-evaluation}
 
 \subsection{Super Bowl Analyses by Social Networks}
 
@@ -410,11 +386,66 @@ that were retrieved for the two queries 49ers and Baltimore Ravens.
 We have made the dataset of media items available%
 \footnote{\url{https://www.dropbox.com/sh/30qwuvphcv49max/ilsaMbSdf6},
 accessed February 12, 2013}.
-We then fine-tuned the weight factors $ \alpha, \beta, \gamma, \delta, \epsilon, \zeta $ of the ranking formula
+We then fine-tuned the weight factors
+$ \alpha, \beta, \gamma, \delta, \epsilon, \zeta \eta $ of the ranking formula
 that was introduced in \autoref{sec:ranking-media-item-clusters}
-until the highest possible agreement between the human ranking
+until the highest possible agreement between the human-generated ranking
 and the system-generated ranking was reached.
-Afterwards, we tested the 
+Afterwards, we tested these empirically determined weight factors of the ranking formula
+with different events and asked the evaluators to what extent
+on a~MOS scale from 1--5 they agreed with each of the top-10 ranked media items.
+Rating the ranking of all media items is barely possible,
+which is why we limit ourselves to rating the top-10 returned results,
+a~technique that is also known as \emph{pooling}
+in the Information Retrieval community~\cite{liu2009learningtorank}.
+Screenshots of some of the events we tested with
+and the particular top-ranked media items can be seen in 
+\autoref{fig:qualcomm}, \autoref{fig:blackberry}, and \autoref{fig:facebook}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.75\linewidth]{qualcomm.png}
+  \caption[Ranked media items for the Qualcomm CES 2013 keynote event]
+  {Ranked media items for the Qualcomm CES 2013 keynote event
+  on January~8, 2013 (raw cluster view)}
+  \label{fig:qualcomm}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.75\linewidth]{blackberry.png}
+  \caption[Ranked media gallery for the BlackBerry 10 launch event]
+  {Ranked media gallery for the BlackBerry 10 launch event on January 30, 2013}
+  \label{fig:blackberry}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.75\linewidth]{facebook.png}
+  \caption[Ranked media gallery for the Facebook Graph Search launch event]
+  {Ranked media gallery for the Facebook Graph Search launch event
+  on January 15, 2013}
+  \label{fig:facebook}
+\end{figure}
+
+\subsubsection{Evaluation Results}
+
+In this subsection, we present the human rater results in the form of MOS scores
+of the events we tested our empirically determined ranking formula with.
+
+\begin{table}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\backslashbox{\textbf{Event}}{\textbf{Rank}}&\textbf{1}&\textbf{2}&\textbf{3}&\textbf{4}&\textbf{5}&\textbf{6}&\textbf{7}&\textbf{8}&\textbf{9}&\textbf{10}\\ \hline
+\textbf{Facebook Graph Search Launch}&~&~&~&~&~&~&~&~&~&~\\ \hline
+\textbf{BlackBerry 10 Launch}&~&~&~&~&~&~&~&~&~&~\\ \hline
+\textbf{Qualcomm CES 2013 Keynote}&~&~&~&~&~&~&~&~&~&~\\ \hline
+\textbf{Super Bowl XLVII}&~&~&~&~&~&~&~&~&~&~\\
+\hline
+\caption[Mean Opinion Scores (MOS) for top-10 ranked media items]
+  {Mean Opinion Scores (MOS) for the top-10 ranked media items of four events}
+\end{tabular}
+\end{table}
 
 \section{Conclusion}
 
