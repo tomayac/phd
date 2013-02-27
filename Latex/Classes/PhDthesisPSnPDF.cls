@@ -149,6 +149,7 @@
      \def\subsubsectionautorefname{Subsection}
      \def\figureautorefname{Figure}
      \def\subfloatautorefname{Subfigure}
+     \def\subfigureautorefname{Subfigure}     
      \def\tableautorefname{Table}
 
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
