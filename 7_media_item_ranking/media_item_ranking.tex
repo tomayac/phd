@@ -188,21 +188,26 @@ we treat unknown values represented as \texttt{null} as \texttt{0}.
 The algorithm accumulates individual social interactions
 and assigns the accumulated social interactions to the cluster.
 
-\begin{lstlisting}[caption=Pseudocode of the social interactions merging algorithm,
-  label=code:merging, float]
-for cluster in clusters
-  likes = shares = views = comments = 0
-  for mediaItem in cluster
-    likes += mediaItem.likes ? mediaItem.likes : 0
-    shares += mediaItem.shares ? mediaItem.shares : 0
-    comments += mediaItem.comments ? mediaItem.comments : 0
-    views += mediaItem.views ? mediaItem.views : 0
-  end for
-  cluster.socialInteractions.likes = likes
-  cluster.socialInteractions.shares = shares
-  cluster.socialInteractions.comments = comments
-  cluster.socialInteractions.views = views
-end for     
+\begin{lstlisting}[caption=The social interactions merging algorithm,
+  label=code:merging, float=b!, escapechar=§]
+§\textbf{Input: cluster, cluster of visually similar media items}§ 
+§\textbf{Output: socialInteractions, merged social interactions}§ 
+
+likes = shares = views = comments = 0
+socialInteractions = {}
+
+§\textbf{for}§ item §\textbf{in}§ cluster
+  likes += item.likes ? item.likes : 0
+  shares += item.shares ? item.shares : 0
+  comments += item.comments ? item.comments : 0
+  views += item.views ? item.views : 0
+§\textbf{end for}§
+socialInteractions.likes = likes
+socialInteractions.shares = shares
+socialInteractions.comments = comments
+socialInteractions.views = views
+
+§\textbf{return}§ socialInteractions
 \end{lstlisting}
 
 \section{Selection of a~Cluster's Visual Representative}  
@@ -222,18 +227,30 @@ selection algorithm, which is based on the low-level feature \emph{resolution}.
 The algorithm selects the media item with the highest megapixel resolution
 as the cluster representative.
 
-\begin{lstlisting}[caption=Pseudocode of the cluster representative selection algorithm,
-  label=code:clusterrepresentative, float]
+\begin{lstlisting}[caption=Pseudocode of the cluster visual representative selection algorithm that finds the highest quality media item of a~cluster,
+  label=code:clusterrepresentative, float, escapechar=§]
+§\textbf{Input:}§ cluster, a cluster of media items
+§\textbf{Output:}§ representative, the visual representative
+
+§\textbf{init:}§
+  
 maxPixels = 0
-clusterRepresentative = null
-for mediaItem in cluster
-  resolution = mediaItem.width * mediaItem.height
-  if resolution >= maxPixels
+representative = null
+§\textbf{for}§ item §\textbf{in}§ cluster
+  
+  §\textit{\# Ensure that videos will always be preferred}§  
+  §\textbf{if}§ item.type == 'video' §\textbf{then}§
+    item.width = item.height = INFINITY
+  §\textbf{end if}§ 
+    
+  resolution = item.width * item.height
+  §\textbf{if}§ resolution >= maxPixels §\textbf{then}§
     maxPixels = resolution
-    clusterRepresentative = mediaItem
-  end if  
-end for
-return clusterRepresentative     
+    representative = item
+  §\textbf{end if}§  
+§\textbf{end for}§
+
+§\textbf{return}§ representative     
 \end{lstlisting}
 
 \section{Ranking Formula}

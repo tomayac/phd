@@ -24,9 +24,24 @@ The corresponding verb \emph{to duplicate} is defined as to
 The derived term \emph{deduplication} in consequence refers to
 the act of eliminating duplicate or redundant information.
 
-\subsection{Definition of Exact Duplicate for Photos}
+\subsection{Definition of Camera Shot Boundary Detection}
 
-We define two media items of type photo as \emph{exact duplicate}
+In video production and filmmaking, a~shot is a~series of frames
+that runs for an uninterrupted period of time.
+Shots are always filmed with a~single camera and can be of any duration. 
+Camera shot boundary detection is a~field of research of video processing.
+
+\subsection{Definition of Social Media Item}
+
+We define a~social media item as either a~photo (image) or video
+that was \emph{publicly} shared or published
+on at least one social network.
+In the following, we will use the shorter term media item
+rather than the full term.
+
+\subsection{Definition of Exact Duplicates for Photos}
+
+We define two media items of type photo as \emph{exact duplicates}
 if their pixel contents are exactly the same.
 This implies that by our definition, a~scaled or recompressed version
 of the same photo is \emph{not} an exact duplicate. 
@@ -43,9 +58,9 @@ from one social network on another, for example,
 if one user posts a~photo on Instagram that then someone else
 (or even the same user) posts on Facebook.
 
-\subsection{Definition of Near-Duplicate for Photos}
+\subsection{Definition of Near-Duplicates for Photos}
 
-We define two media items of type photo as \emph{near-duplicate}
+We define two media items of type photo as \emph{near-duplicates}
 if their pixel contents differ no more than a~given threshold after resampling.
 Examples of near-duplicate photos are scaled versions
 of the same photo, photos shot from a~slightly different angle,
@@ -57,9 +72,9 @@ Another scenario is a~user applying a~photo effect to a~photo
 (like an Instagram filter) and then sharing both the modified
 and the unmodified version.
 
-\subsection{Definition of Exact Duplicate for Videos}
+\subsection{Definition of Exact Duplicates for Videos}
 
-We define two media items of type video as \emph{exact duplicate}
+We define two media items of type video as \emph{exact duplicates}
 if their pixel contents are frame by frame exactly the same.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
@@ -70,9 +85,9 @@ Typical scenarios where exact duplicate videos can occur is,
 for example, two users sharing the same YouTube video
 independently from each other.
 
-\subsection{Definition of Near-Duplicate for Videos}
+\subsection{Definition of Near-Duplicates for Videos}
 
-We define two media items of type video as \emph{near-duplicate},
+We define two media items of type video as \emph{near-duplicates},
 if their pixel contents per frame differ no more
 than a~given threshold.
 In practice, we lower this condition and instead of every frame
@@ -448,9 +463,32 @@ In the previous section, we have presented an algorithm
 for on-the-fly shot boundary detection for video media items.
 In this section, we will show how components of this algorithm
 can be used to deduplicate photos.
+
+\subsection{Problem Statement}
+\label{sec:problem-statement}
+
+Our work is situated in the broader context of summarizing events
+based on social network data.
+In order to get an overview of a~given event based on a~\emph{potentially huge} set
+of event-related media items, this set of media items needs to be \emph{pruned}
+to exclusively contain highly relevant media items that are as representative
+for the event as possible.
+Rather than showing the viewer all media items,
+clusters of similar media items need to be formed.
+Within each cluster, the most representative media item
+has to be recognized as such, according to well-defined criteria.
+Undesired duplicate or near-duplicate content in the context of social networks
+arises in a~number of situations
+that we will illustrate in the following.
+All shown examples of media items were actually shared on social networks
+and were clustered correctly as near-duplicates
+by our clustering algorithm, which we will detail in
+\autoref{sec:near-duplicate-clustering-algorithm}.
 First, we look at related work for the task of photo deduplication.
 
 \subsection{Related Work}
+
+\paragraph{Image Deduplication and Clustering}
 
 Work on ordinal measures that serve as a~general tool for
 image matching was performed by Bhat \emph{et al.}\
@@ -458,11 +496,22 @@ in~\cite{bhat1998imagecorrespondence}.
 Chum \emph{et al.}\ have proposed a~near-duplicate image detection method
 using min-Hash and term frequency--inverse document frequency (tf--idf)
 weighting~\cite{chum2008nearduplicate}.
-The proposed method uses a~visual vocabulary of
-vector quantized local feature descriptors based on
+They use a~visual vocabulary of vector quantized local feature descriptors based on
 Scale-Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
-A~method for both photos and videos~\cite{yang2009nearduplicate}
-has been proposed by Yang \emph{et al.}
+Gao \emph{et al.}~\cite{gao2005webimageclustering} have proposed an image clustering method
+in the context of Web image clustering, which clusters images
+based on the consistent fusion of the information contained in
+both low-level features and surrounding texts.
+Also in the context of Web pages, Cai
+\emph{et al.}~\cite{cai2004hierarchicalclustering} have proposed
+a~hierarchical clustering method using visual, textual, and link analysis.
+Goldberger \emph{et al.}~\cite{goldberger2006unsupervisedclustering} 
+have combined discrete and continuous image models based on a~mixture of Gaussian densities
+with a~generalized version of the information bottleneck principle
+for unsupervised hierarchical image set clustering. 
+Chen \emph{et al.}~\cite{chen2003cbir} have introduced an image retrieval approach,
+which tackles the semantic gap problem by learning similarities
+of images of the same semantics.
 
 \subsection{Duplicate Content}
 \label{sec:duplicate-content}
@@ -488,10 +537,10 @@ by our clustering algorithm, which we will detail in
 \paragraph{Different Viewing Angle}
 
 When two people attend the same event
-and produce media items at roughly the same time
-covering the same scenes,
+and create media items at roughly the same time
+and covering the same scene,
 their media items will be similar
-and only differ in the viewing angle. 
+and---the capturing devices' qualities aside---only differ in the viewing angle. 
 \autoref{fig:viewing-angle} shows a~concrete example.
 
 \begin{figure}[h!]
@@ -509,10 +558,10 @@ and only differ in the viewing angle.
 \paragraph{Logo, Watermark, Lower Third, or Caption Insertion}
 
 Oftentimes, organizations or individuals insert
-logos, watermarks, or captions into media items
-to highlight their origin or convey related information,
+logos, watermarks, lower thirds, or captions into media items
+to highlight their origin, to convey related information,
 or to claim ownership of a~media item.
-An example of logo and lower third insertion
+An example of caption, logo, and lower third insertion
 can be seen in \autoref{fig:logo}.
 
 \begin{figure}[h!]
@@ -532,12 +581,12 @@ can be seen in \autoref{fig:logo}.
 
 \paragraph{Cropping}
 
-Cropping refers to the removal of the outer parts of a~photo
+Cropping refers to the removal of the outer parts of a~media item
 to improve framing, accentuate subject matter,
 or to (lossily) change the aspect ratio.
 Cropping either happens manually via an image editing application,
-or, more often, the social networks themselves crop photos
-to have a~square aspect ratio
+or, more often, by the social networks themselves
+to obtain a~square aspect ratio
 that better fits the timeline view of users,
 as can be seen in the example in \autoref{fig:cropping}.
 
@@ -556,10 +605,10 @@ as can be seen in the example in \autoref{fig:cropping}.
 
 \paragraph{Different Keyframes}
 
-We have shown camera shot detection earlier in this chapter.
+We have shown an approach to camera shot boundary detection in~\cite{steiner_www_2012b}.
 Different frames stemming from the same camera shot
-can occur on social networks when the social networks attempt to auto-select
-a~well-identifying poster frame with different heuristics,
+can occur on social networks, when preview heuristics
+attempt to auto-select a~well-identifying poster frame from a~video with different approaches,
 typically resulting in different frames for different social networks.
 \autoref{fig:camera-shot} shows an example of this phenomenon.
 
@@ -577,20 +626,19 @@ typically resulting in different frames for different social networks.
   \label{fig:camera-shot}  
 \end{figure}
 
-\paragraph{Aspect Ratio Changes with Bulging or Stretching}
+\paragraph{Aspect Ratio Changes with Squeezing or Stretching}
 
 Aspect ratio changes can either happen combined with cropping
-(and thus losing parts of the photo), and/or combined with 
-bulging or stretching (and thus deforming the photo).
-\autoref{fig:bulged} shows an example where a~photo gets
-both cropped and bulged.
+(and thus losing parts of the media item), and/or combined with 
+squeezing or stretching (and thus deforming the media item).
+\autoref{fig:stretched} shows an example where a~media item gets stretched.
 
 \begin{figure}[h!]
   \centering
   \subfloat[Original]{
     \includegraphics[width=0.155\textwidth]{lordoftherings.jpg}
   }                
-  \subfloat[Stretched and bulged]{
+  \subfloat[Stretched]{
     \includegraphics[width=0.3\textwidth]{lordoftheringsstretched.jpg}
   }
   \caption{Original, and stretched version of a~photo.}
@@ -599,8 +647,10 @@ both cropped and bulged.
 
 \paragraph{Photo Filters}
 
-Especially with the popularity of Instagram, photo filters
-are a~considerable reason for near-duplicate media content.
+With the raising popularity of Instagram with its 90 million monthly active users%
+\footnote{\url{http://instagram.com/press/}, accessed 02/14/2013},
+photo filters that, \emph{e.g.}, emulate retro Polaroid\texttrademark\ or tilt-shift effects,
+are a~considerable reason for near-duplicate media content on social networks.
 \autoref{fig:photo-filter} shows a~typical example.
 
 \begin{figure}[h!]
@@ -622,126 +672,133 @@ In this subsection, we detail our near-duplicate photo clustering algorithm
 and its design goals.
 We start with a~description of its face detection component.
 
-\subsubsection{Face Detection}
+\subsection{Face Detection}
 \label{sec:face-detection}
 
 Face detection is a~computer vision technology
-that determines the regions of faces in photos.
+that determines the regions of faces in media items.
 Rotation-invariant face detection aims to detect faces with arbitrary
 rotation angles and is crucial as the first step in automatic face detection
-for general applications, as face photos are seldom upright and frontal.
+for general applications, as face images on social media are seldom upright and frontal.
 Face detection is a~subclass of the broader class of object detection.
 The Viola--Jones object detection framework proposed in 2001
 by Paul Viola and Michael
 Jones~\cite{viola2001objectdetection,viola2004robust}
-provides competitive object detection rates in real-time.
-It was motivated primarily by the problem of face detection.
-We use a~face detection algorithm that further improves Viola--Jones,
+provides competitive object detection rates in realtime
+and was motivated primarily by the problem of face detection.
+We use an algorithm that further improves Viola--Jones,
 based on work by Huang \emph{et al.}~\cite{huang2007facedetection}
 and Abramson \emph{et al.}~\cite{abramson2007yef},
 in a~JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
-This algorithm is fast enough to be applied to hundreds of photos
+This algorithm is fast enough to be applied to hundreds of media items
 in well less than a~second overall processing time on a~standard laptop
 (mid-2010 MacBook~Pro).
 
-\subsubsection{Algorithm Design Goals}
+\subsection{Algorithm Description}
 
-In \autoref{sec:duplicate-content}, we have outlined
-cases of duplicate and near-duplicate content.
-Design goals of the algorithm include
-the capability to detect those cases
-in a~timely, entirely \emph{ad hoc} manner, without any pre-calculation.
-As in general for bigger events, event coverage is exhaustive, \emph{i.e.},
-there exist more media items
-than one would want to watch in a~reasonable time,
-it is tolerable for the algorithm to cluster media items aggressively
-rather than leaving too many media items unclustered.
-
-\subsubsection{Algorithm Description}
-
-Our near-duplicate photo clustering algorithm belongs to the family of
-tile-wise histogram-based photo clustering algorithms.
-As an additional semantic feature, the algorithm detects faces
-as described in \autoref{sec:face-detection}.
-For two photos to be clustered,
+Our near-duplicate media item clustering algorithm belongs to the family of
+tile-wise histogram-based clustering algorithms.
+As an additional semantic feature, the algorithm considers detected faces
+as described above.
+For two media items to be clustered,
 the following conditions have to be fulfilled.
 
 \begin{enumerate}
-  \item The numbers $f_1$ and $f_2$ of detected faces in both photos
-    have to be the same, ($f_1, f_2 \geq 0$).
-    We note that we do \emph{not} recognize faces.
-  \item Out of $m$ tiles of a~photo with $n$ tiles, ($m \leq n$),
-    at most $tiles\_threshold$ tiles may differ not more than $similarity\_threshold$
-    from their corresponding counterpart tiles.
+  \item Out of $m$ tiles of a~media item with $n$ tiles ($m \leq n$),
+    at most $\textit{tiles\_threshold}$ tiles may differ not more than $\textit{similarity\_threshold}$
+    from their counterpart~tiles.
+  \item The numbers $f_1$ and $f_2$ of detected faces in both media items
+    have to be the same.
+    We note that we do not \emph{recognize} faces, but only \emph{detect} them.
 \end{enumerate}
 
 The simplified algorithm pseudocode can be seen in \autoref{code:clustering}.
 In the actual implementation, some speed improvements,
 like, for example, looking up already calculated
-distances\footnote{\texttt{distances[outerPhoto][innerPhoto] =
-distances[innerPhoto][outerPhoto]}}
-have been applied,
+distances\footnote{\texttt{distances[outerItem][innerItem] =
+distances[innerItem][outerItem]}}
+have been applied;
 these were omitted in the listing for legibility reasons.
 We calculate the histograms and distances only once initially.
 The clusters are then recalculated dynamically
-whenever either $tiles\_threshold$ or $similarity\_threshold$ change.
-The given values of $rows = cols = 10$ and
-$tiles\_threshold = 80 = \lceil rows * cols * 0.8 \rceil$ where determined empirically on a~large corpus of event-related media items
-and deliver solid results.
-The corpus is available, see \autoref{sec:evaluation-chpater6} for the details.
+whenever either $\textit{tiles\_threshold}$ or $\textit{similarity\_threshold}$ change.
+The given values of $\textit{rows} = \textit{cols} = 10$ and
+$\textit{tiles\_threshold} = 67 = \lceil \textit{rows} \cdot \textit{cols} \cdot 2/3 \rceil$
+and $\textit{similarity\_threshold} = 10$ were determined empirically
+on a~large corpus of event-related media items
+and are known to deliver solid results.
+The corpus has been made available publicly,
+see \autoref{sec:evaluation-chpater6} for the details.
 
-
-\begin{lstlisting}[caption={Simplified pseudocode of the near-duplicate
-    photo clustering algorithm},
+\begin{lstlisting}[float=top,caption={Simplified pseudocode of the exact- and near-duplicate media item deduplication and clustering algorithm},
   label={code:clustering},escapechar=§]
+§\textbf{Input:}§ mediaItems, a~list of media items
+§\textbf{Output:}§ clusters, a~list of clustered media items
+
+§\textbf{init:}§
+
+
+§\textit{\# Algorithm settings}§
 ROWS = 10
 COLS = 10
-TILES_THRESHOLD = ceil(ROWS * COLS * 0.8)
+TILES_THRESHOLD = ceil(ROWS * COLS * 2/3)
 SIMILARITY_THRESHOLD = 10
 
+
+§\textit{\# Calculates tile-wise histograms}§
 histograms = {}
 faces = {}
-for photo in photos
-  faces[photo] = getFaces(photo)
-
-  for tile in photo
-    histograms[photo][tile] = getHistogram(tile)
-  end for
-end for  
-    
-distances = {}
-for outerPhoto in photos
-  for innerPhoto in photos
-    distances[outerPhoto][innerPhoto] = {}
-    for tile in histograms[outerPhoto]
-      distances[outerPhoto][innerPhoto][tile] =
-          abs(histograms[outerPhoto][tile] - histograms[innerPhoto][tile])
-    end for
-  end for
-end for
+§\textbf{for}§ item §\textbf{in}§ mediaItems
+  faces[item] = getFaces(item)
   
+  histograms[item] = {}
+  §\textbf{for}§ tile §\textbf{in}§ item
+    histograms[item][tile] = getHistogram(tile)
+  §\textbf{end for}§
+§\textbf{end for}§  
+
+    
+§\textit{\# Calculates tile-wise distances}§
+distances = {}
+§\textbf{for}§ outerItem §\textbf{in}§ mediaItems
+  distances[outerItem] = {}
+  §\textbf{for}§ innerItem §\textbf{in}§ mediaItems
+    distances[outerItem][innerItem] = {}
+    §\textbf{for}§ tile §\textbf{in}§ histograms[outerItem]
+      distances[outerItem][innerItem][tile] =
+          abs(histograms[outerItem][tile] -
+              histograms[innerItem][tile])
+    §\textbf{end for}§
+  §\textbf{end for}§
+§\textbf{end for}§
+
+  
+§\textit{\# Calculates clusters}§
 clusters = {}
-for outerPhoto in photos  
-  clusters[outerPhoto] = []  
-  for innerPhoto in photos
-    if outerPhoto == innerPhoto continue
+§\textbf{for}§ outerItem §\textbf{in}§ mediaItems  
+  clusters[outerItem] = []  
+  §\textbf{for}§ innerItem §\textbf{in}§ mediaItems
+    §\textbf{if}§ outerItem == innerItem §\textbf{then}§ continue
     
     similarTiles = 0
-    distance = distances[outerPhoto][innerPhoto]
-    for tile in distance      
-      if distance[tile] <= SIMILARITY_THRESHOLD
+    distance = distances[outerItem][innerItem]
+    §\textbf{for}§ tile §\textbf{in}§ distance      
+      §\textbf{if}§ distance[tile] <= SIMILARITY_THRESHOLD §\textbf{then}§
         similarTiles++
-      end if   
-    end for
+      §\textbf{end if}§
+    §\textbf{end for}§
          
-    if similarTiles >= TILES_THRESHOLD
-      if faces[outerPhoto] == faces[innerPhoto]
-        clusters[outerPhoto].push(innerPhoto)
-      end if
-    end if
-    
-  end for
-end for        
+    §\textit{\# Check condition 1 (tiles)}§
+    §\textbf{if}§ similarTiles >= TILES_THRESHOLD §\textbf{then}§
+      §\textit{\# Check condition 2 (faces)}§
+      §\textbf{if}§ faces[outerItem] == faces[innerItem] §\textbf{then}§
+        clusters[outerItem].push(innerItem)
+      §\textbf{end if}§
+    §\textbf{end if}§    
+  §\textbf{end for}§
+§\textbf{end for}§
+
+§\textbf{return}§ clusters        
 \end{lstlisting}
 
 \subsection{Experiments}
@@ -784,29 +841,32 @@ was aired on December 4, 2012 on CBS
 to an audience of 9.48 million viewers.
 CBS suggested the hashtag \texttt{\#VSFashionShow} for the event.
 
-\subsubsection{Algorithm Debug View}
+\subsection{Algorithm Debug View}
+\label{sec:algorithm-debug-view}
 
-In order to illustrate the way the algorithm clusters photos,
+In order to illustrate the way the algorithm clusters media items,
 \autoref{fig:algorithmdebug} shows a~debug view of the algorithm
-for two clustered photos related to the 
+for two clustered media items related to the 
 \emph{Grammy Awards Nominations 2013} event.
-The red border indicates detected faces.
-Independent from the actual photo aspect ratio,
-the tile-wise comparison always happens based on a~potentially bulged
+The red border around the media item indicates at least one detected face.
+Independent from the actual media item's aspect ratio,
+the tile-wise comparison always happens based on a~potentially squeezed
 square aspect ratio version.
-The two photos were clustered as out of the $10 * 10 = 100$ tiles
-$85$ out of the $tiles\_threshold$ of $80$ required tiles
-differed not more than the $similarity\_threshold$ of $10$.
-In both photos there was $1$ face detected.
+The two slightly different media items (caption insertion, lighting change)
+were clustered, because out of the $10 \cdot 10 = 100$ tiles,
+$85$ of the minimum required $\textit{tiles\_threshold}$ of $67$ tiles differed not more
+than the $\textit{similarity\_threshold}$ of $10$ per tile.
+In both media items, exactly $1$ face was detected.
+A~screenshot of the complete media item clustering application (with a~different event)
+is available online at \url{http://twitpic.com/c02qfs/full} (accessed 02/14/2013).
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
   \includegraphics[width=0.5\linewidth]{./algorithmdebug.png}
-  \caption[Algorithm debug view for two clustered photos]
-  {Algorithm debug view for two clustered photos related to the \emph{Grammy Awards Nominations 2013} event (red border indicates detected faces)}
+  \caption[Algorithm debug view for two clustered media items]
+  {Algorithm debug view for two clustered media items related to the \emph{Grammy Awards Nominations 2013} event (the red border around the media items indicates at least one detected face)}
   \label{fig:algorithmdebug}
 \end{figure}
-
 \subsection{Evaluation}\label{sec:evaluation-chpater6}
 
 We have collected and made available%
@@ -825,11 +885,11 @@ are not reproducible; our focus in this chapter
 is on media item deduplication and clustering.
 The concrete clustering parameters for the algorithm were set as listed below.
 
-\begin{small_itemize}
-  \item[] $ROWS$ = $COLS$ = $10$
-  \item[] $TILES\_THRESHOLD$ = $80$
-  \item[] $SIMILARITY\_THRESHOLD$ = $10$
-\end{small_itemize}
+\begin{enumerate}
+  \item $\textit{rows}$ = $\textit{cols}$ = $10$
+  \item $\textit{tiles\_threshold}$ = $67$
+  \item $\textit{similarity\_threshold}$ = $10$
+\end{enumerate}
 
 In the following, we discuss the clustering and deduplication results.
 \autoref{fig:topvsfashionshow} and \autoref{fig:topgrammy} show the top clusters
@@ -920,31 +980,48 @@ the photos are correctly clustered.
 
 \subsubsection{Algorithm Weaknesses}
 
-\autoref{fig:white} shows five Web page screenshots with pure white
-as the dominating color and black font.
-The algorithm in its previously described form clusters such photos.
+\autoref{fig:white} shows five media items with pure white
+as the dominating color and a~pure black font,
+where users had taken screenshots of the Grammy results from Web pages.
+The algorithm in its previously described form clusters such media items.
 This may or may not be desired.
 Likewise at the other end of the color spectrum,
-\autoref{fig:bwtolerance} shows two photos of a~woman,
+\autoref{fig:bwtolerance} shows two media items of a~woman
+with pure black as the dominating color,
 one time with, and the other time without added black bars
 to fit a~letterbox aspect ratio.
 In its previously described form, the algorithm
-does not cluster such photos (unless a~really small number
+does \emph{not} cluster such media items
+(unless a~really small number $\textit{tiles\_threshold}$ 
 of required similar tiles is selected).
-In the majority of cases, though, clustering will be desired.
-Our response to both issues is to ignore a~certain amount
-of the color spectrum in the algorithm's similarity measure,
-\emph{e.g.}, ignoring pure white and pure black correctly fixed
-the clustering in our chosen example events in all but one cases.
 
-Finally, \autoref{fig:weakness} shows two entirely different photos
+In the majority of cases, though, clustering such media items \emph{is} desired.
+Our response to both issues is to ignore a~certain part
+of the color spectrum in the algorithm's similarity measure.
+In the concrete case, ignoring pure white and pure black correctly fixed
+the clustering in our chosen example events in all but one cases,
+without negatively impacting previously correctly formed clusters.
+
+Finally, \autoref{fig:weakness} shows two entirely different media items
 that were incorrectly clustered as the tile histograms
 were similar enough under the chosen similarity threshold.
-We have experienced in our experiments that there is no perfect
+The explanation for this is twofold.
+First, the original source media items were very small thumbnail-like images,
+which hindered face recognition
+(there is actually an \emph{unequal} number of faces in each image).
+Second, the way the algorithm works,
+which is best understood by looking at \autoref{fig:algorithmdebug},
+causes the tiles of very tiny media items like the ones in question to blur.
+
+We have experienced in our experiments that there is no single perfect
 combination of algorithm parameters,
-so the only way to address this issue is to make the parameters flexible.
+so the only way to address this issue (besides ignoring too small media items,
+which in practice may be the easiest and best solution)
+is to make the parameters flexible.
 In our graphical user interface we have created sliders
-that let the user interactively preview clustering changes. 
+that let the user interactively preview clustering changes.
+As noted before, a~screenshot of the application
+is available online at the URL \url{http://twitpic.com/c02qfs/full}.
 
 \begin{figure}[h!]
   \centering
@@ -982,28 +1059,45 @@ whether a~given photo is contained in a~video.
 
 \subsection{Related Work}
 
-In addition to the aforementioned  combined approach
-for video and photo near-duplicate
-detection~\cite{yang2009nearduplicate},
-more specialized methods for video deduplication exist,
+\paragraph{Video Deduplication and Clustering}
+
+More specialized methods for video deduplication exist,
 for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate}
 by Min \emph{et al.}\ who, given the observation that 
 transformations tend to preserve the semantic information conveyed
-by the video content, propose a~novel approach for identifying
+by the video content, propose an approach for identifying
 near-duplicate videos by making use of both low-level visual
 features and high-level semantic features
 detected using trained classifiers.
-Furthermore, there is~\cite{oliveira2010nearduplicate} by Oliveira
-\emph{et al.},\ who look at near-duplicate video detection
-from a~human angle.  
-The authors have conducted four large-scale surveys
-and have confirmed that humans perceive videos as near-duplicates
+In~\cite{oliveira2010nearduplicate}, Oliveira
+\emph{et al.} report on four large-scale online surveys
+wherein they have confirmed that humans perceive videos as near-duplicates
 based on both non-semantic features like different photo or audio
 quality, but also based on semantic features like different
-videos of similar content, where, according to the authors,
-most research still focuses mostly on the non-semantic features.
+videos of similar content.
 A~survey of video deduplication methods has been conducted by
 Lian \emph{et al.}\ in~\cite{lian2010survey}.
+In~\cite{guil2007clustering}, Guil \emph{et al.} have proposed a~method
+for detecting copies of a~query video in a~videos database
+that groups frames with similar visual content while maintaining their temporal order.
+In~\cite{okamoto2002videoclustering}, Okamoto \emph{et al.} have proposed an approach
+that is based on fixed length video stream segments.
+By generating spatio-temporal images, they employ co-occurrence matrices
+to express features in the time dimension explicitly. 
+Yi \emph{et al.} have proposed motion histograms in~\cite{yi2005motionhistogram},
+where the motion content of a~video at pixel level is represented
+as a~Pixel Change Ratio Map (PCRM), which captures the motion intensity,
+spatial location, and size of moving objects in a~video sequence. 
+
+\paragraph{Image and Video Deduplication and Clustering}
+
+A~method for both photos and videos
+has been proposed by Yang \emph{et al.}~\cite{yang2009nearduplicate}.
+The authors describe a~system for detecting duplicate images and videos
+in a~large collection of multimedia data that uses local difference patterns
+as the unified feature to describe both images and videos.
+It has been demonstrated that the proposed method is robust against
+common image-processing tasks used to produce duplicates.
 
 \subsection{Photo-contained-in-Video Workflow}
 
