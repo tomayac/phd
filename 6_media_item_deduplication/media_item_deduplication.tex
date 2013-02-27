@@ -668,9 +668,24 @@ are a~considerable reason for near-duplicate media content on social networks.
 \subsection{Near-Duplicate Photo Clustering Algorithm}
 \label{sec:near-duplicate-clustering-algorithm}
 
-In this subsection, we detail our near-duplicate photo clustering algorithm
-and its design goals.
-We start with a~description of its face detection component.
+\subsection{Algorithm Design Goals}
+In the previous section, we have outlined
+reasons and sources for duplicate and near-duplicate content.
+In this section, we describe an algorithm tailored to
+deduplicating and clustering exact-duplicate and near-duplicate media items.
+Design goals for the algorithm include
+the capability to detect exact-duplicate and near-duplicate media items
+in a~timely, entirely \emph{ad-hoc} manner, without any pre-calculation.
+In general---and especially for big events---event coverage on social networks
+is very broad, \emph{i.e.}, there exist more media items
+than one could consume in a~reasonable time.
+In consequence, it is tolerable for the algorithm to cluster media items aggressively,
+rather than leaving too many media items unclustered.
+The algorithm has a~twofold approach to clustering:
+\emph{low-level} analysis, by looking at tile-wise pixel data
+combined with \emph{high-level} analysis, by detecting faces in media items.
+In the following, we describe the face detection component
+of our media item clustering algorithm.
 
 \subsection{Face Detection}
 \label{sec:face-detection}
