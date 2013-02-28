@@ -22,7 +22,7 @@ fieldset {
 
 input.number {
   width: 3em;
-  margin-left: 3em;
+  margin-left: 0.5em;
 }
 
 #statusMessages {
@@ -149,6 +149,8 @@ input.number {
   float: left;
   position: relative;
   margin: 2px;
+  -webkit-transition: top 2s, left 2s;
+  transition: top 2s, left 2s;
 }
 
 .lastMediaItem {

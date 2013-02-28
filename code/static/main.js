@@ -212,6 +212,38 @@
         click(e);
       });
 
+      mediaGallery.addEventListener('mouseover', function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'img') &&
+            (e.target.nodeName.toLowerCase() !== 'video') &&
+            (e.target.nodeName.toLowerCase() !== 'span')) {
+          return;
+        };
+        var img = e.target.parentNode.querySelector('img, video');
+        var left = mediaGallery.clientWidth / 2;
+        var top = mediaGallery.clientHeight / 2;
+        var div = img.parentNode.parentNode;
+        div.style.zIndex = 1000;
+        // needed for the CSS transition to trigger
+        getComputedStyle(div).left;
+        div.style.left = left - div.offsetLeft - (div.clientWidth / 2);
+        div.style.top = top - div.offsetTop - (div.clientHeight / 2) +
+            mediaGallery.scrollTop;
+      });
+
+      mediaGallery.addEventListener('mouseout', function(e) {
+        if ((e.target.nodeName.toLowerCase() !== 'img') &&
+            (e.target.nodeName.toLowerCase() !== 'video') &&
+            (e.target.nodeName.toLowerCase() !== 'span')) {
+          return;
+        };
+        var img = e.target.parentNode.querySelector('img, video');
+        var div = img.parentNode.parentNode;
+        getComputedStyle(div).left;
+        div.style.zIndex = 1;
+        div.style.left = null;
+        div.style.top = null;
+      });
+
       var toggleVideoPlayStateButton = document.getElementById('playAllVideos');
       toggleVideoPlayStateButton.addEventListener('click', function(e) {
         var videos = document.querySelectorAll('video');
@@ -1227,9 +1259,12 @@
           var setHeight = function(images, height) {
             heights.push(height);
             for (var i = 0; i < images.length; ++i) {
-              images[i].style.width = (height * images[i].dataset.width /
+              var width = (height * images[i].dataset.width /
                   images[i].dataset.height);
+              images[i].style.width = width;
               images[i].style.height = height;
+              images[i].parentNode.parentNode.style.width = width;
+              images[i].parentNode.parentNode.style.height = height;
             }
           };
 
