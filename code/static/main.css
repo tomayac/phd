@@ -149,8 +149,8 @@ input.number {
   float: left;
   position: relative;
   margin: 2px;
-  -webkit-transition: top 2s, left 2s;
-  transition: top 2s, left 2s;
+  -webkit-transition: top 2s, left 2s, -webkit-transform 2s, -webkit-filter 2s;
+  transition: top 2s, left 2s, transform 2s, filter 2s;
 }
 
 .lastMediaItem {

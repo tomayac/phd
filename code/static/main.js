@@ -222,12 +222,30 @@
         var left = mediaGallery.clientWidth / 2;
         var top = mediaGallery.clientHeight / 2;
         var div = img.parentNode.parentNode;
-        div.style.zIndex = 1000;
+        if (div.classList.contains('clone')) {
+          return;
+        }
+        if (!document.getElementById(img.src)) {
+          var clone = div.cloneNode(true);
+          clone.classList.add('clone');
+          clone.id = img.src;
+          mediaGallery.insertBefore(clone, div);
+        }
+        div.style.zIndex++;
+        div.style['-webkit-transform'] = 'scale(2.0)';
+        div.style.transform = 'scale(2.0)';
         // needed for the CSS transition to trigger
         getComputedStyle(div).left;
         div.style.left = left - div.offsetLeft - (div.clientWidth / 2);
         div.style.top = top - div.offsetTop - (div.clientHeight / 2) +
             mediaGallery.scrollTop;
+        var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
+        for (var i = 0, len = mediaItems.length; i < len; i++) {
+          if (mediaItems[i] !== div) {
+            mediaItems[i].style['-webkit-filter'] = 'blur(10px)';
+            mediaItems[i].style['filter'] = 'blur(10px)';
+          }
+        }
       });
 
       mediaGallery.addEventListener('mouseout', function(e) {
@@ -239,9 +257,34 @@
         var img = e.target.parentNode.querySelector('img, video');
         var div = img.parentNode.parentNode;
         getComputedStyle(div).left;
+        div.style['-webkit-transform'] = 'scale(1.0)';
+        div.style.transform = 'scale(1.0)';
         div.style.zIndex = 1;
         div.style.left = null;
         div.style.top = null;
+        var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
+        for (var i = 0, len = mediaItems.length; i < len; i++) {
+          if (mediaItems[i] !== div) {
+            mediaItems[i].style['-webkit-filter'] = null;
+            mediaItems[i].style['filter'] = null;
+          }
+        }
+        div.addEventListener('webkitTransitionEnd', function(transEvent) {
+          if (transEvent.propertyName === '-webkit-transform') {
+            var clone = document.getElementById(img.src);
+            if (clone) {
+              mediaGallery.removeChild(clone);
+            }
+          }
+        });
+        div.addEventListener('transitionend', function(transEvent) {
+          if (transEvent.propertyName === 'transform') {
+            var clone = document.getElementById(img.src);
+            if (clone) {
+              mediaGallery.removeChild(clone);
+            }
+          }
+        });
       });
 
       var toggleVideoPlayStateButton = document.getElementById('playAllVideos');
@@ -1274,7 +1317,6 @@
             fragment.appendChild(div);
             div.classList.add('mediaItem');
             div.classList.add('photoBorder');
-            item.classList.add('gallery');
             var anchor = document.createElement('a');
             anchor.href = item.dataset.microposturl;
             anchor.setAttribute('target', '_newtab');
@@ -1390,13 +1432,11 @@
           mediaItems.forEach(function(item) {
             var div = document.createElement('div');
             div.classList.add('mediaItem');
-            div.classList.add('gallery');
             div.style.position = 'absolute';
             div.style.overflow = 'hidden';
             div.dataset.width = item.dataset.width;
             div.dataset.height = item.dataset.height;
             div.classList.add('photoBorder');
-            item.classList.add('gallery');
 
             var anchor = document.createElement('a');
             anchor.href = item.dataset.microposturl;
@@ -1453,6 +1493,7 @@
         item.dataset.height = mediaItem.fullImage.height;
         item.dataset.origin = mediaItem.origin;
         item.dataset.microposturl = mediaItem.micropostUrl;
+        item.classList.add('gallery');
         mediaItems.push(item);
       });
 
