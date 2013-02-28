@@ -19,6 +19,7 @@
     micropostUrls: {}, // the object key is always the micropost url
     mediaItems: {}, // the object key is always the proxied poster url
     clusters: [],
+    mediaGalleryZIndex: 1,
 
     // settings
     photosOnly: false,
@@ -231,7 +232,8 @@
           clone.id = img.src;
           mediaGallery.insertBefore(clone, div);
         }
-        div.style.zIndex++;
+        div.style.zIndex = illustrator.mediaGalleryZIndex++;
+console.log('z-index: '+ div.style.zIndex        )
         div.style['-webkit-transform'] = 'scale(2.0)';
         div.style.transform = 'scale(2.0)';
         // needed for the CSS transition to trigger
@@ -259,7 +261,6 @@
         getComputedStyle(div).left;
         div.style['-webkit-transform'] = 'scale(1.0)';
         div.style.transform = 'scale(1.0)';
-        div.style.zIndex = 1;
         div.style.left = null;
         div.style.top = null;
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
@@ -271,6 +272,7 @@
         }
         div.addEventListener('webkitTransitionEnd', function(transEvent) {
           if (transEvent.propertyName === '-webkit-transform') {
+            div.style.zIndex = 1;
             var clone = document.getElementById(img.src);
             if (clone) {
               mediaGallery.removeChild(clone);
@@ -279,6 +281,7 @@
         });
         div.addEventListener('transitionend', function(transEvent) {
           if (transEvent.propertyName === 'transform') {
+            div.style.zIndex = 1;
             var clone = document.getElementById(img.src);
             if (clone) {
               mediaGallery.removeChild(clone);
@@ -612,6 +615,7 @@
       illustrator.mediaItems = {};
       illustrator.micropostUrls = {};
       illustrator.clusters = [];
+      illustrator.mediaGalleryZIndex = 1;
     },
 
     showStatusMessage: function(message) {
@@ -1473,6 +1477,7 @@
       }
     },
     createMediaGallery: function() {
+      illustrator.mediaGalleryZIndex = 1;
       var mediaItems = [];
       illustrator.clusters.forEach(function(cluster, counter) {
         if (counter >= illustrator.mediaGallerySize) {
