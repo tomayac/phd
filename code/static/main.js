@@ -220,7 +220,16 @@
           return;
         };
         var img = e.target.parentNode.querySelector('img, video');
-        var left = mediaGallery.clientWidth / 2;
+        var mediaItems = mediaGallery.childNodes;
+        var left = 0;
+        for (var i = 0, len = mediaItems.length; i < len; i++) {
+          var mediaItem = mediaItems[i];
+          if (mediaItem.style.marginTop === '0px') {
+            left = (mediaItem.offsetLeft + mediaItem.offsetWidth) / 2;
+          } else {
+            break;
+          }
+        }
         var top = mediaGallery.clientHeight / 2;
         var div = img.parentNode.parentNode;
         if (div.classList.contains('clone')) {
@@ -233,7 +242,6 @@
           mediaGallery.insertBefore(clone, div);
         }
         div.style.zIndex = illustrator.mediaGalleryZIndex++;
-console.log('z-index: '+ div.style.zIndex        )
         div.style['-webkit-transform'] = 'scale(2.0)';
         div.style.transform = 'scale(2.0)';
         // needed for the CSS transition to trigger
@@ -272,19 +280,23 @@ console.log('z-index: '+ div.style.zIndex        )
         }
         div.addEventListener('webkitTransitionEnd', function(transEvent) {
           if (transEvent.propertyName === '-webkit-transform') {
-            div.style.zIndex = 1;
-            var clone = document.getElementById(img.src);
-            if (clone) {
-              mediaGallery.removeChild(clone);
+            if (div.style['-webkit-transform'] === 'scale(1)') {
+              div.style.zIndex = 1;
+              var clone = document.getElementById(img.src);
+              if (clone) {
+                mediaGallery.removeChild(clone);
+              }
             }
           }
         });
         div.addEventListener('transitionend', function(transEvent) {
           if (transEvent.propertyName === 'transform') {
-            div.style.zIndex = 1;
-            var clone = document.getElementById(img.src);
-            if (clone) {
-              mediaGallery.removeChild(clone);
+            if (div.style['transform'] === 'scale(1)') {
+              div.style.zIndex = 1;
+              var clone = document.getElementById(img.src);
+              if (clone) {
+                mediaGallery.removeChild(clone);
+              }
             }
           }
         });
