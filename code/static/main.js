@@ -241,9 +241,12 @@
           if (illustrator.mediaGalleryAlgorithm === 'looseOrder') {
             mediaGallery.insertBefore(clone, div);
           } else {
-            clone.setAttribute('style', 'position: absolute !important;');
-            clone.style.left = div.offsetLeft;
-            clone.style.top = div.offsetTop;
+            var left = div.offsetLeft;
+            var top = div.offsetTop;
+            clone.setAttribute('style', 'position: absolute !important; ' +
+                'left: ' + left + 'px !important; ' +
+                'top: ' + top + 'px !important; ' +
+                'float: none !important;');
             mediaGallery.appendChild(clone);
           }
         }
@@ -1371,6 +1374,7 @@
               illustrator.mediaGalleryResizeFunction);
           illustrator.mediaGalleryResizeFunction = function() {
             calculateSizes(mediaItems);
+            illustrator.calculateMediaGalleryCenter();
           };
           window.addEventListener('resize',
               illustrator.mediaGalleryResizeFunction);
@@ -1499,6 +1503,7 @@
               illustrator.mediaGalleryResizeFunction);
           illustrator.mediaGalleryResizeFunction = function() {
             calculateSizes(divs);
+            illustrator.calculateMediaGalleryCenter();
           };
           window.addEventListener('resize',
               illustrator.mediaGalleryResizeFunction);
@@ -1535,8 +1540,9 @@
       illustrator.showStatusMessage('Creating media gallery of type ' +
           algorithm);
       illustrator.mediaGalleryAlgorithms[algorithm].func(mediaItems);
-
-      // calculate center of current media gallery
+      illustrator.calculateMediaGalleryCenter();
+    },
+    calculateMediaGalleryCenter: function() {
       var mediaGallery = document.getElementById('mediaGallery');
       var left = 0;
       var mediaItems = mediaGallery.childNodes;
@@ -1548,6 +1554,10 @@
         } else {
           break;
         }
+      }
+      // if the media gallery has not rendered yet, simply call yourself again
+      if (left === 0) {
+        illustrator.calculateMediaGalleryCenter();
       }
       var top = mediaGallery.clientHeight / 2;
       illustrator.mediaGalleryCenter = {
