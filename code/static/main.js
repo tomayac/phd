@@ -228,8 +228,8 @@
           return;
         };
         var img = e.target.parentNode.querySelector('img, video');
-        // do not trigger mouseover on clones
         var div = img.parentNode.parentNode;
+        // do not trigger mouseover on clones
         if (div.classList.contains('clone')) {
           return;
         }
@@ -282,6 +282,10 @@
         };
         var img = e.target.parentNode.querySelector('img, video');
         var div = img.parentNode.parentNode;
+        // do not trigger mouseout on clones
+        if (div.classList.contains('clone')) {
+          return;
+        }
         // needed for the CSS transition to trigger
         getComputedStyle(div).left;
         // scale down the media item again and put it back to its space
@@ -1557,7 +1561,9 @@
       }
       // if the media gallery has not rendered yet, simply call yourself again
       if (left === 0) {
-        illustrator.calculateMediaGalleryCenter();
+        setTimeout(function() {
+          illustrator.calculateMediaGalleryCenter();
+        }, 500);
       }
       var top = mediaGallery.clientHeight / 2;
       illustrator.mediaGalleryCenter = {
