@@ -1245,7 +1245,11 @@ var mediaFinder = {
                           })(micropost, userProfileUrl, timestamp, publicationDate);
                         // TwitPic
                         } else if (mediaUrl.indexOf('http://twitpic.com') === 0) {
-                          var id = mediaUrl.replace('http://twitpic.com/', '');
+                          var id = mediaUrl.replace('http://twitpic.com/', '')
+                              .replace('show/', '')
+                              .replace('large/', '')
+                              .replace('thumbnail/', '')
+                              .replace('/full', '');
                           var options = {
                             url: 'http://twitpic.com/' + id + '/full'
                           };
@@ -1255,7 +1259,7 @@ var mediaFinder = {
                                 if (mediaUrl) {
                                   results.push({
                                     mediaUrl: mediaUrl,
-                                    posterUrl: mediaUrl,
+                                    posterUrl: 'http://twitpic.com/show/thumb/' + id,
                                     micropostUrl: micropostUrl,
                                     micropost: micropost,
                                     userProfileUrl: userProfileUrl,
@@ -1812,7 +1816,7 @@ var mediaFinder = {
                         scrapeTwitPic(body2, function(mediaUrl, type) {
                           results.push({
                             mediaUrl: mediaUrl,
-                            posterUrl: 'http://twitpic.com/show/thumb/' + micropostUrl.replace('http://twitpic.com/', ''),
+                            posterUrl: 'http://twitpic.com/show/thumb/' + image.short_id,
                             micropostUrl: micropostUrl,
                             micropost: cleanMicropost(micropost),
                             userProfileUrl: userProfileUrl,

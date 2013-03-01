@@ -20,6 +20,11 @@
     mediaItems: {}, // the object key is always the proxied poster url
     clusters: [],
     mediaGalleryZIndex: 1,
+    mediaGalleryAlgorithm: null,
+    mediaGalleryCenter: {
+      top: null,
+      left: null
+    },
 
     // settings
     photosOnly: false,
@@ -73,10 +78,13 @@
         option.value = algorithm;
         if (algorithm === 'looseOrder') {
           option.setAttribute('selected', 'selected');
+          illustrator.mediaGalleryAlgorithm = algorithm;
         }
         mediaGalleryAlgorithmSelect.appendChild(option);
       }
       mediaGalleryAlgorithmSelect.addEventListener('change', function() {
+        illustrator.mediaGalleryAlgorithm =
+            mediaGalleryAlgorithmSelect.selectedOptions[0].value;
         illustrator.createMediaGallery();
       });
 
@@ -225,25 +233,19 @@
         if (div.classList.contains('clone')) {
           return;
         }
-        // find the actual width of the media gallery
-        var left = 0;
-        var mediaItems = mediaGallery.childNodes;
-        for (var i = 0, len = mediaItems.length; i < len; i++) {
-          var mediaItem = mediaItems[i];
-          if (mediaItem.style.marginTop === '0px') {
-            left = mediaItem.offsetLeft + mediaItem.offsetWidth;
-          } else {
-            break;
-          }
-        }
-        left = left / 2;
-        var top = mediaGallery.clientHeight / 2;
         // create the placeholder clone
         if (!document.getElementById(img.src)) {
           var clone = div.cloneNode(true);
           clone.classList.add('clone');
           clone.id = img.src;
-          mediaGallery.insertBefore(clone, div);
+          if (illustrator.mediaGalleryAlgorithm === 'looseOrder') {
+            mediaGallery.insertBefore(clone, div);
+          } else {
+            clone.setAttribute('style', 'position: absolute !important;');
+            clone.style.left = div.offsetLeft;
+            clone.style.top = div.offsetTop;
+            mediaGallery.appendChild(clone);
+          }
         }
         // prepare the zoom animation and center the media item
         div.style.zIndex = illustrator.mediaGalleryZIndex++;
@@ -255,9 +257,10 @@
         div.style.transform = 'scale(' + scaleFactor + ')';
         // needed for the CSS transition to trigger
         getComputedStyle(div).left;
-        div.style.left = left - div.offsetLeft - (div.clientWidth / 2);
-        div.style.top = top - div.offsetTop - (div.clientHeight / 2) +
-            mediaGallery.scrollTop;
+        div.style.left = illustrator.mediaGalleryCenter.left - div.offsetLeft -
+            (div.clientWidth / 2);
+        div.style.top = illustrator.mediaGalleryCenter.top - div.offsetTop -
+            (div.clientHeight / 2) + mediaGallery.scrollTop;
         // blur all other media items
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
         for (var i = 0, len = mediaItems.length; i < len; i++) {
@@ -1528,12 +1531,29 @@
         mediaItems.push(item);
       });
 
-      var mediaGalleryAlgorithmSelect =
-          document.getElementById('mediaGalleryAlgorithm');
-      var algorithm = mediaGalleryAlgorithmSelect.selectedOptions[0].value;
+      var algorithm = illustrator.mediaGalleryAlgorithm;
       illustrator.showStatusMessage('Creating media gallery of type ' +
           algorithm);
       illustrator.mediaGalleryAlgorithms[algorithm].func(mediaItems);
+
+      // calculate center of current media gallery
+      var mediaGallery = document.getElementById('mediaGallery');
+      var left = 0;
+      var mediaItems = mediaGallery.childNodes;
+      for (var i = 0, len = mediaItems.length; i < len; i++) {
+        var mediaItem = mediaItems[i];
+        // just look at the media items in the first row
+        if (mediaItem.offsetTop < 5) {
+          left = (mediaItem.offsetLeft + mediaItem.offsetWidth) / 2;
+        } else {
+          break;
+        }
+      }
+      var top = mediaGallery.clientHeight / 2;
+      illustrator.mediaGalleryCenter = {
+        top: top,
+        left: left
+      };
     }
   };
 
