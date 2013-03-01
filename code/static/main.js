@@ -220,35 +220,45 @@
           return;
         };
         var img = e.target.parentNode.querySelector('img, video');
-        var mediaItems = mediaGallery.childNodes;
-        var left = 0;
-        for (var i = 0, len = mediaItems.length; i < len; i++) {
-          var mediaItem = mediaItems[i];
-          if (mediaItem.style.marginTop === '0px') {
-            left = (mediaItem.offsetLeft + mediaItem.offsetWidth) / 2;
-          } else {
-            break;
-          }
-        }
-        var top = mediaGallery.clientHeight / 2;
+        // do not trigger mouseover on clones
         var div = img.parentNode.parentNode;
         if (div.classList.contains('clone')) {
           return;
         }
+        // find the actual width of the media gallery
+        var left = 0;
+        var mediaItems = mediaGallery.childNodes;
+        for (var i = 0, len = mediaItems.length; i < len; i++) {
+          var mediaItem = mediaItems[i];
+          if (mediaItem.style.marginTop === '0px') {
+            left = mediaItem.offsetLeft + mediaItem.offsetWidth;
+          } else {
+            break;
+          }
+        }
+        left = left / 2;
+        var top = mediaGallery.clientHeight / 2;
+        // create the placeholder clone
         if (!document.getElementById(img.src)) {
           var clone = div.cloneNode(true);
           clone.classList.add('clone');
           clone.id = img.src;
           mediaGallery.insertBefore(clone, div);
         }
+        // prepare the zoom animation and center the media item
         div.style.zIndex = illustrator.mediaGalleryZIndex++;
-        div.style['-webkit-transform'] = 'scale(2.0)';
-        div.style.transform = 'scale(2.0)';
+        var scaleFactor = '2.0';
+        if (div.classList.contains('big')) {
+          scaleFactor = '1.5';
+        }
+        div.style['-webkit-transform'] = 'scale(' + scaleFactor + ')';
+        div.style.transform = 'scale(' + scaleFactor + ')';
         // needed for the CSS transition to trigger
         getComputedStyle(div).left;
         div.style.left = left - div.offsetLeft - (div.clientWidth / 2);
         div.style.top = top - div.offsetTop - (div.clientHeight / 2) +
             mediaGallery.scrollTop;
+        // blur all other media items
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
         for (var i = 0, len = mediaItems.length; i < len; i++) {
           if (mediaItems[i] !== div) {
@@ -266,11 +276,14 @@
         };
         var img = e.target.parentNode.querySelector('img, video');
         var div = img.parentNode.parentNode;
+        // needed for the CSS transition to trigger
         getComputedStyle(div).left;
+        // scale down the media item again and put it back to its space
         div.style['-webkit-transform'] = 'scale(1.0)';
         div.style.transform = 'scale(1.0)';
         div.style.left = null;
         div.style.top = null;
+        // unblur all other media items
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
         for (var i = 0, len = mediaItems.length; i < len; i++) {
           if (mediaItems[i] !== div) {
@@ -278,9 +291,12 @@
             mediaItems[i].style['filter'] = null;
           }
         }
-        div.addEventListener('webkitTransitionEnd', function(transEvent) {
-          if (transEvent.propertyName === '-webkit-transform') {
-            if (div.style['-webkit-transform'] === 'scale(1)') {
+        // remove the clone, but only when the scale down animation has finished
+        var removeClone = function(transEvent) {
+          if ((transEvent.propertyName === '-webkit-transform') ||
+              (transEvent.propertyName === 'transform')) {
+            if ((div.style['-webkit-transform'] === 'scale(1)') ||
+                (div.style.transform === 'scale(1)')) {
               div.style.zIndex = 1;
               var clone = document.getElementById(img.src);
               if (clone) {
@@ -288,18 +304,10 @@
               }
             }
           }
-        });
-        div.addEventListener('transitionend', function(transEvent) {
-          if (transEvent.propertyName === 'transform') {
-            if (div.style['transform'] === 'scale(1)') {
-              div.style.zIndex = 1;
-              var clone = document.getElementById(img.src);
-              if (clone) {
-                mediaGallery.removeChild(clone);
-              }
-            }
-          }
-        });
+        };
+        // remove the clone, but only when the scale down animation has finished
+        div.addEventListener('webkitTransitionEnd', removeClone);
+        div.addEventListener('transitionend', removeClone);
       });
 
       var toggleVideoPlayStateButton = document.getElementById('playAllVideos');
@@ -930,7 +938,10 @@
       var now = new Date().getTime();
       for (var key in illustrator.mediaItems) {
         var mediaItem = illustrator.mediaItems[key];
-        if (now - mediaItem.timestamp <= illustrator.maxAge) {
+        if (mediaItem.timestamp > now) {
+          mediaItem.considerMediaItem = false;
+        }
+        else if (now - mediaItem.timestamp <= illustrator.maxAge) {
           mediaItem.considerMediaItem = true;
         } else {
           mediaItem.considerMediaItem = false;
@@ -1400,6 +1411,9 @@
             var height = isBig ? columnSize * 2 + margin : columnSize;
             elem.style.width = width;
             elem.style.height = height;
+            if (isBig) {
+              elem.classList.add('big');
+            }
             var mediaItem = elem.firstChild.firstChild;
             var mediaItemWidth = parseInt(mediaItem.dataset.width, 10);
             var mediaItemHeight = parseInt(mediaItem.dataset.height, 10);
