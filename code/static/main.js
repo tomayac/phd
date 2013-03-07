@@ -1066,6 +1066,12 @@
                 '\nNulls: ' + nulls + '\nPercent: ' +
                 ((similarTiles / (illustrator.cols * illustrator.rows)) * 100) +
                 '%');
+illustrator.speak(                'Similar tiles: ' +
+                    similarTiles + '\nMinimum required: ' + minimumRequired +
+                    '\nOverall: ' + (illustrator.cols * illustrator.rows) +
+                    '\nNulls: ' + nulls + '\nPercent: ' +
+                    ((similarTiles / (illustrator.cols * illustrator.rows)) * 100) +
+                    '%');
           }
           return;
         }
@@ -1616,5 +1622,5 @@
   };
 
   illustrator.init();
-  illustrator.speak('Welcome to Social Media Illustrator');
+  illustrator.speak('Hello! I am that magic voice deep inside your laptop!');
 })();

@@ -8,7 +8,8 @@
         "pos": "0.1.x",
         "request": "2.11.x",
         "socket.io": "0.9.x",
-        "supervisor": "0.3.x"
+        "supervisor": "0.3.x",
+        "node-speak": "0.0.x"
     },
     "engines": {
         "node": "0.8.x",
