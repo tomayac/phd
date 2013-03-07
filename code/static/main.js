@@ -4,6 +4,7 @@
     DEBUG: true,
     MEDIA_SERVER: 'http://localhost:8001/search/combined/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
+    SPEECH_SERVER: 'http://localhost:8001/speech/',
     MAX_ROW_HEIGHT: 200,
     SIMILAR_TILES_FACTOR: 2/3,
 
@@ -1570,8 +1571,50 @@
         top: top,
         left: left
       };
+    },
+    speak: function(message) {
+      if (!message) {
+        return false;
+      }
+
+      illustrator.showStatusMessage('Trying to say "' + message + '"');
+
+      var url = illustrator.SPEECH_SERVER + encodeURIComponent(message);
+
+      var handleXhrError = function(url) {
+        illustrator.showStatusMessage('Error while trying to load ' + url);
+      };
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+            try {
+              var speech = JSON.parse(xhr.responseText);
+              var audio = document.createElement('audio');
+              audio.src = speech.base64;
+              audio.addEventListener('ended', function() {
+                audio.parentNode.removeChild(audio);
+              });
+              document.body.appendChild(audio);
+              audio.play();
+            } catch(e) {
+              if (illustrator.DEBUG) console.log(e);
+              handleXhrError(url);
+            }
+          } else {
+            handleXhrError(url);
+          }
+        }
+      };
+      xhr.onerror = function() {
+        handleXhrError(url);
+      };
+      xhr.open("GET", url, true);
+      xhr.send(null);
+      return false;
     }
   };
 
   illustrator.init();
+  illustrator.speak('Welcome to Social Media Illustrator');
 })();

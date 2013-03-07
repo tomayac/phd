@@ -9,6 +9,7 @@ global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
 var Uri = require('./uris.js');
 var mediaFinder = require('./mediafinder.js');
+var speak = require('./speak.js');
 
 var GLOBAL_config = {
   DEBUG: true
@@ -36,6 +37,8 @@ app.get('/', function(req, res) {
 app.get(/^\/search\/(.+)\/(.+)$/, search);
 
 app.get(/^\/proxy\/(.+)$/, proxy);
+
+app.get(/^\/speech\/(.+)$/, speech);
 
 function proxy(req, res, next) {
   var path = /^\/proxy\/(.+)$/;
@@ -93,10 +96,27 @@ function search(req, res, next) {
   });
 }
 
+function speech(req, res, next) {
+  var path = /^\/speech\/(.+)$/;
+  var pathname = require('url').parse(req.url).pathname;
+  var words = decodeURIComponent(pathname.replace(path, '$1'));
+  if (GLOBAL_config.DEBUG) console.log('Speech request for ' + words);
+  speak.say(words, function(src) {
+    if (src) {
+      res.setHeader('Content-Type', 'application/json; charset=UTF-8');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+      res.send(JSON.stringify({base64: src}));
+    } else {
+      res.statusCode = 404;
+      res.send('Error 404 File not found.');
+    }
+  });
+}
+
 io.set('log level', 1);
 io.sockets.on('connection', function(socket) {
 });
-
 
 var port = process.env.PORT || 8001;
 server.listen(port);
