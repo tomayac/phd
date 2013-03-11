@@ -1098,8 +1098,9 @@ illustrator.speak(                'Similar tiles: ' +
 
       var createMatchingTilesGrid = function(image, indexes, invert) {
         var fragment = document.createDocumentFragment();
-        var tileWidth = image.width / illustrator.cols;
-        var tileHeight = image.height / illustrator.rows;
+        var tileWidth = ~~(image.width / illustrator.cols);
+        var tileHeight = ~~(image.height / illustrator.rows);
+
         var len = illustrator.cols * illustrator.rows;
         for (var i = 0; i < len; i++) {
           // calculate the boundaries for the current tile from the
@@ -1120,8 +1121,8 @@ illustrator.speak(                'Similar tiles: ' +
           }
           if (indexes[i] === true) {
             var tile = document.createElement('img');
-            tile.src = image.src + '#xywh=' + ~~sx + ',' + ~~sy + ',' +
-                ~~tileWidth + ',' + ~~tileHeight;
+            tile.src = image.src + '#xywh=' + sx + ',' + sy + ',' + tileWidth +
+                ',' + tileHeight;
             tile.classList.add('tilerBorder');
             fragment.appendChild(tile);
           } else if (indexes[i] === false) {
@@ -1159,17 +1160,17 @@ illustrator.speak(                'Similar tiles: ' +
       matchLeftTd.appendChild(matchLeft);
       matchesRow.appendChild(matchLeftTd);
 
-      var matchRight =
-          createMatchingTilesGrid(right, similarTilesIndexes.slice(0), false);
-      var matchRightTd = document.createElement('td');
-      matchRightTd.appendChild(matchRight);
-      matchesRow.appendChild(matchRightTd);
-
       var diffLeft =
           createMatchingTilesGrid(left, similarTilesIndexes.slice(0), true);
       var diffLeftTd = document.createElement('td');
       diffLeftTd.appendChild(diffLeft);
       diffRow.appendChild(diffLeftTd);
+
+      var matchRight =
+          createMatchingTilesGrid(right, similarTilesIndexes.slice(0), false);
+      var matchRightTd = document.createElement('td');
+      matchRightTd.appendChild(matchRight);
+      matchesRow.appendChild(matchRightTd);
 
       var diffRight =
           createMatchingTilesGrid(right, similarTilesIndexes.slice(0), true);
