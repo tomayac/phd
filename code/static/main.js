@@ -638,6 +638,8 @@
       document.getElementById('queryLog').innerHTML = '';
       document.getElementById('statistics').innerHTML = '';
       document.getElementById('mediaGallery').innerHTML = '';
+      document.getElementById('differences').innerHTML = '';
+      document.getElementById('differences').style.display = 'none';
       document.getElementById('query').value = '';
       document.getElementById('tab1').checked = true;
       illustrator.statusMessages.innerHTML = '';
@@ -990,7 +992,7 @@
       } else {
         keys = [opt_outer, opt_inner];
       }
-      var similarTilesIndexes = {};
+      var similarTilesIndexes = [];
       var len = keys.length;
       var abs = Math.abs;
       var max = Math.max;
@@ -1014,11 +1016,18 @@
               if (distance[k] <= illustrator.threshold) {
                 similarTiles++;
                 if (debugOnly) {
-                  similarTilesIndexes[k] = true;
+                  similarTilesIndexes.push(true);
+                }
+              } else {
+                if (debugOnly) {
+                  similarTilesIndexes.push(false);
                 }
               }
             } else {
               nulls++;
+              if (debugOnly) {
+                similarTilesIndexes.push(null);
+              }
             }
           }
           var minimumRequired;
@@ -1087,7 +1096,7 @@ illustrator.speak(                'Similar tiles: ' +
     },
     showDiffImages: function(opt_outer, opt_inner, similarTilesIndexes) {
 
-      var createMatchingTilesGrid = function(image, similarTilesIndexes) {
+      var createMatchingTilesGrid = function(image, indexes, invert) {
         var fragment = document.createDocumentFragment();
         var tileWidth = image.width / illustrator.cols;
         var tileHeight = image.height / illustrator.rows;
@@ -1102,19 +1111,31 @@ illustrator.speak(                'Similar tiles: ' +
           if (mod === 0) {
             fragment.appendChild(document.createElement('br'));
           }
-          if (similarTilesIndexes[i]) {
+          if (invert) {
+            if (indexes[i] === true) {
+              indexes[i] = false;
+            } else if (indexes[i] === false) {
+              indexes[i] = true;
+            }
+          }
+          if (indexes[i] === true) {
             var tile = document.createElement('img');
-            tile.src = left.src +
-                '#xywh=' + sx + ',' + sy + ',' + tileWidth + ',' + tileHeight;
+            tile.src = image.src + '#xywh=' + ~~sx + ',' + ~~sy + ',' +
+                ~~tileWidth + ',' + ~~tileHeight;
+            tile.classList.add('tilerBorder');
             fragment.appendChild(tile);
-          } else {
+          } else if (indexes[i] === false) {
             var transparent = document.createElement('img');
             transparent.style.cssText = 'width:' + tileWidth + 'px;' +
-                'height:' + tileHeight + 'px;' +
-                'outline:solid 1px #ccc;' +
-                'outline-offset:-1px;';
-            transparent.src = 'data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+                'height:' + tileHeight + 'px;';
+            transparent.classList.add('tilerBorder');
             fragment.appendChild(transparent);
+          } else if (indexes[i] === null) {
+            var nullTile = document.createElement('img');
+            nullTile.style.cssText = 'width:' + tileWidth + 'px;' +
+                'height:' + tileHeight + 'px;';
+            nullTile.classList.add('checkerbordTile');
+            fragment.appendChild(nullTile);
           }
         }
         return fragment;
@@ -1122,14 +1143,55 @@ illustrator.speak(                'Similar tiles: ' +
 
       var left = document.createElement('img');
       left.src = opt_outer;
+
       var right = document.createElement('img');
       right.src = opt_inner;
-      var fragment = document.createDocumentFragment();
-      fragment.appendChild(createMatchingTilesGrid(left, similarTilesIndexes));
-      fragment.appendChild(document.createElement('br'));
-      fragment.appendChild(createMatchingTilesGrid(right, similarTilesIndexes));
-      document.body.appendChild(fragment);
-      mediaFragments.apply();
+
+      var table = document.createElement('table');
+      var matchesRow = document.createElement('tr');
+      var diffRow = document.createElement('tr');
+      table.appendChild(matchesRow);
+      table.appendChild(diffRow);
+
+      var matchLeft =
+          createMatchingTilesGrid(left, similarTilesIndexes.slice(0), false);
+      var matchLeftTd = document.createElement('td');
+      matchLeftTd.appendChild(matchLeft);
+      matchesRow.appendChild(matchLeftTd);
+
+      var matchRight =
+          createMatchingTilesGrid(right, similarTilesIndexes.slice(0), false);
+      var matchRightTd = document.createElement('td');
+      matchRightTd.appendChild(matchRight);
+      matchesRow.appendChild(matchRightTd);
+
+      var diffLeft =
+          createMatchingTilesGrid(left, similarTilesIndexes.slice(0), true);
+      var diffLeftTd = document.createElement('td');
+      diffLeftTd.appendChild(diffLeft);
+      diffRow.appendChild(diffLeftTd);
+
+      var diffRight =
+          createMatchingTilesGrid(right, similarTilesIndexes.slice(0), true);
+      var diffRightTd = document.createElement('td');
+      diffRightTd.appendChild(diffRight);
+      diffRow.appendChild(diffRightTd);
+
+      var differencesDiv = document.getElementById('differences');
+      differencesDiv.innerHTML = '';
+      var close = document.createElement('span');
+      close.classList.add('close');
+      close.innerHTML = 'X';
+      close.style.display = 'block';
+      differencesDiv.appendChild(close);
+      close.addEventListener('click', function() {
+        differencesDiv.style.display = 'none';
+        differencesDiv.innerHTML = '';
+      });
+      differencesDiv.appendChild(table);
+      differencesDiv.style.display = 'block';
+
+      mediaFragments.apply(differencesDiv);
     },
     displayClusterStatistics: function() {
       var numClusters = illustrator.clusters.length;

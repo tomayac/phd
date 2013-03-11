@@ -44,11 +44,23 @@ input.number {
   right: 2em;
 }
 
+#differences {
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  left: 2em;
+  top: 1em;
+  padding: 1em;
+  display: none;
+  border: solid darkblue 4px;
+}
+
 #querylog {
   margin: 0 0.75em;
   float: left;
   height: 4em;
-  width: -webkit-calc(100% - 15em);
+  width: calc(100% - 5em);
+  width: -webkit-calc(100% - 5em);
   overflow: auto;
 }
 
@@ -168,6 +180,19 @@ input.number {
 
 .photoBorder {
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tileBorder {
+  outline: solid 1px #ccc;
+  outline-offset: -1px;
+}
+
+.checkerbordTile {
+  background-color:#eee;
+  background-image: -webkit-linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc), -webkit-linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc), linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc);
+  background-size: 6px 6px;
+  background-position: 0 0, 3px 3px;
 }
 
 .face {
