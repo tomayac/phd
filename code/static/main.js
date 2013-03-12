@@ -1200,49 +1200,61 @@
       var facesRight = illustrator.mediaItems[opt_inner].faces.length;
       var hasEqualFaces = facesLeft === facesRight;
       var isSimilar = similarTiles >= minimumRequired;
+      var overall = illustrator.cols * illustrator.rows;
+      var percent = similarTiles / overall * 100;
 
       // clustered at all or not?
       var clusteredOrNot = function(callback) {
         if (isSimilar) {
-          illustrator.speak('The two media items are clustered.', callback);
+          illustrator.speak('The two media items are ' +
+          (similarTiles === overall ?
+              'exact duplicates.' : 'near-duplicates.'), callback);
         } else {
-          illustrator.speak('The two media items are not clustered.', callback);
+          illustrator.speak('The two media items are different.', callback);
         }
       };
 
       // same amount of faces?
       var sameAmountOfFaces = function(callback) {
-        illustrator.speak('The left media item contains ' +
-            (facesLeft === 0 ? 'no ' : facesLeft + ' ') +
-            (facesLeft === 1 ? 'face ' : 'faces ') +
-            (hasEqualFaces ? 'and ' : 'while ') + 'the right media item ' +
-            (hasEqualFaces ? 'also ' : '') + 'contains ' +
-            (facesRight === 0 ? 'no ' : facesRight + ' ') +
-            (facesRight === 1 ? 'face.' : 'faces.'), callback);
+        if (facesLeft === 0 && facesRight === 0) {
+          illustrator.speak('Neither the left, nor the right media item ' +
+              'contain detected faces.', callback);
+        } else {
+          illustrator.speak('The left media item contains ' +
+              (facesLeft === 0 ? 'no ' : facesLeft + ' ') +
+              (facesLeft === 1 ? 'face ' : 'faces ') +
+              (hasEqualFaces ? 'and ' : 'while ') + 'the right media item ' +
+              (hasEqualFaces ? 'also ' : '') + 'contains ' +
+              (facesRight === 0 ? 'no detected ' : facesRight + ' detected ') +
+              (facesRight === 1 ? 'face.' : 'faces.'), callback);
+        }
       };
 
       // how many tiles?
       var tileStatistics = function(callback) {
-        var overall = illustrator.cols * illustrator.rows;
-        var percent = similarTiles / overall * 100;
         var matchingTiles = document.querySelectorAll('.matchingTile');
         for (var i = 0, len = matchingTiles.length; i < len; i++) {
           matchingTiles[i].classList.add('highlightTile');
         }
-        illustrator.speak('Out of overall ' +
-            overall + ' ' +
-            'tiles, ' + (isSimilar ? '' : 'only ') + similarTiles +
-            ' from the minimum required ' +
-            minimumRequired + ' were similar enough to be ' +
-            'clustered. This corresponds to ' +
-            (Math.round(percent) == percent ?
-                percent : 'roughly ' + Math.round(percent)) + ' ' +
-            'percent of all tiles.', function(message) {
-              for (var i = 0, len = matchingTiles.length; i < len; i++) {
-                matchingTiles[i].classList.remove('highlightTile');
-              }
-              callback(message);
-            });
+        if (similarTiles > 0) {
+          illustrator.speak('Out of overall ' + overall + ' tiles, ' +
+              (isSimilar ? '' : 'only ') + similarTiles +
+              ' from the minimum required ' +
+              minimumRequired + ' were similar enough to be ' +
+              'clustered. This corresponds to ' +
+              (Math.round(percent) == percent ?
+                  percent : 'roughly ' + Math.round(percent)) + ' ' +
+              'percent of all tiles.', function(message) {
+                for (var i = 0, len = matchingTiles.length; i < len; i++) {
+                  matchingTiles[i].classList.remove('highlightTile');
+                }
+                callback(message);
+              });
+          } else {
+            illustrator.speak('Out of overall ' + overall + ' tiles,' +
+                'not a single one was similar enough to be clustered.',
+                callback);
+          }
       };
 
       // how many nulls?
@@ -1254,7 +1266,7 @@
           }
           illustrator.speak('However, ' + nulls + ' tiles were not ' +
               'considered, as they are either too bright or too dark, which ' +
-              'is a common source of errors.', function(message) {
+              'is a common source of clustering issues.', function(message) {
                 for (var i = 0, len = nullTiles.length; i < len; i++) {
                   nullTiles[i].classList.remove('highlightTile');
                 }
@@ -1266,10 +1278,9 @@
       };
 
       clusteredOrNot(function() {
-        sameAmountOfFaces(function() {
-          tileStatistics(function() {
-            nullStatistics(function() {
-
+        tileStatistics(function() {
+          nullStatistics(function() {
+            sameAmountOfFaces(function() {
             });
           });
         });
