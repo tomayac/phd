@@ -1222,8 +1222,8 @@
         } else {
           illustrator.speak('The left media item contains ' +
               (facesLeft === 0 ? 'no ' : facesLeft + ' ') + 'detected ' +
-              (facesLeft === 1 ? 'face ' : 'faces ') +
-              (hasEqualFaces ? 'and ' : 'while ') + 'the right media item ' +
+              (facesLeft === 1 ? 'face' : 'faces') +
+              (hasEqualFaces ? ' and ' : ', while ') + 'the right media item ' +
               (hasEqualFaces ? 'also ' : '') + 'contains ' +
               (facesRight === 0 ? 'no detected ' : facesRight + ' detected ') +
               (facesRight === 1 ? 'face.' : 'faces.'), callback);
@@ -1252,7 +1252,7 @@
                 callback(message);
               });
           } else {
-            illustrator.speak('Out of overall ' + overall + ' tiles,' +
+            illustrator.speak('Out of overall ' + overall + ' tiles, ' +
                 'not a single one was similar enough to be clustered.',
                 callback);
           }
