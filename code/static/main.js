@@ -1221,7 +1221,7 @@
               'contain detected faces.', callback);
         } else {
           illustrator.speak('The left media item contains ' +
-              (facesLeft === 0 ? 'no ' : facesLeft + ' ') +
+              (facesLeft === 0 ? 'no ' : facesLeft + ' ') + 'detected ' +
               (facesLeft === 1 ? 'face ' : 'faces ') +
               (hasEqualFaces ? 'and ' : 'while ') + 'the right media item ' +
               (hasEqualFaces ? 'also ' : '') + 'contains ' +
@@ -1240,7 +1240,8 @@
           illustrator.speak('Out of overall ' + overall + ' tiles, ' +
               (isSimilar ? '' : 'only ') + similarTiles +
               ' from the minimum required ' +
-              minimumRequired + ' were similar enough to be ' +
+              minimumRequired + ' tiles ' +
+              (similarTiles > 1 ? 'were ' : 'was ') + 'similar enough to be ' +
               'clustered. This corresponds to ' +
               (Math.round(percent) == percent ?
                   percent : 'roughly ' + Math.round(percent)) + ' ' +
@@ -1264,8 +1265,11 @@
           for (var i = 0, len = nullTiles.length; i < len; i++) {
             nullTiles[i].classList.add('highlightTile');
           }
-          illustrator.speak('However, ' + nulls + ' tiles were not ' +
-              'considered, as they are either too bright or too dark, which ' +
+          illustrator.speak('However, ' + nulls + ' ' +
+              (nulls > 1 ?
+                  'tiles were not considered, as they are ' :
+                  'tile was not considered, as it is ') +
+              'either too bright or too dark, which ' +
               'is a common source of clustering issues.', function(message) {
                 for (var i = 0, len = nullTiles.length; i < len; i++) {
                   nullTiles[i].classList.remove('highlightTile');
