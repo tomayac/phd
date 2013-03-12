@@ -1072,20 +1072,15 @@
             members: members
           });
         } else {
-          illustrator.showDiffImages(opt_outer, opt_inner, similarTilesIndexes);
-
           if (illustrator.DEBUG) console.log('Similar tiles: ' +
               similarTiles + '\nMinimum required: ' + minimumRequired +
               '\nOverall: ' + (illustrator.cols * illustrator.rows) +
               '\nNulls: ' + nulls + '\nPercent: ' +
               ((similarTiles / (illustrator.cols * illustrator.rows)) * 100) +
               '%');
-illustrator.speak(                'Similar tiles: ' +
-                  similarTiles + '\nMinimum required: ' + minimumRequired +
-                  '\nOverall: ' + (illustrator.cols * illustrator.rows) +
-                  '\nNulls: ' + nulls + '\nPercent: ' +
-                  ((similarTiles / (illustrator.cols * illustrator.rows)) * 100) +
-                  '%');
+          illustrator.showDiffImages(opt_outer, opt_inner, similarTilesIndexes);
+          illustrator.sayDiffImages(opt_outer, opt_inner, similarTilesIndexes,
+              similarTiles, minimumRequired, nulls);
           return;
         }
       }
@@ -1123,13 +1118,18 @@ illustrator.speak(                'Similar tiles: ' +
             var tile = document.createElement('img');
             tile.src = image.src + '#xywh=' + sx + ',' + sy + ',' + tileWidth +
                 ',' + tileHeight;
-            tile.classList.add('tilerBorder');
+            tile.classList.add('tileBorder');
+            if (!invert) {
+              tile.classList.add('matchingTile');
+            } else {
+              tile.classList.add('nonMatchingTile');
+            }
             fragment.appendChild(tile);
           } else if (indexes[i] === false) {
             var transparent = document.createElement('img');
             transparent.style.cssText = 'width:' + tileWidth + 'px;' +
                 'height:' + tileHeight + 'px;';
-            transparent.classList.add('tilerBorder');
+            transparent.classList.add('tileBorder');
             fragment.appendChild(transparent);
           } else if (indexes[i] === null) {
             var nullTile = document.createElement('img');
@@ -1193,6 +1193,87 @@ illustrator.speak(                'Similar tiles: ' +
       differencesDiv.style.display = 'block';
 
       mediaFragments.apply(differencesDiv);
+    },
+    sayDiffImages: function(opt_outer, opt_inner, similarTilesIndexes,
+        similarTiles, minimumRequired, nulls) {
+      var facesLeft = illustrator.mediaItems[opt_outer].faces.length;
+      var facesRight = illustrator.mediaItems[opt_inner].faces.length;
+      var hasEqualFaces = facesLeft === facesRight;
+      var isSimilar = similarTiles >= minimumRequired;
+
+      // clustered at all or not?
+      var clusteredOrNot = function(callback) {
+        if (isSimilar) {
+          illustrator.speak('The two media items are clustered.', callback);
+        } else {
+          illustrator.speak('The two media items are not clustered.', callback);
+        }
+      };
+
+      // same amount of faces?
+      var sameAmountOfFaces = function(callback) {
+        illustrator.speak('The left media item contains ' +
+            (facesLeft === 0 ? 'no ' : facesLeft + ' ') +
+            (facesLeft === 1 ? 'face ' : 'faces ') +
+            (hasEqualFaces ? 'and ' : 'while ') + 'the right media item ' +
+            (hasEqualFaces ? 'also ' : '') + 'contains ' +
+            (facesRight === 0 ? 'no ' : facesRight + ' ') +
+            (facesRight === 1 ? 'face.' : 'faces.'), callback);
+      };
+
+      // how many tiles?
+      var tileStatistics = function(callback) {
+        var overall = illustrator.cols * illustrator.rows;
+        var percent = similarTiles / overall * 100;
+        var matchingTiles = document.querySelectorAll('.matchingTile');
+        for (var i = 0, len = matchingTiles.length; i < len; i++) {
+          matchingTiles[i].classList.add('highlightTile');
+        }
+        illustrator.speak('Out of overall ' +
+            overall + ' ' +
+            'tiles, ' + (isSimilar ? '' : 'only ') + similarTiles +
+            ' from the minimum required ' +
+            minimumRequired + ' were similar enough to be ' +
+            'clustered. This corresponds to ' +
+            (Math.round(percent) == percent ?
+                percent : 'roughly ' + Math.round(percent)) + ' ' +
+            'percent of all tiles.', function(message) {
+              for (var i = 0, len = matchingTiles.length; i < len; i++) {
+                matchingTiles[i].classList.remove('highlightTile');
+              }
+              callback(message);
+            });
+      };
+
+      // how many nulls?
+      var nullStatistics = function(callback) {
+        if (nulls > 0) {
+          var nullTiles = document.querySelectorAll('.checkerbordTile');
+          for (var i = 0, len = nullTiles.length; i < len; i++) {
+            nullTiles[i].classList.add('highlightTile');
+          }
+          illustrator.speak('However, ' + nulls + ' tiles were not ' +
+              'considered, as they are either too bright or too dark, which ' +
+              'is a common source of errors.', function(message) {
+                for (var i = 0, len = nullTiles.length; i < len; i++) {
+                  nullTiles[i].classList.remove('highlightTile');
+                }
+                callback(message);
+              });
+        } else {
+          callback();
+        }
+      };
+
+      clusteredOrNot(function() {
+        sameAmountOfFaces(function() {
+          tileStatistics(function() {
+            nullStatistics(function() {
+
+            });
+          });
+        });
+      });
     },
     displayClusterStatistics: function() {
       var numClusters = illustrator.clusters.length;
@@ -1691,12 +1772,12 @@ illustrator.speak(                'Similar tiles: ' +
         left: left
       };
     },
-    speak: function(message) {
+    speak: function(message, opt_callback) {
       if (!message) {
         return false;
       }
 
-      illustrator.showStatusMessage('Trying to say "' + message + '"');
+      illustrator.showStatusMessage('Saying "' + message + '"');
 
       var url = illustrator.SPEECH_SERVER + encodeURIComponent(message);
 
@@ -1713,6 +1794,9 @@ illustrator.speak(                'Similar tiles: ' +
               audio.src = speech.base64;
               audio.addEventListener('ended', function() {
                 audio.parentNode.removeChild(audio);
+                if (opt_callback) {
+                  opt_callback(message);
+                }
               });
               document.body.appendChild(audio);
               audio.play();

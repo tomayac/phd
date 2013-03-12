@@ -195,6 +195,30 @@ input.number {
   background-position: 0 0, 3px 3px;
 }
 
+.highlightTile {
+  -webkit-animation: highlight 1s ease infinite alternate;
+  animation: highlight 1s ease infinite alternate;
+  outline: solid 1px transparent;
+}
+
+@-webkit-keyframes highlight {
+  0% {
+    outline-color: transparent;
+  }
+  100% {
+    outline-color: red;
+  }
+}
+
+@keyframes highlight {
+  0% {
+    outline-color: transparent;
+  }
+  100% {
+    outline-color: red;
+  }
+}
+
 .face {
   border-right: solid red 3px;
 }
