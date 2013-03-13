@@ -1153,7 +1153,7 @@
       var diffRow = document.createElement('tr');
       table.appendChild(matchesRow);
       table.appendChild(diffRow);
-
+//setTimeout(function() {
       var matchLeft =
           createMatchingTilesGrid(left, similarTilesIndexes.slice(0), false);
       var matchLeftTd = document.createElement('td');
@@ -1193,6 +1193,7 @@
       differencesDiv.style.display = 'block';
 
       mediaFragments.apply(differencesDiv);
+//},5000)
     },
     sayDiffImages: function(opt_outer, opt_inner, similarTilesIndexes,
         similarTiles, minimumRequired, nulls) {
@@ -1219,6 +1220,10 @@
         if (facesLeft === 0 && facesRight === 0) {
           illustrator.speak('Neither the left, nor the right media item ' +
               'contain detected faces.', callback);
+        } else if (hasEqualFaces) {
+          illustrator.speak('Both, the left and the right media item ' +
+              'contain ' + facesLeft + ' detected ' +
+              (facesLeft === 1 ? 'face.' : 'faces.'), callback);
         } else {
           illustrator.speak('The left media item contains ' +
               (facesLeft === 0 ? 'no ' : facesLeft + ' ') + 'detected ' +
