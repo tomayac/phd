@@ -10,7 +10,7 @@
 
 \section{Introduction}
 
-In this chapter, we present and define aesthetic principles
+In this chapter, we introduce aesthetic principles
 for the automatic generation of media galleries
 based on media items retrieved from social networks
 that---after a~ranking and pruning step---can serve to authentically
@@ -46,7 +46,7 @@ and harmonic media galleries.
 \section{Related Work}
 While enormous efforts have been made to extract those features
 from media items and microposts on social networks in \emph{isolation},
-to the best knowledge of the author, remarkably less initiatives 
+to the best of our knowledge, remarkably less initiatives 
 concern the extraction and the application
 of all those features \emph{in combination}
 for \emph{all} types of media items, including microposts.
@@ -187,7 +187,7 @@ A~media gallery is called \emph{balanced}, if its shape is rectangular,
 and \emph{order-respecting},
 if media items appear in insertion order.
 
-\subsection{Non-Order-Respecting Styles}
+\paragraph{Non-Order-Respecting Styles}
 
 An interesting technique for arranging media items is dividing.
 Paper sizes that follow the ISO~216 standard%
@@ -216,7 +216,7 @@ for the ranking step to make sense.
 In the upcoming two subsections, we will introduce two techniques
 for the generation of such media galleries.
 
-\subsection{Strict Order, Equal Size (SOES)}
+\paragraph{Strict Order, Equal Size (SOES)}
 
 A~media gallery style that we call \emph{Strict Order, Equal Size (SOES)},
 which strictly respects the ranking-implied order is presented in~%
@@ -258,7 +258,7 @@ of media items in $+1$ steps.
   \label{fig:media-gallery2}  
 \end{figure}
 
-\subsection{Loose Order, Varying Size (LOVS)}
+\paragraph{Loose Order, Varying Size (LOVS)}
 
 Examples of a~media gallery style
 that we call \emph{Loose Order, Varying Size (LOVS)}
@@ -276,7 +276,7 @@ Balancing the gallery is slightly harder,
 as in the worst case up to $ (\mathit{bigBlocksPerRow} - 1) \times 2 $
 media items may be required.
 
-\section{Discussion}
+\section{Discussion and Evaluation}
 
 The main motivation for the \emph{Loose Order, Varying Size} style
 is that certain media items can be featured more prominently
@@ -287,9 +287,6 @@ or media items with interesting details~%
 \cite{suh2003thumbnail}.
 Users may want to decide what media items to feature,
 albeit we aim for an automatized solution.
-
-\section{Preliminary Evaluation}
-
 Evaluating subjective data like \emph{the} correct presentation form
 for a~set of media items is a~challenging task.
 For different users and different media galleries,

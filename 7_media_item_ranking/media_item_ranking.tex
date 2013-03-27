@@ -60,14 +60,15 @@ which, given event-related search terms,
 extract raw binary media items and associated microposts
 from multiple social networks.
 
-\subsection{Textual Ranking Criteria}
+\paragraph{Textual Ranking Criteria}
 
 This category regards the microposts that accompany media items.
 Typically, microposts provide a~description of media items.
 Using named-entity disambiguation tools,
 textual content can be linked to LOD cloud concepts~\cite{Facebook2011}.
 We have described micropost annotation in detail in \autoref{cha:micropost-annotation}.
-\subsection{Visual Ranking Criteria} \label{sec:visualrankingcriteria}
+
+\paragraph{Visual Ranking Criteria} \label{sec:visualrankingcriteria}
 
 This category regards the contents of photos and videos.
 We distinguish \emph{low-} and \emph{high-level} visual ranking criteria.
@@ -77,7 +78,7 @@ Low-level criteria include file size, resolution,
 duration of a~video, geolocation, and time.
 Via OCR, contained characters can be treated as textual features.
 
-\subsection{Audial Ranking Criteria}
+\paragraph{Audial Ranking Criteria}
 
 This category regards the audio track of videos.
 \emph{High-level} ranking criteria are the presence or absence
@@ -87,7 +88,7 @@ audial \emph{low-level} features are the average bit rate,
 volume, possibly distorted areas, \emph{etc}.
 Through audio transcription, speech can be treated as textual features.
 
-\subsection{Social Ranking Criteria}
+\paragraph{Social Ranking Criteria}
 
 This category regards social network effects like shares, mentions,
 view counts, expressions of (dis)likes, user diversity, \emph{etc}.
@@ -97,7 +98,7 @@ on a~\emph{single} social network,
 but in a~network-agnostic way across \emph{multiple} social networks.
 We will detail social aspects more later on in this chapter.
 
-\subsection{Aesthetic Ranking Criteria}
+\paragraph{Aesthetic Ranking Criteria}
 
 This category regards the desired outcome after the ranking, \emph{i.e.},
 the media gallery that illustrates a~given event and its atmosphere.
@@ -109,7 +110,7 @@ However, to the best of our knowledge,
 no media gallery composition aesthetics studies exist
 that examine mixing video \emph{and} photo media items.
 
-\subsection{Temporal Ranking Criteria}
+\paragraph{Temporal Ranking Criteria}
 
 This category regards the publication date of media items.
 If media items are clustered, we use the youngest media item
@@ -173,7 +174,7 @@ of the abstraction layer's data format:
   \label{table:social-interactions}
 \end{table}
 
-\section{Merging Social Interactions}
+\section{Merging and Ranking}
 \label{sec:merging-social-interactions}
 
 If a~set of media items is sufficiently similar to be clustered
@@ -210,7 +211,7 @@ and assigns the accumulated social interactions to the cluster.
 §\textbf{return}§ cluster
 \end{lstlisting}
 
-\section{Selection of a~Cluster's Visual Representative}  
+\subsection{Selection of a~Cluster's Visual Representative}  
 
 As outlined in the previous section, similar enough media items
 are clustered and treated as just one media item.
@@ -251,7 +252,7 @@ maxResolution = 0
 §\textbf{return}§ cluster     
 \end{lstlisting}
 
-\section{Ranking Formula}
+\subsection{Ranking Formula}
 \label{sec:introduction-of-a-ranking-formula}
 
 Up to now, we have shown how media item clusters are formed,
@@ -291,12 +292,12 @@ These factors follow the usage patterns of the different actions:
 viewing happens more often than liking, which in turn happens more often than commenting.
 We describe the evaluation in the upcoming section.
 
-\section{Evaluation}
+\section{Evaluation Based on the Super Bowl XLVII Event}
 \label{sec-chapter7-evaluation}
 
 \subsection{Super Bowl Analyses by Social Networks}
 
-We have evaluated our approach with the at time of writing
+We have evaluated our approach with the (at time of writing)
 recent event of the Super Bowl XLVII%
 \footnote{\url{http://en.wikipedia.org/wiki/Super_Bowl_XLVII},
 accessed February 8, 2013}.
