@@ -267,14 +267,14 @@ For a~given set of media item clusters, a~ranking is calculated as follows.
 \begin{gather}
   \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
   \gamma \times \mathit{comments} + \delta \times \mathit{views} + \nonumber\\
-  \epsilon \times \mathit{crossNetwork} + \zeta \times \mathit{recency} +
+  \epsilon \times \mathit{clusterSize} + \zeta \times \mathit{recency} +
   \eta \times \mathit{quality}
 \end{gather}
 
 The factors $ \mathit{likes}, \mathit{shares}, \mathit{comments},$ and $ \mathit{views} $
 stem from the individual media items as described in \autoref{sec:social-interactions-abstraction-layer}
 and \autoref{sec:merging-social-interactions}.
-The factor $ \mathit{crossNetwork} $ corresponds to the size of the current cluster. 
+The factor $ \mathit{clusterSize} $ corresponds to the size of the current cluster. 
 After some experimentation with different event media items sets,
 the factor $ \mathit{recency} $ was empirically determined to be calculated as follows.
 If the youngest media item in the cluster is less than or exactly one day old,
