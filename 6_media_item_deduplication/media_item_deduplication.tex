@@ -24,14 +24,14 @@ The corresponding verb \emph{to duplicate} is defined as to
 The derived term \emph{deduplication} in consequence refers to
 the act of eliminating duplicate or redundant information.
 
-\subsection{Definition of Camera Shot Boundary Detection}
+\paragraph{Definition of Camera Shot Boundary Detection}
 
 In video production and filmmaking, a~shot is a~series of frames
 that runs for an uninterrupted period of time.
 Shots are always filmed with a~single camera and can be of any duration. 
 Camera shot boundary detection is a~field of research of video processing.
 
-\subsection{Definition of Social Media Item}
+\paragraph{Definition of Social Media Item}
 
 We define a~social media item as either a~photo (image) or video
 that was \emph{publicly} shared or published
@@ -39,7 +39,7 @@ on at least one social network.
 In the following, we will use the shorter term media item
 rather than the full term.
 
-\subsection{Definition of Exact Duplicates for Photos}
+\paragraph{Definition of Exact Duplicates for Photos}
 
 We define two media items of type photo as \emph{exact duplicates}
 if their pixel contents are exactly the same.
@@ -58,7 +58,7 @@ from one social network on another, for example,
 if one user posts a~photo on Instagram that then someone else
 (or even the same user) posts on Facebook.
 
-\subsection{Definition of Near-Duplicates for Photos}
+\paragraph{Definition of Near-Duplicates for Photos}
 
 We define two media items of type photo as \emph{near-duplicates}
 if their pixel contents differ no more than a~given threshold after resampling.
@@ -72,7 +72,7 @@ Another scenario is a~user applying a~photo effect to a~photo
 (like an Instagram filter) and then sharing both the modified
 and the unmodified version.
 
-\subsection{Definition of Exact Duplicates for Videos}
+\paragraph{Definition of Exact Duplicates for Videos}
 
 We define two media items of type video as \emph{exact duplicates}
 if their pixel contents are frame by frame exactly the same.
@@ -85,7 +85,7 @@ Typical scenarios where exact duplicate videos can occur is,
 for example, two users sharing the same YouTube video
 independently from each other.
 
-\subsection{Definition of Near-Duplicates for Videos}
+\paragraph{Definition of Near-Duplicates for Videos}
 
 We define two media items of type video as \emph{near-duplicates},
 if their pixel contents per frame differ no more
@@ -97,7 +97,7 @@ logo or subtitle insertion, resizing, re-encoding,
 or aspect-ration changes.
 Note that we do not consider video subsegments near-duplicates.
 
-\subsection{Special Case of Photo Contained in a~Video}
+\paragraph{Special Case of Photo Contained in a~Video}
 
 We define the special case of
 \emph{a photo being contained in a~video} if the pixel contents
@@ -139,9 +139,7 @@ and exact duplicate detection are founded
 on a~tile-wise histogram-based pixel comparison algorithm.
 
 \section{Video Shot Boundary Detection} \label{sec:videoshotboundarydetection}
-In video production and filmmaking, a~shot is a~series of frames
-that runs for an uninterrupted period of time.
-Shots are always filmed with a~single camera and can be of any duration. 
+
 Shot boundary detection (also called cut detection or shot transition detection
 or simply shot detection) is a~field of research of video processing.
 Its subject is the automated detection of transitions between shots
@@ -162,7 +160,7 @@ shots for a~sample video.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.7\linewidth]{./stevejobs.png}
+    \includegraphics[width=1.0\linewidth]{./stevejobs.png}
   \end{center}
   \caption[Camera shots for a~sample video on  
     a~major online video portal]
