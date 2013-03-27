@@ -29,16 +29,16 @@ can serve to create authentic media galleries
 that illustrate events and their atmosphere.
 A~key feature for this task is the semantic enrichment
 of media items and associated microposts
-and the extraction of \textbf{visual}, \textbf{audial},
-\textbf{textual}, and \textbf{social} features.
+and the extraction of \emph{visual}, \emph{audial},
+\emph{textual}, and \emph{social} features.
 Based on this set of features,
-additional \textbf{aesthetic} features
+additional \emph{aesthetic} features
 can be defined and exploited to obtain appealing
 and harmonic media galleries.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[trim=20mm 40mm 20mm 10mm, clip, width=0.75\columnwidth]{media-gallery.pdf}
+  \includegraphics[trim=20mm 40mm 20mm 10mm, clip, width=0.7\columnwidth]{media-gallery.pdf}
   \caption{Schematic media gallery with four photos and two videos.}
   \label{fig:media-gallery}
 \end{figure}
@@ -46,41 +46,51 @@ and harmonic media galleries.
 \section{Related Work}
 While enormous efforts have been made to extract those features
 from media items and microposts on social networks in \emph{isolation},
-to the best knowledge of the authors, remarkably less initiatives 
+to the best knowledge of the author, remarkably less initiatives 
 concern the extraction and the application
 of all those features \emph{in combination}
 for \emph{all} types of media items, including microposts.
-In~\cite{Photo2011}, Sandhaus \emph{et al.}\ consider visual and
+In~\cite{sandhaus2011photobook}, Sandhaus \emph{et al.}\ consider visual and
 aesthetic features for the automatic creation of photo books.
 Obrador \emph{et al.}\ use visual and aesthetic features
 for a~category-based approach to automatically assess
-the aesthetic appeal of photographs~\cite{Photo2012}.
-In~\cite{Playlist2006}, Knees \emph{et al.}\ use audial and textual
+the aesthetic appeal of photographs~\cite{obrador2012photoaesthetics}.
+In~\cite{knees2006musicplaylist}, Knees \emph{et al.}\ use audial and textual
 features for the automatic generation of music playlists.
-Choudhury \emph{et al.}\ show in\cite{Sports2011} how social and textual
+Choudhury \emph{et al.}\ show in~\cite{choudhury2011sportstweets} how social and textual
 features can be used to achieve precise detection results 
 of named entities and significant events in sports-related microposts.
-In~\cite{YouTube2010}, Davidson \emph{et al.}\ show how visual,
+In~\cite{davidson2010videorecommendation}, Davidson \emph{et al.}\ show how visual,
 textual, and social features can be used for personalized video recommendations.
-A service called Storify~\cite{Storify2011} lets users manually combine
+A service called Storify~\cite{fincham2011storify} lets users manually combine
 microposts, photos, videos, and other elements onto one page for the purpose
 of storytelling or summarizing an event,
 and share stories permanently on the Web.
 Finally, social networks present photos and videos
-often in grid-like galleries\footnote{\url{http://twitpic.com/904yka/full}}, sometimes scaled
-based on the amount of comments.
-When unique media items have been collected, the remaining task is to summarize events by selecting the most relevant media fragments. Fabro and B\"osz\"orm\'enyi~\cite{Fabro:MMM12} detail the summarization and presentation of events from content retrieved from social media. Nowadays, many domain-specific methods already exhibit good accuracy, for example in the sports domain~\cite{Li1,Li2}. However, the challenge in this field is to find methods that are content-agnostic. Methods that exploit semantic information~(\emph{e.g.}~\cite{Chen}) will likely provide high-quality results in the future, but today's most relevant summaries are produced by user interaction~\cite{Olsen}.
+often in grid-like galleries\footnote{\url{http://twitpic.com/904yka/full}},
+sometimes scaled based on the amount of comments.
+When unique media items have been collected,
+the remaining task is to summarize events by selecting the most relevant media fragments. 
+Fabro and B\"osz\"orm\'enyi~\cite{delfabro2012summarization} detail
+the summarization and presentation of events from content retrieved from social media.
+Nowadays, many domain-specific methods already exhibit good accuracy,
+for example in the sports domain~\cite{li2001sportsvideo,li2010americanfootball}. However, the challenge is to find methods that are content-agnostic.
+Methods that exploit semantic information~(\emph{e.g.},~\cite{chen2009videosummarization}) 
+will likely provide high-quality results in the future,
+but today's most relevant summaries are produced by user interaction~\cite{olsen2011videosummarization}.
 
 \section{Media Gallery Aesthetics}
 
 \noindent \textbf{Definition}
-A media gallery in our context is a~compilation of photos or videos
+A media gallery is a~compilation of photos or videos
 retrieved from social networks that are related to a~given event.
 Given a~set $M = \{m_1,..., m_n\}$ of media items related to a~certain event,
-and given a~ranking formula $f$,
-the subset $M^\prime \subset M$
-is the result after the application of $f$ to $M$: $f(M)=M^\prime$.
-Each media item $m_i$ can either be an instance of video or photo.
+a~ranking formula $f$, and a~ranking threshold $t$,
+the subset $M^{\prime\prime} \subset M$
+is the result after the application of $f$ to $M$: $f(M)=M^\prime$
+and pruning the ranked set $M^\prime$ to only include members
+whose rank is greater than $t$, with the resulting set named $M^{\prime\prime}$.
+Each media item $m_i$ can either be an instance of a~video or photo.
 For each point $t_x$ on a~timeline $T$, the state of the media gallery
 at $t_x$ is defined for each media item $m_i$
 as a~set $S_x$ of $n$ tuples $s_{x,i}$, where
@@ -104,12 +114,12 @@ for the event atmosphere can be observed.
 
 \noindent \textbf{Visual aesthetics}
 Visual aesthetics are determined by the composition, \emph{i.e.},
-the relation of photos to videos \emph{globally}, \emph{per coherent scene},
-and per \emph{point in time}.
-In order not to overcharge the perceptive capacity
-of viewers, the number of visible (moving) media items
+the relation of the number of photos \emph{vs.} the number of videos \emph{globally},
+\emph{per coherent scene}, and per \emph{point in time}.
+In order to avoid cognitive overload of viewers,
+the number of visible (moving) media items
 at a~time should be limited.
-Depending on the event, a~consistent or a~contrasty overall
+Depending on the event, a~consistent or a~contrast-rich overall
 appearance of items may be desired, also for transitions.
 
 \section{Media Gallery Generation}
@@ -118,9 +128,10 @@ We have developed an application for the automatic generation of
 media galleries that visually and audibly summarize events
 based on media items like videos and photos from multiple social networks.
 Further, we have evaluated different media gallery styles with online surveys 
-and examined their pros and cons.
-Besides the survey results, our contribution is also the application itself,
-where media galleries of different styles can be created on-the-fly.
+and examined their advantages and disadvantages.
+Besides the application itself,
+where media galleries of different styles can be created on-the-fly,
+our contributions are also the survey results.
 A~demo is available at
 \url{http://social-media-illustrator.herokuapp.com/}.
 
@@ -131,7 +142,7 @@ Media galleries (see \autoref{fig:media-gallery1} and \autoref{fig:media-gallery
 for examples)
 help users consume larger, however not overwhelmingly huge,
 amounts of media items in an ideally pleasing and aesthetic way.
-These media items may, or, more commonly, may not be ordered,
+These media items may---or, more commonly: may not---be ordered,
 besides an intrinsic chronologic order.
 In the context of our work on summarizing events
 based on microposts and media items stemming from
@@ -142,18 +153,18 @@ from multiple social networks, second, to
 third, to \emph{cluster} them by visual similarity, and
 finally, to \emph{rank} the resulting media item clusters
 according to well-defined ranking criteria.
-In this paper, we treat the challenge of \emph{compiling}
+In this chapter, we treat the challenge of \emph{compiling}
 ranked media item clusters in media galleries in ways
 such that the ranking-implied order is (loosely) respected.
-In the previous sections, we have defined~\cite{steiner2012definingaesthetic}
-aesthetic principles for automatic media gallery layout,
+In the previous sections, we have defined
+aesthetic principles for automatic media gallery layout~\cite{steiner2012definingaesthetic},
 which we now apply to media gallery styles.
 
 \section{Media Gallery Styles}
 
 Media galleries---in contrast to free-form digital media collages---%
 necessarily display media items in a~grid-like way.
-The crucial question is thus, whether the media items' aspect ratios
+The crucial question is thus whether the media items' aspect ratios
 should be respected, or whether they should be cropped to square,
 or other aspect ratios (\emph{e.g.}, 4:3 or 16:9).
 Respecting the aspect ratio has the advantage that media items
@@ -164,7 +175,7 @@ The advantage of cropping is that media gallery layout is easier,
 as the media item formats are predictably the same,
 at the cost of having to decide where to crop.
 Different algorithms (\emph{e.g.},~\cite{suh2003thumbnail})
-beyond this paper's scope exist to aid this decision.
+beyond this chapter's scope exist to aid this decision.
 A~media gallery is called \emph{balanced}, if its shape is rectangular,
 \emph{hole-free} if there are no gaps from missing media items,
 and \emph{order-respecting},
@@ -173,12 +184,16 @@ if media items appear in insertion order.
 \subsection{Non-Order-Respecting Styles}
 
 An interesting technique for arranging media items is dividing.
-Every media item with an aspect ratio of $ \sqrt2 $ can be divided
+Paper sizes that follow the ISO~216 standard%
+\footnote{\url{http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=36631},
+accessed March 27, 2013}
+are the most common every-day examples of the dividing principle:
+every media item with an aspect ratio of $ \sqrt2 $ can be divided
 into two media items with the same aspect ratio.%
 \footnote{\url{http://blog.vjeux.com/2012/image/image-layout-algorithm-lightbox-android.html},
 as~of 02/22/2013}
 This works for portrait and landscape orientations,
-however, is not order-respecting.
+however, is not necessarily order-respecting.
 Two other non-order-respecting techniques are (i),~%
 working with pre-defined placeholder patterns
 (small and big squares, portrait and landscape rectangles)
@@ -190,7 +205,10 @@ and then iteratively inserting in the smallest column.%
 \footnote{\url{http://blog.vjeux.com/2012/image/image-layout-algorithm-lightbox.html},
 as~of 02/22/2013}
 As outlined in \autoref{sec:motivation-chapter-8},
-we need (loosely) order-respecting media galleries.
+we require (at least loosely) order-respecting media galleries
+for the ranking step to make sense.
+In the upcoming two subsections, we will introduce two techniques
+for the generation of such media galleries.
 
 \subsection{Strict Order, Equal Size (SOES)}
 
