@@ -28,7 +28,7 @@
 % below is to generate the title page with crest and author name
 
 %if output to PDF then put the following in PDF header
-\ifpdf  
+\ifpdf
     \pdfinfo { /Title  (PhD and MPhil Thesis Classes)
                /Creator (TeX)
                /Producer (pdfTeX)
@@ -60,7 +60,7 @@
   % The crest is a graphics file of the logo of your research institution.
   % Place it in ./frontmatter/figures and specify the width
   \crest{\includegraphics[width=4cm]{upc-logo}}
-  
+
 % If you are not creating a PDF then use the following. The default is PDF.
 \else
   \author{Thomas Steiner}
@@ -76,7 +76,7 @@
 
 
 % ----------------------------------------------------------------------
-       
+
 % turn of those nasty overfull and underfull hboxes
 \hbadness=10000
 \hfuzz=50pt
@@ -148,7 +148,7 @@ Day of the defense: \todo{add date of the defense}
 
 %: ----------------------- list of figures/tables ------------------------
 
-\listoffigures	% print list of figures
+\listoffigures  % print list of figures
 
 \listoftables  % print list of tables
 
@@ -157,7 +157,7 @@ Day of the defense: \todo{add date of the defense}
 
 % Tie in external source file for definitions: /frontmatter/glossary.tex
 % Glossary entries can also be defined in the main text. See glossary.tex
-\include{frontmatter/glossary} 
+\include{frontmatter/glossary}
 
 \begin{multicols}{2} % \begin{multicols}{#columns}[header text][space]
 \begin{footnotesize} % scriptsize(7) < footnotesize(8) < small (9) < normal (10)
@@ -190,11 +190,12 @@ Day of the defense: \todo{add date of the defense}
 \include{3_social_networks/social_networks}
 \include{4_micropost_annotation/micropost_annotation}
 \include{5_media_item_extraction/media_item_extraction}
-\include{6_media_item_deduplication/media_item_deduplication}
-\include{7_media_item_ranking/media_item_ranking}
-\include{8_media_item_compilation/media_item_compilation}
-\include{9_future_work/future_work}
-\include{10_conclusion/conclusion}
+\include{6_shot_boundary_detection/shot_boundary_detection}
+\include{7_media_item_deduplication/media_item_deduplication}
+\include{8_media_item_ranking/media_item_ranking}
+\include{9_media_item_compilation/media_item_compilation}
+\include{10_future_work/future_work}
+\include{11_conclusion/conclusion}
 
 
 % --------------------------------------------------------------
@@ -212,7 +213,7 @@ Day of the defense: \todo{add date of the defense}
 % The default below is 2 columns, small font, complete author names.
 % Entries are also linked back to the page number in the text and to external URL if provided in the BibTex file.
 
-% PhDbiblio-url2 = names small caps, title bold & hyperlinked, link to page 
+% PhDbiblio-url2 = names small caps, title bold & hyperlinked, link to page
 \begin{multicols}{2} % \begin{multicols}{ # columns}[ header text][ space]
 \begin{tiny} % tiny(5) < scriptsize(7) < footnotesize(8) < small (9)
 

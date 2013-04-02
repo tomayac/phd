@@ -3,9 +3,9 @@
 
 % the code below specifies where the figures are stored
 \ifpdf
-    \graphicspath{{6_media_item_deduplication/figures/PNG/}{6_media_item_deduplication/figures/PDF/}{6_media_item_deduplication/figures/}}
+    \graphicspath{{7_media_item_deduplication/figures/PNG/}{7_media_item_deduplication/figures/PDF/}{7_media_item_deduplication/figures/}}
 \else
-    \graphicspath{{6_media_item_deduplication/figures/EPS/}{6_media_item_deduplication/figures/}}
+    \graphicspath{{7_media_item_deduplication/figures/EPS/}{7_media_item_deduplication/figures/}}
 \fi
 
 \section{Introduction}
@@ -484,9 +484,7 @@ by our clustering algorithm, which we will detail in
 \autoref{sec:near-duplicate-clustering-algorithm}.
 First, we look at related work for the task of photo deduplication.
 
-\subsection{Related Work}
-
-\paragraph{Image Deduplication and Clustering}
+\subsection{Related Work on Image Deduplication and Clustering}
 
 Work on ordinal measures that serve as a~general tool for
 image matching was performed by Bhat \emph{et al.}\
@@ -742,7 +740,7 @@ and are known to deliver solid results.
 The corpus has been made available publicly,
 see \autoref{sec:evaluation-chpater6} for the details.
 
-\begin{lstlisting}[float=top,caption={Simplified pseudocode of the exact- and near-duplicate media item deduplication and clustering algorithm},
+\begin{lstlisting}[,caption={Simplified pseudocode of the exact- and near-duplicate media item deduplication and clustering algorithm},
   label={code:clustering},escapechar=§]
 §\textbf{Input:}§ mediaItems, a~list of media items
 §\textbf{Output:}§ clusters, a~list of clustered media items
@@ -1037,7 +1035,7 @@ is available online at the URL \url{http://twitpic.com/c02qfs/full}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.8\linewidth]{./white.png}
+  \includegraphics[width=1\linewidth]{./white.png}
   \caption{Pure white as dominating color stemming from screenshots}
   \label{fig:white}
 \end{figure}
