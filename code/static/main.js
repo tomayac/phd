@@ -222,6 +222,39 @@
         click(e);
       });
 
+      mediaGallery.addEventListener('keydown', function(e) {
+console.log('keydown')
+        // zoom out the currently zoomed-in media item
+        var activeElement = document.activeElement;
+        if (activeElement.classList.contains('mediaItem')) {
+          var img = activeElement.querySelector('img, video');
+          zoomOut(mediaGallery, activeElement, img);
+console.log('zooming out activeElement')
+        } else {
+          activeElement = document.querySelector('mediaItem');
+console.log('setting activeElement to first mediaItem')
+        }
+        var i = 0;
+        var child = activeElement;
+console.log(child);
+        while((child = child.previousSibling) !== null) {
+console.log(i)
+          i++;
+        }
+console.log('children ' + mediaGallery.childElementCount)
+console.log('index ' + i)
+        if (e.keyCode === 37 /* left arrow */) {
+console.log('focus on left sibling')
+console.log((i - 1) % mediaGallery.childElementCount)
+          mediaGallery.childNodes[(i - 1) % mediaGallery.childElementCount].focus();
+        } else if (e.keyCode === 39 /* right arrow */) {
+console.log('focus on right sibling')
+console.log((i + 1) % mediaGallery.childElementCount)
+          mediaGallery.childNodes[(i + 1) % mediaGallery.childElementCount].focus();
+
+        }
+      });
+
       mediaGallery.addEventListener('focus', function(e) {
         if (e.target.classList.contains('mediaItem')) {
           var mediaItem = e.target;
