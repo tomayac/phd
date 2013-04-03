@@ -5,7 +5,6 @@
     MEDIA_SERVER: 'http://localhost:8001/search/combined/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     SPEECH_SERVER: 'http://localhost:8001/speech/',
-    MAX_ROW_HEIGHT: 200,
     SIMILAR_TILES_FACTOR: 2/3,
 
     // global state
@@ -46,6 +45,7 @@
     },
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
     mediaGallerySize: 25,
+    mediaItemHeight: 150,
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -362,7 +362,22 @@
         mediaGallerySizeLabel.innerHTML = mediaGallerySize.value;
       });
       mediaGallerySize.addEventListener('mouseup', function() {
-        illustrator.mediaGallerySize = mediaGallerySize.value;
+        illustrator.mediaGallerySize = parseInt(mediaGallerySize.value, 10);
+        illustrator.createMediaGallery();
+      });
+
+      var mediaItemHeight = document.getElementById('mediaItemHeight');
+      var mediaItemHeightLabel =
+          document.getElementById('mediaItemHeightLabel');
+      mediaItemHeight.min = 50;
+      mediaItemHeight.max = 500;
+      mediaItemHeight.value = illustrator.mediaItemHeight;
+      mediaItemHeightLabel.innerHTML = illustrator.mediaItemHeight;
+      mediaItemHeight.addEventListener('change', function() {
+        mediaItemHeightLabel.innerHTML = mediaItemHeight.value;
+      });
+      mediaItemHeight.addEventListener('mouseup', function() {
+        illustrator.mediaItemHeight = parseInt(mediaItemHeight.value, 10);
         illustrator.createMediaGallery();
       });
 
@@ -371,10 +386,10 @@
       maxAge.min = 1 * 60 * 1000; // 1 minute
       maxAge.value = illustrator.maxAge;
       var maxAgeLabel = document.getElementById('maxAgeLabel');
-      maxAgeLabel.innerHTML = humaneDate(new Date((new Date().getTime() -
+      maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
           maxAge.value)));
       maxAge.addEventListener('change', function() {
-        maxAgeLabel.innerHTML = humaneDate(new Date((new Date().getTime() -
+        maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
             maxAge.value)));
       });
       maxAge.addEventListener('mouseup', function() {
@@ -671,7 +686,7 @@
       illustrator.showStatusMessage('Searching for "' + query + '"');
 
       var url = illustrator.MEDIA_SERVER + encodeURIComponent(query);
-      var queryId = new Date().getTime();
+      var queryId = Date.now();
 
       var handleXhrError = function(url) {
         illustrator.showStatusMessage('Error while loading ' + url);
@@ -948,7 +963,7 @@
     filterForMaxAge: function() {
       illustrator.showStatusMessage('Filtering media items for maximum age');
 
-      var now = new Date().getTime();
+      var now = Date.now();
       for (var key in illustrator.mediaItems) {
         var mediaItem = illustrator.mediaItems[key];
         if (mediaItem.timestamp > now) {
@@ -1391,7 +1406,7 @@
       popularity: {
         name: 'Popularity',
         func: function(a, b) {
-          var now = new Date().getTime();
+          var now = Date.now();
           var getAgeFactor = function(timestamp) {
             /* 86400000 = 24 * 60 * 60 * 1000 */
             var ageInDays = Math.floor((now - timestamp) / 86400000);
@@ -1541,14 +1556,14 @@
               for (var i = 1; i < images.length + 1; ++i) {
                 var slice = images.slice(0, i);
                 var h = getHeight(slice, size);
-                if (h < illustrator.MAX_ROW_HEIGHT) {
+                if (h < illustrator.mediaItemHeight) {
                   setHeight(slice, h);
                   n++;
                   images = images.slice(i);
                   continue w;
                 }
               }
-              setHeight(slice, Math.min(illustrator.MAX_ROW_HEIGHT, h));
+              setHeight(slice, Math.min(illustrator.mediaItemHeight, h));
               n++;
               break;
             }
@@ -1557,7 +1572,7 @@
           var getHeight = function(images, width) {
             width -= images.length * 4;
             var h = 0;
-            for (var i = 0; i < images.length; ++i) {
+            for (var i = 0, len = images.length; i < len; ++i) {
               h += images[i].dataset.width / images[i].dataset.height;
             }
             return (width / h);
@@ -1565,7 +1580,7 @@
 
           var setHeight = function(images, height) {
             heights.push(height);
-            for (var i = 0; i < images.length; ++i) {
+            for (var i = 0, len = images.length; i < len; ++i) {
               var width = (height * images[i].dataset.width /
                   images[i].dataset.height);
               images[i].style.width = width;
@@ -1618,7 +1633,7 @@
           // http://blog.vjeux.com/2012/image/-
           // image-layout-algorithm-facebook.html
           var heights = [];
-          var columnSize = illustrator.MAX_ROW_HEIGHT;
+          var columnSize = illustrator.mediaItemHeight;
           var dimensions = columnSize * columnSize;
           var margin = 4;
 
@@ -1632,7 +1647,7 @@
           var getMinColumn = function() {
             var minHeight = Infinity;
             var iMin = -1;
-            for (var i = 0; i < heights.length; ++i) {
+            for (var i = 0, len = heights.length; i < len; ++i) {
               if (heights[i] < minHeight) {
                 minHeight = heights[i];
                 iMin = i;
@@ -1672,7 +1687,7 @@
             createColumns(nColumns);
 
             var smallImages = [];
-            for (var i = 0; i < images.length; ++i) {
+            for (var i = 0, len = images.length; i < len; ++i) {
               var image = images[i];
               var column = getMinColumn();
               if ((image.dataset.width * image.dataset.height > dimensions) &&
