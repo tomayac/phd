@@ -228,17 +228,20 @@
           var key = mediaItem.querySelector('.gallery').dataset.posterurl;
           var micropost = illustrator.mediaItems[key].micropost.plainText;
           illustrator.speak(micropost);
+          var img = mediaItem.querySelector('img, video');
+          zoomIn(mediaGallery, mediaItem, img);
         }
       }, true /* This is important, else, the event never fires */);
 
-      mediaGallery.addEventListener('mouseover', function(e) {
-        if ((e.target.nodeName.toLowerCase() !== 'img') &&
-            (e.target.nodeName.toLowerCase() !== 'video') &&
-            (e.target.nodeName.toLowerCase() !== 'span')) {
-          return;
-        };
-        var img = e.target.parentNode.querySelector('img, video');
-        var div = img.parentNode.parentNode;
+      mediaGallery.addEventListener('blur', function(e) {
+        if (e.target.classList.contains('mediaItem')) {
+          var mediaItem = e.target;
+          var img = mediaItem.querySelector('img, video');
+          zoomOut(mediaGallery, mediaItem, img);
+        }
+      }, true /* This is important, else, the event never fires */);
+
+      var zoomIn = function(mediaGallery, div, img) {
         // do not trigger mouseover on clones
         if (div.classList.contains('clone')) {
           return;
@@ -282,16 +285,9 @@
             mediaItems[i].style['filter'] = 'blur(10px)';
           }
         }
-      });
+      };
 
-      mediaGallery.addEventListener('mouseout', function(e) {
-        if ((e.target.nodeName.toLowerCase() !== 'img') &&
-            (e.target.nodeName.toLowerCase() !== 'video') &&
-            (e.target.nodeName.toLowerCase() !== 'span')) {
-          return;
-        };
-        var img = e.target.parentNode.querySelector('img, video');
-        var div = img.parentNode.parentNode;
+      var zoomOut = function(mediaGallery, div, img) {
         // do not trigger mouseout on clones
         if (div.classList.contains('clone')) {
           return;
@@ -328,7 +324,7 @@
         // remove the clone, but only when the scale down animation has finished
         div.addEventListener('webkitTransitionEnd', removeClone);
         div.addEventListener('transitionend', removeClone);
-      });
+      };
 
       var toggleVideoPlayStateButton = document.getElementById('playAllVideos');
       toggleVideoPlayStateButton.addEventListener('click', function(e) {
