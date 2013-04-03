@@ -1093,8 +1093,10 @@
 
       var createMatchingTilesGrid = function(image, indexes, invert) {
         var fragment = document.createDocumentFragment();
-        var tileWidth = ~~(image.width / illustrator.cols);
-        var tileHeight = ~~(image.height / illustrator.rows);
+        var fixedWidth = image.width < 250 ? image.width : 250;
+        var aspectRatio = image.width / image.height;
+        var tileWidth = ~~(fixedWidth / illustrator.cols);
+        var tileHeight = ~~((fixedWidth / aspectRatio) / illustrator.rows);
 
         var len = illustrator.cols * illustrator.rows;
         for (var i = 0; i < len; i++) {
@@ -1153,7 +1155,7 @@
       var diffRow = document.createElement('tr');
       table.appendChild(matchesRow);
       table.appendChild(diffRow);
-//setTimeout(function() {
+
       var matchLeft =
           createMatchingTilesGrid(left, similarTilesIndexes.slice(0), false);
       var matchLeftTd = document.createElement('td');
@@ -1186,6 +1188,11 @@
       close.style.display = 'block';
       differencesDiv.appendChild(close);
       close.addEventListener('click', function() {
+        var audios = document.querySelectorAll('audio');
+        for (var i = 0, len = audios.length; i < len; i++) {
+          var audio = audios[i];
+          audio.parentNode.removeChild(audio);
+        }
         differencesDiv.style.display = 'none';
         differencesDiv.innerHTML = '';
       });
@@ -1193,7 +1200,6 @@
       differencesDiv.style.display = 'block';
 
       mediaFragments.apply(differencesDiv);
-//},5000)
     },
     sayDiffImages: function(opt_outer, opt_inner, similarTilesIndexes,
         similarTiles, minimumRequired, nulls) {

@@ -199,6 +199,7 @@ input.number {
   -webkit-animation: highlight 1s ease infinite alternate;
   animation: highlight 1s ease infinite alternate;
   outline: solid 1px transparent;
+  outline-offset: -1px;
 }
 
 @-webkit-keyframes highlight {
