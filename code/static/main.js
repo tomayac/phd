@@ -222,6 +222,15 @@
         click(e);
       });
 
+      mediaGallery.addEventListener('focus', function(e) {
+        if (e.target.classList.contains('mediaItem')) {
+          var mediaItem = e.target;
+          var key = mediaItem.querySelector('.gallery').dataset.posterurl;
+          var micropost = illustrator.mediaItems[key].micropost.plainText;
+          illustrator.speak(micropost);
+        }
+      }, true /* This is important, else, the event never fires */);
+
       mediaGallery.addEventListener('mouseover', function(e) {
         if ((e.target.nodeName.toLowerCase() !== 'img') &&
             (e.target.nodeName.toLowerCase() !== 'video') &&
@@ -1591,10 +1600,11 @@
           };
 
           var fragment = document.createDocumentFragment();
-          mediaItems.forEach(function(item) {
+          mediaItems.forEach(function(item, i) {
             var div = document.createElement('div');
             fragment.appendChild(div);
             div.classList.add('mediaItem');
+            div.tabIndex = i + 1;
             div.classList.add('photoBorder');
             var anchor = document.createElement('a');
             anchor.href = item.dataset.microposturl;
@@ -1712,9 +1722,10 @@
 
           var fragment = document.createDocumentFragment();
           var divs = [];
-          mediaItems.forEach(function(item) {
+          mediaItems.forEach(function(item, i) {
             var div = document.createElement('div');
             div.classList.add('mediaItem');
+            div.tabIndex = i + 1;
             div.style.position = 'absolute';
             div.style.overflow = 'hidden';
             div.dataset.width = item.dataset.width;
