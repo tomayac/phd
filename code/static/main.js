@@ -234,24 +234,23 @@ console.log('zooming out activeElement')
           activeElement = document.querySelector('mediaItem');
 console.log('setting activeElement to first mediaItem')
         }
-        var i = 0;
-        var child = activeElement;
-console.log(child);
-        while((child = child.previousSibling) !== null) {
-console.log(i)
-          i++;
+        var mediaItems =
+            mediaGallery.querySelectorAll('.mediaItem:not(.clone)');
+        var index;
+        var childCount = mediaItems.length;
+        for (index = 0; index < childCount; index++) {
+          if (mediaItems[index] === activeElement) {
+            break;
+          }
         }
-console.log('children ' + mediaGallery.childElementCount)
-console.log('index ' + i)
+console.log('children ' + childCount)
+console.log('index ' + index)
         if (e.keyCode === 37 /* left arrow */) {
-console.log('focus on left sibling')
-console.log((i - 1) % mediaGallery.childElementCount)
-          mediaGallery.childNodes[(i - 1) % mediaGallery.childElementCount].focus();
+console.log('focus on left sibling ' + (index > 0 ? index - 1 : childCount - 1))
+          mediaItems.item(index > 0 ? index - 1 : childCount - 1).focus();
         } else if (e.keyCode === 39 /* right arrow */) {
-console.log('focus on right sibling')
-console.log((i + 1) % mediaGallery.childElementCount)
-          mediaGallery.childNodes[(i + 1) % mediaGallery.childElementCount].focus();
-
+console.log('focus on right sibling ' + ((index + 1) % childCount))
+          mediaItems.item((index + 1) % childCount).focus();
         }
       });
 
