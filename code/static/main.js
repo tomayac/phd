@@ -394,7 +394,7 @@
       });
       mediaGallerySize.addEventListener('mouseup', function() {
         illustrator.mediaGallerySize = parseInt(mediaGallerySize.value, 10);
-        illustrator.createMediaGallery();
+        illustrator.createMediaGallery(true);
       });
 
       var mediaItemHeight = document.getElementById('mediaItemHeight');
@@ -409,7 +409,7 @@
       });
       mediaItemHeight.addEventListener('mouseup', function() {
         illustrator.mediaItemHeight = parseInt(mediaItemHeight.value, 10);
-        illustrator.createMediaGallery();
+        illustrator.createMediaGallery(true);
       });
 
       var maxAge = document.getElementById('maxAge');
@@ -1656,7 +1656,7 @@
       },
       looseOrder: {
         name: 'Loose order, varying size',
-        func: function(mediaItems) {
+        func: function(mediaItems, opt_resizeOnly) {
           // media gallery algorithm credits to
           // http://blog.vjeux.com/2012/image/-
           // image-layout-algorithm-facebook.html
@@ -1718,11 +1718,15 @@
             for (var i = 0, len = images.length; i < len; ++i) {
               var image = images[i];
               var column = getMinColumn();
+              var wasBigElseRandom = opt_resizeOnly ?
+                  mediaItems[i].dataset.isbig : Math.random() > 0.7;
               if ((image.dataset.width * image.dataset.height > dimensions) &&
-                  (Math.random() > 0.5)) {
+                  (wasBigElseRandom)) {
+                mediaItems[i].dataset.isbig = true;
                 addColumnElem(column * 2, image, true);
                 heights[column] += 2;
               } else {
+                mediaItems[i].dataset.isbig = false;
                 smallImages.push(image);
                 if (smallImages.length === 2) {
                   addColumnElem(column * 2, smallImages[0], false);
@@ -1785,7 +1789,7 @@
         }
       }
     },
-    createMediaGallery: function() {
+    createMediaGallery: function(opt_resizeOnly) {
       illustrator.mediaGalleryZIndex = 1;
       var mediaItems = [];
       illustrator.clusters.forEach(function(cluster, counter) {
@@ -1814,7 +1818,8 @@
       var algorithm = illustrator.mediaGalleryAlgorithm;
       illustrator.showStatusMessage('Creating media gallery of type ' +
           algorithm);
-      illustrator.mediaGalleryAlgorithms[algorithm].func(mediaItems);
+      illustrator.mediaGalleryAlgorithms[algorithm].func(mediaItems,
+          opt_resizeOnly);
       illustrator.calculateMediaGalleryCenter();
     },
     calculateMediaGalleryCenter: function() {
