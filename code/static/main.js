@@ -177,10 +177,13 @@
             image2 = img;
           }
           if (image1 && image2) {
-            illustrator.clusterMediaItems(image1.dataset.posterurl,
-                image2.dataset.posterurl);
-            image1 = null;
-            image2 = null;
+            var posterUrl1 = image1.dataset.posterurl;
+            var posterUrl2 = image2.dataset.posterurl;
+            if ((posterUrl1 && posterUrl2) && (posterUrl1 !== posterUrl2)) {
+              image1 = null;
+              image2 = null;
+              illustrator.clusterMediaItems(posterUrl1, posterUrl2);
+            }
           }
         }
       });
@@ -1904,7 +1907,9 @@
               var audio = document.createElement('audio');
               audio.src = speech.base64;
               audio.addEventListener('ended', function() {
-                audio.parentNode.removeChild(audio);
+                if (audio) {
+                  audio.parentNode.removeChild(audio);
+                }
                 if (opt_callback) {
                   opt_callback(message);
                 }
