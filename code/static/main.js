@@ -173,7 +173,7 @@
           var img = e.target;
           if (!image1) {
             image1 = img;
-          } else if (!image2) {
+          } else if (!image2 && (img !== image1)) {
             image2 = img;
           }
           if (image1 && image2) {
