@@ -223,16 +223,13 @@
       });
 
       mediaGallery.addEventListener('keydown', function(e) {
-console.log('keydown')
         // zoom out the currently zoomed-in media item
         var activeElement = document.activeElement;
         if (activeElement.classList.contains('mediaItem')) {
           var img = activeElement.querySelector('img, video');
           zoomOut(mediaGallery, activeElement, img);
-console.log('zooming out activeElement')
         } else {
           activeElement = document.querySelector('mediaItem');
-console.log('setting activeElement to first mediaItem')
         }
         var mediaItems =
             mediaGallery.querySelectorAll('.mediaItem:not(.clone)');
@@ -243,13 +240,9 @@ console.log('setting activeElement to first mediaItem')
             break;
           }
         }
-console.log('children ' + childCount)
-console.log('index ' + index)
         if (e.keyCode === 37 /* left arrow */) {
-console.log('focus on left sibling ' + (index > 0 ? index - 1 : childCount - 1))
           mediaItems.item(index > 0 ? index - 1 : childCount - 1).focus();
         } else if (e.keyCode === 39 /* right arrow */) {
-console.log('focus on right sibling ' + ((index + 1) % childCount))
           mediaItems.item((index + 1) % childCount).focus();
         }
       });
@@ -259,6 +252,7 @@ console.log('focus on right sibling ' + ((index + 1) % childCount))
           var mediaItem = e.target;
           var key = mediaItem.querySelector('.gallery').dataset.posterurl;
           var micropost = illustrator.mediaItems[key].micropost.plainText;
+          illustrator.removeAllAudio();
           illustrator.speak(micropost);
           var img = mediaItem.querySelector('img, video');
           zoomIn(mediaGallery, mediaItem, img);
@@ -1240,11 +1234,7 @@ console.log('focus on right sibling ' + ((index + 1) % childCount))
       close.style.display = 'block';
       differencesDiv.appendChild(close);
       close.addEventListener('click', function() {
-        var audios = document.querySelectorAll('audio');
-        for (var i = 0, len = audios.length; i < len; i++) {
-          var audio = audios[i];
-          audio.parentNode.removeChild(audio);
-        }
+        illustrator.removeAllAudio();
         differencesDiv.style.display = 'none';
         differencesDiv.innerHTML = '';
       });
@@ -1830,7 +1820,7 @@ console.log('focus on right sibling ' + ((index + 1) % childCount))
     calculateMediaGalleryCenter: function() {
       var mediaGallery = document.getElementById('mediaGallery');
       var left = 0;
-      var mediaItems = mediaGallery.childNodes;
+      var mediaItems = mediaGallery.querySelectorAll('.mediaItem:not(.clone)');
       for (var i = 0, len = mediaItems.length; i < len; i++) {
         var mediaItem = mediaItems[i];
         // just look at the media items in the first row
@@ -1844,13 +1834,21 @@ console.log('focus on right sibling ' + ((index + 1) % childCount))
       if (left === 0) {
         setTimeout(function() {
           illustrator.calculateMediaGalleryCenter();
-        }, 500);
+        }, 100);
       }
-      var top = mediaGallery.clientHeight / 2;
+      var lastItem = mediaItems.item(mediaItems.length - 1);
+      var top = (lastItem.offsetTop + lastItem.offsetHeight) / 2;
       illustrator.mediaGalleryCenter = {
         top: top,
         left: left
       };
+    },
+    removeAllAudio: function() {
+      var audios = document.querySelectorAll('audio');
+      for (var i = 0, len = audios.length; i < len; i++) {
+        var audio = audios[i];
+        audio.parentNode.removeChild(audio);
+      }
     },
     speak: function(message, opt_callback) {
       if (!message) {
