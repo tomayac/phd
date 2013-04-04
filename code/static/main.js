@@ -253,8 +253,10 @@
           var mediaItem = e.target;
           var key = mediaItem.querySelector('.gallery').dataset.posterurl;
           var micropost = illustrator.mediaItems[key].micropost.plainText;
+          /*
           illustrator.removeAllAudio();
           illustrator.speak(micropost);
+          */
           var img = mediaItem.querySelector('img, video');
           zoomIn(mediaGallery, mediaItem, img);
         }
@@ -308,8 +310,9 @@
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
         for (var i = 0, len = mediaItems.length; i < len; i++) {
           if (mediaItems[i] !== div) {
-            mediaItems[i].style['-webkit-filter'] = 'blur(10px)';
-            mediaItems[i].style['filter'] = 'blur(10px)';
+            mediaItems[i].style['-webkit-filter'] =
+                'blur(10px) grayscale(100%)';
+            mediaItems[i].style['filter'] = 'blur(10px) grayscale(100%)';
           }
         }
       };
