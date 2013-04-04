@@ -25,6 +25,7 @@
       top: null,
       left: null
     },
+    mediaGalleryBigItems: {},
 
     // settings
     photosOnly: false,
@@ -695,6 +696,7 @@
       illustrator.micropostUrls = {};
       illustrator.clusters = [];
       illustrator.mediaGalleryZIndex = 1;
+      illustrator.mediaGalleryBigItems = {};
     },
 
     showStatusMessage: function(message) {
@@ -1657,6 +1659,10 @@
       looseOrder: {
         name: 'Loose order, varying size',
         func: function(mediaItems, opt_resizeOnly) {
+          if (!opt_resizeOnly) {
+            illustrator.mediaGalleryBigItems = {};
+          }
+
           // media gallery algorithm credits to
           // http://blog.vjeux.com/2012/image/-
           // image-layout-algorithm-facebook.html
@@ -1692,10 +1698,14 @@
             var height = isBig ? columnSize * 2 + margin : columnSize;
             elem.style.width = width;
             elem.style.height = height;
+            var mediaItem = elem.firstChild.firstChild;
+            var posterUrl = mediaItem.dataset.posterurl;
             if (isBig) {
               elem.classList.add('big');
+              illustrator.mediaGalleryBigItems[posterUrl] = true;
+            } else {
+              illustrator.mediaGalleryBigItems[posterUrl] = false;
             }
-            var mediaItem = elem.firstChild.firstChild;
             var mediaItemWidth = parseInt(mediaItem.dataset.width, 10);
             var mediaItemHeight = parseInt(mediaItem.dataset.height, 10);
             var aspectRatio = mediaItemWidth / mediaItemHeight;
@@ -1718,15 +1728,30 @@
             for (var i = 0, len = images.length; i < len; ++i) {
               var image = images[i];
               var column = getMinColumn();
-              var wasBigElseRandom = opt_resizeOnly ?
-                  mediaItems[i].dataset.isbig : Math.random() > 0.7;
-              if ((image.dataset.width * image.dataset.height > dimensions) &&
-                  (wasBigElseRandom)) {
-                mediaItems[i].dataset.isbig = true;
+              var wasBigElseRandom;
+              if (opt_resizeOnly) {
+                var posterUrl = image.firstChild.firstChild.dataset.posterurl;
+                wasBigElseRandom = illustrator.mediaGalleryBigItems[posterUrl];
+              } else {
+                wasBigElseRandom = Math.random() > 0.7;
+              }
+              // The following if statement is an _ugly_ hack as the image proxy
+              // https://images1-focus-opensocial.googleusercontent.com
+              // delivers differently sized images on demand.
+              // In consequence, if we only resize, we use the previous value,
+              // else, if the media gallery gets generated anew, we make the
+              // dimensions check and add a random component.
+              var wasBig;
+              if (opt_resizeOnly) {
+                wasBig = wasBigElseRandom;
+              } else {
+                wasBig = (wasBigElseRandom) &&
+                    (image.dataset.width * image.dataset.height > dimensions);
+              }
+              if (wasBig) {
                 addColumnElem(column * 2, image, true);
                 heights[column] += 2;
               } else {
-                mediaItems[i].dataset.isbig = false;
                 smallImages.push(image);
                 if (smallImages.length === 2) {
                   addColumnElem(column * 2, smallImages[0], false);
