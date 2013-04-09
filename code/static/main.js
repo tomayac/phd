@@ -12,7 +12,6 @@
     ctx: null,
     statusMessagesTimeout: null,
     statusMessages: document.getElementById('statusMessages'),
-    mediaGalleryResizeFunction: null,
 
     // app logic
     queries: {},
@@ -46,6 +45,7 @@
     },
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
     mediaGallerySize: 25,
+    mediaGalleryWidth: 1200,
     mediaItemHeight: 150,
 
     init: function() {
@@ -401,6 +401,21 @@
       });
       mediaGallerySize.addEventListener('mouseup', function() {
         illustrator.mediaGallerySize = parseInt(mediaGallerySize.value, 10);
+        illustrator.createMediaGallery(true);
+      });
+
+      var mediaGalleryWidth = document.getElementById('mediaGalleryWidth');
+      var mediaGalleryWidthLabel =
+          document.getElementById('mediaGalleryWidthLabel');
+      mediaGalleryWidth.min = 300;
+      mediaGalleryWidth.max = 2000;
+      mediaGalleryWidth.value = illustrator.mediaGalleryWidth;
+      mediaGalleryWidthLabel.innerHTML = illustrator.mediaGalleryWidth;
+      mediaGalleryWidth.addEventListener('change', function() {
+        mediaGalleryWidthLabel.innerHTML = mediaGalleryWidth.value;
+      });
+      mediaGalleryWidth.addEventListener('mouseup', function() {
+        illustrator.mediaGalleryWidth = parseInt(mediaGalleryWidth.value, 10);
         illustrator.createMediaGallery(true);
       });
 
@@ -1603,7 +1618,7 @@
           var heights = [];
 
           var calculateSizes = function(images) {
-            var size = mediaGallery.clientWidth - 20;
+            var size = illustrator.mediaGalleryWidth;
             var n = 0;
             w: while (images.length > 0) {
               for (var i = 1; i < images.length + 1; ++i) {
@@ -1624,6 +1639,7 @@
 
           var getHeight = function(images, width) {
             width -= images.length * 4;
+console.log(width)
             var h = 0;
             for (var i = 0, len = images.length; i < len; ++i) {
               h += images[i].dataset.width / images[i].dataset.height;
@@ -1667,17 +1683,12 @@
           });
           var mediaGallery = document.getElementById('mediaGallery');
           mediaGallery.innerHTML = '';
-          mediaGallery.appendChild(fragment);
+          var containerDiv = document.createElement('div');
+          containerDiv.style.width =
+              (illustrator.mediaGalleryWidth + mediaItems.length * 4) + 'px';
+          mediaGallery.appendChild(containerDiv);
+          containerDiv.appendChild(fragment);
           calculateSizes(mediaItems);
-
-          window.removeEventListener('resize',
-              illustrator.mediaGalleryResizeFunction);
-          illustrator.mediaGalleryResizeFunction = function() {
-            calculateSizes(mediaItems);
-            illustrator.calculateMediaGalleryCenter();
-          };
-          window.addEventListener('resize',
-              illustrator.mediaGalleryResizeFunction);
         }
       },
       looseOrder: {
@@ -1744,7 +1755,7 @@
           };
 
           var calculateSizes = function(images) {
-            var size = mediaGallery.clientWidth - 20;
+            var size = illustrator.mediaGalleryWidth;
             var nColumns = Math.floor(size / (2 * (columnSize + margin)));
             createColumns(nColumns);
 
@@ -1826,15 +1837,6 @@
           mediaGallery.innerHTML = '';
           mediaGallery.appendChild(fragment);
           calculateSizes(divs);
-
-          window.removeEventListener('resize',
-              illustrator.mediaGalleryResizeFunction);
-          illustrator.mediaGalleryResizeFunction = function() {
-            calculateSizes(divs);
-            illustrator.calculateMediaGalleryCenter();
-          };
-          window.addEventListener('resize',
-              illustrator.mediaGalleryResizeFunction);
         }
       }
     },
@@ -1869,6 +1871,9 @@
           algorithm);
       illustrator.mediaGalleryAlgorithms[algorithm].func(mediaItems,
           opt_resizeOnly);
+      var length = mediaItems.length;
+      document.querySelector('#mediaGallerySize').value = length;
+      document.querySelector('#mediaGallerySizeLabel').innerHTML = length;
       illustrator.calculateMediaGalleryCenter();
     },
     calculateMediaGalleryCenter: function() {
