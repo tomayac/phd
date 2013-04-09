@@ -762,8 +762,8 @@
       illustrator.ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
       // calculate the histograms tile-wise
-      var sw = ~~(img.width / illustrator.cols);
-      var sh = ~~(img.height / illustrator.rows);
+      var sw = ~~(img.naturalWidth / illustrator.cols);
+      var sh = ~~(img.naturalHeight / illustrator.rows);
       var dw = ~~(canvasWidth / illustrator.cols);
       var dh = ~~(canvasHeight / illustrator.rows);
 
@@ -854,7 +854,7 @@
 
       var successThumbnail = function(image, micropostUrl) {
         illustrator.mediaItems[image.src].thumbnail = image;
-        detectFaces(image, image.width, image.height);
+        detectFaces(image, image.naturalWidth, image.naturalHeight);
         illustrator.calculateHistograms(image);
         preloadFullImage(image.src, micropostUrl);
       };
@@ -1027,7 +1027,8 @@
       // always prefer video over photo, so set the dimensions of videos
       // to Infinity, which overrules even high-res photos
       return (mediaItem.type === 'video' ?
-          Infinity : mediaItem.fullImage.width * mediaItem.fullImage.height);
+          Infinity :
+          mediaItem.fullImage.naturalWidth * mediaItem.fullImage.naturalHeight);
     },
     clusterMediaItems: function(opt_outer, opt_inner) {
       illustrator.showStatusMessage('Clustering media items');
@@ -1147,11 +1148,12 @@
 
       var createMatchingTilesGrid = function(image, indexes, invert) {
         var fragment = document.createDocumentFragment();
-        var fixedWidth = image.width < 250 ? image.width : 250;
-        var aspectRatio = image.width / image.height;
-        var tileWidth = ~~(fixedWidth / illustrator.cols);
-        var tileHeight = ~~((fixedWidth / aspectRatio) / illustrator.rows);
-
+        var fixedHeight = image.naturalHeight < 150 ? image.naturalHeight : 150;
+        var scalingFactor = fixedHeight / image.naturalHeight;
+        var aspectRatio = image.naturalWidth / image.naturalHeight;
+        var tileHeight = ~~(image.naturalHeight / illustrator.rows);
+        var tileWidth =
+            ~~((image.naturalHeight * aspectRatio) / illustrator.cols);
         var len = illustrator.cols * illustrator.rows;
         for (var i = 0; i < len; i++) {
           // calculate the boundaries for the current tile from the
@@ -1195,7 +1197,10 @@
             fragment.appendChild(nullTile);
           }
         }
-        return fragment;
+        return {
+          fragment: fragment,
+          scalingFactor: scalingFactor
+        };
       };
 
       var left = document.createElement('img');
@@ -1213,25 +1218,37 @@
       var matchLeft =
           createMatchingTilesGrid(left, similarTilesIndexes.slice(0), false);
       var matchLeftTd = document.createElement('td');
-      matchLeftTd.appendChild(matchLeft);
+      matchLeftTd.appendChild(matchLeft.fragment);
+      matchLeftTd.style.cssText +=
+          '-webkit-transform:scale(' + matchLeft.scalingFactor + '); ' +
+          'transform:scale(' + matchLeft.scalingFactor + ');';
       matchesRow.appendChild(matchLeftTd);
 
       var diffLeft =
           createMatchingTilesGrid(left, similarTilesIndexes.slice(0), true);
       var diffLeftTd = document.createElement('td');
-      diffLeftTd.appendChild(diffLeft);
+      diffLeftTd.appendChild(diffLeft.fragment);
+      diffLeftTd.style.cssText +=
+          '-webkit-transform:scale(' + diffLeft.scalingFactor + '); ' +
+          'transform:scale(' + diffLeft.scalingFactor + ');';
       diffRow.appendChild(diffLeftTd);
 
       var matchRight =
           createMatchingTilesGrid(right, similarTilesIndexes.slice(0), false);
       var matchRightTd = document.createElement('td');
-      matchRightTd.appendChild(matchRight);
+      matchRightTd.appendChild(matchRight.fragment);
+      matchRightTd.style.cssText +=
+          '-webkit-transform:scale(' + matchRight.scalingFactor + '); ' +
+          'transform:scale(' + matchRight.scalingFactor + ');';
       matchesRow.appendChild(matchRightTd);
 
       var diffRight =
           createMatchingTilesGrid(right, similarTilesIndexes.slice(0), true);
       var diffRightTd = document.createElement('td');
-      diffRightTd.appendChild(diffRight);
+      diffRightTd.appendChild(diffRight.fragment);
+      diffRightTd.style.cssText +=
+          '-webkit-transform:scale(' + diffRight.scalingFactor + '); ' +
+          'transform:scale(' + diffRight.scalingFactor + ');';
       diffRow.appendChild(diffRightTd);
 
       var differencesDiv = document.getElementById('differences');
@@ -1425,7 +1442,7 @@
     },
     rankingFormulas: {
       crossNetwork: {
-        name: 'Cross-Network',
+        name: 'Cluster Size',
         func: function(a, b) {
           return b.members.length - a.members.length;
         }
@@ -1518,8 +1535,8 @@
         var hasFaces = mediaItem.faces.length ? ' face' : '';
         var url = illustrator.PROXY_SERVER +
             encodeURIComponent(mediaItem.posterUrl);
-        var micropostWidth = Math.ceil(100 / mediaItem.thumbnail.height *
-            mediaItem.thumbnail.width) + 'px;';
+        var micropostWidth = Math.ceil(100 / mediaItem.thumbnail.naturalHeight *
+            mediaItem.thumbnail.naturalWidth) + 'px;';
         var service = mediaItem.origin.toLowerCase() + '.png';
         return '' +
             '<div class="mediaItem' + lastMediaItem + '">' +
@@ -1538,10 +1555,11 @@
                 'Shares: ' + mediaItem.socialInteractions.shares + '<br/>' +
                 'Comments: ' + mediaItem.socialInteractions.comments + '<br/>' +
                 'Views: ' + mediaItem.socialInteractions.views + '<br/>' +
-                'Aspect Ratio: ' + (Math.round(mediaItem.fullImage.width /
-                    mediaItem.fullImage.height * 100) / 100) + '<br/>' +
-                'Megapixels: ' + (Math.round(mediaItem.fullImage.width *
-                    mediaItem.fullImage.height / 1000000 * 100) / 100) +
+                'Aspect Ratio: ' +
+                    (Math.round(mediaItem.fullImage.naturalWidth /
+                    mediaItem.fullImage.naturalHeight * 100) / 100) + '<br/>' +
+                'Megapixels: ' + (Math.round(mediaItem.fullImage.naturalWidth *
+                    mediaItem.fullImage.naturalHeight / 1000000 * 100) / 100) +
               '</div>' +
             '</div>';
       };
@@ -1838,8 +1856,8 @@
           item.setAttribute('loop', 'loop');
         }
         item.dataset.posterurl = cluster.identifier;
-        item.dataset.width = mediaItem.fullImage.width;
-        item.dataset.height = mediaItem.fullImage.height;
+        item.dataset.width = mediaItem.fullImage.naturalWidth;
+        item.dataset.height = mediaItem.fullImage.naturalHeight;
         item.dataset.origin = mediaItem.origin;
         item.dataset.microposturl = mediaItem.micropostUrl;
         item.classList.add('gallery');
