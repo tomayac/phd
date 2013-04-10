@@ -13,5 +13,6 @@
 *.nls
 *.synctex.gz
 .texpadtmp
+.tmproj
 .git
 .DS_Store

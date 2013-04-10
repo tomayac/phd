@@ -58,6 +58,70 @@
       window.addEventListener('resize', resizeTabsDiv, false);
       resizeTabsDiv();
 
+      var saveMediaGallery = document.getElementById('saveMediaGallery');
+      saveMediaGallery.addEventListener('click', function() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        var mediaGallery = document.getElementById('mediaGallery');
+        canvas.width = mediaGallery.clientWidth;
+        canvas.height = mediaGallery.clientHeight;
+        mediaGallery.appendChild(canvas);
+        var mediaItems = mediaGallery.querySelectorAll('.gallery');
+        var metadata = {};
+        var maxTopOffset = 0;
+        for (var i = 0, len = mediaItems.length; i < len; i++) {
+          var item = mediaItems[i];
+          var parentDiv = item.parentNode.parentNode;
+          var favicon = parentDiv.querySelector('.favicon');
+          var dx = parentDiv.offsetLeft;
+          var dy = parentDiv.offsetTop;
+          var dw = parentDiv.offsetWidth;
+          var dh = parentDiv.offsetHeight;
+          var posterUrl = item.nodeName.toLowerCase() === 'video' ?
+              item.dataset.posterurl :
+              item.src;
+          metadata[posterUrl] = {
+            dx: dx,
+            dy: dy,
+            dw: dw,
+            dh: dh,
+            favicon: favicon
+          };
+          if (dy + dh > maxTopOffset) {
+            maxTopOffset = dy + dh;
+          }
+          var img = document.createElement('img');
+          img.src = posterUrl;
+          img.addEventListener('load', function(e) {
+            var target = e.target;
+            var dest = metadata[target.src];
+            var sw;
+            var sh;
+            var aspectRatio = target.naturalWidth / target.naturalHeight;
+            if (illustrator.mediaGalleryAlgorithm === 'looseOrder') {
+              canvas.style.position = 'absolute';
+              canvas.style.top = (maxTopOffset + 10) + 'px'
+              if (aspectRatio > 1 /* landscape */) {
+                sw = target.naturalHeight;
+                sh = target.naturalHeight;
+              } else /* portrait */ {
+                sw = target.naturalWidth;
+                sh = target.naturalWidth;
+              }
+            } else {
+              sw = target.naturalWidth;
+              sh = target.naturalHeight;
+            }
+            ctx.drawImage(target, 0, 0, sw, sh, dest.dx, dest.dy, dest.dw,
+                dest.dh);
+            ctx.drawImage(dest.favicon, dest.dx + 10, dest.dy + 10);
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(dest.dx + 1, dest.dy + 1, dest.dw - 1, dest.dh - 1);
+          });
+        }
+      });
+
       var rankBySelect = document.getElementById('rankBy');
       for (var formula in illustrator.rankingFormulas) {
         var option = document.createElement('option');
@@ -1639,7 +1703,6 @@
 
           var getHeight = function(images, width) {
             width -= images.length * 4;
-console.log(width)
             var h = 0;
             for (var i = 0, len = images.length; i < len; ++i) {
               h += images[i].dataset.width / images[i].dataset.height;
@@ -1877,6 +1940,9 @@ console.log(width)
       illustrator.calculateMediaGalleryCenter();
     },
     calculateMediaGalleryCenter: function() {
+      if (!mediaItems) {
+        return;
+      }
       var mediaGallery = document.getElementById('mediaGallery');
       var left = 0;
       var mediaItems = mediaGallery.querySelectorAll('.mediaItem:not(.clone)');

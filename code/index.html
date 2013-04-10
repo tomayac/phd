@@ -14,7 +14,7 @@
       <div class="tab">
         <input type="radio" id="tab1" name="tabGroup">
         <label for="tab1">Media Item Clusters</label>
-        <div class="content">
+        <div id="tab1Content" class="content">
           <div id="mediaClusterSettings">
             <form method="get" id="searchForm">
               <fieldset>
@@ -92,7 +92,7 @@
       <div class="tab">
         <input type="radio" id="tab2" name="tabGroup">
         <label for="tab2">Media Gallery</label>
-        <div class="content">
+        <div id="tab2Content" class="content">
           <div id="mediaGallerySettings">
             <button id="playAllVideos">Play all videos</button>
 
@@ -111,9 +111,12 @@
             <input type="range" id="mediaItemHeight"/>
             <label id="mediaItemHeightLabel" for="mediaItemHeight"></label> Media Item Height
 
+            <button id="saveMediaGallery">Save Media Gallery</button>
+
           </div>
 
           <div id="mediaGallery"></div>
+
         </div>
       </div>
 
