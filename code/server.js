@@ -1,9 +1,11 @@
 var request = require('request');
 var express = require('express');
+var fs = require('fs');
 var http = require('http');
 var querystring = require('querystring');
 var jsdom = require('jsdom');
 var app = express();
+app.use(express.bodyParser());
 var server = http.createServer(app);
 global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
@@ -39,6 +41,35 @@ app.get(/^\/search\/(.+)\/(.+)$/, search);
 app.get(/^\/proxy\/(.+)$/, proxy);
 
 app.get(/^\/speech\/(.+)$/, speech);
+
+app.all(/^\/download\/(.+)?$/, download);
+
+function download(req, res, next) {
+  if (req.method === 'POST') {
+    if (req.body.base64 && req.body.fileName) {
+      var base64Data = req.body.base64.replace(/^data:image\/png;base64,/, '');
+      var fileName = req.body.fileName;
+      fs.writeFile('/tmp/' + fileName, base64Data, 'base64', function(err) {
+        res.send({path: fileName});
+      });
+    } else {
+      res.statusCode = 400;
+      res.send('Error 400 Bad Request.');
+    }
+  } else if (req.method === 'GET') {
+    var path = /^\/download\/(.+)$/;
+    var pathname = require('url').parse(req.url).pathname;
+    var fileName = decodeURIComponent(pathname.replace(path, '$1'));
+    fs.readFile('/tmp/' + fileName, function(err, data) {
+      if (err) {
+        res.statusCode = 400;
+        res.send('Error 400 Bad Request.');
+      } else {
+        res.send(data);
+      }
+    });
+  }
+}
 
 function proxy(req, res, next) {
   var path = /^\/proxy\/(.+)$/;

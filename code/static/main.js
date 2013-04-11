@@ -5,6 +5,7 @@
     MEDIA_SERVER: 'http://localhost:8001/search/combined/',
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     SPEECH_SERVER: 'http://localhost:8001/speech/',
+    DOWNLOAD_SERVER: 'http://localhost:8001/download/',
     SIMILAR_TILES_FACTOR: 2/3,
 
     // global state
@@ -58,68 +59,87 @@
       window.addEventListener('resize', resizeTabsDiv, false);
       resizeTabsDiv();
 
-      var saveMediaGallery = document.getElementById('saveMediaGallery');
-      saveMediaGallery.addEventListener('click', function() {
+      var downloadMediaGallery = document.getElementById('downloadMediaGallery');
+      downloadMediaGallery.addEventListener('click', function() {
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         var mediaGallery = document.getElementById('mediaGallery');
-        canvas.width = mediaGallery.clientWidth;
-        canvas.height = mediaGallery.clientHeight;
-        mediaGallery.appendChild(canvas);
+
         var mediaItems = mediaGallery.querySelectorAll('.gallery');
-        var metadata = {};
-        var maxTopOffset = 0;
+        var maxOffsetTop = 0;
+        var maxOffsetLeft = 0;
+        var cache = [];
         for (var i = 0, len = mediaItems.length; i < len; i++) {
           var item = mediaItems[i];
           var parentDiv = item.parentNode.parentNode;
+          var posterUrl = item.dataset.posterurl;
           var favicon = parentDiv.querySelector('.favicon');
-          var dx = parentDiv.offsetLeft;
           var dy = parentDiv.offsetTop;
-          var dw = parentDiv.offsetWidth;
           var dh = parentDiv.offsetHeight;
-          var posterUrl = item.nodeName.toLowerCase() === 'video' ?
-              item.dataset.posterurl :
-              item.src;
-          metadata[posterUrl] = {
+          if (dy + dh > maxOffsetTop) {
+            maxOffsetTop = dy + dh;
+          }
+          var dx = parentDiv.offsetLeft;
+          var dw = parentDiv.offsetWidth;
+          if (dx + dw > maxOffsetLeft) {
+            maxOffsetLeft = dx + dw;
+          }
+          cache[i] = {
             dx: dx,
             dy: dy,
             dw: dw,
             dh: dh,
-            favicon: favicon
+            favicon: favicon,
+            posterUrl: posterUrl
           };
-          if (dy + dh > maxTopOffset) {
-            maxTopOffset = dy + dh;
-          }
-          var img = document.createElement('img');
-          img.src = posterUrl;
-          img.addEventListener('load', function(e) {
-            var target = e.target;
-            var dest = metadata[target.src];
-            var sw;
-            var sh;
-            var aspectRatio = target.naturalWidth / target.naturalHeight;
-            if (illustrator.mediaGalleryAlgorithm === 'looseOrder') {
-              canvas.style.position = 'absolute';
-              canvas.style.top = (maxTopOffset + 10) + 'px'
-              if (aspectRatio > 1 /* landscape */) {
-                sw = target.naturalHeight;
-                sh = target.naturalHeight;
-              } else /* portrait */ {
-                sw = target.naturalWidth;
-                sh = target.naturalWidth;
-              }
-            } else {
-              sw = target.naturalWidth;
-              sh = target.naturalHeight;
-            }
-            ctx.drawImage(target, 0, 0, sw, sh, dest.dx, dest.dy, dest.dw,
-                dest.dh);
-            ctx.drawImage(dest.favicon, dest.dx + 10, dest.dy + 10);
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(dest.dx + 1, dest.dy + 1, dest.dw - 1, dest.dh - 1);
-          });
         }
+        var margin = 4;
+        canvas.width = maxOffsetLeft + 2 * margin;
+        canvas.height = maxOffsetTop + 2 * margin;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0, len = mediaItems.length; i < len; i++) {
+          var c = cache[i];
+          var img = illustrator.mediaItems[c.posterUrl].fullImage;
+          var sw;
+          var sh;
+          var aspectRatio = img.naturalWidth / img.naturalHeight;
+          if (illustrator.mediaGalleryAlgorithm === 'looseOrder') {
+            if (aspectRatio > 1 /* landscape */) {
+              sw = img.naturalHeight;
+              sh = img.naturalHeight;
+            } else /* portrait */ {
+              sw = img.naturalWidth;
+              sh = img.naturalWidth;
+            }
+          } else if (illustrator.mediaGalleryAlgorithm === 'strictOrder') {
+            sw = img.naturalWidth;
+            sh = img.naturalHeight;
+          }
+          ctx.drawImage(img, 0, 0, sw, sh, c.dx, c.dy + margin, c.dw, c.dh);
+          ctx.drawImage(c.favicon, c.dx + 10, c.dy + margin + 10);
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(c.dx + 1, c.dy + margin + 1, c.dw - 1, c.dh - 1);
+        }
+        var dataUrl = canvas.toDataURL('image/png');
+
+        var formData = new FormData();
+        formData.append('base64', dataUrl);
+        formData.append('fileName', 'media_gallery_' + Date.now() + '.png');
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', illustrator.DOWNLOAD_SERVER, true);
+        xhr.onload = function(e) {
+          var response = JSON.parse(xhr.responseText);
+          if (response.path) {
+            var downloadLink = document.createElement('a');
+            downloadLink.href = illustrator.DOWNLOAD_SERVER +
+                response.path;
+            downloadLink.click();
+          }
+        };
+        xhr.send(formData);
       });
 
       var rankBySelect = document.getElementById('rankBy');
@@ -920,6 +940,7 @@
         if (illustrator.mediaItems[posterUrl].type === 'photo') {
           mediaUrl = illustrator.mediaItems[posterUrl].mediaUrl;
         }
+        mediaUrl = illustrator.PROXY_SERVER + encodeURIComponent(mediaUrl);
         illustrator.showStatusMessage('Loading file ' + mediaUrl);
         preloadImage(
             mediaUrl,
