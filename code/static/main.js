@@ -136,6 +136,8 @@
             var downloadLink = document.createElement('a');
             downloadLink.href = illustrator.DOWNLOAD_SERVER +
                 response.path;
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
             downloadLink.click();
           }
         };
@@ -169,8 +171,8 @@
         mediaGalleryAlgorithmSelect.appendChild(option);
       }
       mediaGalleryAlgorithmSelect.addEventListener('change', function() {
-        illustrator.mediaGalleryAlgorithm =
-            mediaGalleryAlgorithmSelect.selectedOptions[0].value;
+        illustrator.mediaGalleryAlgorithm = mediaGalleryAlgorithmSelect
+            .options[mediaGalleryAlgorithmSelect.selectedIndex].value;
         illustrator.createMediaGallery();
       });
 
@@ -1621,7 +1623,7 @@
     },
     rankClusters: function() {
       var rankBySelect = document.getElementById('rankBy');
-      var formula = rankBySelect.selectedOptions[0].value;
+      var formula = rankBySelect.options[rankBySelect.selectedIndex].value;
       illustrator.showStatusMessage('Ranking clusters by ' + formula);
       illustrator.clusters.sort(illustrator.rankingFormulas[formula].func);
 
@@ -1961,32 +1963,26 @@
       illustrator.calculateMediaGalleryCenter();
     },
     calculateMediaGalleryCenter: function() {
-      if (!mediaItems) {
-        return;
-      }
       var mediaGallery = document.getElementById('mediaGallery');
       var left = 0;
+      var top = 0;
       var mediaItems = mediaGallery.querySelectorAll('.mediaItem:not(.clone)');
+      if (mediaItems.length === 0) {
+        return;
+      }
       for (var i = 0, len = mediaItems.length; i < len; i++) {
         var mediaItem = mediaItems[i];
         // just look at the media items in the first row
-        if (mediaItem.offsetTop < 5) {
-          left = (mediaItem.offsetLeft + mediaItem.offsetWidth) / 2;
-        } else {
-          break;
+        if (mediaItem.offsetLeft + mediaItem.offsetWidth > left) {
+          left = mediaItem.offsetLeft + mediaItem.offsetWidth;
+        }
+        if (mediaItem.offsetTop + mediaItem.offsetHeight > top) {
+          top = mediaItem.offsetTop + mediaItem.offsetHeight;
         }
       }
-      // if the media gallery has not rendered yet, simply call yourself again
-      if (left === 0) {
-        setTimeout(function() {
-          illustrator.calculateMediaGalleryCenter();
-        }, 100);
-      }
-      var lastItem = mediaItems.item(mediaItems.length - 1);
-      var top = (lastItem.offsetTop + lastItem.offsetHeight) / 2;
       illustrator.mediaGalleryCenter = {
-        top: top,
-        left: left
+        left: left / 2,
+        top: top / 2
       };
     },
     removeAllAudio: function() {
