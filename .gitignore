@@ -12,7 +12,7 @@
 *.ilg
 *.nls
 *.synctex.gz
+*.tmproj
 .texpadtmp
-.tmproj
 .git
 .DS_Store
