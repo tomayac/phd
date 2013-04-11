@@ -84,7 +84,6 @@ input.number {
   width: -webkit-calc(100% - 5px);
   overflow-y: auto;
   overflow-x: hidden;
-  position:absolute;
 }
 
 #mediaClusterSettings {
