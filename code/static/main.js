@@ -342,11 +342,34 @@
         if (e.target.classList.contains('mediaItem')) {
           var mediaItem = e.target;
           var key = mediaItem.querySelector('.gallery').dataset.posterurl;
-          var micropost = illustrator.mediaItems[key].micropost.plainText;
-          /*
+          var cluster;
+          for (var i = 0, len = illustrator.clusters.length; i < len; i++) {
+            cluster = illustrator.clusters[i];
+            if (cluster.identifier === key) {
+              break;
+            }
+          }
+          var micropostCandidates = cluster.translations;
+          var maxLength = 0;
+          var minLength = Infinity;
+          var longestMicropost;
+          var shortestMicropost;
+          for (var i = 0, len = micropostCandidates.length; i < len; i++) {
+            var micropostLength = micropostCandidates[i].length;
+            if (micropostLength > maxLength) {
+              longestMicropost = micropostCandidates[i];
+            }
+            if (micropostLength < minLength) {
+              shortestMicropost = micropostCandidates[i];
+            }
+          }
+console.log('Shortest post:\n' + shortestMicropost)
+console.log('Longest post:\n' + longestMicropost)
+          var micropost = shortestMicropost;
+
           illustrator.removeAllAudio();
           illustrator.speak(micropost);
-          */
+
           var img = mediaItem.querySelector('img, video');
           zoomIn(mediaGallery, mediaItem, img);
         }
@@ -1989,6 +2012,10 @@
       illustrator.translateMicroposts();
     },
     translateMicroposts: function() {
+      if (illustrator.clusters[0].translations) {
+        if (illustrator.DEBUG) console.log('Microposts already translated');
+        return;
+      }
       if (illustrator.DEBUG) console.log('Translating microposts');
       var microposts = [];
       var clusterIndexes = [];
@@ -2012,7 +2039,14 @@
       xhr.open('POST', illustrator.TRANSLATION_SERVER, true);
       xhr.onload = function(e) {
         var response = JSON.parse(xhr.responseText);
-        console.log(response);
+        for (var i = 0, len = response.translations.length; i < len; i++) {
+          var index = clusterIndexes[i];
+          if (!illustrator.clusters[index].translations) {
+            illustrator.clusters[index].translations = [];
+          }
+          illustrator.clusters[index].translations.push(
+              response.translations[i]);
+        }
       };
       xhr.send(formData);
     },
