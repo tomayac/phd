@@ -11,6 +11,7 @@ global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
 var Uri = require('./uris.js');
 var mediaFinder = require('./mediafinder.js');
+var translator = require('./translate.js');
 var speak = require('./speak.js');
 
 var GLOBAL_config = {
@@ -43,6 +44,24 @@ app.get(/^\/proxy\/(.+)$/, proxy);
 app.get(/^\/speech\/(.+)$/, speech);
 
 app.all(/^\/download\/(.+)?$/, download);
+
+app.post(/^\/translator\/$/, translate);
+
+function translate(req, res, next) {
+  if (req.body.toLanguage && req.body.texts && Array.isArray(req.body.texts)) {
+    translator.multiTranslate(texts, toLanguage, function(err, results) {
+      if (err) {
+        res.statusCode = 400;
+        res.send('Error 400 Bad Request.');
+      } else {
+        res.send(results);
+      }
+    });
+  } else {
+    res.statusCode = 400;
+    res.send('Error 400 Bad Request.');
+  }
+}
 
 function download(req, res, next) {
   if (req.method === 'POST') {

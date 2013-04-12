@@ -1929,6 +1929,22 @@
     createMediaGallery: function(opt_resizeOnly) {
       illustrator.mediaGalleryZIndex = 1;
       var mediaItems = [];
+      var microposts = [];
+      for (var i = 0, len = illustrator.clusters.length; i < len; i++) {
+        var cluster = illustrator.clusters[i];
+        microposts.push({
+          text: illustrator.mediaItems[cluster.identifier].micropost.plainText,
+          cluster: i
+        });
+        for (var j = 0, length = cluster.members.length; j < length; j++) {
+          var member = cluster.members[j];
+          microposts.push({
+            text: illustrator.mediaItems[member].micropost.plainText,
+            cluster: i
+          });
+        }
+      }
+
       illustrator.clusters.forEach(function(cluster, counter) {
         if (counter >= illustrator.mediaGallerySize) {
           return;
