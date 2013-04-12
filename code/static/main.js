@@ -6,6 +6,7 @@
     PROXY_SERVER: 'http://localhost:8001/proxy/',
     SPEECH_SERVER: 'http://localhost:8001/speech/',
     DOWNLOAD_SERVER: 'http://localhost:8001/download/',
+    TRANSLATION_SERVER: 'http://localhost:8001/translation/',
     SIMILAR_TILES_FACTOR: 2/3,
 
     // global state
@@ -1929,22 +1930,6 @@
     createMediaGallery: function(opt_resizeOnly) {
       illustrator.mediaGalleryZIndex = 1;
       var mediaItems = [];
-      var microposts = [];
-      for (var i = 0, len = illustrator.clusters.length; i < len; i++) {
-        var cluster = illustrator.clusters[i];
-        microposts.push({
-          text: illustrator.mediaItems[cluster.identifier].micropost.plainText,
-          cluster: i
-        });
-        for (var j = 0, length = cluster.members.length; j < length; j++) {
-          var member = cluster.members[j];
-          microposts.push({
-            text: illustrator.mediaItems[member].micropost.plainText,
-            cluster: i
-          });
-        }
-      }
-
       illustrator.clusters.forEach(function(cluster, counter) {
         if (counter >= illustrator.mediaGallerySize) {
           return;
@@ -1979,6 +1964,7 @@
       illustrator.calculateMediaGalleryCenter();
     },
     calculateMediaGalleryCenter: function() {
+      if (illustrator.DEBUG) console.log('Calculating media gallery center');
       var mediaGallery = document.getElementById('mediaGallery');
       var left = 0;
       var top = 0;
@@ -2000,6 +1986,35 @@
         left: left / 2,
         top: top / 2
       };
+      illustrator.translateMicroposts();
+    },
+    translateMicroposts: function() {
+      if (illustrator.DEBUG) console.log('Translating microposts');
+      var microposts = [];
+      var clusterIndexes = [];
+      for (var i = 0, len = illustrator.clusters.length; i < len; i++) {
+        var cluster = illustrator.clusters[i];
+        microposts.push(
+            illustrator.mediaItems[cluster.identifier].micropost.plainText);
+        clusterIndexes.push(i);
+        for (var j = 0, length = cluster.members.length; j < length; j++) {
+          var member = cluster.members[j];
+          microposts.push(illustrator.mediaItems[member].micropost.plainText);
+          clusterIndexes.push(i);
+        }
+      }
+      var formData = new FormData();
+      formData.append('toLanguage', 'en');
+      microposts.forEach(function(micropost) {
+        formData.append('texts', encodeURIComponent(micropost));
+      });
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', illustrator.TRANSLATION_SERVER, true);
+      xhr.onload = function(e) {
+        var response = JSON.parse(xhr.responseText);
+        console.log(response);
+      };
+      xhr.send(formData);
     },
     removeAllAudio: function() {
       var audios = document.querySelectorAll('audio');

@@ -45,10 +45,12 @@ app.get(/^\/speech\/(.+)$/, speech);
 
 app.all(/^\/download\/(.+)?$/, download);
 
-app.post(/^\/translator\/$/, translate);
+app.post(/^\/translation\/$/, translate);
 
 function translate(req, res, next) {
-  if (req.body.toLanguage && req.body.texts && Array.isArray(req.body.texts)) {
+  if (req.body.toLanguage && req.body.texts) {
+    var texts = req.body.texts;
+    var toLanguage = req.body.toLanguage;
     translator.multiTranslate(texts, toLanguage, function(err, results) {
       if (err) {
         res.statusCode = 400;

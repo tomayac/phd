@@ -24,9 +24,10 @@ var translator = {
       texts = texts.slice(0, 2000);
     }
     for (var i = 0; i < textsLength; i++) {
+      texts[i] = decodeURIComponent(texts[i]).replace(/"/g, '\\"');
       if (texts[i].length > 10000) {
         console.log('Warning: maximum text length of 10,000 characters exceeded at index ' + i + '.');
-        texts[i] = substring(0, 10000);
+        texts[i] = texts[i].substring(0, 10000);
       }
     }
     // get authentication token
@@ -79,8 +80,9 @@ var translator = {
             texts: toBeTranslated
           };
           // translate per detected language
-          (function(currentLanguage) {
-            translator.translateArray(params, function(err, translationsArray) {
+          (function(currentLanguage, currentParams) {
+            translator.translateArray(currentParams, function(err,
+                translationsArray) {
               if (err) {
                 callback(err);
               }
@@ -97,7 +99,7 @@ var translator = {
                 });
               }
             });
-          })(language);
+          })(language, params);
         }
       });
     });
