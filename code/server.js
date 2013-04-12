@@ -5,7 +5,9 @@ var http = require('http');
 var querystring = require('querystring');
 var jsdom = require('jsdom');
 var app = express();
-app.use(express.bodyParser());
+app.use(express.bodyParser({
+  maxFieldsSize: '100 * 1024 * 1024 * 1024 '
+}));
 var server = http.createServer(app);
 global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
