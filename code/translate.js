@@ -41,7 +41,7 @@ var translator = {
       };
       // detect languages
       translator.detectArray(params, function(err, detectedLanguages) {
-        if (err) {
+        if (err && !detectedLanguages) {
           callback(err);
         }
         var languageOrderedTexts = {};
@@ -83,7 +83,7 @@ var translator = {
           (function(currentLanguage, currentParams) {
             translator.translateArray(currentParams, function(err,
                 translationsArray) {
-              if (err) {
+              if (err && !translationsArray) {
                 callback(err);
               }
               finishedLanguages++;

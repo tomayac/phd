@@ -70,7 +70,8 @@
         var maxOffsetTop = 0;
         var maxOffsetLeft = 0;
         var cache = [];
-        for (var i = 0, len = mediaItems.length; i < len; i++) {
+        var len = mediaItems.length;
+        for (var i = 0; i < len; i++) {
           var item = mediaItems[i];
           var parentDiv = item.parentNode.parentNode;
           var posterUrl = item.dataset.posterurl;
@@ -95,12 +96,13 @@
           };
         }
         var margin = 4;
+        var fontSize = 8;
         canvas.width = maxOffsetLeft + 2 * margin;
-        canvas.height = maxOffsetTop + 2 * margin;
+        canvas.height = maxOffsetTop + 7 * margin + len * (fontSize + 3);
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        for (var i = 0, len = mediaItems.length; i < len; i++) {
+        for (var i = 0; i < len; i++) {
           var c = cache[i];
           var img = illustrator.mediaItems[c.posterUrl].fullImage;
           var sw;
@@ -119,10 +121,20 @@
             sh = img.naturalHeight;
           }
           ctx.drawImage(img, 0, 0, sw, sh, c.dx, c.dy + margin, c.dw, c.dh);
-          ctx.drawImage(c.favicon, c.dx + 10, c.dy + margin + 10);
+          ctx.drawImage(c.favicon, c.dx + 5, c.dy + margin + 5);
           ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
           ctx.lineWidth = 1;
           ctx.strokeRect(c.dx + 1, c.dy + margin + 1, c.dw - 1, c.dh - 1);
+          var micropostUrl = illustrator.mediaItems[c.posterUrl].micropostUrl;
+          ctx.strokeStyle = 'white';
+          ctx.fillStyle = 'black';
+          ctx.lineWidth = 3;
+          ctx.font = fontSize + 'pt Helvetica';
+          var index = i + 1;
+          ctx.strokeText(index, c.dx + 23, c.dy + margin + 16, c.dw - 1);
+          ctx.fillText(index, c.dx + 23, c.dy + margin + 16, c.dw - 1);
+          ctx.fillText('[' + index + '] Source: ' + micropostUrl, margin,
+              maxOffsetTop + 5 * margin + i * (fontSize + 3), maxOffsetLeft);
         }
         var dataUrl = canvas.toDataURL('image/png');
 
@@ -1965,6 +1977,7 @@ console.log('Longest post:\n' + longestMicropost)
           item = document.createElement('video');
           item.src = mediaItem.mediaUrl;
           item.setAttribute('poster', mediaItem.posterUrl);
+          item.setAttribute('preload', 'auto');
           item.setAttribute('loop', 'loop');
         }
         item.dataset.posterurl = cluster.identifier;
