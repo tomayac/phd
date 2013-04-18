@@ -2,7 +2,6 @@ var request = require('request');
 var express = require('express');
 var fs = require('fs');
 var http = require('http');
-var querystring = require('querystring');
 var jsdom = require('jsdom');
 var app = express();
 app.use(express.bodyParser({
@@ -15,6 +14,7 @@ var Uri = require('./uris.js');
 var mediaFinder = require('./mediafinder.js');
 var translator = require('./translate.js');
 var speak = require('./speak.js');
+var entityExtractor = require('./entityextraction.js');
 
 var GLOBAL_config = {
   DEBUG: true
@@ -41,6 +41,8 @@ app.get('/', function(req, res) {
 
 app.get(/^\/search\/(.+)\/(.+)$/, search);
 
+app.get(/^\/entityextraction\/(.+)\/(.+)$/, extractEntities);
+
 app.get(/^\/proxy\/(.+)$/, proxy);
 
 app.get(/^\/speech\/(.+)$/, speech);
@@ -50,6 +52,7 @@ app.all(/^\/download\/(.+)?$/, download);
 app.post(/^\/translation\/$/, translate);
 
 function translate(req, res, next) {
+  if (GLOBAL_config.DEBUG) console.log('Translation request');
   if (req.body.toLanguage && req.body.texts) {
     var texts = req.body.texts;
     var toLanguage = req.body.toLanguage;
@@ -68,6 +71,7 @@ function translate(req, res, next) {
 }
 
 function download(req, res, next) {
+  if (GLOBAL_config.DEBUG) console.log('Download request');
   if (req.method === 'POST') {
     if (req.body.base64 && req.body.fileName) {
       var base64Data = req.body.base64.replace(/^data:image\/png;base64,/, '');
@@ -131,12 +135,30 @@ function proxy(req, res, next) {
   */
 }
 
+function extractEntities(req, res, next) {
+  if (GLOBAL_config.DEBUG) console.log('Entity extraction request');
+  var path = /^\/entityextraction\/(.+)\/(.+)$/;
+  var pathname = require('url').parse(req.url).pathname;
+  var service = pathname.replace(path, '$1');
+  var text = decodeURIComponent(pathname.replace(path, '$2'));
+  entityExtractor.extract(service, text, function(json) {
+    res.setHeader('Content-Type', 'application/json; charset=UTF-8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+    if (req.query.callback) {
+      res.send(req.query.callback + '(' + JSON.stringify(json) + ')');
+    } else {
+      res.send(json);
+    }
+  });
+}
+
 function search(req, res, next) {
-  // actual code begins, up to here we only had helper functions
   var path = /^\/search\/(.+)\/(.+)$/;
   var pathname = require('url').parse(req.url).pathname;
   var service = pathname.replace(path, '$1');
   var query = decodeURIComponent(pathname.replace(path, '$2'));
+  if (GLOBAL_config.DEBUG) console.log('Search request for ' + query);
   var userAgent = req.headers['user-agent'];
   mediaFinder.search(service, query, userAgent, function(json) {
     res.setHeader('Content-Type', 'application/json; charset=UTF-8');
