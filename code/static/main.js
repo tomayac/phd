@@ -7,6 +7,7 @@
     SPEECH_SERVER: 'http://localhost:8001/speech/',
     DOWNLOAD_SERVER: 'http://localhost:8001/download/',
     TRANSLATION_SERVER: 'http://localhost:8001/translation/',
+    ENTITY_EXTRACTION_SERVER: 'http://localhost:8001/entityextraction/combined/',
     SIMILAR_TILES_FACTOR: 2/3,
 
     // global state
@@ -2023,6 +2024,7 @@ console.log('Longest post:\n' + longestMicropost)
         top: top / 2
       };
       illustrator.translateMicroposts();
+      illustrator.extractEntities();
     },
     translateMicroposts: function() {
       if (illustrator.clusters[0].translations) {
@@ -2062,6 +2064,53 @@ console.log('Longest post:\n' + longestMicropost)
         }
       };
       xhr.send(formData);
+    },
+    extractEntities: function() {
+      if (illustrator.clusters[0].entities) {
+        if (illustrator.DEBUG) console.log('Entities already extracted');
+        return;
+      }
+      if (illustrator.DEBUG) console.log('Extracting entities from microposts');
+      var handleXhrError = function(url) {
+        illustrator.showStatusMessage('Error while trying to load ' + url);
+      };
+      var len = illustrator.clusters.length;
+      var pending = len;
+      for (var i = 0; i < len; i++) {
+        var cluster = illustrator.clusters[i];
+        var text =
+            illustrator.mediaItems[cluster.identifier].micropost.plainText;
+        var url = illustrator.ENTITY_EXTRACTION_SERVER +
+            encodeURIComponent(text);
+        (function(index) {
+          var xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+              if (xhr.status == 200) {
+                pending--;
+                try {
+                  var entities = JSON.parse(xhr.responseText);
+                  illustrator.clusters[index].entities = entities;
+                  if (pending === 0) {
+                    console.log(illustrator.clusters);
+                  }
+                } catch(e) {
+                  if (illustrator.DEBUG) console.log(e);
+                  handleXhrError(url);
+                }
+              } else {
+                pending--;
+                handleXhrError(url);
+              }
+            }
+          };
+          xhr.onerror = function() {
+            handleXhrError(url);
+          };
+          xhr.open("GET", url, true);
+          xhr.send(null);
+        })(i);
+      }
     },
     removeAllAudio: function() {
       var audios = document.querySelectorAll('audio');
