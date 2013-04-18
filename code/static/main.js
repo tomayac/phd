@@ -2024,7 +2024,6 @@ console.log('Longest post:\n' + longestMicropost)
         top: top / 2
       };
       illustrator.translateMicroposts();
-      illustrator.extractEntities();
     },
     translateMicroposts: function() {
       if (illustrator.clusters[0].translations) {
@@ -2062,6 +2061,7 @@ console.log('Longest post:\n' + longestMicropost)
           illustrator.clusters[index].translations.push(
               response.translations[i]);
         }
+        illustrator.extractEntities();
       };
       xhr.send(formData);
     },
@@ -2078,8 +2078,10 @@ console.log('Longest post:\n' + longestMicropost)
       var pending = len;
       for (var i = 0; i < len; i++) {
         var cluster = illustrator.clusters[i];
-        var text =
-            illustrator.mediaItems[cluster.identifier].micropost.plainText;
+        var text;
+        for (var j = 0, length = cluster.translations.length; j < length; j++) {
+          text += cluster.translations[j] + '\n';
+        }
         var url = illustrator.ENTITY_EXTRACTION_SERVER +
             encodeURIComponent(text);
         (function(index) {
