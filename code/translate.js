@@ -41,10 +41,13 @@ var translator = {
       };
       // detect languages
       translator.detectArray(params, function(err, detectedLanguages) {
-        if (err && !detectedLanguages) {
+        if (err || !detectedLanguages) {
           callback(err);
         }
         var languageOrderedTexts = {};
+console.log('detectedLanguages')
+console.log(detectedLanguages)
+
         for (var i = 0, len = detectedLanguages.length; i < len; i++) {
           var detectedLanguage = detectedLanguages[i];
           if (!languageOrderedTexts[detectedLanguage]) {
@@ -55,6 +58,8 @@ var translator = {
             index: i
           });
         }
+console.log('keys')
+console.log(Object.keys(languageOrderedTexts))
         var translations = new Array(textsLength);
         var finishedLanguages = 0;
         var languagesToGo = Object.keys(languageOrderedTexts).length;
@@ -83,7 +88,12 @@ var translator = {
           (function(currentLanguage, currentParams) {
             translator.translateArray(currentParams, function(err,
                 translationsArray) {
-              if (err && !translationsArray) {
+console.log('err')
+console.log(err)
+console.log('translationsArray')
+console.log(translationsArray)
+console.log(currentParams)
+              if (err || translationsArray === null) {
                 callback(err);
               }
               finishedLanguages++;

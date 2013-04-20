@@ -2052,16 +2052,20 @@ console.log('Longest post:\n' + longestMicropost)
       var xhr = new XMLHttpRequest();
       xhr.open('POST', illustrator.TRANSLATION_SERVER, true);
       xhr.onload = function(e) {
-        var response = JSON.parse(xhr.responseText);
-        for (var i = 0, len = response.translations.length; i < len; i++) {
-          var index = clusterIndexes[i];
-          if (!illustrator.clusters[index].translations) {
-            illustrator.clusters[index].translations = [];
+        try {
+          var response = JSON.parse(xhr.responseText);
+          for (var i = 0, len = response.translations.length; i < len; i++) {
+            var index = clusterIndexes[i];
+            if (!illustrator.clusters[index].translations) {
+              illustrator.clusters[index].translations = [];
+            }
+            illustrator.clusters[index].translations.push(
+                response.translations[i]);
           }
-          illustrator.clusters[index].translations.push(
-              response.translations[i]);
+          illustrator.extractEntities();
+        } catch(e) {
+          console.log('Translation error ' + e);
         }
-        illustrator.extractEntities();
       };
       xhr.send(formData);
     },
