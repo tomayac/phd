@@ -2067,6 +2067,9 @@ console.log('Longest post:\n' + longestMicropost)
           console.log('Translation error ' + e);
         }
       };
+      xhr.onerror = function(e) {
+        console.log('Translation error: ' + e);
+      }
       xhr.send(formData);
     },
     extractEntities: function() {

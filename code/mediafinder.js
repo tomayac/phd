@@ -4,6 +4,7 @@ var jsdom = require('jsdom');
 var pos = require('pos');
 var Step = require('./step.js');
 var Uri = require('./uris.js');
+var twitter = require('ntwitter');
 
 var GLOBAL_config = {
   DEBUG: true,
@@ -16,11 +17,15 @@ var GLOBAL_config = {
   FLICKR_KEY: 'b0f2a04baa5dd667fb181701408db162',
   YFROG_KEY: '89ABGHIX5300cc8f06b447103e19a201c7599962',
   LOCKERZ_KEY: 'f42ed850-c341-46ca-8360-dc47c049b73a',
-  INSTAGRAM_KEY: '82fe3d0649e04c2da8e38736547f9170',
-  INSTAGRAM_SECRET: 'b0b5316d40a74dffab16bfe3b0dfd5b6',
+  INSTAGRAM_KEY: '47dcb5ea3b5b4c7595ee25081caca1bb',
+  INSTAGRAM_SECRET: '8579591.f59def8.8ca970406d154bc1904da1b1d7cab559',
   GOOGLE_KEY: 'AIzaSyC5GxhDFxBHTKCLNMYtYm6o1tiagi65Ufc',
   GOOGLE_RESEARCH_API_KEY: 'DQAAAMcAAAAcGiug619uBnQa2Joxo2vPo2Bup-s062p1fLvLpRM9Mc7IdRUeJ-YZUv9BcuXgAdWcg1uu5YrIRLvzA_eojgOmpGF6wF3Bsd5pYAczmtTeNcpgzdWI5otAToWwPkSuRRulDUqAUZdnCXwjuR8XTobYVLNNmO-sqVeXIwaT593vH2eDGycOoYyeDEji0jmPTXkvqV9_T20u7Zb5jWcl2b-Kz5B6n2OuKSIZjRU_8bqKzasAQD5r9ycFY5uWTQPyUA3lFRqdgS0tTDPpFL9-bXFP',
   IMGUR_KEY: '9b7d0e62bfaacc04db0b719c998d225e',
+  TWITTER_CONSUMER_KEY: '6qjXspcrt3j7BmXqbCzjQ',
+  TWITTER_CONSUMER_SECRET: 'NOHRonZUDzz9CxQysNE2MByaZU8Sg9n7DG3gG1VS1o',
+  TWITTER_ACCESS_TOKEN_KEY: '14697496-wCkjgHciqZzcylUJgEALRdSLIyg52IqNaI0Qw5iY',
+  TWITTER_ACCESS_TOKEN_SECRET: 'kZEapR3HG75mQS6SnEvuxfzsHwcAF8X6cRSGuolMTM8',
   HEADERS: {
     "Accept": "application/json, text/javascript, */*",
     "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
@@ -33,9 +38,12 @@ var GLOBAL_config = {
   MEDIA_PLATFORMS: [
     'yfrog.com',
     'instagr.am',
+    'instagram.com',
     'flic.kr',
+    'flickr.com',
     'moby.to',
     'youtu.be',
+    'youtube.com',
     'twitpic.com',
     'lockerz.com',
     'picplz.com',
@@ -57,6 +65,13 @@ var GLOBAL_config = {
   PLUS_REGEX: /(^|\W)\+([a-zA-Z0-9_]+)/g,
   TAG_REGEX: /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi
 };
+
+var twit = new twitter({
+  consumer_key: GLOBAL_config.TWITTER_CONSUMER_KEY,
+  consumer_secret: GLOBAL_config.TWITTER_CONSUMER_SECRET,
+  access_token_key: GLOBAL_config.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: GLOBAL_config.TWITTER_ACCESS_TOKEN_SECRET
+});
 
 var mediaFinder = {
   search: function search(service, query, userAgent, callback) {
@@ -970,21 +985,15 @@ var mediaFinder = {
       TwitterNative: function(pendingRequests) {
         var currentService = 'TwitterNative';
         if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
-        var params = {
-          q: query + ' -"RT "',
-          result_type: 'recent',
-          include_entities: true,
-          rpp: 20
-        };
-        params = querystring.stringify(params);
-        var options = {
-          url: 'http://search.twitter.com/search.json?' + params,
-          headers: GLOBAL_config.HEADERS
-        };
-        if (GLOBAL_config.DEBUG) console.log(currentService + ' ' + options.url);
-        request.get(options, function(err, reply, body) {
+        twit.search(
+            query + ' ' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ' -"RT "',
+            {
+              rpp: 20,
+              result_type: 'recent',
+              include_entities: true,
+            },
+            function(err, body) {
           try {
-            body = JSON.parse(body);
             var results = [];
             if ((body.results) && (body.results.length)) {
               var items = body.results;
@@ -1058,319 +1067,231 @@ var mediaFinder = {
       Twitter: function(pendingRequests) {
         var currentService = 'Twitter';
         if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
-        var params = {
-          q: query + ' ' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ' -"RT "',
-          rpp: 20,
-          result_type: 'recent'
-        };
-        params = querystring.stringify(params);
-        var options = {
-          url: 'http://search.twitter.com/search.json?' + params,
-          headers: GLOBAL_config.HEADERS
-        };
-        if (GLOBAL_config.DEBUG) console.log(currentService + ' ' + options.url);
-        request.get(options, function(err, reply, body) {
+        twit.search(
+            query + ' AND (' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ') -"RT "',
+            {
+              rpp: 20,
+              result_type: 'recent',
+              include_entities: true,
+            },
+            function(err, body) {
           try {
-            body = JSON.parse(body);
             var results = [];
             if ((body.results) && (body.results.length)) {
               var items = body.results;
               var itemStack = [];
+              var numberOfUrls = 0;
+              var pendingUrls = 0;
               for (var i = 0, len = items.length; i < len; i++) {
                 var item = items[i];
                 // extract all URLs form a tweet
-                var urls = [];
-                item.text.replace(GLOBAL_config.URL_REGEX, function(url) {
-                  var targetURL = (/^\w+\:\//.test(url) ? '' : 'http://') + url;
-                  urls.push(targetURL);
-                });
-                // for each URL prepare the options object
-                var optionsStack = [];
-                for (var j = 0, len2 = urls.length; j < len2; j++) {
-                  var options = {
-                    url: urls[j],
-                    followRedirect: false,
-                    headers: GLOBAL_config.HEADERS
-                  };
-                  optionsStack[j] = options;
+                if (!item.entities.urls.length) {
+                  continue;
                 }
-                itemStack[i] = {
-                  urls: urls,
-                  options: optionsStack,
-                  item: item
-                };
-              }
-              // for each tweet retrieve all URLs and try to expand shortend URLs
-              Step(
-                function() {
-                  var group = this.group();
-                  itemStack.forEach(function (obj) {
-                    obj.options.forEach(function(options) {
-                      var cb = group();
-                      request.get(options, function(err, reply2) {
-                        if (reply2 && reply2.statusCode) {
-                          cb(null, {
-                            req: {
-                              statusCode: reply2.statusCode,
-                              location: (reply2.headers.location ?
-                                  reply2.headers.location : '')
-                            },
-                            url: options.url
-                          });
-                        } else {
-                          cb(null, {
-                            req: {
-                              statusCode: 404,
-                              location: ''
-                            },
-                            url: options.url
-                          });
-                        }
-                      });
-                    });
-                  });
-                },
-                function(err, replies) {
-                  /**
-                   * Checks if a URL is one of the media platform URLs
-                   */
-                  function checkForValidUrl(url) {
-                    var host = new Uri(url).heirpart().authority().host();
-                    return GLOBAL_config.MEDIA_PLATFORMS.indexOf(host) !== -1;
-                  }
-                  var locations = [];
-                  replies.forEach(function(thing, i) {
-                    if ((thing.req.statusCode === 301) ||
-                        (thing.req.statusCode === 302)) {
-                      if (checkForValidUrl(thing.req.location)) {
-                        locations.push(thing.req.location);
-                      } else {
-                        locations.push(false);
-                      }
-                    } else {
-                      if (checkForValidUrl(thing.url)) {
-                        locations.push(thing.url);
-                      } else {
-                        locations.push(false);
-                      }
-                    }
-                  });
-                  var locationIndex = 0;
-                  var numberOfUrls = 0;
-                  var pendingUrls = 0;
-                  var i;
-                  var len;
-                  for (i = 0, len = itemStack.length; i < len; i++) {
-                    itemStack[i].urls.forEach(function() {
-                      numberOfUrls++;
-                    });
-                  }
-                  for (i = 0, len = itemStack.length; i < len; i++) {
-                    var item = itemStack[i].item;
+                for (var j = 0, len2 = item.entities.urls.length; j < len2; j++) {
+                  var url = item.entities.urls[j].expanded_url;
+                  var host = new Uri(url).heirpart().authority().host();
+                  if (GLOBAL_config.MEDIA_PLATFORMS.indexOf(host) !== -1) {
+                    numberOfUrls++;
                     var timestamp = Date.parse(item.created_at);
                     var publicationDate = getIsoDateString(timestamp);
                     var micropost = cleanMicropost(item.text);
                     var userProfileUrl = 'http://twitter.com/' + item.from_user;
-                    itemStack[i].urls.forEach(function() {
-                      if (locations[locationIndex]) {
-                        var mediaUrl = locations[locationIndex];
-                        var micropostUrl = 'http://twitter.com/' +
-                            item.from_user + '/status/' + item.id_str;
-                        // vine.co
-                        if (mediaUrl.indexOf('http://vine.co') === 0) {
-                          var options = {
-                            url: mediaUrl
-                          };
-                          (function(micropost, userProfileUrl, timestamp, publicationDate) {
-                            request.get(options, function(err, result, body) {
-                              scrapeVine(body, function(videoUrl, posterUrl) {
-                                if (videoUrl && posterUrl) {
-                                  results.push({
-                                    mediaUrl: videoUrl,
-                                    posterUrl: posterUrl,
-                                    micropostUrl: micropostUrl,
-                                    micropost: micropost,
-                                    userProfileUrl: userProfileUrl,
-                                    type: 'video',
-                                    timestamp: timestamp,
-                                    publicationDate: publicationDate,
-                                    socialInteractions: {
-                                      likes: null,
-                                      shares: null,
-                                      comments: null,
-                                      views: null
-                                    }
-                                  });
-                                }
-                                pendingUrls++;
-                                if (pendingUrls === numberOfUrls) {
-                                  collectResults(
-                                      results, currentService, pendingRequests);
+                    var mediaUrl = url;
+                    var micropostUrl = 'http://twitter.com/' +
+                        item.from_user + '/status/' + item.id_str;
+                    // vine.co
+                    if (mediaUrl.indexOf('https://vine.co') === 0) {
+                      var options = {
+                        url: mediaUrl
+                      };
+                      (function(micropost, userProfileUrl, timestamp, publicationDate) {
+                        request.get(options, function(err, result, body) {
+                          scrapeVine(body, function(videoUrl, posterUrl) {
+                            if (videoUrl && posterUrl) {
+                              results.push({
+                                mediaUrl: videoUrl,
+                                posterUrl: posterUrl,
+                                micropostUrl: micropostUrl,
+                                micropost: micropost,
+                                userProfileUrl: userProfileUrl,
+                                type: 'video',
+                                timestamp: timestamp,
+                                publicationDate: publicationDate,
+                                socialInteractions: {
+                                  likes: null,
+                                  shares: null,
+                                  comments: null,
+                                  views: null
                                 }
                               });
-                            });
-                          })(micropost, userProfileUrl, timestamp, publicationDate);
-                        // yfrog
-                        } else if (mediaUrl.indexOf('http://yfrog.com') === 0) {
-                          var id = mediaUrl.replace('http://yfrog.com/', '');
-                          var options = {
-                            url: 'http://yfrog.com/api/xmlInfo?path=' + id
-                          };
-                          (function(micropost, userProfileUrl, timestamp, publicationDate) {
-                            request.get(options, function(err, result, body) {
-                              if (mediaUrl) {
-                                results.push({
-                                  mediaUrl: mediaUrl + ':iphone',
-                                  posterUrl: mediaUrl + ':small',
-                                  micropostUrl: micropostUrl,
-                                  micropost: micropost,
-                                  userProfileUrl: userProfileUrl,
-                                  type: 'photo',
-                                  timestamp: timestamp,
-                                  publicationDate: publicationDate,
-                                  socialInteractions: {
-                                    likes: null,
-                                    shares: null,
-                                    comments: null,
-                                    views: null
-                                  }
-                                });
+                            }
+                            pendingUrls++;
+                            if (pendingUrls === numberOfUrls) {
+                              collectResults(
+                                  results, currentService, pendingRequests);
+                            }
+                          });
+                        });
+                      })(micropost, userProfileUrl, timestamp, publicationDate);
+                    // yfrog
+                    } else if (mediaUrl.indexOf('http://yfrog.com') === 0) {
+                      var id = mediaUrl.replace('http://yfrog.com/', '');
+                      var options = {
+                        url: 'http://yfrog.com/api/xmlInfo?path=' + id
+                      };
+                      (function(micropost, userProfileUrl, timestamp, publicationDate) {
+                        request.get(options, function(err, result, body) {
+                          if (mediaUrl) {
+                            results.push({
+                              mediaUrl: mediaUrl + ':iphone',
+                              posterUrl: mediaUrl + ':small',
+                              micropostUrl: micropostUrl,
+                              micropost: micropost,
+                              userProfileUrl: userProfileUrl,
+                              type: 'photo',
+                              timestamp: timestamp,
+                              publicationDate: publicationDate,
+                              socialInteractions: {
+                                likes: null,
+                                shares: null,
+                                comments: null,
+                                views: null
                               }
-                              pendingUrls++;
-                              if (pendingUrls === numberOfUrls) {
-                                collectResults(
-                                    results, currentService, pendingRequests);
-                              }
                             });
-                          })(micropost, userProfileUrl, timestamp, publicationDate);
-                        // TwitPic
-                        } else if (mediaUrl.indexOf('http://twitpic.com') === 0) {
-                          var id = mediaUrl.replace('http://twitpic.com/', '')
-                              .replace('show/', '')
-                              .replace('large/', '')
-                              .replace('thumbnail/', '')
-                              .replace('/full', '');
-                          var options = {
-                            url: 'http://twitpic.com/' + id + '/full'
-                          };
-                          (function(micropost, userProfileUrl, timestamp, publicationDate) {
-                            request.get(options, function(err, res, body) {
-                              scrapeTwitPic(body, function(mediaUrl, type) {
-                                if (mediaUrl) {
-                                  results.push({
-                                    mediaUrl: mediaUrl,
-                                    posterUrl: 'http://twitpic.com/show/thumb/' + id,
-                                    micropostUrl: micropostUrl,
-                                    micropost: micropost,
-                                    userProfileUrl: userProfileUrl,
-                                    type: type,
-                                    timestamp: timestamp,
-                                    publicationDate: publicationDate,
-                                    socialInteractions: {
-                                      likes: null,
-                                      shares: null,
-                                      comments: null,
-                                      views: null
-                                    }
-                                  });
-                                }
-                                pendingUrls++;
-                                if (pendingUrls === numberOfUrls) {
-                                  collectResults(
-                                      results, currentService, pendingRequests);
+                          }
+                          pendingUrls++;
+                          if (pendingUrls === numberOfUrls) {
+                            collectResults(
+                                results, currentService, pendingRequests);
+                          }
+                        });
+                      })(micropost, userProfileUrl, timestamp, publicationDate);
+                    // TwitPic
+                    } else if (mediaUrl.indexOf('http://twitpic.com') === 0) {
+                      var id = mediaUrl.replace('http://twitpic.com/', '')
+                          .replace('show/', '')
+                          .replace('large/', '')
+                          .replace('thumbnail/', '')
+                          .replace('/full', '');
+                      var options = {
+                        url: 'http://twitpic.com/' + id + '/full'
+                      };
+                      (function(micropost, userProfileUrl, timestamp, publicationDate) {
+                        request.get(options, function(err, res, body) {
+                          scrapeTwitPic(body, function(mediaUrl, type) {
+                            if (mediaUrl) {
+                              results.push({
+                                mediaUrl: mediaUrl,
+                                posterUrl: 'http://twitpic.com/show/thumb/' + id,
+                                micropostUrl: micropostUrl,
+                                micropost: micropost,
+                                userProfileUrl: userProfileUrl,
+                                type: type,
+                                timestamp: timestamp,
+                                publicationDate: publicationDate,
+                                socialInteractions: {
+                                  likes: null,
+                                  shares: null,
+                                  comments: null,
+                                  views: null
                                 }
                               });
-                            });
-                          })(micropost, userProfileUrl, timestamp, publicationDate);
-                        // img.ly
-                        } else if (mediaUrl.indexOf('http://img.ly') === 0) {
-                          var id = mediaUrl.replace('http://img.ly/', '');
-                          var options = {
-                            url: 'http://img.ly/' + id
-                          };
-                          (function(micropost, userProfileUrl, timestamp, publicationDate) {
-                            request.get(options, function(err, res, body) {
-                              scrapeImgLy(body, function(mediaUrl) {
-                                if (mediaUrl) {
-                                  results.push({
-                                    mediaUrl: mediaUrl,
-                                    posterUrl: mediaUrl,
-                                    micropostUrl: micropostUrl,
-                                    micropost: micropost,
-                                    userProfileUrl: userProfileUrl,
-                                    type: 'photo',
-                                    timestamp: timestamp,
-                                    publicationDate: publicationDate,
-                                    socialInteractions: {
-                                      likes: null,
-                                      shares: null,
-                                      comments: null,
-                                      views: null
-                                    }
-                                  });
-                                }
-                                pendingUrls++;
-                                if (pendingUrls === numberOfUrls) {
-                                  collectResults(
-                                      results, currentService, pendingRequests);
+                            }
+                            pendingUrls++;
+                            if (pendingUrls === numberOfUrls) {
+                              collectResults(
+                                  results, currentService, pendingRequests);
+                            }
+                          });
+                        });
+                      })(micropost, userProfileUrl, timestamp, publicationDate);
+                    // img.ly
+                    } else if (mediaUrl.indexOf('http://img.ly') === 0) {
+                      var id = mediaUrl.replace('http://img.ly/', '');
+                      var options = {
+                        url: 'http://img.ly/' + id
+                      };
+                      (function(micropost, userProfileUrl, timestamp, publicationDate) {
+                        request.get(options, function(err, res, body) {
+                          scrapeImgLy(body, function(mediaUrl) {
+                            if (mediaUrl) {
+                              results.push({
+                                mediaUrl: mediaUrl,
+                                posterUrl: mediaUrl,
+                                micropostUrl: micropostUrl,
+                                micropost: micropost,
+                                userProfileUrl: userProfileUrl,
+                                type: 'photo',
+                                timestamp: timestamp,
+                                publicationDate: publicationDate,
+                                socialInteractions: {
+                                  likes: null,
+                                  shares: null,
+                                  comments: null,
+                                  views: null
                                 }
                               });
-                            });
-                          })(micropost, userProfileUrl, timestamp, publicationDate);
-                        // Instagram
-                        } else if (mediaUrl.indexOf('http://instagr.am') === 0) {
-                          var id = mediaUrl.replace('http://instagr.am/p/', '');
-                          var options = {
-                            url: 'https://api.instagram.com/v1/media/' + id +
-                                '?access_token=' + GLOBAL_config.INSTAGRAM_KEY
-                          };
-                          (function(micropost, userProfileUrl, timestamp, publicationDate) {
-                            request.get(options, function(err, result, body) {
-                              try {
-                                body = JSON.parse(body);
-                                if ((body.data) && (body.data.images) &&
-                                    (body.data.images.standard_resolution ) &&
-                                    (body.data.images.standard_resolution.url)) {
-                                  results.push({
-                                    mediaUrl:
-                                        body.data.images.standard_resolution.url,
-                                    posterUrl: body.data.images.thumbnail.url,
-                                    micropostUrl: micropostUrl,
-                                    micropost: micropost,
-                                    userProfileUrl: userProfileUrl,
-                                    type: 'photo',
-                                    timestamp: timestamp,
-                                    publicationDate: publicationDate,
-                                    socialInteractions: {
-                                      likes: null,
-                                      shares: null,
-                                      comments: null,
-                                      views: null
-                                    }
-                                  });
+                            }
+                            pendingUrls++;
+                            if (pendingUrls === numberOfUrls) {
+                              collectResults(
+                                  results, currentService, pendingRequests);
+                            }
+                          });
+                        });
+                      })(micropost, userProfileUrl, timestamp, publicationDate);
+                    // Instagram
+                    } else if ((mediaUrl.indexOf('http://instagr.am') === 0) ||
+                               (mediaUrl.indexOf('http://instagram.com') === 0)) {
+                      var id = mediaUrl.replace('http://instagram.com', 'http://instagr.am')
+                          .replace('http://instagr.am/p/', '');
+                      var options = {
+                        url: 'https://api.instagram.com/v1/media/' + id +
+                            '?access_token=' + GLOBAL_config.INSTAGRAM_SECRET
+                      };
+                      (function(micropost, userProfileUrl, timestamp, publicationDate) {
+                        request.get(options, function(err, result, body) {
+                          try {
+                            body = JSON.parse(body);
+                            if ((body.data) && (body.data.images) &&
+                                (body.data.images.standard_resolution ) &&
+                                (body.data.images.standard_resolution.url)) {
+                              results.push({
+                                mediaUrl:
+                                    body.data.images.standard_resolution.url,
+                                posterUrl: body.data.images.thumbnail.url,
+                                micropostUrl: micropostUrl,
+                                micropost: micropost,
+                                userProfileUrl: userProfileUrl,
+                                type: 'photo',
+                                timestamp: timestamp,
+                                publicationDate: publicationDate,
+                                socialInteractions: {
+                                  likes: null,
+                                  shares: null,
+                                  comments: null,
+                                  views: null
                                 }
-                              } catch(e) {
-                                // noop
-                              }
-                              pendingUrls++;
-                              if (pendingUrls === numberOfUrls) {
-                                collectResults(
-                                    results, currentService, pendingRequests);
-                              }
-                            });
-                          })(micropost, userProfileUrl, timestamp, publicationDate);
-                        // URL from unsupported media platform, don't consider it
-                        } else {
-                          numberOfUrls--;
-                        }
-                      } else {
-                        numberOfUrls--;
-                      }
-                      locationIndex++;
-                    });
+                              });
+                            }
+                          } catch(e) {
+                            // noop
+                          }
+                          pendingUrls++;
+                          if (pendingUrls === numberOfUrls) {
+                            collectResults(
+                                results, currentService, pendingRequests);
+                          }
+                        });
+                      })(micropost, userProfileUrl, timestamp, publicationDate);
+                    // URL from unsupported media platform, don't consider it
+                    } else {
+                      numberOfUrls--;
+                    }
                   }
                 }
-              );
+              }
             } else {
               collectResults([], currentService, pendingRequests);
             }

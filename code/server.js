@@ -59,7 +59,7 @@ function translate(req, res, next) {
     translator.multiTranslate(texts, toLanguage, function(err, results) {
       if (err) {
         res.statusCode = 400;
-        res.send('Error 400 Bad Request.');
+        res.send('Error 400 Bad Request.\n\n' + err);
       } else {
         res.send(results);
       }

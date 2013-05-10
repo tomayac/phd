@@ -29,6 +29,9 @@ var translator = {
         console.log('Warning: maximum text length of 10,000 characters exceeded at index ' + i + '.');
         texts[i] = texts[i].substring(0, 10000);
       }
+      if (texts[i].trim().length === 0) {
+        texts[i] = 'N/A';
+      }
     }
     // get authentication token
     var translator = new (require('mstranslator'))({
@@ -41,13 +44,10 @@ var translator = {
       };
       // detect languages
       translator.detectArray(params, function(err, detectedLanguages) {
-        if (err || !detectedLanguages) {
-          callback(err);
+        if (err) {
+          return callback(err);
         }
         var languageOrderedTexts = {};
-console.log('detectedLanguages')
-console.log(detectedLanguages)
-
         for (var i = 0, len = detectedLanguages.length; i < len; i++) {
           var detectedLanguage = detectedLanguages[i];
           if (!languageOrderedTexts[detectedLanguage]) {
@@ -58,8 +58,6 @@ console.log(detectedLanguages)
             index: i
           });
         }
-console.log('keys')
-console.log(Object.keys(languageOrderedTexts))
         var translations = new Array(textsLength);
         var finishedLanguages = 0;
         var languagesToGo = Object.keys(languageOrderedTexts).length;
@@ -88,13 +86,8 @@ console.log(Object.keys(languageOrderedTexts))
           (function(currentLanguage, currentParams) {
             translator.translateArray(currentParams, function(err,
                 translationsArray) {
-console.log('err')
-console.log(err)
-console.log('translationsArray')
-console.log(translationsArray)
-console.log(currentParams)
-              if (err || translationsArray === null) {
-                callback(err);
+              if (err) {
+                return callback(err);
               }
               finishedLanguages++;
               for (var i = 0, len = translationsArray.length; i < len; i++) {
