@@ -2,12 +2,12 @@
   var illustrator = {
     // constants
     DEBUG: true,
-    MEDIA_SERVER: 'http://localhost:8001/search/combined/',
-    PROXY_SERVER: 'http://localhost:8001/proxy/',
-    SPEECH_SERVER: 'http://localhost:8001/speech/',
-    DOWNLOAD_SERVER: 'http://localhost:8001/download/',
-    TRANSLATION_SERVER: 'http://localhost:8001/translation/',
-    ENTITY_EXTRACTION_SERVER: 'http://localhost:8001/entityextraction/combined/',
+    MEDIA_SERVER: './search/combined/',
+    PROXY_SERVER: document.location.href + 'proxy/',
+    SPEECH_SERVER: './speech/',
+    DOWNLOAD_SERVER: './download/',
+    TRANSLATION_SERVER: './translation/',
+    ENTITY_EXTRACTION_SERVER: './entityextraction/combined/',
     SIMILAR_TILES_FACTOR: 2/3,
 
     // global state
@@ -718,7 +718,7 @@ console.log('Longest post:\n' + longestMicropost)
 
       if (illustrator.DEBUG) illustrator.debug();
 
-      illustrator.socket = io.connect('http://localhost:8001/');
+      illustrator.socket = io.connect('/');
       illustrator.initSockets();
 
       illustrator.canvas = document.createElement('canvas');
@@ -992,6 +992,7 @@ console.log('Longest post:\n' + longestMicropost)
       };
 
       var successThumbnail = function(image, micropostUrl) {
+console.log('Ficken ' + image.src)
         illustrator.mediaItems[image.src].thumbnail = image;
         detectFaces(image, image.naturalWidth, image.naturalHeight);
         illustrator.calculateHistograms(image);
