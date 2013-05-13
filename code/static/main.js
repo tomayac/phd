@@ -992,7 +992,6 @@ console.log('Longest post:\n' + longestMicropost)
       };
 
       var successThumbnail = function(image, micropostUrl) {
-console.log('Ficken ' + image.src)
         illustrator.mediaItems[image.src].thumbnail = image;
         detectFaces(image, image.naturalWidth, image.naturalHeight);
         illustrator.calculateHistograms(image);
@@ -2022,8 +2021,8 @@ console.log('Ficken ' + image.src)
         }
       }
       illustrator.mediaGalleryCenter = {
-        left: left / 2,
-        top: top / 2
+        left: Math.min(left, mediaGallery.clientWidth) / 2,
+        top: Math.min(top, mediaGallery.clientHeight) / 2
       };
       illustrator.translateMicroposts();
     },
@@ -2103,7 +2102,7 @@ console.log('Ficken ' + image.src)
                   var entities = JSON.parse(xhr.responseText);
                   illustrator.clusters[index].entities = entities;
                   if (pending === 0) {
-                    console.log(illustrator.clusters);
+                    // console.log(illustrator.clusters);
                   }
                 } catch(e) {
                   if (illustrator.DEBUG) console.log(e);
