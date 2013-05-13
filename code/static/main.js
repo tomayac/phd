@@ -1144,8 +1144,9 @@ console.log('Longest post:\n' + longestMicropost)
       var now = Date.now();
       for (var key in illustrator.mediaItems) {
         var mediaItem = illustrator.mediaItems[key];
+        // FixMe: needs to check for timezones!
         if (mediaItem.timestamp > now) {
-          mediaItem.considerMediaItem = false;
+          mediaItem.considerMediaItem = true; // was: false
         }
         else if (now - mediaItem.timestamp <= illustrator.maxAge) {
           mediaItem.considerMediaItem = true;

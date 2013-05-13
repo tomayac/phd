@@ -810,6 +810,7 @@ var mediaFinder = {
           }
         });
       },
+      /*
       MySpace: function(pendingRequests) {
         var currentService = 'MySpace';
         if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
@@ -827,7 +828,7 @@ var mediaFinder = {
         request.get(options, function(err, reply, body) {
           var results = [];
           // when no results are found, the MySpace API returns 404
-          if (reply.statusCode === 404) {
+          if (err || reply.statusCode !== 200) {
             collectResults(results, currentService, pendingRequests);
             return;
           }
@@ -884,6 +885,7 @@ var mediaFinder = {
           }
         });
       },
+      */
       /*
       MySpaceVideos: function(pendingRequests) {
         var currentService = 'MySpaceVideos';
@@ -1769,6 +1771,7 @@ var mediaFinder = {
           }
         });
       },
+      /*
       Lockerz: function(pendingRequests) {
         var currentService = 'Lockerz';
         if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
@@ -1812,6 +1815,7 @@ var mediaFinder = {
           }
         });
       }
+      */
     };
     if (services[service]) {
       services[service]();
