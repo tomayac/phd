@@ -50,6 +50,7 @@
     mediaGallerySize: 25,
     mediaGalleryWidth: 1200,
     mediaItemHeight: 150,
+    speechOutputEnabled: false,
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -380,8 +381,10 @@ console.log('Shortest post:\n' + shortestMicropost)
 console.log('Longest post:\n' + longestMicropost)
           var micropost = shortestMicropost;
 
-          illustrator.removeAllAudio();
-          illustrator.speak(micropost);
+          if (illustrator.speechOutputEnabled) {
+            illustrator.removeAllAudio();
+            illustrator.speak(micropost);
+          }
 
           var img = mediaItem.querySelector('img, video');
           zoomIn(mediaGallery, mediaItem, img);
