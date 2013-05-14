@@ -127,7 +127,8 @@ var mediaFinder = {
 
       // if is YouTube URL
       if ((url.indexOf('http://www.youtube.com') === 0) ||
-          (url.indexOf('https://www.youtube.com') === 0)) {
+          (url.indexOf('https://www.youtube.com') === 0) ||
+          (url.indexOf('http://youtu.be') === 0)) {
         try {
           var urlObj = new Uri(url);
           var path = urlObj.heirpart().path();
@@ -147,6 +148,10 @@ var mediaFinder = {
                 videoId = keyValue[1];
               }
             });
+          } else if (!pathComponents[0] && pathComponents[1]) {
+            // URL of shortened type:
+            // http://youtu.be/EVBsypHzF3U
+            videoId = pathComponents[1];
           }
           // Translate to HTML5 video URL, try at least
           var options = {
@@ -182,11 +187,11 @@ var mediaFinder = {
             var webm = video.getSource('video/webm', 'medium');
             var mp4 =  video.getSource('video/mp4', 'medium');
             if (webm) {
-              return callback(webm.url);
+              return callback(webm.url, videoId);
             } else if (mp4) {
-              return callback(mp4.url);
+              return callback(mp4.url, videoId);
             } else {
-              return callback(url);
+              return callback(url, videoId);
             }
           });
         } catch(e) {
@@ -1287,12 +1292,43 @@ var mediaFinder = {
                           }
                         });
                       })(micropost, userProfileUrl, timestamp, publicationDate);
+                    } else if ((mediaUrl.indexOf('http://youtu.be') === 0) ||
+                               (mediaUrl.indexOf('http://www.youtube.com') === 0) ||
+                               (mediaUrl.indexOf('https://www.youtube.com') === 0)) {
+                      cleanVideoUrl(mediaUrl, function(cleanedVideoUrl, videoId) {
+                        results.push({
+                          mediaUrl: cleanedVideoUrl,
+                          posterUrl: 'http://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg',
+                          micropostUrl: micropostUrl,
+                          micropost: micropost,
+                          userProfileUrl: userProfileUrl,
+                          type: 'video',
+                          timestamp: timestamp,
+                          publicationDate: publicationDate,
+                          socialInteractions: {
+                            likes: null,
+                            shares: null,
+                            comments: null,
+                            views: null
+                          }
+                        });
+                        pendingUrls++;
+                        if (pendingUrls === numberOfUrls) {
+                          collectResults(
+                              results, currentService, pendingRequests);
+                        }
+                      });
                     // URL from unsupported media platform, don't consider it
                     } else {
                       numberOfUrls--;
+                      console.log(pendingUrls + '/' + numberOfUrls);
                     }
                   }
                 }
+              }
+              if (pendingUrls === numberOfUrls) {
+                collectResults(
+                    results, currentService, pendingRequests);
               }
             } else {
               collectResults([], currentService, pendingRequests);
