@@ -163,7 +163,8 @@ var mediaFinder = {
           request.get(options, function(err, reply, body) {
             var video;
             video = decodeQueryString(body);
-            if (video.status === 'fail') {
+            // video.live_playback is '1' for Hangouts on Air
+            if (video.status === 'fail' || video.live_playback) {
               return callback(url);
             }
             video.sources = decodeStreamMap(video.url_encoded_fmt_stream_map);
@@ -782,7 +783,7 @@ var mediaFinder = {
                         mediaUrl = attachment.fullImage.url;
                       }
                       cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
-                        if (cleanedMediaUrl) {
+                        if (cleanedMediaUrl && cleanedMediaUrl !== mediaUrl) {
                           results.push({
                             mediaUrl: cleanedMediaUrl,
                             posterUrl: attachment.image.url,
@@ -951,7 +952,7 @@ var mediaFinder = {
                     var mediaUrl = item.type === 'video' ?
                         item.source : item.picture;
                     cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
-                      if (cleanedMediaUrl && item.picture) {
+                      if (cleanedMediaUrl && item.picture && cleanedMediaUrl !== mediaUrl) {
                         results.push({
                           mediaUrl: cleanedMediaUrl.replace(/s\.jpg$/gi, 'n.jpg'),
                           posterUrl: item.picture,
@@ -1295,33 +1296,36 @@ var mediaFinder = {
                     } else if ((mediaUrl.indexOf('http://youtu.be') === 0) ||
                                (mediaUrl.indexOf('http://www.youtube.com') === 0) ||
                                (mediaUrl.indexOf('https://www.youtube.com') === 0)) {
-                      cleanVideoUrl(mediaUrl, function(cleanedVideoUrl, videoId) {
-                        results.push({
-                          mediaUrl: cleanedVideoUrl,
-                          posterUrl: 'http://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg',
-                          micropostUrl: micropostUrl,
-                          micropost: micropost,
-                          userProfileUrl: userProfileUrl,
-                          type: 'video',
-                          timestamp: timestamp,
-                          publicationDate: publicationDate,
-                          socialInteractions: {
-                            likes: null,
-                            shares: null,
-                            comments: null,
-                            views: null
+                      (function(mediaUrl) {
+                        cleanVideoUrl(mediaUrl, function(cleanedVideoUrl, videoId) {
+                          if (cleanedVideoUrl && cleanedVideoUrl !== mediaUrl) {
+                            results.push({
+                              mediaUrl: cleanedVideoUrl,
+                              posterUrl: 'http://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg',
+                              micropostUrl: micropostUrl,
+                              micropost: micropost,
+                              userProfileUrl: userProfileUrl,
+                              type: 'video',
+                              timestamp: timestamp,
+                              publicationDate: publicationDate,
+                              socialInteractions: {
+                                likes: null,
+                                shares: null,
+                                comments: null,
+                                views: null
+                              }
+                            });
+                          }
+                          pendingUrls++;
+                          if (pendingUrls === numberOfUrls) {
+                            collectResults(
+                                results, currentService, pendingRequests);
                           }
                         });
-                        pendingUrls++;
-                        if (pendingUrls === numberOfUrls) {
-                          collectResults(
-                              results, currentService, pendingRequests);
-                        }
-                      });
+                      })(mediaUrl);
                     // URL from unsupported media platform, don't consider it
                     } else {
                       numberOfUrls--;
-                      console.log(pendingUrls + '/' + numberOfUrls);
                     }
                   }
                 }
@@ -1427,28 +1431,30 @@ var mediaFinder = {
                     var timestamp = Date.parse(item.uploaded);
                     var url = item.player.default;
                     cleanVideoUrl(url, function(cleanedVideoUrl) {
-                      results.push({
-                        mediaUrl: cleanedVideoUrl,
-                        posterUrl: item.thumbnail.hqDefault,
-                        micropostUrl: url,
-                        micropost: cleanMicropost(
-                            item.title + '. ' + item.description),
-                        userProfileUrl: 'http://www.youtube.com/' + item.uploader,
-                        type: 'video',
-                        timestamp: timestamp,
-                        publicationDate: getIsoDateString(timestamp),
-                        socialInteractions: {
-                          likes: (parseInt((item.likeCount ?
-                              item.likeCount : 0), 10) +
-                              parseInt((item.favoriteCount ?
-                              item.favoriteCount : 0), 10)),
-                          shares: null,
-                          comments: parseInt((item.commentCount ?
-                              item.commentCount : 0), 10),
-                          views: parseInt((item.viewCount ?
-                              item.viewCount : 0), 10)
-                        }
-                      });
+                      if (cleanedVideoUrl !== url) {
+                        results.push({
+                          mediaUrl: cleanedVideoUrl,
+                          posterUrl: item.thumbnail.hqDefault,
+                          micropostUrl: url,
+                          micropost: cleanMicropost(
+                              item.title + '. ' + item.description),
+                          userProfileUrl: 'http://www.youtube.com/' + item.uploader,
+                          type: 'video',
+                          timestamp: timestamp,
+                          publicationDate: getIsoDateString(timestamp),
+                          socialInteractions: {
+                            likes: (parseInt((item.likeCount ?
+                                item.likeCount : 0), 10) +
+                                parseInt((item.favoriteCount ?
+                                item.favoriteCount : 0), 10)),
+                            shares: null,
+                            comments: parseInt((item.commentCount ?
+                                item.commentCount : 0), 10),
+                            views: parseInt((item.viewCount ?
+                                item.viewCount : 0), 10)
+                          }
+                        });
+                      }
                       cb(null);
                     });
                   });
