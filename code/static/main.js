@@ -818,7 +818,7 @@ console.log('Longest post:\n' + longestMicropost)
       if (illustrator.DEBUG) console.log('Initializing WebSockets');
 
       illustrator.socket.on('proxy', function(data) {
-        illustrator.showStatusMessage('Proxying file ' + decodeURIComponent(data.url.replace(PROXY_SERVER, '')));
+        illustrator.showStatusMessage('Proxying file ' + decodeURIComponent(data.url.replace(illustrator.PROXY_SERVER, '')));
       });
 
       illustrator.socket.on('mediaResults', function(data) {
