@@ -294,7 +294,7 @@ is the Mean~Opinion Score (MOS),
 used for decades in telephony networks to
 obtain the human user's view of the quality of a~network.%
 \footnote{\url{http://www.itu.int/rec/T-REC-P.800-199608-I/en},
-as~of 02/21/2013}
+accessed June 1, 2013}
 Recently, MOS has also found wider usage in the multimedia community.
 Therefore, a~set of standard subjective tests are conducted,
 where users rate the perceived quality of test samples
@@ -343,7 +343,7 @@ The MOS for \emph{SOES} was $2.39$ (variance $0.68$),
 the MOS for \emph{LOVS} was $4.17$ (variance $0.47$).
 The data of Survey~B is available.%
 \footnote{\url{http://bit.ly/media-gallery-survey},
-as~of 02/22/2013}
+accessed June 1, 2013}
 
 \subsection{Maintaining Provenance Information with Downloadable Media Galleries}
 
@@ -352,15 +352,16 @@ each with its specific pieces of provenance data
 like creator, originating social network, \emph{etc.}
 In the context of the application Social Media Illustrator
 (\url{http://social-media-illustrator.herokuapp.com/}),
-this data is maintained in the form of HTML hyperlinks
-back to the source social networks.
+this provenance data is maintained in the form of HTML hyperlinks
+back to the originating social networks.
 However, when media galleries get downloaded in form of
 one static image dump, this is no longer the case.
 In consequence, we generate a~caption-like image legend
 that gets added to each downloaded media gallery.
-An example of a~media gallery generated in the context
-of the 2013 Taksim Gezi Park protests%
-\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed June 1, 2013}
+An example of a~media gallery with provenance data
+generated in the context of the 2013 Taksim Gezi Park protests%
+\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests},
+accessed June 1, 2013}
 can be seen in \autoref{fig:occupygezidump}.
 
 \begin{figure}[htb]
@@ -372,8 +373,67 @@ can be seen in \autoref{fig:occupygezidump}.
 
 \section{Interactive Media Galleries}
 
-Up to now, we have presented static media galleries
-and different algorithms to generate media galleries of different styles.
+\paragraph{Traditional slideshows:}
+
+Up to now, we have presented different algorithms
+to generate media galleries of different styles
+and static media galleries, including a~way to preserve
+provenance data when media galleries get downloaded as one image.
+Such media galleries are useful in the context of static media,
+such as newspapers or embedded in (online or offline) news articles.
+A~first step towards more interactive media galleries are so-called slideshows.
+An exemplary slideshow, courtesy of the BBC's Online division, can be seen in \autoref{fig:occupygezibbc}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{occupygezibbc.png}
+  \caption[Media gallery in form of a~slideshow]{Media gallery in form of a~slideshow
+  (Source and copyright: BBC Online \url{http://www.bbc.co.uk/news/world-europe-22740038}, accessed June 1, 2013)}
+  \label{fig:occupygezibbc}
+\end{figure}
+
+\paragraph{Media gallery paradigm slideshows:}
+
+We have opted to extend the traditional slideshow model
+by adhering to the media gallery paradigm of our two preferred styles
+Loose Order, Varying Size (\emph{LOVS}) and Strict Order, Equal Size (\emph{SOES}).
+Given a~media gallery in either \emph{LOVS} or \emph{SOES} style,
+each media item can be focused.
+When a~media item is focused, it smoothly transitions
+from its origin in the media gallery to the center,
+while in parallel it is zoomed to double its size.
+All other media items that are currently not focused are faded out
+in a~black-and-white variant and blurred, in order to put the maximum emphasis
+to the currently focused media item.
+\autoref{fig:interactive-media-gallery} shows three steps of the described transitions,
+a~screencast of the whole animation is available online at \url{https://vine.co/v/bT7eiwjE6DQ}.
+
+\begin{figure}[t!]
+  \centering
+  \subfloat[Animation step 1]{
+    \includegraphics[height=4cm]{zoom1.png}
+    \label{fig:zoom1}
+  }                
+  \subfloat[Animation step 2]{
+    \includegraphics[height=4cm]{zoom2.png}
+    \label{fig:zoom2}
+  }
+  \subfloat[Animation step 3]{
+    \includegraphics[height=4cm]{zoom3.png}
+    \label{fig:zoom3}
+  }  
+  \caption[Three animation steps of interactive media gallery]{Three animation steps of interactive media gallery}
+  \label{fig:interactive-media-gallery}  
+\end{figure}
+
+\paragraph{Audible media galleries:}
+
+With our media galleries, we go yet another step further
+and add an audio component to the interactive slideshow.
+Media items in the form of videos typically already have an audio track,
+it is thus straight-forward to play the video once it is focused
+in the slideshow.
+
 
 
 \begin{figure}[htb]
