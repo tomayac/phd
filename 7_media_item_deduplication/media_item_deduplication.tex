@@ -1,4 +1,4 @@
-\chapter{Media Item Deduplication}
+\chapter{On-the-fly Media Item Deduplication}
 \label{cha:media-item-deduplication}
 
 % the code below specifies where the figures are stored
@@ -26,15 +26,14 @@ the act of eliminating duplicate or redundant information.
 
 \subsection{Definitions}
 
-\paragraph{Definition of Social Media Item}
-
 We define a~social media item as either a~photo (image) or video
 that was \emph{publicly} shared or published
 on at least one social network.
 In the following, we will use the shorter term media item
-rather than the full term.
+rather than the full term and define
+what we mean with \emph{duplicate media items} for various cases.
 
-\paragraph{Definition of Exact Duplicates for Photos}
+\paragraph{Exact Duplicates for Photos:}
 
 We define two media items of type photo as \emph{exact duplicates}
 if their pixel contents are exactly the same.
@@ -53,7 +52,7 @@ from one social network on another, for example,
 if one user posts a~photo on Instagram that then someone else
 (or even the same user) posts on Facebook.
 
-\paragraph{Definition of Near-Duplicates for Photos}
+\paragraph{Near-Duplicates for Photos:}
 
 We define two media items of type photo as \emph{near-duplicates}
 if their pixel contents differ no more than a~given threshold after resampling.
@@ -67,7 +66,7 @@ Another scenario is a~user applying a~photo effect to a~photo
 (like an Instagram filter) and then sharing both the modified
 and the unmodified version.
 
-\paragraph{Definition of Exact Duplicates for Videos}
+\paragraph{Duplicates for Videos:}
 
 We define two media items of type video as \emph{exact duplicates}
 if their pixel contents are frame by frame exactly the same.
@@ -80,7 +79,7 @@ Typical scenarios where exact duplicate videos can occur is,
 for example, two users sharing the same YouTube video
 independently from each other.
 
-\paragraph{Definition of Near-Duplicates for Videos}
+\paragraph{Near-Duplicates for Videos:}
 
 We define two media items of type video as \emph{near-duplicates},
 if their pixel contents per frame differ no more
@@ -92,7 +91,7 @@ logo or subtitle insertion, resizing, re-encoding,
 or aspect-ration changes.
 Note that we do not consider video subsegments near-duplicates.
 
-\paragraph{Special Case of Photo Contained in a~Video}
+\paragraph{Special Case of Photo Contained in a~Video:}
 
 We define the special case of
 \emph{a photo being contained in a~video} if the pixel contents
@@ -134,6 +133,10 @@ and exact duplicate detection are founded
 on a~tile-wise histogram-based pixel comparison algorithm.
 
 \section{Related Work}
+
+Related work in the field of media item deduplication
+and clustering can be separated in different groups,
+which reflects the grouping of our definitions above.
 
 \paragraph{Image Deduplication and Clustering:}
 
@@ -540,7 +543,7 @@ We have evaluated the near-duplicate photo clustering
 on two events from recent history with high social network coverage
 that we will briefly describe in the following.
 
-\subsubsection{Grammy Awards Nominations 2013}
+\paragraph{Grammy Awards Nominations 2013:}
 
 The Grammy Award---or short Grammy---is an award by
 the National Academy of Recording Arts and Sciences of the United States
@@ -555,7 +558,7 @@ accessed December 7, 2012},
 during which Taylor Swift and LL~Cool~J revealed the nominees in several key categories, including the so-called Big Four: Album, Record and Song of the Year and Best New Artist.
 CBS suggested the hashtag \texttt{\#GRAMMYNoms} for the event.
 
-\subsubsection{Victoria's Secret Fashion Show 2012}
+\paragraph{Victoria's Secret Fashion Show 2012:}
 
 The \emph{Victoria's Secret Fashion
 Show}\footnote{\url{http://en.wikipedia.org/wiki/Victoria's_Secret_Fashion_Show},
@@ -645,7 +648,7 @@ and have a~closer look at the clustering algorithm's strengths and weaknesses.
   \label{fig:topgrammy}
 \end{figure}
 
-\subsubsection{Algorithm Strengths} 
+\paragraph{Algorithm Strengths:} 
 
 \autoref{fig:personclose} has a~brunette fashion model in a~pink robe
 and a~heart-shaped pink spotlight as central elements of both photos. 
@@ -711,7 +714,7 @@ the photos are correctly clustered.
   \label{fig:stageperson}
 \end{figure}
 
-\subsubsection{Algorithm Weaknesses}
+\paragraph{Algorithm Weaknesses:}
 
 \autoref{fig:white} shows five media items with pure white
 as the dominating color and a~pure black font,
@@ -759,7 +762,8 @@ is available online at the URL \url{http://twitpic.com/c02qfs/full}.
 \begin{figure}[h!]
   \centering
   \includegraphics[width=1\linewidth]{./white.png}
-  \caption{Pure white as dominating color stemming from screenshots}
+  \caption{Pure white as dominating color stemming from screenshots
+    (bad quality caused by down-scaling via the originating social networks)}
   \label{fig:white}
 \end{figure}
 
