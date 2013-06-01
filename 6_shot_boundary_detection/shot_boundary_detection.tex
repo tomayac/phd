@@ -1,4 +1,4 @@
-\chapter{Shot Boundary Detection}
+\chapter{On-the-fly Camera Shot Boundary Detection}
 \label{cha:shot-boundary-detection}
 
 % the code below specifies where the figures are stored
@@ -10,14 +10,14 @@
 
 \section{Introduction} \label{sec:videoshotboundarydetection}
 
-In video production and filmmaking, a~shot is a~series of frames
-that runs for an uninterrupted period of time.
+In video production and filmmaking, a~\emph{shot is a~series of frames
+that runs for an uninterrupted period of time}.
 Shots are always filmed with a~single camera and can be of any duration. 
 Shot boundary detection (also called cut detection or shot transition detection
 or simply shot detection) is a~field of research of video processing.
 Its subject is the automated detection of transitions between shots
 with hard or soft cuts as the boundaries
-in digital video with the purpose of temporal segmentation of videos.
+in digital video with, the purpose of temporal segmentation of videos.
 
 In this chapter, we present a~browser-based, client-side, and
 on-the-fly approach to this challenge
@@ -51,7 +51,7 @@ consecutive frames from a~single viewpoint,
 representing a~continuous action in time and space.
 The topic of shot boundary detection has already been described
 extensively in literature.
-While some specific issues still remain
+While some specific issues still remain open
 (notably detecting gradual transitions and detected false positives
 due to large movement or illumination changes),
 the problem is considered resolved for many
@@ -108,8 +108,22 @@ outperform histogram-based approaches~\cite{gargi2000videoshot}.
 A~detailed comparison can be found in
 Yuan~\emph{et~al.}~\cite{yuan2007shotboundary}.
 
-\section{Shot Boundary Detection Algorithm}
+\section{On-the-fly Shot Boundary Detection Algorithm}
 \label{sec:details-of-algo}
+
+As outlined in the previous section,
+shot boundary detection is mostly considered a~solved problem
+and many efficient approaches exist.
+However, to the best of our knowledge,
+none of the proposed solutions deals with
+the specific issue of detecting camera shots in \emph{streaming} video
+in the context of a~Web browser and on-the-fly.
+Streaming (HTML5) video has no notion of frames,
+but only allows for time-based navigation
+via the \texttt{currentTime} attribute.
+The algorithm we propose in the sequence of this chapter 
+deals effectively with these limitations
+and we also demonstrate that it works efficiently.
 
 \subsection{Details of the Algorithm}
 
@@ -269,8 +283,8 @@ they can modify details of Web pages.
 
 \section{Evaluation}
 
-Detecting shots on-the-fly in streaming video
-comes with its very own challenges.
+On-the-fly shot detection in streaming video
+comes with its very own challenges that were briefly outlined before.
 First, it is a~question of streaming speed.
 Especially with high-definition (HD) video,
 this can be very demanding.

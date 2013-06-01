@@ -982,8 +982,8 @@ console.log('Longest post:\n' + longestMicropost)
         if (illustrator.mediaItems[posterUrl].type === 'photo') {
           mediaUrl = illustrator.mediaItems[posterUrl].mediaUrl;
         }
-        mediaUrl = illustrator.PROXY_SERVER + encodeURIComponent(mediaUrl);
         illustrator.showStatusMessage('Loading file ' + mediaUrl);
+        mediaUrl = illustrator.PROXY_SERVER + encodeURIComponent(mediaUrl);
         preloadImage(
             mediaUrl,
             function(image) {
