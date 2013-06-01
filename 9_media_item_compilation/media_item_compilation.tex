@@ -109,7 +109,7 @@ A schematic media gallery at $t_x$ can be seen in \autoref{fig:media-gallery}.
 We recall the purpose of our media galleries:
 to illustrate an event and its atmosphere.
 Audial aesthetics thus consist of aspects like volume level normalization,
-avoiding multiple videos playing music in parallel, smooth transitions, \emph{etc}.
+avoiding multiple videos playing music in parallel, smooth transitions, \emph{etc.}
 We remark that through selective mixing of audio tracks
 of event-related videos, ``noise clouds'' very characteristic
 for the event atmosphere can be observed.
@@ -345,7 +345,36 @@ The data of Survey~B is available.%
 \footnote{\url{http://bit.ly/media-gallery-survey},
 as~of 02/22/2013}
 
+\subsection{Maintaining Provenance Information with Downloadable Media Galleries}
+
+Media galleries consist of individual media items,
+each with its specific pieces of provenance data
+like creator, originating social network, \emph{etc.}
+In the context of the application Social Media Illustrator
+(\url{http://social-media-illustrator.herokuapp.com/}),
+this data is maintained in the form of HTML hyperlinks
+back to the source social networks.
+However, when media galleries get downloaded in form of
+one static image dump, this is no longer the case.
+In consequence, we generate a~caption-like image legend
+that gets added to each downloaded media gallery.
+An example of a~media gallery generated in the context
+of the 2013 Taksim Gezi Park protests%
+\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed June 1, 2013}
+can be seen in \autoref{fig:occupygezidump}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=1\columnwidth]{occupygezidump.png}
+  \caption{Downloadable media gallery with provenance data}
+  \label{fig:occupygezidump}
+\end{figure}
+
 \section{Interactive Media Galleries}
+
+Up to now, we have presented static media galleries
+and different algorithms to generate media galleries of different styles.
+
 
 \begin{figure}[htb]
   \centering
