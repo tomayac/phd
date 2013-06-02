@@ -192,32 +192,32 @@
       });
 
       var weightChanged = function(e) {
-        illustrator.weights[e.target.name] = e.target.value;
+        illustrator.weights[e.target.name] = parseInt(e.target.value, 10);
         illustrator.rankClusters();
       };
 
       var likesWeight = document.getElementById('likesWeight');
-      likesWeight.value = illustrator.weights.likes;
+      likesWeight.value = parseInt(illustrator.weights.likes, 10);
       likesWeight.addEventListener('change', weightChanged);
 
       var sharesWeight = document.getElementById('sharesWeight');
-      sharesWeight.value = illustrator.weights.shares;
+      sharesWeight.value = parseInt(illustrator.weights.shares, 10);
       sharesWeight.addEventListener('change', weightChanged);
 
       var commentsWeight = document.getElementById('commentsWeight');
-      commentsWeight.value = illustrator.weights.comments;
+      commentsWeight.value = parseInt(illustrator.weights.comments, 10);
       commentsWeight.addEventListener('change', weightChanged);
 
       var viewsWeight = document.getElementById('viewsWeight');
-      viewsWeight.value = illustrator.weights.views;
+      viewsWeight.value = parseInt(illustrator.weights.views, 10);
       viewsWeight.addEventListener('change', weightChanged);
 
       var crossNetworkWeight = document.getElementById('crossNetworkWeight');
-      crossNetworkWeight.value = illustrator.weights.crossNetwork;
+      crossNetworkWeight.value = parseInt(illustrator.weights.crossNetwork, 10);
       crossNetworkWeight.addEventListener('change', weightChanged);
 
       var recencyWeight = document.getElementById('recencyWeight');
-      recencyWeight.value = illustrator.weights.recency;
+      recencyWeight.value = parseInt(illustrator.weights.recency, 10);
       recencyWeight.addEventListener('change', weightChanged);
 
       var mouseover = function(e) {
@@ -520,7 +520,7 @@ console.log('Longest post:\n' + longestMicropost)
           document.getElementById('mediaGallerySizeLabel');
       mediaGallerySize.min = 5;
       mediaGallerySize.max = 100;
-      mediaGallerySize.value = illustrator.mediaGallerySize;
+      mediaGallerySize.value = parseInt(illustrator.mediaGallerySize, 10);
       mediaGallerySizeLabel.innerHTML = illustrator.mediaGallerySize;
       mediaGallerySize.addEventListener('change', function() {
         mediaGallerySizeLabel.innerHTML = mediaGallerySize.value;
@@ -566,14 +566,14 @@ console.log('Longest post:\n' + longestMicropost)
       maxAge.value = illustrator.maxAge;
       var maxAgeLabel = document.getElementById('maxAgeLabel');
       maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
-          maxAge.value)));
+          parseInt(maxAge.value, 10))));
       maxAge.addEventListener('change', function() {
         maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
-            maxAge.value)));
+            parseInt(maxAge.value, 10))));
       });
       maxAge.addEventListener('mouseup', function() {
-        illustrator.maxAge = maxAge.value;
-        illustrator.filterForMaxAge();
+        illustrator.maxAge = parseInt(maxAge.value, 10);
+        illustrator.filterForMaxAgeAndVisibility();
       });
 
       var threshold = document.getElementById('threshold');
@@ -584,7 +584,7 @@ console.log('Longest post:\n' + longestMicropost)
         thresholdLabel.innerHTML = threshold.value;
       });
       threshold.addEventListener('mouseup', function() {
-        illustrator.threshold = threshold.value;
+        illustrator.threshold = parseInt(threshold.value, 10);
         illustrator.clusterMediaItems();
       });
 
@@ -592,7 +592,7 @@ console.log('Longest post:\n' + longestMicropost)
       similarTiles.min = illustrator.calculateMinimumSimilarTiles();
       similarTiles.max = illustrator.rows * illustrator.cols;
       similarTiles.value = illustrator.calculateSimilarTiles();
-      illustrator.similarTiles = similarTiles.value;
+      illustrator.similarTiles = parseInt(similarTiles.value, 10);
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
       similarTilesLabel.innerHTML = similarTiles.value;
@@ -600,7 +600,7 @@ console.log('Longest post:\n' + longestMicropost)
         similarTilesLabel.innerHTML = similarTiles.value;
       });
       similarTiles.addEventListener('mouseup', function() {
-        illustrator.similarTiles = similarTiles.value;
+        illustrator.similarTiles = parseInt(similarTiles.value, 10);
         illustrator.clusterMediaItems();
       });
 
@@ -615,7 +615,7 @@ console.log('Longest post:\n' + longestMicropost)
         bwToleranceLabel.innerHTML = bwTolerance.value;
       });
       bwTolerance.addEventListener('mouseup', function() {
-        illustrator.bwTolerance = bwTolerance.value;
+        illustrator.bwTolerance = parseInt(bwTolerance.value, 10);
         illustrator.calculateDistances();
       });
 
@@ -640,13 +640,13 @@ console.log('Longest post:\n' + longestMicropost)
       });
 
       var rowsColsChange = function() {
-        illustrator.rows = rows.value;
-        illustrator.cols = cols.value;
+        illustrator.rows = parseInt(rows.value, 10);
+        illustrator.cols = parseInt(cols.value, 10);
         similarTiles.min = illustrator.calculateMinimumSimilarTiles();
         similarTiles.max = illustrator.rows * illustrator.cols;
         similarTiles.value = illustrator.calculateSimilarTiles();
-        illustrator.similarTiles = similarTiles.value;
-        similarTilesLabel.innerHTML = similarTiles.value;
+        illustrator.similarTiles = parseInt(similarTiles.value, 10);
+        similarTilesLabel.innerHTML = parseInt(similarTiles.value, 10);
         for (var key in illustrator.mediaItems) {
           var mediaItem = illustrator.mediaItems[key];
           illustrator.calculateHistograms(mediaItem.thumbnail);
@@ -678,7 +678,7 @@ console.log('Longest post:\n' + longestMicropost)
       }, false);
 
       var queryLogDiv = document.getElementById('queryLog');
-      queryLog.addEventListener('click', function(e) {
+      queryLogDiv.addEventListener('click', function(e) {
         if ((e.target.nodeName.toLowerCase() === 'input') ||
             (e.target.nodeName.toLowerCase() === 'label')) {
           // can use checkbox, even if the label was clicked
@@ -686,18 +686,10 @@ console.log('Longest post:\n' + longestMicropost)
           var queryId = target.parentNode.getElementsByTagName('label')[0]
               .getAttribute('for');
           var checkbox = target.parentNode.getElementsByTagName('input')[0];
-          var displayState;
-          if (checkbox.checked) {
-            displayState = 'inline';
-          } else {
-            displayState = 'none';
-          }
           var sources = illustrator.queries[queryId].forEach(function(source) {
-            var images = document.querySelectorAll('img[src="' + source + '"]');
-            for (var i = 0, len = images.length; i < len; i++) {
-              images[i].parentNode.parentNode.style.display = displayState;
-            }
+            illustrator.mediaItems[source].currentlyVisible = checkbox.checked;
           });
+          illustrator.filterForMaxAgeAndVisibility();
         }
       });
 
@@ -934,6 +926,27 @@ console.log('Longest post:\n' + longestMicropost)
         };
       }
     },
+    updateQueryLog: function(query, queryId) {
+      var queryLogDiv = document.getElementById('queryLog');
+      var fragment = document.createDocumentFragment();
+      var div = document.createElement('div');
+      fragment.appendChild(div);
+      div.setAttribute('class', 'queryLog');
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.checked = true;
+      input.id = queryId;
+      div.appendChild(input);
+      var label = document.createElement('label');
+      label.setAttribute('for', queryId);
+      div.appendChild(label);
+      var strong = document.createElement('strong');
+      strong.textContent = query;
+      label.appendChild(strong);
+      var numResults = Object.keys(illustrator.mediaItems).length;
+      label.appendChild(document.createTextNode(' (' + numResults + ')'));
+      queryLogDiv.appendChild(fragment);
+    },
 
     retrieveMediaItems: function(results, query, queryId) {
 
@@ -945,16 +958,17 @@ console.log('Longest post:\n' + longestMicropost)
             return false;
           }
         }
+        illustrator.updateQueryLog(query, queryId);
         return true;
       };
 
       var preloadImage = function(src, success, error) {
         var image = new Image();
         image.onerror = function() {
-          return error(src)
+          return error(src);
         };
         image.onload = function() {
-          return success(image)
+          return success(image);
         };
         image.src = src;
         // make sure the load event fires for cached images too
@@ -1003,7 +1017,10 @@ console.log('Longest post:\n' + longestMicropost)
 
       var errorThumbnail = function(src) {
         delete illustrator.mediaItems[src];
-        if (illustrator.DEBUG) console.log('Removing ' + src);
+        if (illustrator.DEBUG) console.log('Removing thumbnail ' + src);
+        if (checkMediaItemStatuses('loaded')) {
+          illustrator.calculateDistances();
+        }
       };
 
       var successFullImage = function(image, posterUrl, micropostUrl) {
@@ -1022,7 +1039,7 @@ console.log('Longest post:\n' + longestMicropost)
 
       var errorFullImage = function(src, posterUrl) {
         delete illustrator.mediaItems[posterUrl];
-        if (illustrator.DEBUG) console.log('Removing ' + posterUrl);
+        if (illustrator.DEBUG) console.log('Removing full image ' + posterUrl);
       };
 
       // assume the worst, set false once we have at least one result
@@ -1047,24 +1064,19 @@ console.log('Longest post:\n' + longestMicropost)
           item.origin = service;
           item.status = false;
           item.considerMediaItem = true;
+          item.currentlyVisible = true;
           illustrator.mediaItems[posterUrl] = item;
           // load the poster url as thumbnail
-          preloadImage(posterUrl, function(image) {
-            successThumbnail(image, micropostUrl)
-          }, errorThumbnail);
+          preloadImage(
+            posterUrl,
+            function(image) {
+              successThumbnail(image, micropostUrl);
+            },
+            errorThumbnail);
         });
       }
       if (numResults === 0) {
-        illustrator.showStatusMessage('No results for "' + query + '"')
-      } else {
-        var queryLogDiv = document.getElementById('queryLog');
-        queryLogDiv.innerHTML += '' +
-            '<div class="queryLog">' +
-              '<input type="checkbox" checked="checked" ' + 'id="' +
-                  queryId + '">' +
-              '<label for="' + queryId + '"><strong>' + query + '</strong> ' +
-                  '(' + numResults + ' Results)</label>' +
-            '</div>';
+        illustrator.showStatusMessage('No results for "' + query + '"');
       }
     },
     calculateDistances: function() {
@@ -1139,20 +1151,29 @@ console.log('Longest post:\n' + longestMicropost)
           }
         }
       }
-      illustrator.filterForMaxAge();
+      illustrator.filterForMaxAgeAndVisibility();
     },
-    filterForMaxAge: function() {
-      illustrator.showStatusMessage('Filtering media items for maximum age');
-
+    filterForMaxAgeAndVisibility: function() {
+      illustrator.showStatusMessage('Filtering media items for maximum age and visibility');
       var now = Date.now();
       for (var key in illustrator.mediaItems) {
         var mediaItem = illustrator.mediaItems[key];
-        // FixMe: needs to check for timezones!
-        if (mediaItem.timestamp > now) {
-          mediaItem.considerMediaItem = true; // was: false
-        }
-        else if (now - mediaItem.timestamp <= illustrator.maxAge) {
-          mediaItem.considerMediaItem = true;
+        // check for visibility (media items stemming from certain query terms
+        // in the queryLog can be turned on and off)
+        // if visible, then also check for max age
+        if (mediaItem.currentlyVisible) {
+          // FixMe: needs to check for timezones!
+          // don't consider items from the future
+          if (mediaItem.timestamp > now) {
+            mediaItem.considerMediaItem = true; // was: false
+          }
+          // perfect
+          else if (now - mediaItem.timestamp <= illustrator.maxAge) {
+            mediaItem.considerMediaItem = true;
+          // too old
+          } else {
+            mediaItem.considerMediaItem = false;
+          }
         } else {
           mediaItem.considerMediaItem = false;
         }
@@ -2181,5 +2202,4 @@ console.log('Longest post:\n' + longestMicropost)
   };
 
   illustrator.init();
-  illustrator.speak('Hello! I am that magic voice deep inside your laptop!');
 })();
