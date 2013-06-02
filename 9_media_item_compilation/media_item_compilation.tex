@@ -430,11 +430,50 @@ a~screencast of the whole animation is available online at \url{https://vine.co/
 
 With our media galleries, we go yet another step further
 and add an audio component to the interactive slideshow.
-Media items in the form of videos typically already have an audio track,
+Media items of type video typically already have an audio track,
 it is thus straight-forward to play the video once it is focused
 in the slideshow.
+In contrast, by their pure nature,
+photos do not have audible information associated with them.
+We can, however, use the (potentially machine-translated,
+see \autoref{sec:machine-translation}) textual information
+of any of the media items in the particular media item's media cluster
+(see \autoref{sec:photo-deduplication})
+and via speech synthesis create an audible experience.
+This follows the hypothesis that visually similar media items 
+also share similar textual descriptions.
+We use the set of extracted and disambiguated named entities
+(see \autoref{sec:nlp-services}) combined with
+the insights gained from part-of-speech tagging
+(see \autoref{sec:part-of-speech-tagging})
+to select the one textual description
+from the entire set of textual descriptions in the cluster
+that \textit{(i)} maximizes the number of named entities
+and that \textit{(ii)} has the most diverse set of words
+identified as nouns, verbs, and adjectives.
+Following this simple heuristic, we avoid deciding on
+a~textual description that consists of purely a~list of tags,
+as is often the case with, \emph{e.g.},
+Instagram (see \autoref{sec:instagram}).
 
+\paragraph{Text-to-Speech Synthesis:}
 
+We convert the textual descripton of a~media item
+to audible information with the help of a~text--to--speech system.
+We use the eSpeak~\cite{duddington2012espeak} speech synthesizer
+that was originally developed by Jonathan Duddington
+in a~JavaScript port called Speak.js,
+made available by Alon Zakai~\cite{zakai2012speakjs}.
+This speech synthesizer uses the formant synthesis method,
+which allows many languages to be provided in a~small size.
+Rather than using human speech samples at runtime,
+the synthesized speech output is created using additive synthesis
+and an acoustic model, where parameters
+such as fundamental frequency, voicing, and noise levels
+are varied over time to create a~waveform of artificial speech.
+The speech is clear and can be used at high speeds.
+However, it is not as natural or smooth as larger synthesizers
+that are based on speech recordings.
 
 \begin{figure}[htb]
   \centering
@@ -442,7 +481,6 @@ in the slideshow.
   \caption[Media gallery in interactive mode (i)]{Media gallery in interactive mode, one media item centered and exclusively focused}
   \label{fig:occupygezi1}
 \end{figure}
-
 
 \begin{figure}[htb]
   \centering
