@@ -951,31 +951,55 @@ var mediaFinder = {
                         (micropost.length ? '. ' : '') + item.micropost : '');
                     var mediaUrl = item.type === 'video' ?
                         item.source : item.picture;
-                    cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
-                      if (cleanedMediaUrl && item.picture && cleanedMediaUrl !== mediaUrl) {
-                        results.push({
-                          mediaUrl: cleanedMediaUrl.replace(/s\.jpg$/gi, 'n.jpg'),
-                          posterUrl: item.picture,
-                          micropostUrl:
-                              'https://www.facebook.com/permalink.php?story_fbid=' +
-                              item.id.split(/_/)[1] + '&id=' + item.from.id,
-                          micropost: cleanMicropost(micropost),
-                          userProfileUrl:
-                              'https://www.facebook.com/profile.php?id=' +
-                              item.from.id,
-                          type: item.type,
-                          timestamp: timestamp,
-                          publicationDate: getIsoDateString(timestamp),
-                          socialInteractions: {
-                            likes: item.likes ? item.likes.count : null,
-                            shares: item.shares ? item.shares.count : null,
-                            comments: item.comments ? item.comments.count : null,
-                            views: null
-                          }
-                        });
-                      }
+                    if (item.type === 'video') {
+                      cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
+                        if (cleanedMediaUrl && item.picture && cleanedMediaUrl !== mediaUrl) {
+                          results.push({
+                            mediaUrl: cleanedMediaUrl.replace(/s\.jpg$/gi, 'n.jpg'),
+                            posterUrl: item.picture,
+                            micropostUrl:
+                                'https://www.facebook.com/permalink.php?story_fbid=' +
+                                item.id.split(/_/)[1] + '&id=' + item.from.id,
+                            micropost: cleanMicropost(micropost),
+                            userProfileUrl:
+                                'https://www.facebook.com/profile.php?id=' +
+                                item.from.id,
+                            type: item.type,
+                            timestamp: timestamp,
+                            publicationDate: getIsoDateString(timestamp),
+                            socialInteractions: {
+                              likes: item.likes ? item.likes.count : null,
+                              shares: item.shares ? item.shares.count : null,
+                              comments: item.comments ? item.comments.count : null,
+                              views: null
+                            }
+                          });
+                        }
+                        cb(null);
+                      });
+                    } else {
+                      results.push({
+                        mediaUrl: mediaUrl.replace(/s\.jpg$/gi, 'n.jpg'),
+                        posterUrl: item.picture,
+                        micropostUrl:
+                            'https://www.facebook.com/permalink.php?story_fbid=' +
+                            item.id.split(/_/)[1] + '&id=' + item.from.id,
+                        micropost: cleanMicropost(micropost),
+                        userProfileUrl:
+                            'https://www.facebook.com/profile.php?id=' +
+                            item.from.id,
+                        type: item.type,
+                        timestamp: timestamp,
+                        publicationDate: getIsoDateString(timestamp),
+                        socialInteractions: {
+                          likes: item.likes ? item.likes.count : null,
+                          shares: item.shares ? item.shares.count : null,
+                          comments: item.comments ? item.comments.count : null,
+                          views: null
+                        }
+                      });
                       cb(null);
-                    });
+                    }
                   });
                 },
                 function(err) {

@@ -3,7 +3,7 @@
 % content in this file will be fed into the main document
 
 %: ----------------------- introduction file header -----------------------
-\chapter{Event Detection}
+\chapter{Event Detection Based On Wikipedia Edit Spikes}
 
 % the code below specifies where the figures are stored
 \ifpdf
@@ -14,6 +14,51 @@
 
 \section{Introduction}
 
+In the previous chapters, we have focused on the creation of event summaries 
+for well-known, planned events (\emph{e.g.}, the Super Bowl XLVII event)
+or unplanned events (\emph{e.g.}, the 2013 Taksim Gezi Park protests).
+In this chapter, we will focus on the task of \emph{event detection}.
+Yang, Pierce, and Carbonell define~\cite{yang1998eventdetection} \emph{event detection} as follows.
+
+\begin{quotation}
+  \textit{``Event detection is essentially a~discovery problem,  
+  \emph{i.e.}, mining the data stream for new patterns in document content''.}
+\end{quotation}
+
+They differentiate two types of event detection techniques.
+
+%\begin{quotation}
+%  \textit{``\emph{Retrospective} event detection is the task of grouping stories
+%  in a~corpus where each group uniquely identifies an event.
+%  \emph{On-line} event detection is the problem of labeling
+%  each document as it arrives in sequence with a New or Old flag,
+%  indicating whether or not the current document is the   first story discussing a~novel event at that time''.}
+%\end{quotation}
+
+\begin{quotation}
+  \textit{``\emph{Retrospective} event detection is the task of grouping stories
+  in a~corpus where each group uniquely identifies an event.
+  \emph{On-line} event detection is the problem of labeling
+  each document as it arrives in sequence with a New or Old flag,
+  indicating whether or not the current document is the
+  first story discussing a~novel event at that time''.}
+\end{quotation}
+
+
+Allan, Papka, and Lavrenko use the following definitions~\cite{allan1998eventdetection}.
+
+\begin{quotation}
+  \textit{``The goal of those tasks [new event detection and event tracking]
+  is to monitor a stream of broadcast news stories
+  so as to determine the relationships between the stories
+  based on the real-world events that they describe.
+  \emph{New event detection} requires identifying those news stories
+  that discuss an event that has not already been reported in earlier stories.
+  \emph{Event tracking} means starting from a few sample stories
+  and  finding all subsequent stories that discuss the same event''.}
+\end{quotation}
+
+In our research, we focus on online new event detection based on Wikipedia edit spikes.
 We have developed an application called \emph{Wikipedia Live Monitor}
 that monitors article edits on different language versions of Wikipedia---%
 as they happen in realtime.
