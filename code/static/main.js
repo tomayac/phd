@@ -355,6 +355,8 @@
       mediaGallery.addEventListener('focus', function(e) {
         if (e.target.classList.contains('mediaItem')) {
           var mediaItem = e.target;
+          var img = mediaItem.querySelector('img, video');
+          zoomIn(mediaGallery, mediaItem, img);
           var key = mediaItem.querySelector('.gallery').dataset.posterurl;
           var cluster;
           for (var i = 0, len = illustrator.clusters.length; i < len; i++) {
@@ -363,31 +365,32 @@
               break;
             }
           }
-          var micropostCandidates = cluster.translations;
-          var maxLength = 0;
-          var minLength = Infinity;
-          var longestMicropost;
-          var shortestMicropost;
-          for (var i = 0, len = micropostCandidates.length; i < len; i++) {
-            var micropostLength = micropostCandidates[i].length;
-            if (micropostLength > maxLength) {
-              longestMicropost = micropostCandidates[i];
+          if (cluster.translations) {
+            var micropostCandidates = cluster.translations;
+            var maxLength = 0;
+            var minLength = Infinity;
+            var longestMicropost;
+            var shortestMicropost;
+            for (var i = 0, len = micropostCandidates.length; i < len; i++) {
+              var micropostLength = micropostCandidates[i].length;
+              if (micropostLength > maxLength) {
+                longestMicropost = micropostCandidates[i];
+              }
+              if (micropostLength < minLength) {
+                shortestMicropost = micropostCandidates[i];
+              }
             }
-            if (micropostLength < minLength) {
-              shortestMicropost = micropostCandidates[i];
+  console.log('Shortest post:\n' + shortestMicropost)
+  console.log('Longest post:\n' + longestMicropost)
+            var micropost = shortestMicropost;
+
+            if (illustrator.speechOutputEnabled) {
+              illustrator.removeAllAudio();
+              illustrator.speak(micropost);
             }
+          } else {
+            console.log('Translations not yet finished');
           }
-console.log('Shortest post:\n' + shortestMicropost)
-console.log('Longest post:\n' + longestMicropost)
-          var micropost = shortestMicropost;
-
-          if (illustrator.speechOutputEnabled) {
-            illustrator.removeAllAudio();
-            illustrator.speak(micropost);
-          }
-
-          var img = mediaItem.querySelector('img, video');
-          zoomIn(mediaGallery, mediaItem, img);
         }
       }, true /* This is important, else, the event never fires */);
 
