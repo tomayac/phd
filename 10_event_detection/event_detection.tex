@@ -44,7 +44,6 @@ They differentiate two types of event detection techniques.
   first story discussing a~novel event at that time''.}
 \end{quotation}
 
-
 Allan, Papka, and Lavrenko use the following definitions~\cite{allan1998eventdetection}.
 
 \begin{quotation}
@@ -205,7 +204,7 @@ Our \emph{Wikipedia Live Monitor} is partly based on an application called
 
 As described earlier, our application monitors concurrent edit spikes
 on different language versions of Wikipedia.
-In the current implementation, we monitor 42 different Wiki\-pedias, 5 with 
+In the current implementation, we monitor 42 different Wikipedias, 5 with 
 $\geq$~1,000,000 and 37 with $\geq$~100,000 articles.%
 \footnote{List of Wikipedias by size: \url{http://meta.wikimedia.org/wiki/List_of_Wikipedias},
 accessed 02/18/2013}
@@ -226,9 +225,9 @@ A~sample chat message with the components separated
 by the asterisk character \texttt{`*'}
 announcing a~change can be seen in the following.
 \texttt{"[[Juniata River]]
-http://en.wikipedia.org/w/index.php?diff=516269072\&oldid=514\-659029 *
-Johanna-Hypatia * (+67)
-Category:Place names of Native American origin in Pennsylvania"}.
+http://en.wikipedia.org/w/index.php?diff=516269072\&oldid=514-659029 *
+Jo\-hanna-Hypatia * (+67)
+Category:Place names of Native American origin in\\Pennsylvania"}.
 The message components are (i)~article name, (ii)~revision URL,
 (iii)~Wikipedia editor handle, and (iv)~change size and change description.
 
@@ -384,7 +383,7 @@ timeout.every.240seconds §\textbf{do}§
 §\textbf{end do}§
 \end{lstlisting}
 
-\section{Premature Evaluation}
+\section{Evaluation}
 \label{sec:premature-evaluation}
 
 As noted earlier, in this chapter,
@@ -489,9 +488,8 @@ whose exact parameters were determined empirically
 and the corresponding dataset made available publicly.
 We have shown how cross-language full-text social network searches are used
 as plausibility checks to avoid false-positive alerts.
-In a~first step towards a~full evaluation,
-we have shown promising preliminary results
-and actionable next steps in future work for improving the application.
+We have shown promising results and actionable next steps
+in future work for improving the application.
 
 \bibliographystyle{plainnat}
 \bibliography{backmatter/references}
