@@ -104,7 +104,7 @@ of the same event both cover the event from almost the same
 standpoint, however, if the one attendant takes a~video,
 while the other attendant takes a~photo.
 
-\subsection{Motivation and Chapter Outline}
+\subsection{Motivation}
 
 In this chapter, we will treat video
 and photo deduplication separately. 
@@ -137,6 +137,8 @@ on a~tile-wise histogram-based pixel comparison algorithm.
 Related work in the field of media item deduplication
 and clustering can be separated in different groups,
 which reflects the grouping of our definitions above.
+We further show related work required for the task of 
+algorithm debugging.
 
 \paragraph{Image Deduplication and Clustering:}
 
@@ -202,6 +204,70 @@ in a~large collection of multimedia data that uses local difference patterns
 as the unified feature to describe both images and videos.
 It has been demonstrated that the proposed method is robust against
 common image-processing tasks used to produce duplicates.
+
+\paragraph{Media Fragments:}
+
+There are many online video hosting platforms
+that have some sort of media fragments support.
+In the following, we present two representative ones.
+The video hosting platform YouTube%
+\footnote{YouTube: \url{http://www.youtube.com/}}
+allows for deep-linking into videos
+via a~proprietary {\sc url} parameter \texttt{t},
+whose value has to match the regular expression
+\texttt{\textbackslash d+m\textbackslash d+s} (for minutes and seconds),
+as documented in~\cite{youtube2008link}.
+Dailymotion\footnote{Dailymotion: \url{http://www.dailymotion.com/}}
+has similar {\sc url} parameters \texttt{start} and \texttt{end},
+whose values have to match the regular expression
+\texttt{\textbackslash d+} (for seconds).
+The {\sc css} Backgrounds and Borders Module Level~3 specification%
+~\cite{bos2012css3} defines the \texttt{background-size} property
+that can be used to crop media items visually
+and thus create the illusion of a~spatial media fragment
+when combined with a~wrapping element.
+Media Fragments {\sc uri}~\cite{troncy2012mediafragments}
+specifies a~syntax for constructing media fragments {\sc uri}s
+and explains how to handle them
+when used over the {\sc http} protocol~\cite{fielding1999http}.
+The syntax is based on the specification of particular name-value pairs
+that can be used in {\sc uri} query strings and {\sc uri} fragment identifiers
+to restrict a~media resource to a~certain fragment.
+The temporal and spatial dimensions are currently supported
+in the basic version of Media Fragments {\sc uri}s.
+Combinations of dimensions are also possible.
+
+\paragraph{Digital Storytelling:}
+
+Pizzi and Cavazza report in~\cite{pizzi2008debugging}
+on the development of an authoring technology
+on top of an interactive storytelling system
+that originated as a~debugging%
+\footnote{Pizzi and Cavazza use the term \emph{debugging}
+in the non-IT sense: to check for redundancy, dead-ends, consistency, \emph{etc.}
+in authored stories} tool for a~planning system.
+Alexander and Levine define in~\cite{alexander2008storytelling}
+the term \emph{Web~2.0 storytelling},
+where people create \emph{microcontent}---%
+small chunks of content, with each chunk conveying a~primary idea---%
+that gets combined with social media to form coherent stories.
+We use Media Fragments {\sc uri}s to help human annotators
+to understand the results of an algorithm
+by converting dry software debugging data to digital stories.
+
+\paragraph{Natural Language Generation:}
+
+Natural language generation is the natural language processing task
+of generating natural language from a~machine representation system.
+This field is covered in great detail by Reiter and Dale
+in~\cite{reiter2000building}.
+They divide the task into three stages:
+document planning, microplanning, and realization.
+\emph{Document planning} determines the content and structure of a~document.
+\emph{Microplanning} decides which words, syntactic structures,
+\emph{etc.} are used to communicate the chosen content and structure.
+\emph{Realization} maps the abstract representations
+used by microplanning into text.
 
 \section{Photo Deduplication}
 \label{sec:photo-deduplication}
@@ -468,7 +534,8 @@ and are known to deliver solid results.
 The corpus has been made available publicly,
 see \autoref{sec:evaluation-chpater6} for the details.
 
-\begin{lstlisting}[,caption={Simplified pseudocode of the exact- and near-duplicate media item deduplication and clustering algorithm},
+\begin{lstlisting}[,caption={Simplified pseudocode of the exact- and near-duplicate
+  media item deduplication and clustering algorithm},
   label={code:clustering},escapechar=§]
 §\textbf{Input:}§ mediaItems, a~list of media items
 §\textbf{Output:}§ clusters, a~list of clustered media items
@@ -557,7 +624,9 @@ were announced at an event broadcasted live by CBS
 titled \emph{Grammy Nominations Concert
 Live}\footnote{\url{http://en.wikipedia.org/wiki/2013_Grammy_Awards},
 accessed December 7, 2012},
-during which Taylor Swift and LL~Cool~J revealed the nominees in several key categories, including the so-called Big Four: Album, Record and Song of the Year and Best New Artist.
+during which Taylor Swift and LL~Cool~J revealed the nominees
+in several key categories, including the so-called Big Four:
+Album, Record and Song of the Year and Best New Artist.
 CBS suggested the hashtag \texttt{\#GRAMMYNoms} for the event.
 
 \paragraph{Victoria's Secret Fashion Show 2012:}
@@ -602,9 +671,14 @@ is available online at \url{http://twitpic.com/c02qfs/full} (accessed 02/14/2013
   \centering
   \includegraphics[width=0.5\linewidth]{./algorithmdebug.png}
   \caption[Algorithm debug view for two clustered media items]
-  {Algorithm debug view for two clustered media items related to the \emph{Grammy Awards Nominations 2013} event (the red border around the media items indicates at least one detected face)}
+  {Algorithm debug view for two clustered media items
+  related to the \emph{Grammy Awards Nominations 2013} event
+  (the red border around the media items indicates at least one detected face)}
   \label{fig:algorithmdebug}
 \end{figure}
+
+
+
 \subsection{Evaluation}\label{sec:evaluation-chpater6}
 
 We have collected and made available%
@@ -854,6 +928,431 @@ and even if the other video meta data like title and description
 were different, with the described work-around approach,
 we were able to effectively deduplicate the videos.
 
+\section{Describing Media Item Differences with Media Fragments URI and Speech Synthesis}
+
+\subsection{Media Fragments Requirements}
+\label{sec:media-fragment-requirements}
+
+A~media fragment is a~part that was separated from its parent media item.
+In order to make statements about such media fragments,
+we need to uniquely identify them.
+In the context of our research on media item deduplication and clustering,
+media fragments identifiers need to be capable of expressing the following concepts.
+
+\begin{enumerate}
+  \itemsep0em
+  \item Given a~rectangular media item with the dimensions
+    $ width \times height $, express that in turn rectangular
+    tiles of smaller dimensions are part of the original media item.
+  \item Given detected faces at the granularity level of bounding rectangles,
+    express that these bounding rectangles are within the dimensions
+    of the original media item and that each bounding rectangle contains a~face.
+  \item Requirements \textit{i} and \textit{ii} need to be fulfilled
+    for both types of media items, photos and videos; in case of the latter,
+    video subsegments of any length---including video still frames---need to be supported.
+\end{enumerate}
+
+Media Fragments {\sc uri}~\cite{troncy2012mediafragments}
+as described in the basic version of the specification
+supports all three requirements.
+The \emph{temporal dimension} is denoted by the parameter name \texttt{t}
+and specified as an interval with a~begin time and an end time.
+Either one or both parameters may be omitted,
+with the begin time defaulting to 0 seconds
+and the end time defaulting to the duration of the source media item.
+The interval is half-open: the begin time is considered part of the interval,
+whereas the end time is considered to be the first time point
+that is not part of the interval.
+If only a~single value is present, it corresponds to the begin time,
+except for when it is preceded by a~comma,
+which indicates the end time.
+The temporal dimension is specified as Normal Play Time
+({\sc npt},~\cite{schulzrinne1998realtime}).
+
+The \emph{spatial dimension} selects an area of pixels from media items.
+In the current version of the specification,
+only rectangular selections are supported.
+Rectangles can be specified as pixel coordinates or percentages.
+Rectangle selection is denoted by the parameter name \texttt{xywh}.
+The value is either \texttt{pixel:} or \texttt{percent:}
+(defaulting to \texttt{pixel:}) and four comma-separated integers.
+The integers denote $x$, $y$, $width$, and $height$ respectively,
+with $x = 0$ and $y = 0$ being the top left corner of the media item.
+If \texttt{percent:} is used,
+$x$ and $width$ are interpreted as a~percentage of the width of the original media item,
+while $y$ and $height$ are interpreted as a~percentage of the original height.
+While (at time of writing) the temporal dimension is implemented natively
+in common Web browsers, this is not the case for the spatial dimension.
+
+The intent of the Ontology for Media Resources~\cite{lee2012mediaontology}
+by Lee \emph{et~al.} is to bridge different description methods of media resources
+and to provide a~core set of descriptive properties.
+Combined with Media Fragments {\sc uri}, this allows for making statements
+about media items and fragments thereof.
+An example in RDF Turtle syntax~\cite{prudhommeaux2013turtle}
+is given in \autoref{code:media-fragment}.
+
+\begin{lstlisting}[caption={Description of two 10~sec long media fragments:
+  \textit{(i)}~a~tile of dimensions $ 30 \times 40 $ pixels
+  starting at pixel coordinates $ (0, 0) $
+  that contains a~face; and
+  \textit{(ii)}~a~tile of dimensions $ 10 \times 10 $ pixels
+  starting at pixel coordinates $ (0, 0) $ of red color},
+  label=code:media-fragment, float=b!]
+@base <http://example.org/> .
+@prefix ma: <http://www.w3.org/ns/ma-ont> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix db: <http://dbpedia.org/resource/> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix col: <http://purl.org/colors/rgb/> .
+
+<video> a ma:MediaResource .
+<video#t=,10&xywh=0,0,30,40> a ma:MediaFragment ;
+                             foaf:depicts db:Face .
+<video#t=,10&xywh=0,0,10,10> a ma:MediaFragment ;
+                             dbo:colour col:f00 .
+\end{lstlisting}
+
+\subsection{Algorithm Debug Properties}
+\label{sec:media-item-deduplication-algorithm}
+
+The deduplication algorithm described in this chapter
+belongs to the family of tile-wise histogram-based clustering algorithms.
+As an additional semantic feature, the algorithm considers detected faces.
+It is capable of deduplicating media items of type video and/or photo.
+In the case of video, frames at camera shot boundaries are used.
+To illustrate the algorithm debugging mechanics,
+we use a running example of two media items related to a~music video by the 
+band Backstreet Boys, which can be seen in \autoref{fig:near-duplicate}.
+For media items to be clustered,
+the following clustering conditions have to be fulfilled.
+
+\begin{description}
+  \itemsep0em
+  \item[Cond.~1] Out of $m$ tiles of a~media item with $n$ tiles ($m \leq n$),
+    the average color of at most $\textit{tiles\_threshold}$ tiles
+    may differ not more than $\textit{similarity\_threshold}$
+    from their counterpart tiles.
+  \item[Cond.~2] The numbers $f_1$ and $f_2$ of detected faces
+    in both media items have to be the same.
+    We note that the algorithm does not \emph{recognize} faces,
+    but only \emph{detects} them.
+  \item[Cond.~3] If the average colors of a~tile and its counterpart tile
+    are within the black--and--white tolerance $\textit{bw\_tolerance}$,
+    these tiles are not considered and $\textit{tiles\_threshold}$
+    is decreased accordingly (we talk about $\textit{effective\_tiles\_threshold}$
+    in \autoref{sec:debugging-the-algorithm}).
+\end{description}
+
+The black--and--white tolerance $\textit{bw\_tolerance}$ avoids media items
+to be clustered when the particular tiles are too dark (\emph{e.g.},
+for the video borders in \autoref{fig:near-duplicate}) or too bright (\emph{e.g.},
+for screenshots of Web pages or applications, which frequently appear on social networks).
+In order to illustrate the way the algorithm deduplicates media items,
+\autoref{fig:algorithmdebug} shows a~debug view of the algorithm
+for the two clustered media items related to the previous example
+around the \emph{Backstreet Boys} music video.
+Independent of the actual media items' aspect ratios,
+the tile-wise comparison always happens based on
+a~potentially squeezed square aspect ratio version.
+
+\begin{figure}[b!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{./backstreetboys.png}
+  \caption{\emph{Near-duplicate} music video \emph{Everybody} by the \emph{Backstreet Boys} shared independently on Facebook and Google+}
+  \label{fig:near-duplicate}
+\end{figure}
+
+\begin{figure}[t!]
+  \centering
+  \subfloat[From Facebook user]{
+    \includegraphics[width=0.35\linewidth]{debug1.png}
+  }
+  \subfloat[From Google+ user]{
+    \includegraphics[width=0.35\linewidth]{debug2.png}
+  }
+  \caption{Debug view of the media item deduplication algorithm:
+  since no faces are detected in \autoref{fig:near-duplicate},
+  the clustering is based on tile similarity;
+  black tiles are not considered due to the chosen black--and--white tolerance)}
+  \label{fig:algorithmdebug}
+\end{figure}
+
+\subsubsection{Debugging the Algorithm}
+\label{sec:debugging-the-algorithm}
+
+In this section, we consider the following three debug scenarios
+that occurred most frequently during our previous experiments with human raters.
+They correspond to situations where, given a~set of
+deduplicated and clustered media items, a~human annotator wanted
+to understand the specific details leading to the decisions
+taken by the algorithm that they were unsure about or had decided on differently.
+
+\begin{description}
+  \itemsep0em
+  \item[Clustering Consent.] Two or more media items are clustered
+    by the algorithm and the human rater agrees.
+    The human rater wants to understand why they were clustered.
+  \item[Clustering Dissent.] Two or more media items are clustered
+    by the algorithm, but the human rater thinks
+    that they should not have been clustered.
+    The human rater wants to understand why they were incorrectly clustered.
+  \item[Non-Clustering Dissent.] Two or more media items are not clustered
+  by the algorithm, but the human rater thinks
+  that they should have been clustered.
+  The human rater wants to understand why they were not clustered.
+\end{description}
+
+In order to provide answers to these human raters' information needs,
+different levels of the algorithm's internals have to be debugged.
+Is the $\textit{tiles\_threshold}$ (\emph{i.e.},
+the number of tiles that may differ) too high or too low?
+Complementary to this, is the $\textit{similarity\_threshold}$
+(\emph{i.e.}, the maximum amount two tiles may differ)
+too high or too low (\textbf{Cond.~1})?
+Are the number of detected faces $f_1$ and $f_2$ the same?
+Are all faces correctly detected, or should the face matching condition
+be temporarily disregarded, \emph{e.g.}, with too tiny media items,
+where faces fail to be detected (\textbf{Cond.~2})?
+If the media items to be compared have very dark and/or very bright parts,
+is the $\textit{bw\_tolerance}$ too high or too low (\textbf{Cond.~3})?
+
+\subsubsection{Low-Level Debug Output}
+\label{sec:low-level-debug-output}
+
+As a~consequence of the previous subsection, the low-level debug output
+must include the currently selected $\textit{tiles\_threshold}$ and
+$\textit{similarity\_threshold}$ and how many tiles with the present algorithm settings
+currently fulfill \textbf{Cond.~1}.
+In addition to that, the debug output has to contain
+the number of detected faces $f_1$ and $f_2$ in each media item,
+\emph{i.e.}, whether \textbf{Cond.~2} is fulfilled,
+as well as the number of not considered tiles
+(according to $\textit{bw\_tolerance}$), which implies fulfillment of \textbf{Cond.~3}
+and potentially impacts \textbf{Cond.~1} in form of
+the $\textit{effective\_tiles\_threshold}$.
+For instance, the low-level debug output for the media items
+from the running example of the \emph{Backstreet Boys} media items
+for the music video \emph{Everybody} reads as follows.
+
+\begin{verbatim}
+- Similarity threshold: 15 (Cond. 1)
+- Tiles threshold: 67 (Cond. 1)
+- Similar tiles: 52 (Cond. 1)
+- Faces left: 0. Faces right: 0 (Cond. 2)
+- BW tolerance: 1 (Cond. 3)
+- Not considered tiles: 22 (Cond. 3)
+- Effective tiles threshold: 45 (Cond. 3)
+\end{verbatim}
+
+While this low-level debug output is sufficient to respond
+to the polar question (yes--no question) whether media items
+are clustered at all or not, it does not help with
+the non-polar \emph{why} question
+(the linguistic term for this type of questions is \emph{wh–question}).
+In the following section, we show how
+this low-level debug output can be lifted.
+
+\subsection{From Debug Output to Story}
+\label{sec:from-debug-output-to-story}
+
+In order for human raters to get answers to the question on
+\emph{why} media items are clustered, we need to lift the low-level debug output
+to a~high-level natural language story for
+the previously defined debug scenarios \textbf{Clustering Consent},
+\textbf{Clustering Dissent}, and \textbf{Non-Clustering Dissent}.
+This results in a~natural language generation task,
+whose three stages according to Reiter's and Dale's
+architecture~\cite{reiter2000building} will be detailed in the following.
+
+\subsubsection{Generating Natural Language}
+\label{sec:text-to-speech-espeak}
+
+\paragraph{Document Planning:}
+
+In our context, the document is a~set of low-level debug data
+as illustrated in \autoref{sec:low-level-debug-output}.
+The natural language generation task is thus manageable.
+We need to convey the currently selected $\textit{tiles\_threshold}$
+and $\textit{similarity\_threshold}$, the number of detected faces
+$f_1$ and $f_2$ in each media item, and the number of tiles
+not considered given the $\textit{bw\_tolerance}$ parameter.
+
+\paragraph{Microplanning:}
+
+The microplanning task is driven by the debug scenarios
+that were described previously.
+Initially, we need to decide on a~matching condition aspect
+of the algorithm that will be first highlighted.
+Typically, this will be the overall tiles statistics.
+Afterwards, we need to elaborate on secondary matching conditions
+such as detected faces and black--and--white tolerance.
+The grammatical number (plural or singular)
+needs to be taken into account when statements about tile(s) or face(s)
+are planned. Some values, \emph{e.g.},
+the percentage of matching tiles, are calculated.
+The microplanner needs to decide when exactness
+(\emph{e.g.},~\textit{``99\% of all tiles''})
+and when approximation of calculated values
+(\emph{e.g.}, \textit{``roughly 50\%''}) better suits
+the human evaluators' information needs. Neutral non-judgmental statements
+(\emph{e.g.}, \textit{``45 tiles''}) and biased judgmental statements
+(\emph{e.g.}, \textit{``not a~single one [tile]''})
+need to be carefully balanced. Finally, in the interest of
+a~more naturally sounding phrase composition,
+the microplanner needs to be aware of contrasting juxtaposition
+(\emph{e.g.}, \textit{``Both the left and the right media item
+contain one detected face.''} \emph{vs.}
+\textit{``The left media item contains no detected faces,
+while the right media item contains one detected face.''}).
+
+\paragraph{Realization:}
+
+We show examples of sentences that are actually generated
+for the three different debug scenarios (Quotes~1--3).
+For the sake of completeness, we provide one additional example
+(Quote~4) for the debug scenario \textbf{Non-Clustering Consent}.
+The running example of the \emph{Backstreet Boys} media items
+for the music video \emph{Everybody} is represented by Quote~1.
+
+\begin{description}
+  \itemsep0em
+  \item[Clustering Consent] (Quote~1). \textit{``The two media items
+    are near-duplicates. Out of overall 100 tiles,
+    52 from the minimum required 45 tiles
+    were similar enough to be clustered. This corresponds to 52 percent
+    of all tiles. However, 22 tiles were not considered,
+    as they are either too bright or too dark,
+    which is a~common source of clustering issues.
+    Neither the left, nor the right media item contain detected faces.''}
+  \item[Clustering Dissent] (Quote~2). \textit{``The two media items
+    are near-duplicates. Out of overall 100 tiles,
+    41 from the minimum required 41 tiles were similar enough to be clustered.
+    This corresponds to 41 percent of all tiles.
+    However, 26 tiles were not considered, as they are either too bright
+    or too dark, which is a~common source of clustering issues.
+    Neither the left, nor the right media item contain detected faces.''}
+  \item[Non-Clustering Dissent] (Quote~3). \textit{``The two media items
+    are different. Out of overall 100 tiles,
+    only 8 from the minimum required 67 tiles
+    were similar enough to be clustered. This corresponds to 8 percent of all tiles.
+    The left media item contains 2 detected faces,
+    while the right media item contains 1 detected face.''}
+  \item[(Non-Clustering Consent)] (Quote~4). \textit{``The two media items
+    are different. Out of overall 100 tiles, not a~single one
+    was similar enough to be clustered. Neither the left,
+    nor the right media item contain detected faces.''}
+\end{description}
+
+\subsubsection{Technical Implementation}
+
+\paragraph{Text--to--Speech:}
+
+The generated texts are converted to speech using a~text--to--speech system.
+We use the eSpeak~\cite{duddington2012espeak} speech synthesizer
+that was originally developed by Jonathan Duddington
+in a~JavaScript port called Speak.js,
+made available by Alon Zakai~\cite{zakai2012speakjs}.
+This speech synthesizer uses the formant synthesis method,
+which allows many languages to be provided in a~small size.
+Rather than using human speech samples at runtime,
+the synthesized speech output is created using additive synthesis
+and an acoustic model, where parameters
+such as fundamental frequency, voicing, and noise levels
+are varied over time to create a~waveform of artificial speech.
+The speech is clear and can be used at high speeds.
+However, it is not as natural or smooth as larger synthesizers
+that are based on speech recordings.
+
+\paragraph{Visual Media Fragments Highlighting:}
+
+We treat and address each tile of a~media item
+as a~spatial media fragment. \autoref{fig:similar-different}
+shows a~grid of similar, different, and not considered tiles
+from the \emph{Backstreet Boys} media items for the \emph{Everybody} music video.
+While the speech synthesizer reads the generated text,
+the corresponding tiles (\emph{e.g.},~the matching tiles
+or the because of the black--and--white tolerance not considered tiles)
+are visually highlighted to support the human evaluators' understanding,
+as can be seen in \autoref{fig:tile-highlight}
+and in a~screencast available at \url{http://youtu.be/DWqwEnhqTSc}.
+Spatial Media Fragments {\sc uri}s are currently not implemented
+in any common Web browser~\cite{weinberg2013polyfill}.
+In order to nonetheless support spatial media fragments,
+we use a~so-called JavaScript polyfill for Media Fragments {\sc uri}
+that was developed in the context of this chapter.%
+\footnote{xywh.js: \texttt{https://github.com/tomayac/xywh.js}}
+In Web development, a~polyfill is downloadable code that provides facilities
+by emulating potential future features or {\sc api}s
+that are not built-in to a~Web browser~\cite{sharp2010polyfill}.
+Our polyfill---in contrast to an additional earlier
+spatial Media Fragments {\sc uri} polyfill implementation~\cite{weinberg2013polyfill}
+by Fabrice Weinberg---supports more browsers and both image \emph{and} video.
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.75\linewidth]{./similar-different.png}
+  \caption{Similar (upper row) and different (lower row) corresponding tile pairs for the media items from a~Facebook (left column) and a~Google+ user (right column); checkered tiles are not considered due to the black--and--white tolerance}
+  \label{fig:similar-different}
+\end{figure}
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.75\linewidth]{./tile-highlight.png}
+  \caption{The highlighted checkered tiles are not considered, as the text--to--speech system explains: \textit{``However, 22 tiles were not considered, as they are either too bright or too dark, which is a~common source of clustering issues.''}}
+  \label{fig:tile-highlight}
+\end{figure}
+
+\subsection{Evaluation}
+\label{sec:evaluation}
+
+For the evaluation of natural language generating systems,
+there are three basic techniques.
+First, the \emph{task-based} or \emph{extrinsic} evaluation,
+where the generated text is given to a~person who evaluates
+how well it helps with performing a~given task~\cite{portet2009nlg}.
+Second, there are \emph{automatic metrics}
+such as {\sc bleu}~\cite{papineni2002bleu}, where the generated text
+is compared to texts written by people based on the same input data.
+Finally, there are \emph{human ratings}, where the generated text
+is given to a~person who is asked to rate the quality and usefulness of the text.
+
+For our evaluation, we chose the third approach of human ratings,
+as we do not evaluate the natural language generating system in isolation,
+but in \emph{combination with a~visual representation}
+that makes use of spatial Media Fragments {\sc uri}s
+(\autoref{fig:similar-different} and \autoref{fig:tile-highlight}).
+In the context of this research,
+we have conducted {\sc mos}~\cite{itu1998mos} test sessions
+with five external human raters.
+We generated artificially modified deduplicated media item sets
+around media items about the \emph{Backstreet Boys}
+that were shared on social networks during the time of writing.
+These media item sets were curated by yet another independent two external persons,
+assisted by a~previously developed software system
+that implements the deduplication algorithm described in this chapter.
+We asked the two persons to provoke dissent and consent clustering situations
+for the five human raters, \emph{i.e.}, obviously correct clustering
+(\textbf{Clustering Consent}), obviously incorrect clustering
+(\textbf{Clustering Dissent}), and obviously incorrect non-clustering
+(\textbf{Non-Clustering Dissent}).
+We then asked the five human raters to have the system
+automatically explain the algorithm results to them
+as described in \autoref{sec:from-debug-output-to-story}.
+The raters gave {\sc mos} scores ranging from $2$ to $5$,
+with the overall average values as follows:
+\textbf{Clustering Consent}:~$4.3$, \textbf{Clustering Dissent}:~$3.3$,
+and \textbf{Non-Clustering Dissent}:~$4.1$.
+The human raters appreciated the parallel explanation approach,
+where the visual and the audial parts synchronously described
+what the algorithm was doing.
+They uttered that the not considered tiles (due to the black--and--white tolerance)
+as well as erroneously not detected faces were sources of error
+in the algorithm that they easily understood
+thanks to the human language description.
+They sometimes wished for more diversification in the generated texts.
+Without exception, they liked the system and encouraged future development.
+
 \section{Conclusion}
 
 In this chapter, we have treated the topic of media item deduplication
@@ -867,10 +1366,19 @@ whose foundations then served for a~more general
 photo deduplication algorithm with semantic features.
 We have evaluated the algorithm for two recent events
 that had broad social media coverage.
-Finally, we have outlined how the photo deduplication algorithm
+Further, we have outlined how the photo deduplication algorithm
 can be used for basic video deduplication,
 albeit minimum system response time requirements
 hinder its full applicability in practice.
+Finally, we have successfully demonstrated the feasibility
+of making the task of debugging a~complex algorithm
+more human-friendly by means of a~combined visual and audial approach.
+We have used Media Fragments {\sc uri}
+together with a~natural language generation framework
+realized through a~speech synthesizer to visually and audially
+describe media item differences.
+Our contribution also includes a~polyfill implementation
+of spatial Media Fragments {\sc uri}s.
 
 Media item deduplication of both exact and near-duplicate media items
 is a~fundamental step in dealing with huge amounts of social media

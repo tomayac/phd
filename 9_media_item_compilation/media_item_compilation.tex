@@ -427,7 +427,7 @@ a~screencast of the whole animation is available online at \url{https://vine.co/
   \label{fig:interactive-media-gallery}  
 \end{figure}
 
-\paragraph{Audible media galleries:}
+\paragraph{Audible media galleries and text-to-speech synthesis:}
 
 With our media galleries, we go yet another step further
 and add an audio component to the interactive slideshow.
@@ -456,25 +456,10 @@ Following this simple heuristic, we avoid deciding on
 a~textual description that consists of purely a~list of tags,
 as is often the case with, \emph{e.g.},
 Instagram (see \autoref{sec:instagram}).
-
-\paragraph{Text-to-Speech Synthesis:}
-
-We convert the textual descripton of a~media item
+We convert the textual description of a~media item
 to audible information with the help of a~text--to--speech system.
 We use the eSpeak~\cite{duddington2012espeak} speech synthesizer
-that was originally developed by Jonathan Duddington
-in a~JavaScript port called Speak.js,
-made available by Alon Zakai~\cite{zakai2012speakjs}.
-This speech synthesizer uses the formant synthesis method,
-which allows many languages to be provided in a~small size.
-Rather than using human speech samples at runtime,
-the synthesized speech output is created using additive synthesis
-and an acoustic model, where parameters
-such as fundamental frequency, voicing, and noise levels
-are varied over time to create a~waveform of artificial speech.
-The speech is clear and can be used at high speeds.
-However, it is not as natural or smooth as larger synthesizers
-that are based on speech recordings.
+that was described earlier in \autoref{sec:text-to-speech-espeak}.
 
 \begin{figure}[htb]
   \centering
