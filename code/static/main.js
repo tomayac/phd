@@ -1608,19 +1608,6 @@
       illustrator.rankClusters();
     },
     rankingFormulas: {
-      crossNetwork: {
-        name: 'Cluster Size',
-        func: function(a, b) {
-          return b.members.length - a.members.length;
-        }
-      },
-
-      age: {
-        name: 'Age',
-        func: function(a, b) {
-          return b.timestamp - a.timestamp;
-        }
-      },
 
       popularity: {
         name: 'Popularity',
@@ -1655,6 +1642,20 @@
               weights.crossNetwork * b.members.length +
               weights.recency * getAgeFactor(b.timestamp);
           return combinedStatsB - combinedStatsA;
+        }
+      },
+
+      crossNetwork: {
+        name: 'Cluster Size',
+        func: function(a, b) {
+          return b.members.length - a.members.length;
+        }
+      },
+
+      age: {
+        name: 'Recency',
+        func: function(a, b) {
+          return b.timestamp - a.timestamp;
         }
       },
 
