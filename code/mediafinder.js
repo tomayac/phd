@@ -115,6 +115,9 @@ var mediaFinder = {
         _ref = url_encoded_fmt_stream_map.split(',');
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           urlEncodedStream = _ref[_i];
+          if (!urlEncodedStream) {
+            return false;
+          }
           stream = decodeQueryString(urlEncodedStream);
           type = stream.type.split(';')[0];
           quality = stream.quality.split(',')[0];
@@ -162,12 +165,18 @@ var mediaFinder = {
           };
           request.get(options, function(err, reply, body) {
             var video;
+            if (!body) {
+              return callback(url);
+            }
             video = decodeQueryString(body);
             // video.live_playback is '1' for Hangouts on Air
             if (video.status === 'fail' || video.live_playback) {
               return callback(url);
             }
             video.sources = decodeStreamMap(video.url_encoded_fmt_stream_map);
+            if (!video.sources) {
+              return callback(url);
+            }
             video.getSource = function(type, quality) {
               var exact, key, lowest, source, _ref;
               lowest = null;
