@@ -46,6 +46,7 @@
       crossNetwork: 32,
       recency: 2
     },
+    minAge: 0,
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
     mediaGallerySize: 25,
     mediaGalleryWidth: 1200,
@@ -563,20 +564,49 @@
         illustrator.createMediaGallery(true);
       });
 
+      var minAge = document.getElementById('minAge');
       var maxAge = document.getElementById('maxAge');
+      minAge.max = 7 * 24 * 60 * 60 * 1000; // 7 days
+      minAge.min = 0;
       maxAge.max = 7 * 24 * 60 * 60 * 1000; // 7 days
-      maxAge.min = 1 * 60 * 1000; // 1 minute
+      maxAge.min = 0;
+      minAge.value = illustrator.minAge;
       maxAge.value = illustrator.maxAge;
+      var minAgeLabel = document.getElementById('minAgeLabel');
       var maxAgeLabel = document.getElementById('maxAgeLabel');
+      minAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
+          parseInt(minAge.value, 10))));
       maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
           parseInt(maxAge.value, 10))));
+
+      minAge.addEventListener('change', function() {
+        minAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
+            parseInt(minAge.value, 10))));
+        if (parseInt(minAge.value, 10) >= parseInt(maxAge.value, 10)) {
+          maxAge.value = parseInt(minAge.value, 10);
+          maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
+              parseInt(maxAge.value, 10))));
+        }
+      });
+
       maxAge.addEventListener('change', function() {
         maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
             parseInt(maxAge.value, 10))));
+        if (parseInt(maxAge.value, 10) <= parseInt(minAge.value, 10)) {
+          minAge.value = parseInt(maxAge.value, 10);
+          minAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
+              parseInt(minAge.value, 10))));
+        }
       });
+
+      minAge.addEventListener('mouseup', function() {
+        illustrator.minAge = parseInt(minAge.value, 10);
+        illustrator.filterForMinMaxAgeAndVisibility();
+      });
+
       maxAge.addEventListener('mouseup', function() {
         illustrator.maxAge = parseInt(maxAge.value, 10);
-        illustrator.filterForMaxAgeAndVisibility();
+        illustrator.filterForMinMaxAgeAndVisibility();
       });
 
       var threshold = document.getElementById('threshold');
@@ -692,7 +722,7 @@
           var sources = illustrator.queries[queryId].forEach(function(source) {
             illustrator.mediaItems[source].currentlyVisible = checkbox.checked;
           });
-          illustrator.filterForMaxAgeAndVisibility();
+          illustrator.filterForMinMaxAgeAndVisibility();
         }
       });
 
@@ -1154,9 +1184,9 @@
           }
         }
       }
-      illustrator.filterForMaxAgeAndVisibility();
+      illustrator.filterForMinMaxAgeAndVisibility();
     },
-    filterForMaxAgeAndVisibility: function() {
+    filterForMinMaxAgeAndVisibility: function() {
       illustrator.showStatusMessage('Filtering media items for maximum age and visibility');
       var now = Date.now();
       for (var key in illustrator.mediaItems) {
@@ -1171,9 +1201,10 @@
             mediaItem.considerMediaItem = true; // was: false
           }
           // perfect
-          else if (now - mediaItem.timestamp <= illustrator.maxAge) {
+          else if ((now - mediaItem.timestamp <= illustrator.maxAge) &&
+                   (now - mediaItem.timestamp >= illustrator.minAge)) {
             mediaItem.considerMediaItem = true;
-          // too old
+          // too old or too young
           } else {
             mediaItem.considerMediaItem = false;
           }

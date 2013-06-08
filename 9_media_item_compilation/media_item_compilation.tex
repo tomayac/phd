@@ -157,6 +157,7 @@ two of which we have implemented and evaluated via two different user studies.
 One with, and one without detailed user comments.
 
 \section{Media Gallery Styles}
+\label{sec:mediagallerystyles}
 
 Media galleries---in contrast to free-form digital media collages---%
 necessarily display media items in a~grid-like way.
@@ -487,6 +488,7 @@ and is a~start--to--end solution tailored to both
 non-expert and expert users.
 \autoref{fig:socialmediaillustrator}
 shows the start screen of the application.
+The application has two tabs: Media Item Clusters and Media Gallery.
 
 \begin{figure}[htb]
   \centering
@@ -494,6 +496,70 @@ shows the start screen of the application.
   \caption{Social Media Illustrator start screen}
   \label{fig:socialmediaillustrator}
 \end{figure}
+
+\paragraph{Media Item Extraction}
+
+In a~first step, the user enters a~set of search terms
+that are likely to reveal media items related to a~given event.
+These search terms can be official event hashtags
+(\emph{e.g.}, \texttt{\#VSFashionShow}
+for the event described in \autoref{sec:vsfashionshow}),
+but more commonly a~combination of names of the involved actors,
+event names, event locations, or times, like, for example, \emph{Stanley Cup 2013}.
+Search results for each search term appear in the results panel
+in the lower part of the graphical user interface
+in form of so-called search bundles.
+Each search bundle is associated with its originating search term,
+search bundles can be enabled and disabled at will.
+Undesired media items can be removed from the result bundle
+by clicking a~red cross that appears
+when hovering over the media item in question.
+
+\paragraph{Media Item Deduplication}
+
+Via the parameter settings on the left side, 
+fine-grained control over the deduplicating
+and matching algorithm is possible. 
+The configurable options are best described in \autoref{sec:media-item-deduplication-algorithm}.
+Changes to any of the parameters are reflected in realtime
+in the results panel below, which facilitates finding the optimal 
+settings for a~given result set consisting of result bundles.
+
+\paragraph{Media Item Ranking}
+
+The parameter settings on the right side 
+allow for interactively changing the ranking factors.
+The user can select the main ranking criterion like recency or popularity, and modify the weight factors 
+for the different ranking features in the ranking formula,
+as detailed in \autoref{sec:introduction-of-a-ranking-formula}.
+Again all changes are reflected in realtime.
+A~slider control allows for selecting the maximum 
+and minimum age of the considered media items 
+in order to restrict the result set to a~given time period.
+
+\paragraph{Micropost Annotation}
+
+Once the user is happy with her selection and ranking of media items,
+the next step is micropost annotation,
+which---in contrast to the sequence suggested by the chapter order---%
+only happens at this stage, based on only the final set of media items.
+This is due to the fact that calling the external
+named entity extraction and disambiguation services described in
+\autoref{sec:nlp-services} is very expensive and time-consuming,
+especially if an intermediate machine translation step is required.
+
+\paragraph{Media Item Compilation}
+
+The final step of media item compilation can be initiated
+by clicking on the Media Gallery tab.
+A~configurable number of media items are compiled either in 
+Loose Order, Varying Size (LOVS) style, or 
+Strict Order, Equal Size (SOES), which was detailed in 
+\autoref{sec:mediagallerystyles}.
+The number of considered media items,
+the width of the overall media gallery,
+and the width of individual media items can be customized,
+with the changes being reflected on-the-fly.
 
 \section{Conclusions and Future Work}
 
