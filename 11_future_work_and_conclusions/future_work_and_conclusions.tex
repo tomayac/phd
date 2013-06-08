@@ -59,13 +59,82 @@ based on social network multimedia data have resulted in
 interesting business creations in recent months.
 Albeit similarities to our work exist,
 there are still many differences in the details.
-The company Mahaya has launched a~beta event archiving tool called Seen,
+
+\paragraph{Mahaya}
+ 
+The company Mahaya has launched a~beta-version
+of a~commercial automatic event archiving tool called Seen,
 which, based on manually entered event metadata like event name,
-location, and dates, uses the necessarily provided Twitter hashtag
-to create a~complete archive of all event-related tweets,
-media items, slide and decks.
-Based on term occurrence frequency and co-occurrence analysis,
-the event is split into subevents.
+location, and dates, uses a~necessarily provided Twitter hashtag
+to create a~complete permanent archive of all event-related tweets,
+media items, and slide decks.
+Based on term frequency and co-occurrence analyses,
+the event is split into subevents
+and each subevent's hot topics are tried to be detected.
+The application's main data source is Twitter,
+links to certain media hosting platforms are followed.
+Seen does not deduplicate and cluster
+similar media items.
+
+\paragraph{Eventifier}
+
+Eventifier is a~commercial tool that facilitates the automatic permanent archiving of events
+in form of event-related photos, videos, tweets, slide decks, 
+and event contributors.
+Similar to Mahaya's product Seen,
+the application's main data source is Twitter.
+The manually entered event's official hashtag and potentially existing
+official Twitter account serve to encounter event-related content.
+Eventifier does not deduplicate and cluster
+similar media items.
+
+\paragraph{Storify}
+
+The commercial tool Storify allows for the manual compilation of
+event-related media items, articles, and microposts
+to generated permanently available stories
+that---depending on the level of human curation---%
+can efficiently summarize an event.
+Storify does not deduplicate and cluster
+similar media items.
+
+\paragraph{Media Finder}
+
+Media Finder is an academic non-commercial tool that
+has advanced named entity centric clustering capabilities
+based on extracted named entities in microposts.
+Media items can be clustered by topic, named entity,
+named entity type, and micropost instance.
+We have contributed the application's media extraction component,
+in consequence the covered social networks
+are exactly as described in \autoref{cha:media-item-extraction}.
+
+\subsection{Comparison of Tools}
+
+In the previous paragraphs, we have characterized
+commercial and non-commercial tools for the tasks
+of event summarization and event archiving. 
+\autoref{table:toolcomparison} shows how these tools
+compare against our own application Social Media Illustrator.
+
+\begin{table}[h!]
+  \centering
+  \small
+  \begin{tabular}{|c|l|l|l|l|l|}
+    \hline
+        \backslashbox{\textbf{Property}}{\textbf{Application}}\textbf{Seen} & \textbf{Eventifier} & \textbf{Storify} & \textbf{Media Finder} & \textbf{Social Media Illustrator}\\ \hline
+      \hline
+      \textbf{Primary data source} & Twitter & Twitter & Multiple & Multiple & Multiple\\
+      \textbf{Main task} & Event archiving & Event archiving & Event summarization & Event summarization & Event summarization\\
+      \textbf{Operation mode} Automatic & Automatic & Manual & Semi-automatic & Semi-automatic\\
+      \textbf{Permanent availability} & Yes & Yes & Yes & Yes & No\\
+      \textbf{Downloadable} & No & No & No & No & Yes\\
+      \textbf{Commercial} & Yes & Yes & Yes & No & No\\
+      \hline
+    \end{tabular}
+    \caption{Comparison of commercial and non-commercial event archiving and summarization tools}
+  \label{table:toolcomparison}
+\end{table}
 
 
 Credibility on Storyful.com \url{http://www.ted.com/talks/markham_nolan_how_to_separate_fact_and_fiction_online.html}
