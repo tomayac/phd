@@ -255,10 +255,26 @@ the objective is to determine the most profitable one.
 The compromise or tension with such experiments is to
 greedily decide on bandits that have performed well in the past
 and the risk of trying new ones.
-Highly developed mathematical models exist to optimize this problem.
+Highly developed mathematical models exist~\cite{scott2010bandits}
+to optimize this problem.
 Compared to more classical A/B tests, where two variants 
 are tested against each other, multi-armed bandit experiments
 are statistically just as valid and can oftentimes return results earlier, as already during the experiment
 more focus is gradually put on well-performing variants.
+
+In the online retail industry, multi-armed bandit experiments
+have found broad adoption due to their simplicity and efficiency.
+They are used extensively for, \emph{e.g.}, the optimization 
+of conversions for things like
+online purchases, newsletter sign-ups, or click-throughs.
+Typical experiment factors are headings, button colors and shapes,
+as well as page layout variants.
+Multi-armed bandits experiments are in consequence standard features
+of common off-the-shelf Web analytics software like, for example,
+Google Analytics (\url{http://google.com/analytics}).
+
+Our hypothesis is that multi-armed bandit experiments can be used 
+to evaluate 
+
 
 
