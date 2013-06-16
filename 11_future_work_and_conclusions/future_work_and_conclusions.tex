@@ -203,6 +203,8 @@ is, all potential automation aside, still required for many use cases.
 
 \subsection{Evaluation of Subjective Data}
 
+\paragraph{Examples of Subjective Data}
+
 In many of the tasks from the previous chapters
 we had to deal with subjective data and how to evaluate it.
 In contrast to \emph{objectivity}, where people see things
@@ -230,6 +232,8 @@ and finally the extracted and disambiguated named entities
 from the accompanying microposts for media items
 (\autoref{cha:micropost-annotation}).
 
+\paragraph{Subjective Data Evaluation Strategies}
+
 Common strategies for the evaluation of subjective data were 
 examined by Brabb and Morrison in~\cite{brabb1964evaluation}.
 In the multimedia context, the main evaluation strategies are
@@ -239,6 +243,22 @@ which we have chosen for our evaluation purposes,
 as we were mainly interested in the perceived quality of our tasks.
 What all these evaluation strategies have in common is
 that they create a~potentially artificial test feeling
-or lab environment situation, where users tend not to act naturally.
+or lab environment situation, where users tend to not act naturally.
+
+\paragraph{Multi-armed Bandits Experiments}
+
+One-armed bandits are slot machines
+with potentially varying expected payout.
+Multi-armed bandit experiments are hypothetical experiments
+where, when faced with several one-armed bandits,
+the objective is to determine the most profitable one.
+The compromise or tension with such experiments is to
+greedily decide on bandits that have performed well in the past
+and the risk of trying new ones.
+Highly developed mathematical models exist to optimize this problem.
+Compared to more classical A/B tests, where two variants 
+are tested against each other, multi-armed bandit experiments
+are statistically just as valid and can oftentimes return results earlier, as already during the experiment
+more focus is gradually put on well-performing variants.
 
 
