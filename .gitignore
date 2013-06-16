@@ -14,6 +14,7 @@
 *.ilg
 *.nls
 *.synctex.gz
+*.synctex.gz(busy)
 *.tmproj
 .texpadtmp
 .git
