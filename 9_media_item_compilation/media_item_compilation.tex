@@ -11,7 +11,7 @@
 \section{Introduction}
 
 In this chapter, we introduce aesthetic principles
-for the automatic generation of media galleries
+for the automated generation of media galleries
 based on media items retrieved from social networks
 that---after a~ranking and pruning step---can serve to authentically
 summarize events and their atmosphere from a~visual
@@ -19,11 +19,12 @@ and an audial standpoint.
 Mobile devices such as smartphones, together with social networks,
 enable people to create, share, and consume media items
 like videos or photos.
-They accompany their owners almost everywhere
+These devices accompany their owners almost everywhere
 and are thus omnipresent at all sorts of events.
-Given a~stable network connection, event-related media items
-and microposts are published on social networks
-during events and afterwards.
+At such events---given a~stable network connection---part of
+the event-related media items are published on social networks
+both as the event happens or afterwards,
+once a~stable network connection has been established again.
 Ranked media items stemming from multiple social networks
 can serve to create authentic media galleries
 that illustrate events and their atmosphere.
@@ -36,22 +37,18 @@ additional \emph{aesthetic} features
 can be defined and exploited to obtain appealing
 and harmonic media galleries.
 
-\begin{figure}[htb]
-  \centering
-  \includegraphics[trim=20mm 40mm 20mm 10mm, clip, width=0.7\columnwidth]{media-gallery.pdf}
-  \caption{Schematic media gallery with four photos and two videos.}
-  \label{fig:media-gallery}
-\end{figure}
-
 \section{Related Work}
-While enormous efforts have been made to extract those features
+
+While enormous efforts have been made to extract
+\emph{visual}, \emph{audial},
+\emph{textual}, and \emph{social} features
 from media items and microposts on social networks in \emph{isolation},
 to the best of our knowledge, remarkably less initiatives 
 concern the extraction and the application
 of all those features \emph{in combination}
 for \emph{all} types of media items, including microposts.
 In~\cite{sandhaus2011photobook}, Sandhaus \emph{et al.}\ consider visual and
-aesthetic features for the automatic creation of photo books.
+aesthetic features for the automated creation of photo books.
 Obrador \emph{et al.}\ use visual and aesthetic features
 for a~category-based approach to automatically assess
 the aesthetic appeal of photographs~\cite{obrador2012photoaesthetics}.
@@ -85,12 +82,12 @@ but today's most relevant summaries are produced by user interaction~\cite{olsen
 
 A media gallery is a~compilation of photos or videos
 retrieved from social networks that are related to a~given event.
-Given a~set $M = \{m_1,..., m_n\}$ of media items related to a~certain event,
+Given a~set $M_{start} = \{m_1,..., m_n\}$ of media items related to a~certain event,
 a~ranking formula $f$, and a~ranking threshold $t$,
-the subset $M^{\prime\prime} \subset M$
-is the result after the application of $f$ to $M$: $f(M)=M^\prime$
-and pruning the ranked set $M^\prime$ to only include members
-whose rank is greater than $t$, with the resulting set named $M^{\prime\prime}$.
+the resulting subset $M_{final} \subset M_{start}$
+is the result after the application of $f$ to $M_{start}$: $f(M_{start})=M_{ranked}$
+and pruning the ranked set $M_{ranked}$ to only include members
+whose rank is greater than $t$, with the resulting set named $M_{final}$.
 Each media item $m_i$ can either be an instance of a~video or photo.
 For each point $t_x$ on a~timeline $T$, the state of the media gallery
 at $t_x$ is defined for each media item $m_i$
@@ -98,11 +95,21 @@ as a~set $S_x$ of $n$ tuples $s_{x,i}$, where
 $s_{x,i}=\langle \mathit{left}$, $\mathit{top}$, $\mathit{width}$, $\mathit{height}$,
 $\mathit{alpha}$, $\mathit{z\mbox{-}index}$, $\mathit{animation}$,
 $\mathit{start}$, $\mathit{playing}$, $\mathit{volume} \rangle$.
-The first 6~properties are defined as in CSS, the $\mathit{animation}$ property
+The first six properties are defined as in CSS, the $\mathit{animation}$ property
 allows for the definition of CSS transitions
 and transformations as defined in~\cite{CSSTransitions2009,CSSTransforms2012},
 the $\mathit{start}$ property defines the start time in a~video.
+The property $\mathit{playing}$ describes whether a~video is currently paused or playing.
+Finally, the property $\mathit{volume}$ describes the volume level
+of a~video.
 A schematic media gallery at $t_x$ can be seen in \autoref{fig:media-gallery}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[trim=20mm 40mm 20mm 10mm, clip, width=0.7\columnwidth]{media-gallery.pdf}
+  \caption{Schematic media gallery with four photos and two videos.}
+  \label{fig:media-gallery}
+\end{figure}
 
 \paragraph{Audial aesthetics:}
 
@@ -113,6 +120,7 @@ avoiding multiple videos playing music in parallel, smooth transitions, \emph{et
 We remark that through selective mixing of audio tracks
 of event-related videos, ``noise clouds'' very characteristic
 for the event atmosphere can be observed.
+We support this by allowing users to play more than one video at a~time.
 
 \paragraph{Visual aesthetics:}
 
@@ -122,15 +130,16 @@ the relation of the number of photos \emph{vs.} the number of videos \emph{globa
 In order to avoid cognitive overload of viewers,
 the number of visible (moving) media items
 at a~time should be limited.
+We will treat this topic in more detail in \autoref{sec:user-studies}.
 Depending on the event, a~consistent or a~contrast-rich overall
 appearance of items may be desired, also for transitions.
 
-\section{Motivation for Automatic Media Gallery Generation}
+\section{Motivation for Automated Media Gallery Generation}
 \label{sec:motivation-chapter-8}
 
 Media galleries (see \autoref{fig:media-gallery1} and \autoref{fig:media-gallery2}
 for examples)
-help users consume larger, however not overwhelmingly huge,
+help users consume significant
 amounts of media items in an ideally pleasing and aesthetic way.
 These media items may---or, more commonly: may not---be ordered,
 besides an intrinsic chronologic order.
@@ -147,14 +156,14 @@ In this chapter, we treat the challenge of \emph{compiling}
 ranked media item clusters in media galleries in ways
 such that the ranking-implied order is (loosely) respected.
 In the previous sections, we have defined
-aesthetic principles for automatic media gallery layout~\cite{steiner2012definingaesthetic},
+aesthetic principles for automated media gallery layout~\cite{steiner2012definingaesthetic},
 which we now apply to media gallery styles.
 The task of media gallery compilation is different
 from the widely researched task of photo book generation,
-as media galleries can contain both, photos and videos.
+as media galleries can contain both photos and videos.
 Different types of media gallery layouts are possible,
-two of which we have implemented and evaluated via two different user studies.
-One with, and one without detailed user comments.
+two of which we have implemented and evaluated via two different user studies:
+one with, and one without detailed user comments.
 
 \section{Media Gallery Styles}
 \label{sec:mediagallerystyles}
@@ -165,18 +174,21 @@ The crucial question is thus whether the media items' aspect ratios
 should be respected, or whether they should be cropped to square,
 or other aspect ratios (\emph{e.g.}, 4:3 or 16:9).
 Respecting the aspect ratio has the advantage that media items
-do not need to be potentially lossily cropped,
-however, due to the unpredictable media item formats,
+do not need to be cropped, which may affect important information
+contained in the media item, like, \emph{e.g.}, 
+contained faces or text.
+However, due to the unpredictable media item formats,
 compiling media galleries that do not look frayed is harder.
 The advantage of cropping is that media gallery layout is easier,
 as the media item formats are predictably the same,
 at the cost of having to decide where to crop.
 Different algorithms (\emph{e.g.},~\cite{suh2003thumbnail})
 beyond this chapter's scope exist to aid this decision.
-A~media gallery is called \emph{balanced}, if its shape is rectangular,
+A~media gallery is called \emph{balanced} if its shape is rectangular,
 \emph{hole-free} if there are no gaps from missing media items,
-and \emph{order-respecting},
+and \emph{order-respecting}
 if media items appear in insertion order.
+Optimal media galleries fulfill all three conditions.
 
 \paragraph{Non-Order-Respecting Styles:}
 
@@ -198,10 +210,11 @@ and then filling the placeholder shapes with media items%
 or (ii),~working with columns of pre-defined widths
 and then iteratively inserting in the smallest column%
 ~\cite{chedeau2012lightbox}.
+
 As outlined in \autoref{sec:motivation-chapter-8},
 we require (at least loosely) order-respecting media galleries
 for the ranking step to make sense.
-In the upcoming two subsections, we will introduce two techniques
+In the upcoming two paragraphs, we will introduce two techniques
 for the generation of such media galleries.
 
 \paragraph{Strict Order, Equal Size (SOES):}
@@ -261,10 +274,11 @@ and then adding it to the smallest column.
 This media gallery style allows any media item to become big,
 while still being loosely order-respecting and always hole-free.
 Balancing the gallery is slightly harder,
-as in the worst case up to $ (\mathit{bigBlocksPerRow} - 1) \times 2 $
+as depending on the shape both small \emph{and} big
 media items may be required.
 
 \subsection{Discussion and Evaluation}
+\label{sec:user-studies}
 
 The main motivation for the \emph{Loose Order, Varying Size} style
 is that certain media items can be featured more prominently
@@ -280,11 +294,9 @@ for a~set of media items is a~challenging task.
 For different users and different media galleries,
 there may be different optimal settings.
 A~common subjective evaluation technique
-is the Mean~Opinion Score (MOS),
+is the Mean~Opinion Score (MOS,~\cite{itu1998mos}),
 used for decades in telephony networks to
-obtain the human user's view of the quality of a~network.%
-\footnote{\url{http://www.itu.int/rec/T-REC-P.800-199608-I/en},
-accessed June 1, 2013}
+obtain the human user's view of the quality of a~network.
 Recently, MOS has also found wider usage in the multimedia community.
 Therefore, a~set of standard subjective tests are conducted,
 where users rate the perceived quality of test samples
@@ -334,6 +346,9 @@ the MOS for \emph{LOVS} was $4.17$ (variance $0.47$).
 The data of Survey~B is available.%
 \footnote{\url{http://bit.ly/media-gallery-survey},
 accessed June 1, 2013}
+For privacy reasons, we have posted the media galleries
+as non-public microposts on social networks,
+which is why we are not able to share the data of Survey~A.
 
 \subsection{Maintaining Provenance Information with Downloadable Media Galleries}
 
@@ -418,7 +433,7 @@ a~screencast of the whole animation is available online at \url{https://vine.co/
   \label{fig:interactive-media-gallery}  
 \end{figure}
 
-\paragraph{Audible media galleries and text-to-speech synthesis:}
+\paragraph{Audial media galleries and text-to-speech synthesis:}
 
 With our media galleries, we go yet another step further
 and add an audio component to the interactive slideshow.
@@ -431,7 +446,7 @@ We can, however, use the (potentially machine-translated,
 see \autoref{sec:machine-translation}) textual information
 of any of the media items in the particular media item's media cluster
 (see \autoref{sec:photo-deduplication})
-and via speech synthesis create an audible experience.
+and via speech synthesis create an audial experience.
 This follows the hypothesis that visually similar media items 
 also share similar textual descriptions.
 We use the set of extracted and disambiguated named entities
@@ -448,7 +463,7 @@ a~textual description that consists of purely a~list of tags,
 as is often the case with, \emph{e.g.},
 Instagram (see \autoref{sec:instagram}).
 We convert the textual description of a~media item
-to audible information with the help of a~text--to--speech system.
+to audial information with the help of a~text--to--speech system.
 We use the eSpeak~\cite{duddington2012espeak} speech synthesizer
 that was described earlier in \autoref{sec:text-to-speech-espeak}.
 
@@ -479,8 +494,8 @@ over to media item deduplication and clustering
 media item ranking (\autoref{cha:media-item-ranking}) and
 media item compilation (\autoref{cha:media-item-compilation}).
 We have developed an application called Social Media Illustrator
-for the automatic generation of
-media galleries that visually and audibly summarize events
+for the automated generation of
+media galleries that visually and audially summarize events
 based on media items like videos and photos from multiple social networks.
 The application is publicly available at the URL 
 \url{http://social-media-illustrator.herokuapp.com/}.
@@ -567,7 +582,7 @@ with the changes being reflected on-the-fly.
 In this chapter, we have defined factors that determine and influence
 media gallery aesthetics.
 After an overview of related work and a~motivation,
-we have examined different algorithms for the automatic generation
+we have examined different algorithms for the automated generation
 of media galleries.
 While some of the described algorithms do not fulfill our requirements
 with regards to respecting the ranking-implied order,
@@ -588,7 +603,7 @@ that were in part described in \autoref{sec:near-duplicate-content}.
 We have learned that eyes need focal points
 to spot the needles in the media gallery haystack.
 Interactivity in form of visual \emph{eye candy}
-as well as audible information are helpful factors
+as well as audial information are helpful factors
 to create the impression of a~consistent \emph{event summarization}
 that makes forget the fact that it was generated by combining potentially
 many social network users' contributions.
