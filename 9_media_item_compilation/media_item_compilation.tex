@@ -412,8 +412,9 @@ while in parallel it is zoomed to double its size.
 All other media items that are currently not focused are faded out
 in a~black-and-white variant and blurred, in order to put the maximum emphasis
 to the currently focused media item.
-\autoref{fig:interactive-media-gallery} shows three steps of the described transitions,
-a~screencast of the whole animation is available online at \url{https://vine.co/v/bT7eiwjE6DQ}.
+\autoref{fig:interactive-media-gallery} shows three steps of the described transitions and
+\autoref{fig:occupygezi1} shows the final state after the transition.
+A~screencast of the whole animation is available online at \url{https://vine.co/v/bT7eiwjE6DQ}.
 
 \begin{figure}[t!]
   \centering
@@ -437,11 +438,10 @@ a~screencast of the whole animation is available online at \url{https://vine.co/
 
 With our media galleries, we go yet another step further
 and add an audio component to the interactive slideshow.
-Media items of type video typically already have an audio track,
+As media items of type video typically already have an audio track,
 it is thus straight-forward to play the video once it is focused
 in the slideshow.
-In contrast, by their pure nature,
-photos do not have audible information associated with them.
+In contrast photos do not have audible information associated with them.
 We can, however, use the (potentially machine-translated,
 see \autoref{sec:machine-translation}) textual information
 of any of the media items in the particular media item's media cluster
@@ -458,8 +458,8 @@ from the entire set of textual descriptions in the cluster
 that \textit{(i)} maximizes the number of named entities
 and that \textit{(ii)} has the most diverse set of words
 identified as nouns, verbs, and adjectives.
-Following this simple heuristic, we avoid deciding on
-a~textual description that consists of purely a~list of tags,
+Following this simple heuristic, we avoid choosing
+a~textual description that consists of only a~list of tags,
 as is often the case with, \emph{e.g.},
 Instagram (see \autoref{sec:instagram}).
 We convert the textual description of a~media item
@@ -470,15 +470,8 @@ that was described earlier in \autoref{sec:text-to-speech-espeak}.
 \begin{figure}[htb]
   \centering
   \includegraphics[width=1\columnwidth]{occupygezi1.png}
-  \caption[Media gallery in interactive mode (i)]{Media gallery in interactive mode, one media item centered and exclusively focused}
+  \caption[Media gallery in interactive mode]{Media gallery in interactive mode, one media item centered and exclusively focused, all non-focused media items smoothly blurred and transitioned to a~black-and-white version}
   \label{fig:occupygezi1}
-\end{figure}
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=1\columnwidth]{occupygezi2.png}
-  \caption[Media gallery in interactive mode (ii)]{Media gallery in interactive mode, all non-focused media items smoothly blurred and transitioned to a~black-and-white version}
-  \label{fig:occupygezi2}
 \end{figure}
 
 \section{Social Media Illustrator}
@@ -585,7 +578,7 @@ After an overview of related work and a~motivation,
 we have examined different algorithms for the automated generation
 of media galleries.
 While some of the described algorithms do not fulfill our requirements
-with regards to respecting the ranking-implied order,
+with regard to respecting the ranking-implied order,
 two of them---namely \emph{LOVS} and \emph{SOES}---do fulfill them,
 and are in consequence considered.
 We have created an application that auto-generates the
@@ -594,11 +587,13 @@ and evaluated users' perceived quality with two separate surveys.
 The trend is that users prefer \emph{LOVS}.
 Future work will be on evaluating more media gallery styles
 and advanced heuristics for media item cropping,
-tailored to social network media items, which, as outlined earlier,
-do not necessarily share the same properties as common photos.
+tailored to social network media items.
+As outlined earlier, such social media items
+do not necessarily share the same properties as
+common photos and videos.
 Social media cropping algorithms need to respect 
 the characteristics of social media
-that were in part described in \autoref{sec:near-duplicate-content}.
+that were described in \autoref{sec:duplicate-content}.
 
 We have learned that eyes need focal points
 to spot the needles in the media gallery haystack.
