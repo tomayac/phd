@@ -993,12 +993,12 @@ about media items and fragments thereof.
 An example in RDF Turtle syntax~\cite{prudhommeaux2013turtle}
 is given in \autoref{code:media-fragment}.
 
-\begin{lstlisting}[caption={Description of two 10~sec long media fragments:
+\begin{lstlisting}[caption={[Description of two 10~sec long media fragments]{Description of two 10~sec long media fragments:
   \textit{(i)}~a~tile of dimensions $ 30 \times 40 $ pixels
   starting at pixel coordinates $ (0, 0) $
   that contains a~face; and
   \textit{(ii)}~a~tile of dimensions $ 10 \times 10 $ pixels
-  starting at pixel coordinates $ (0, 0) $ of red color},
+  starting at pixel coordinates $ (0, 0) $ of red color}},
   label=code:media-fragment, float=b!]
 @base <http://example.org/> .
 @prefix ma: <http://www.w3.org/ns/ma-ont> .
@@ -1060,7 +1060,7 @@ a~potentially squeezed square aspect ratio version.
 \begin{figure}[b!]
   \centering
   \includegraphics[width=0.9\linewidth]{./backstreetboys.png}
-  \caption{\emph{Near-duplicate} music video \emph{Everybody} by the \emph{Backstreet Boys} shared independently on Facebook and Google+}
+  \caption[\emph{Near-duplicate} music video \emph{Everybody} by the \emph{Backstreet Boys}]{\emph{Near-duplicate} music video \emph{Everybody} by the \emph{Backstreet Boys} shared independently on Facebook and Google+}
   \label{fig:near-duplicate}
 \end{figure}
 
@@ -1072,7 +1072,7 @@ a~potentially squeezed square aspect ratio version.
   \subfloat[From Google+ user]{
     \includegraphics[width=0.35\linewidth]{debug2.png}
   }
-  \caption{Debug view of the media item deduplication algorithm:
+  \caption[Debug view of the media item deduplication algorithm]{Debug view of the media item deduplication algorithm:
   since no faces are detected in \autoref{fig:near-duplicate},
   the clustering is based on tile similarity;
   black tiles are not considered due to the chosen black--and--white tolerance)}
@@ -1293,14 +1293,14 @@ by Fabrice Weinberg---supports more browsers and both image \emph{and} video.
 \begin{figure}[t!]
   \centering
   \includegraphics[width=0.75\linewidth]{./similar-different.png}
-  \caption{Similar (upper row) and different (lower row) corresponding tile pairs for the media items from a~Facebook (left column) and a~Google+ user (right column); checkered tiles are not considered due to the black--and--white tolerance}
+  \caption[Similar and different corresponding tile pairs]{Similar (upper row) and different (lower row) corresponding tile pairs for the media items from a~Facebook (left column) and a~Google+ user (right column); checkered tiles are not considered due to the black--and--white tolerance}
   \label{fig:similar-different}
 \end{figure}
 
 \begin{figure}[t!]
   \centering
   \includegraphics[width=0.75\linewidth]{./tile-highlight.png}
-  \caption{The highlighted checkered tiles are not considered, as the text--to--speech system explains: \textit{``However, 22 tiles were not considered, as they are either too bright or too dark, which is a~common source of clustering issues.''}}
+  \caption[The highlighted checkered tiles are not considered]{The highlighted checkered tiles are not considered, as the text--to--speech system explains: \textit{``However, 22 tiles were not considered, as they are either too bright or too dark, which is a~common source of clustering issues.''}}
   \label{fig:tile-highlight}
 \end{figure}
 
