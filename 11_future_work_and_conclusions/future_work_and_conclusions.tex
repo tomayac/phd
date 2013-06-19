@@ -346,4 +346,110 @@ We will focus future work primarily on this aspect.
 
 \section{Conclusions}
 
+In this thesis, we have tackled the challenge of event summarization
+from a~multimedia angle by leveraging social networks.
+In the first part of the thesis,
+we have introduced the Semantic Web,
+its technologies, and its applications like Linked Data.
+In continuation, we have introduced social networks
+and their features and have classified them
+based on their level of media item support.
+We have applied semantic methods for limiting ambiguity
+that is intrinsic to language and that especially affects
+short textual microposts, which oftentimes lack context.
+As this task required the orchestration of several services
+in combination, we have shown how provenance information
+can be preserved to make the involved steps traceable.
+We have examined how media items can be extracted from 
+various social networks and how the different
+underlying social network messages and interactions
+can be aligned by an abstraction layer.
+Further, we have detected camera shots in videos and 
+annotated them semantically with media fragments URIs.
+This task is a~required step for video deduplication,
+which we have tackled together with photo deduplication.
+We have determined social-network-specific reasons
+for the occurrence of duplicate and near-duplicate content
+on social networks.
+Based on these findings, we have developed and algorithm
+that is tailored to find such occurrences of duplicate
+and near-duplicate content.
+This algorithm has multiple matching conditions,
+which makes it hard for a~non-expert user to determine
+why or why not media items have been matched.
+Driven by this observation, we have researched
+if speech synthesis together with dynamic media fragment creation
+can help non-expert users understand the algorithm's output,
+which in consequence allowed us to improve it.
+
+Based on a~very open event definition---%
+\textit{``something that happens at a~given place and time''}---%
+we have identified the need to
+visually and audially summarize events
+of personal or public interest.
+The increasingly important role of first-hand eye-witness
+social media data at recent events like the
+Boston Marathon bombings 2013,%
+\footnote{\url{http://en.wikipedia.org/wiki/Boston_Marathon_bombings}, accessed June 19, 2013}
+or the Occupy Gezi movement 2013 in Turkey%
+\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed June 19, 2013}
+drastically confirm the observation that there is a~strong demand
+for social-network-based event summarization.
+
+In this thesis, we have touched on several research fields,
+and some of the encountered problems and challenges,
+like, for example, named entity extraction and disambiguation
+for short and oftentimes sloppily-authored microposts
+or video deduplication,
+certainly deserve a~thesis on their own.
+We have opted for a~pragmatic approach in such cases
+and have not shied back from either using third-party tools
+or working with approximations or heuristics, 
+which work well enough for our use case.
+From the beginning we have envisioned an application
+that would facilitate the tedious work
+of compiling media galleries manually.
+This application, Social Media Illustrator,
+forms part of the deliverables of the thesis.
+We have separated the task of building this application
+in several actionable steps and have contributed 
+scientific publications for each of them.
+The chapters of this thesis follow the steps loosely.  
+As a~reminder, the concrete steps were the following.
+
+\begin{enumerate}
+  \item Micropost annotation
+  \item Media item extraction
+  \item Media item deduplication
+  \item Media item ranking
+  \item Media item compilation
+\end{enumerate}
+
+The main topic of our thesis are events.
+In \autoref{cha:eventdetection}, we have thus 
+explored the world of breaking news event detection,
+which closes the circle.
+We are now in the position to first accurately detect events
+and second, to visually and audially summarize them
+in an optionally fully-automated or semi-automated manner.
+
+While initially we had envisioned an application
+similar to the one we have developed,
+we were ourselves surprised by the broad range
+of possible future use cases ranging from end users
+reviving the atmosphere of a~concert
+to data journalists researching political events
+of potentially global interest
+to finally disaster relief workers coordinating 
+their efforts based on information derived from our application.
+
+This thesis marks the end of our doctorate,
+but it certainly does not mark the end of this work.
+We are excited to improve, extend, and adapt
+Social Media Illustrator in the future
+with concrete future research opportunities
+that were outlined earlier in this chapter.
+
+
+
 
