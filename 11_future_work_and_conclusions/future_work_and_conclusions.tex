@@ -150,9 +150,6 @@ event summary consumption.
   \label{table:toolcomparison}
 \end{sidewaystable}
 
-
-
-
 \section{Future Research Directions}
 
 \subsection{Media Item Verification}
@@ -278,18 +275,75 @@ to evaluate the sort of subjective data we generate
 with our application Social Media Illustrator, given that we 
 properly define our optimization criteria.
 Unlike with, \emph{e.g.}, online purchases,
-where the optimization criterion are conversions,
+where the optimization criterion are conversions,%
+\footnote{That is, people who do not just put items in the virtual shopping cart,
+but who then actually buy them}
 with media galleries there is no direct optimization criterion.
-However, we can use indirect criteria like
+However, our assumption is that we can use indirect criteria like
 interaction with the media gallery
 as outlined in \autoref{sec:interactivemediagalleries},
 the rationale being that if
 a~media gallery is interesting, the user will interact with it.
 Common Web analytics software is capable of tracking mouse and
 keyboard events that occur when users interact with Web pages.
+By exploiting this fact, we can attach event listeners
+to media galleries and report these events
+to the Web analytics software running on a~remote server.
+By varying media gallery styles and parameters like the width,
+number of contained items, item size, \emph{etc.},
+we can then over time determine promising candidates.
+The proposed evaluation approach is less expensive
+and more scalable than user studies.
+From a~result-oriented point of view,
+future research has to show if it is also at least as efficient
+as user studies, our even outperforms them.
 
+\subsection{Application Domains}
 
-\paragraph{Application Domains}
+\paragraph{Embedded Media Galleries:}
 
+A final future research direction is finding new application domains.
+With our examples so far, we have mainly focused
+on the (online) journalist use case.
+We envision interactive media galleries taking the place
+of static photo galleries (\autoref{fig:occupygezibbc})
+or embedded videos on online editions
+of news websites or Web portals.
+
+\paragraph{Data Journalism:}
+
+Data journalism~\cite{rogers2011datajournalism,gray2012data}
+is a~form of journalism that reflects the increased role
+of numerical data in the production and distribution of information
+in the digital era.
+It touches on the fields of design, computer science, and statistics.
+Interactive media galleries and the cross-network search capabilities enabled by our application Social Media Illustrator
+can greatly facilitate the data journalism task of researching news stories and exploring multimedia data.
+
+\paragraph{Event Pages of Social Networks:}
+
+Some social networks like Facebook or \googleplus
+offer their users the creation of events where
+event-related media items can be manually or automatically
+uploaded when event attendees check in to an event.
+Naturally, interactive media galleries embedded on
+social network sites themselves will only feature media items
+from the social network in question and not include foreign ones.
+
+\paragraph{Disaster Response:}
+
+Disasters like earthquakes, floods, plane crashes, \emph{etc.}
+cause great damage or even loss of lives.
+Disaster response includes measures to
+mitigate the effects of a~disastrous event
+in order to avoid further loss of lives or property.
+Social networks and especially social media
+play an increasing role in disaster response%
+~\cite{shklovski2008disasterresponse,sutton2008backchannels}.
+Our work has already sparked initial interest~\cite{meier2013wikipedia}
+in the disaster response community.
+We will focus future work primarily on this aspect.
+
+\section{Conclusions}
 
 
