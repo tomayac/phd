@@ -3,7 +3,7 @@
 % content in this file will be fed into the main document
 
 %: ----------------------- introduction file header -----------------------
-\chapter{Future Work and Conclusions}
+\chapter{Conclusions and Future Work}
 
 % the code below specifies where the figures are stored
 \ifpdf
@@ -16,141 +16,75 @@
 %: ------------------------------- content ----------------------------- 
 % ----------------------------------------------------------------------
 
-\section{Commercial Activity in the Field of Social-Network-Based Event Summarization}
+\section{Conclusions}
 
-The research fields of event summarization and event archiving
-based on social network multimedia data have resulted in 
-interesting business creations in recent months.
-Albeit similarities to our work exist,
-there are still many differences in the details.
+In this thesis, we have tackled the challenge of event summarization
+from a~multimedia angle by leveraging social networks.
+In the first part of the thesis,
+we have introduced the Semantic Web,
+its technologies, and its applications like Linked Data.
+In continuation, we have introduced social networks
+and their features and have classified them
+based on their level of media item support.
+We have applied semantic methods for limiting ambiguity
+that is intrinsic to language and that especially affects
+short textual microposts, which oftentimes lack context.
+As this task required the orchestration of several services
+in combination, we have shown how provenance information
+can be preserved to make the involved steps traceable.
+We have examined how media items can be extracted from 
+various social networks and how the different
+underlying social network messages and interactions
+can be aligned by an abstraction layer.
+Further, we have detected camera shots in videos and 
+annotated them semantically with media fragments URIs.
+This task is a~required step for video deduplication,
+which we have tackled together with photo deduplication.
+We have determined social-network-specific reasons
+for the occurrence of duplicate and near-duplicate content
+on social networks.
+Based on these findings, we have developed and algorithm
+that is tailored to find such occurrences of duplicate
+and near-duplicate content.
+This algorithm has multiple matching conditions,
+which makes it hard for a~non-expert user to determine
+why or why not media items have been matched.
+Driven by this observation, we have researched
+if speech synthesis together with dynamic media fragment creation
+can help non-expert users understand the algorithm's output,
+which in consequence allowed us to improve it significantly.
+We have introduced a~ranking formula for social media clusters
+that, based on novel a~social interaction abstraction layer,
+ranks clusters by popularity and selects from each cluster
+the visually most appealing cluster representative media item.
+Afterwards, we have discussed and evaluated several
+media gallery compilation algorithms
+that fulfill media gallery aesthetics criteria,
+which we have defined.
+Further, we have created an interactive,
+speech-synthesis-supported visualization format
+on top of prior media gallery compilation algorithms.
+Finally, we have shown how Wikipedia edits
+that we capture in realtime can be clustered by language
+for the task of detecting breaking news event candidates.
+An accompanying application called Wikipedia Live Monitor
+was developed and publicly released in the same context.
 
-\paragraph{Mahaya:}
- 
-The company Mahaya has launched a~beta-version
-of a~commercial automatic event archiving tool called Seen,
-which, based on manually entered event metadata like event name,
-location, and dates, uses a~necessarily provided Twitter hashtag
-to create a~complete permanent archive of all event-related tweets,
-media items, and slide decks.
-Based on term frequency and co-occurrence analyses,
-the event is split into subevents
-and each subevent's hot topics are tried to be detected.
-The application's main data source is Twitter,
-links to certain media hosting platforms are followed.
-Seen does not deduplicate and cluster
-similar media items.
-A~screenshot of Seen can be found in \autoref{fig:seen}.
+Based on a~very open event definition---%
+\textit{``something that happens at a~given place and time''}---%
+we have identified the need to
+visually and audially summarize events
+of personal or public interest.
+The increasingly important role of first-hand eye-witness
+social media data at recent events like the
+Boston Marathon bombings 2013,%
+\footnote{\url{http://en.wikipedia.org/wiki/Boston_Marathon_bombings}, accessed June 19, 2013}
+or the Occupy Gezi movement 2013 in Turkey%
+\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed June 19, 2013}
+drastically confirm the observation that there is a~strong demand
+for social-network-based event summarization.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{seen.png}
-  \caption[Mahaya's commercial automatic event archiving tool Seen]{Mahaya's commercial automatic event archiving tool Seen
-    (\url{http://mahaya.co/})}
-  \label{fig:seen}
-\end{figure}
-
-\paragraph{Eventifier:}
-
-Eventifier is a~commercial tool that facilitates the automated permanent archiving of events
-in form of event-related photos, videos, tweets, slide decks, 
-and event contributors.
-Similar to Mahaya's product Seen,
-the application's main data source is Twitter.
-The manually entered event's official hashtag and potentially existing
-official Twitter account serve to encounter event-related content.
-Eventifier does not deduplicate and cluster
-similar media items.
-A~screenshot of Eventifier can be seen in \autoref{fig:eventifier}.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{eventifier.png}
-  \caption[The automated commercial event archiving tool Eventifier]{The automated commercial event archiving tool Eventifier
-    (\url{http://eventifier.co/})}
-  \label{fig:eventifier}
-\end{figure}
-
-\paragraph{Storify:}
-
-The commercial tool Storify allows for the manual compilation of
-event-related media items, articles, and microposts
-to generated permanently available stories
-that---depending on the level of human curation---%
-can efficiently summarize an event.
-Storify does not deduplicate and cluster
-similar media items.
-A~screenshot of Storify can be seen in \autoref{fig:storify}.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{storify.png}
-  \caption[The manual assisted commercial event archiving tool Storify]{The manual assisted commercial event archiving tool Storify
-    (\url{http://storify.com/})}
-  \label{fig:storify}
-\end{figure}
-
-\paragraph{Media Finder:}
-
-Media Finder is an academic non-commercial tool that
-has advanced named entity centric clustering capabilities
-based on extracted named entities in microposts.
-Media items can be clustered by topic, named entity,
-named entity type, and micropost instance.
-We have contributed the application's media extraction component,
-in consequence the covered social networks
-are exactly as described in \autoref{cha:media-item-extraction}.
-A~screenshot of Media Finder can be seen in \autoref{fig:mediafinder}.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{mediafinder.png}
-  \caption[The academic event summarization tool Media Finder]{The academic event summarization tool Media Finder (\url{http://mediafinder.eurecom.fr/})}
-  \label{fig:mediafinder}
-\end{figure}
-
-\subsection{Comparison of Tools}
-
-In the previous paragraphs, we have characterized
-commercial and non-commercial tools for the tasks
-of event summarization and event archiving. 
-\autoref{table:toolcomparison} shows how these tools
-compare against our own application Social Media Illustrator,
-which, for reference, is depicted again in \autoref{fig:socialmediaillustrator}.
-The unique selling point of our application
-are its interactive media galleries that together with speech synthesis
-as outlined in \autoref{sec:interactivemediagalleries}
-allow for truly one of its kind experience when it comes to 
-event summary consumption.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{socialmediaillustrator.png}
-  \caption[Our own academic event summarization tool Social Media Illustrator]{Our own academic event summarization tool Social Media Illustrator (\url{http://social-media-illustrator.herokuapp.com/})}
-  \label{fig:socialmediaillustrator}
-\end{figure}
-
-\begin{sidewaystable}[h!]
-  \centering
-  \small
-  \begin{tabular}{|l|l|l|l|l|l|}
-    \hline
-        \backslashbox{\textbf{Property}}{\textbf{Tool}} & \textbf{Seen} & \textbf{Eventifier} & \textbf{Storify} & \textbf{Media Finder} & \textbf{Social Media Illustrator}\\ \hline
-      \hline
-      \textbf{Data source} & Twitter & Twitter & Multiple & Multiple & Multiple\\
-      \textbf{Main task} & Archiving & Archiving & Summarization & Summarization & Summarization\\
-      \textbf{Operation mode} & Automated & Automated & Manual & Semi-automated & Semi-automated\\
-      \textbf{Linkable} & Yes & Yes & Yes & Yes & No\\
-      \textbf{Downloadable} & No & No & No & No & Yes\\
-      \textbf{Customizable} & No & No & Yes & Yes & Yes\\
-      \textbf{Interactive} & No & No & No & No & Yes\\
-      \textbf{Commercial} & Yes & Yes & Yes & No & No\\
-      \hline
-    \end{tabular}
-    \caption[Comparison of event archiving and summarization tools]{Comparison of commercial and non-commercial event archiving and summarization tools \todo{Check final orientation}}
-  \label{table:toolcomparison}
-\end{sidewaystable}
-
-\section{Future Research Directions}
+\section{Future Work}
 
 \subsection{Media Item Verification}
 
@@ -344,73 +278,141 @@ Our work has already sparked initial interest~\cite{meier2013wikipedia}
 in the disaster response community.
 We will focus future work primarily on this aspect.
 
-\section{Conclusions}
+\subsection{Commercial Activity in the Field of Social-Network-Based Event Summarization}
 
-In this thesis, we have tackled the challenge of event summarization
-from a~multimedia angle by leveraging social networks.
-In the first part of the thesis,
-we have introduced the Semantic Web,
-its technologies, and its applications like Linked Data.
-In continuation, we have introduced social networks
-and their features and have classified them
-based on their level of media item support.
-We have applied semantic methods for limiting ambiguity
-that is intrinsic to language and that especially affects
-short textual microposts, which oftentimes lack context.
-As this task required the orchestration of several services
-in combination, we have shown how provenance information
-can be preserved to make the involved steps traceable.
-We have examined how media items can be extracted from 
-various social networks and how the different
-underlying social network messages and interactions
-can be aligned by an abstraction layer.
-Further, we have detected camera shots in videos and 
-annotated them semantically with media fragments URIs.
-This task is a~required step for video deduplication,
-which we have tackled together with photo deduplication.
-We have determined social-network-specific reasons
-for the occurrence of duplicate and near-duplicate content
-on social networks.
-Based on these findings, we have developed and algorithm
-that is tailored to find such occurrences of duplicate
-and near-duplicate content.
-This algorithm has multiple matching conditions,
-which makes it hard for a~non-expert user to determine
-why or why not media items have been matched.
-Driven by this observation, we have researched
-if speech synthesis together with dynamic media fragment creation
-can help non-expert users understand the algorithm's output,
-which in consequence allowed us to improve it significantly.
-We have introduced a~ranking formula for social media clusters
-that, based on novel a~social interaction abstraction layer,
-ranks clusters by popularity and selects from each cluster
-the visually most appealing cluster representative media item.
-Afterwards, we have discussed and evaluated several
-media gallery compilation algorithms
-that fulfill media gallery aesthetics criteria,
-which we have defined.
-Further, we have created an interactive,
-speech-synthesis-supported visualization format
-on top of prior media gallery compilation algorithms.
-Finally, we have shown how Wikipedia edits
-that we capture in realtime can be clustered by language
-for the task of detecting breaking news event candidates.
-An accompanying application called Wikipedia Live Monitor
-was developed and publicly released in the same context.
+The research fields of event summarization and event archiving
+based on social network multimedia data have resulted in 
+interesting business creations in recent months.
+Albeit similarities to our work exist,
+there are still many differences in the details.
 
-Based on a~very open event definition---%
-\textit{``something that happens at a~given place and time''}---%
-we have identified the need to
-visually and audially summarize events
-of personal or public interest.
-The increasingly important role of first-hand eye-witness
-social media data at recent events like the
-Boston Marathon bombings 2013,%
-\footnote{\url{http://en.wikipedia.org/wiki/Boston_Marathon_bombings}, accessed June 19, 2013}
-or the Occupy Gezi movement 2013 in Turkey%
-\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed June 19, 2013}
-drastically confirm the observation that there is a~strong demand
-for social-network-based event summarization.
+\paragraph{Mahaya:}
+ 
+The company Mahaya has launched a~beta-version
+of a~commercial automatic event archiving tool called Seen,
+which, based on manually entered event metadata like event name,
+location, and dates, uses a~necessarily provided Twitter hashtag
+to create a~complete permanent archive of all event-related tweets,
+media items, and slide decks.
+Based on term frequency and co-occurrence analyses,
+the event is split into subevents
+and each subevent's hot topics are tried to be detected.
+The application's main data source is Twitter,
+links to certain media hosting platforms are followed.
+Seen does not deduplicate and cluster
+similar media items.
+A~screenshot of Seen can be found in \autoref{fig:seen}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{seen.png}
+  \caption[Mahaya's commercial automatic event archiving tool Seen]{Mahaya's commercial automatic event archiving tool Seen
+    (\url{http://mahaya.co/})}
+  \label{fig:seen}
+\end{figure}
+
+\paragraph{Eventifier:}
+
+Eventifier is a~commercial tool that facilitates the automated permanent archiving of events
+in form of event-related photos, videos, tweets, slide decks, 
+and event contributors.
+Similar to Mahaya's product Seen,
+the application's main data source is Twitter.
+The manually entered event's official hashtag and potentially existing
+official Twitter account serve to encounter event-related content.
+Eventifier does not deduplicate and cluster
+similar media items.
+A~screenshot of Eventifier can be seen in \autoref{fig:eventifier}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{eventifier.png}
+  \caption[The automated commercial event archiving tool Eventifier]{The automated commercial event archiving tool Eventifier
+    (\url{http://eventifier.co/})}
+  \label{fig:eventifier}
+\end{figure}
+
+\paragraph{Storify:}
+
+The commercial tool Storify allows for the manual compilation of
+event-related media items, articles, and microposts
+to generated permanently available stories
+that---depending on the level of human curation---%
+can efficiently summarize an event.
+Storify does not deduplicate and cluster
+similar media items.
+A~screenshot of Storify can be seen in \autoref{fig:storify}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{storify.png}
+  \caption[The manual assisted commercial event archiving tool Storify]{The manual assisted commercial event archiving tool Storify
+    (\url{http://storify.com/})}
+  \label{fig:storify}
+\end{figure}
+
+\paragraph{Media Finder:}
+
+Media Finder is an academic non-commercial tool that
+has advanced named entity centric clustering capabilities
+based on extracted named entities in microposts.
+Media items can be clustered by topic, named entity,
+named entity type, and micropost instance.
+We have contributed the application's media extraction component,
+in consequence the covered social networks
+are exactly as described in \autoref{cha:media-item-extraction}.
+A~screenshot of Media Finder can be seen in \autoref{fig:mediafinder}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{mediafinder.png}
+  \caption[The academic event summarization tool Media Finder]{The academic event summarization tool Media Finder (\url{http://mediafinder.eurecom.fr/})}
+  \label{fig:mediafinder}
+\end{figure}
+
+\subsection{Comparison of Tools}
+
+In the previous paragraphs, we have characterized
+commercial and non-commercial tools for the tasks
+of event summarization and event archiving. 
+\autoref{table:toolcomparison} shows how these tools
+compare against our own application Social Media Illustrator,
+which, for reference, is depicted again in \autoref{fig:socialmediaillustrator}.
+The unique selling point of our application
+are its interactive media galleries that together with speech synthesis
+as outlined in \autoref{sec:interactivemediagalleries}
+allow for truly one of its kind experience when it comes to 
+event summary consumption.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{socialmediaillustrator.png}
+  \caption[Our own academic event summarization tool Social Media Illustrator]{Our own academic event summarization tool Social Media Illustrator (\url{http://social-media-illustrator.herokuapp.com/})}
+  \label{fig:socialmediaillustrator}
+\end{figure}
+
+\begin{sidewaystable}[h!]
+  \centering
+  \small
+  \begin{tabular}{|l|l|l|l|l|l|}
+    \hline
+        \backslashbox{\textbf{Property}}{\textbf{Tool}} & \textbf{Seen} & \textbf{Eventifier} & \textbf{Storify} & \textbf{Media Finder} & \textbf{Social Media Illustrator}\\ \hline
+      \hline
+      \textbf{Data source} & Twitter & Twitter & Multiple & Multiple & Multiple\\
+      \textbf{Main task} & Archiving & Archiving & Summarization & Summarization & Summarization\\
+      \textbf{Operation mode} & Automated & Automated & Manual & Semi-automated & Semi-automated\\
+      \textbf{Linkable} & Yes & Yes & Yes & Yes & No\\
+      \textbf{Downloadable} & No & No & No & No & Yes\\
+      \textbf{Customizable} & No & No & Yes & Yes & Yes\\
+      \textbf{Interactive} & No & No & No & No & Yes\\
+      \textbf{Commercial} & Yes & Yes & Yes & No & No\\
+      \hline
+    \end{tabular}
+    \caption[Comparison of event archiving and summarization tools]{Comparison of commercial and non-commercial event archiving and summarization tools \todo{Check final orientation}}
+  \label{table:toolcomparison}
+\end{sidewaystable}
+
+\section{Closing Words}
 
 In this thesis, we have touched on several research fields,
 and some of the encountered problems and challenges,
@@ -464,10 +466,7 @@ with concrete future research opportunities
 that were outlined earlier in this chapter.
 This thesis marks the end of our doctorate,
 but it certainly does not mark the end of this work.
-
+\\
+\\
 \textit{``The Software shall be used for Good, not Evil''}.%
 ---Douglas Crockford
-
-
-
-
