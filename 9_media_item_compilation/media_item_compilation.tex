@@ -523,6 +523,16 @@ search bundles can be enabled and disabled at will.
 Undesired media items can be removed from the result bundle
 by clicking a~red cross that appears
 when hovering over the media item in question.
+\autoref{fig:mediaitemextraction} shows Social Media Illustrator
+with extracted media items stemming from various social networks
+for three search terms.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\columnwidth]{app1.png}
+  \caption{Media item extraction with search bundles from three search terms}
+  \label{fig:mediaitemextraction}
+\end{figure}
 
 \paragraph{Media Item Deduplication}
 
@@ -533,6 +543,15 @@ The configurable options are best described in \autoref{sec:media-item-deduplica
 Changes to any of the parameters are reflected in realtime
 in the results panel below, which facilitates finding the optimal 
 settings for a~given result set consisting of result bundles.
+\autoref{fig:mediaitemdeduplication} shows the deduplication debug view
+accessible by right-clicking two media items.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\columnwidth]{app2.png}
+  \caption{Media item deduplication debug view}
+  \label{fig:mediaitemdeduplication}
+\end{figure}
 
 \paragraph{Media Item Ranking}
 
@@ -545,6 +564,15 @@ Again all changes are reflected in realtime.
 A~slider control allows for selecting the maximum 
 and minimum age of the considered media items 
 in order to restrict the result set to a~given time period.
+\autoref{fig:mediaitemranking} shows the select box
+where the ranking formula can be selected.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\columnwidth]{app3.png}
+  \caption{Media item ranking with configurable ranking formula}
+  \label{fig:mediaitemranking}
+\end{figure}
 
 \paragraph{Micropost Annotation}
 
@@ -556,6 +584,8 @@ This is due to the fact that calling the external
 named entity extraction and disambiguation services described in
 \autoref{sec:nlp-services} is very expensive and time-consuming,
 especially if an intermediate machine translation step is required.
+This step happens transparently in the background,
+while the media gallery is being compiled and is invisible to the user.
 
 \paragraph{Media Item Compilation}
 
@@ -569,6 +599,26 @@ The number of considered media items,
 the width of the overall media gallery,
 and the width of individual media items can be customized,
 with the changes being reflected on-the-fly.
+\autoref{fig:mediagallerycompilation1} shows a~media gallery
+in the LOVS style.
+By clicking on one of the media items,
+the media gallery enters the interactive mode,
+as can be seen in \autoref{fig:mediagallerycompilation2}.
+Navigation from one media item to the next is possible via the arrow keys.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\columnwidth]{app4.png}
+  \caption{Media gallery generation based on the Loose Order, Varying Sizes style}
+  \label{fig:mediagallerycompilation1}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\columnwidth]{app5.png}
+  \caption{Media gallery in interactive mode}
+  \label{fig:mediagallerycompilation2}
+\end{figure}
 
 \section{Conclusions and Future Work}
 
