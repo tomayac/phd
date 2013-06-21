@@ -475,7 +475,7 @@ $\sim$0.7MB and 143 videos.
 Some videos are no longer available due to either
 account termination or video takedown by the user
 (Assad, Dixville).
-Table~\ref{tab:number-media} \todo{Fix reference} shows the total
+\autoref{tab:number-media} shows the total
 numbers of retrieved photos and videos of the media extractor.
 Column values marked with $n+$ signify that there were more 
 results, but that only $n$ results were considered. 
@@ -503,8 +503,9 @@ Query strategies developed by Becker~\cite{becker2012plannedevents}
 that combine different combinations of event title,
 event venue, and event city work consistently well.
 
-\small{\begin{sidewaystable}[!ht]
-  \centering{ 
+\begin{sidewaystable}[!ht]
+  \centering
+  \small
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
     \multicolumn{1}{|c|}{\textbf{Social}} & \multicolumn{2}{c|}{\textbf{Assad}} & \multicolumn{2}{c|}{\textbf{CES}} &
@@ -535,16 +536,9 @@ event venue, and event city work consistently well.
     \hline  
     \hline          
   \end{tabular}
+  \caption[Number of photos and videos collected for nine events]{Number of photos and videos collected for nine events happening between January 10--19, 2012 grouped by social networks, separated in photo (P) and video (V) results. Overall \textbf{photo precision: 0.73}. Overall \textbf{video precision: 0.54}. Note that this is before post-processing. \todo{Check final orientation}}
   \label{tab:number-media}
-  \caption[Number of photos and videos collected for nine events]{Number of photos and videos collected for nine events
-    happening between January 10--19, 2012
-    grouped by social networks, separated in photo (P)
-    and video (V) results.
-    Overall \textbf{photo precision: 0.73}.
-    Overall \textbf{video precision: 0.54}. Note that this is before
-    post-processing. \todo{Check final orientation}}
-  }
-\end{sidewaystable}}
+\end{sidewaystable}
 
 \begin{figure*}
 \begin{tabular}{p{\textwidth}}
