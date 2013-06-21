@@ -421,7 +421,7 @@ typically resulting in different frames for different social networks.
 Aspect ratio changes can either happen combined with cropping
 (and thus losing parts of the media item), and/or combined with 
 squeezing or stretching (and thus deforming the media item).
-\autoref{fig:stretched} shows an example where a~media item gets stretched.
+\autoref{fig:bulged} shows an example where a~media item gets stretched.
 
 \begin{figure}[!ht]
   \centering
@@ -653,7 +653,7 @@ CBS suggested the hashtag \texttt{\#VSFashionShow} for the event.
 \label{sec:algorithm-debug-view}
 
 In order to illustrate the way the algorithm clusters media items,
-\autoref{fig:algorithmdebug} shows a~debug view of the algorithm
+\autoref{fig:algorithmdebugtwoclusters} shows a~debug view of the algorithm
 for two clustered media items related to the 
 \emph{Grammy Awards Nominations 2013} event.
 The red border around the media item indicates at least one detected face.
@@ -675,7 +675,7 @@ is available online at \url{http://twitpic.com/c02qfs/full} (accessed 02/14/2013
   {Algorithm debug view for two clustered media items
   related to the \emph{Grammy Awards Nominations 2013} event
   (the red border around the media items indicates at least one detected face)}
-  \label{fig:algorithmdebug}
+  \label{fig:algorithmdebugtwoclusters}
 \end{figure}
 
 
@@ -1050,7 +1050,7 @@ to be clustered when the particular tiles are too dark (\emph{e.g.},
 for the video borders in \autoref{fig:near-duplicate}) or too bright (\emph{e.g.},
 for screenshots of Web pages or applications, which frequently appear on social networks).
 In order to illustrate the way the algorithm deduplicates media items,
-\autoref{fig:algorithmdebug} shows a~debug view of the algorithm
+\autoref{fig:algorithmdebugtilesimilarity} shows a~debug view of the algorithm
 for the two clustered media items related to the previous example
 around the \emph{Backstreet Boys} music video.
 Independent of the actual media items' aspect ratios,
@@ -1076,7 +1076,7 @@ a~potentially squeezed square aspect ratio version.
   since no faces are detected in \autoref{fig:near-duplicate},
   the clustering is based on tile similarity;
   black tiles are not considered due to the chosen black--and--white tolerance)}
-  \label{fig:algorithmdebug}
+  \label{fig:algorithmdebugtilesimilarity}
 \end{figure}
 
 \subsubsection{Debugging the Algorithm}

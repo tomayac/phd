@@ -180,6 +180,8 @@
     \graphicspath{{frontmatter/figures/EPS/}{frontmatter/figures/}}
 \fi
 
+\usepackage{refcheck}
+
 %:-------------------------- page layout -----------------------
 
 %A4 settings
