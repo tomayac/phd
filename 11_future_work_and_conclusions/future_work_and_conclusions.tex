@@ -108,7 +108,7 @@ Manual approaches to recognize false information
 can include carefully checking the account publishing history
 of the originating source (does the social network user seem legit?),
 comparison of depicted scenes with independent media,
-\emph{e.g.} satellite imagery or street panoramas
+\emph{e.g.}, satellite imagery or street panoramas
 (does the depicted scene look the same elsewhere?),
 verifying weather conditions
 (were the known weather conditions at the time
@@ -290,7 +290,8 @@ there are still many differences in the details.
 \paragraph{Mahaya:}
  
 The company Mahaya has launched a~beta-version
-of a~commercial automatic event archiving tool called Seen,
+of a~commercial automatic event archiving tool called Seen
+(\url{http://beta.seen.co/}),
 which, based on manually entered event metadata like event name,
 location, and dates, uses a~necessarily provided Twitter hashtag
 to create a~complete permanent archive of all event-related tweets,
@@ -308,13 +309,14 @@ A~screenshot of Seen can be found in \autoref{fig:seen}.
   \centering
   \includegraphics[width=\linewidth]{seen.png}
   \caption[Mahaya's commercial automatic event archiving tool Seen]{Mahaya's commercial automatic event archiving tool Seen
-    (\url{http://mahaya.co/})}
+    (\url{http://beta.seen.co/})}
   \label{fig:seen}
 \end{figure}
 
 \paragraph{Eventifier:}
 
-Eventifier is a~commercial tool that facilitates the automated permanent archiving of events
+Eventifier \url{http://eventifier.co/}) is a~commercial tool
+that facilitates the automated permanent archiving of events
 in form of event-related photos, videos, tweets, slide decks, 
 and event contributors.
 Similar to Mahaya's product Seen,
@@ -335,7 +337,8 @@ A~screenshot of Eventifier can be seen in \autoref{fig:eventifier}.
 
 \paragraph{Storify:}
 
-The commercial tool Storify allows for the manual compilation of
+The commercial tool Storify (\url{http://storify.com/})
+allows for the manual compilation of
 event-related media items, articles, and microposts
 to generated permanently available stories
 that---depending on the level of human curation---%
@@ -354,7 +357,8 @@ A~screenshot of Storify can be seen in \autoref{fig:storify}.
 
 \paragraph{Media Finder:}
 
-Media Finder is an academic non-commercial tool that
+Media Finder (\url{http://mediafinder.eurecom.fr/})
+is an academic non-commercial tool that
 has advanced named entity centric clustering capabilities
 based on extracted named entities in microposts.
 Media items can be clustered by topic, named entity,
@@ -397,7 +401,7 @@ event summary consumption.
   \small
   \begin{tabular}{|l|l|l|l|l|l|}
     \hline
-        \backslashbox{\textbf{Property}}{\textbf{Tool}} & \textbf{Seen} & \textbf{Eventifier} & \textbf{Storify} & \textbf{Media Finder} & \textbf{Social Media Illustrator}\\ \hline
+    \textbf{Tool} & \textbf{Seen} & \textbf{Eventifier} & \textbf{Storify} & \textbf{Media Finder} & \textbf{Social Media Illustrator}\\ \hline
       \hline
       \textbf{Data source} & Twitter & Twitter & Multiple & Multiple & Multiple\\
       \textbf{Main task} & Archiving & Archiving & Summarization & Summarization & Summarization\\
@@ -434,16 +438,13 @@ We have separated the task of building this application
 in several actionable steps and have contributed 
 scientific publications for each of them.
 The chapters of this thesis follow the steps loosely.  
-As a~reminder, the concrete steps were the following.
-
-\begin{enumerate}
-  \item Micropost annotation
-  \item Media item extraction
-  \item Media item deduplication
-  \item Media item ranking
-  \item Media item compilation
-\end{enumerate}
-
+As a~reminder, the concrete steps were the following:
+(i)~micropost annotation,
+(ii)~event detection,
+(iii)~media item extraction,
+(iv)~media item deduplication,
+(v)~media item ranking,
+and finally (vi)~media item compilation.
 The main topic of our thesis are events.
 In \autoref{cha:eventdetection}, we have thus 
 explored the world of breaking news event detection,
@@ -465,12 +466,13 @@ We are excited to improve, extend, and adapt
 Social Media Illustrator in the future
 with concrete future research opportunities
 that were outlined earlier in this chapter.
-This thesis marks the end of our doctorate,
+This thesis marks the end of my doctorate,
 but it certainly does not mark the end of this work.
 \\
 \\
 \textit{``The Software shall be used for Good, not Evil''}.%
----Douglas Crockford
+\footnote{\url{https://github.com/douglascrockford/JSLint/blob/master/jslint.js\#L16},
+accessed June 24, 2013}~---Douglas Crockford
 
 \section*{Chapter Notes}
 This chapter is partly based on the following publications:
