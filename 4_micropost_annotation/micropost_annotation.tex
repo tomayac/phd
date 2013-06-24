@@ -147,7 +147,7 @@ when using multiple APIs in combination.
 \subsection{Entity Disambiguation Using Lexical Databases}
 
 In~\cite{choudhury2009youtubetags},
-Choudhury \emph{et al.}\ describe a~framework for
+Choudhury \emph{et~al.}\ describe a~framework for
 semantic enrichment, ranking, and integration
 of Web video tags using Semantic Web technologies.
 This task is more related to microposts
@@ -178,7 +178,7 @@ to decide on an already existing tag URI.
 \subsection{Entity Disambiguation with Semantic Coherence and News Trends}
 
 In~\cite{fernandez2007identityrank},
-Fernández \emph{et al.}\ examine named-entity disambiguation
+Fernández \emph{et~al.}\ examine named-entity disambiguation
 in the context of news annotation.
 Their approach consists of three steps:
 finding the candidate instances in the NEWS
@@ -199,7 +199,7 @@ in order to find semantic coherences.
 \subsection{Disambiguation with Disambiguation Dictionaries}
 
 In~\cite{nguyen2008namedentity},
-Nguyen \emph{et al.}\ show how disambiguation dictionaries
+Nguyen \emph{et~al.}\ show how disambiguation dictionaries
 can be used to disambiguate entities
 using Wikipedia disambiguation pages.
 For a~set of entity candidates, all disambiguations are ranked
@@ -223,8 +223,8 @@ extracted from Wikipedia and the context of a~document.
 
 \subsection{Disambiguation With Search Query Logs}
 
-In~\cite{billerbeck2010rankingentities}, Billerbeck \emph{et al.}\
-use click graphs and session graphs
+In~\cite{billerbeck2010rankingentities}, Billerbeck \emph{et~al.}\ use
+click graphs and session graphs
 of users' search engine sessions
 to semantically bridge different queries in order to
 retrieve entities for a~concrete entity retrieval query.
@@ -240,8 +240,8 @@ These entities are then ranked and returned to the user.
 
 \subsection{Combining Different Web Services and Provenance}
 
-In~\cite{groth2009mashups}, Groth \emph{et al.}\
-describe how so-called mash-ups can be created in a~dynamic,
+In~\cite{groth2009mashups}, Groth \emph{et~al.}\ describe
+how so-called mash-ups can be created in a~dynamic,
 just-in-time way, combining data from different data sources
 through tools and technologies such as
 Yahoo! Pipes\footnote{\url{http://pipes.yahoo.com/pipes/},
@@ -259,13 +259,13 @@ add provenance data at API invocation time,
 their focus is more on overall process documentation
 in the context of a~mash-up application.
 
-The focus of Carroll \emph{et al.}\ in~\cite{carroll2005namedgraphs}
+The focus of Carroll \emph{et~al.}\ in~\cite{carroll2005namedgraphs}
 is on the provenance of triples in the Semantic Web world, namely,
 for making statements about triples in graphs.
 Therefore, the authors introduce the concept of Named Graphs,
 an extension to RDF~\cite{klyne2004rdf}.
-In contrast to our work, Carroll \emph{et al.}\
-focus purely on using triples to make statements about triples
+In contrast to our work, Carroll \emph{et~al.}\ focus
+purely on using triples to make statements about triples
 (\emph{i.e.}, stay in the RDF world),
 whereas our approach uses RDF to make statements
 about potentially any API result.
@@ -275,7 +275,7 @@ first-generation standards represented by WSDL~\cite{christensen2001wsdl},
 SOAP~\cite{gudgin2007soap}, and UDDI~\cite{sabbouh2001uddi}
 are occasionally referred to collectively as \emph{WS--*}.
 In the \emph{WS--*} world, BPEL4WS, described by
-Curbera \emph{et al.}\ in~\cite{curbera2003bpel4ws}
+Curbera \emph{et~al.}\ in~\cite{curbera2003bpel4ws}
 provides a~formal language for the specification of
 business processes and business interaction protocols.
 This allows for the combination of several APIs.
@@ -476,8 +476,8 @@ with the objective of obtaining named entity candidates
 for a~textual document such as a~micropost.
 The task of evaluating and aligning named-entity extraction and
 disambiguation APIs and their typed output
-has been formally addressed by Rizzo \emph{et al.}\
-in the context of the NERD
+has been formally addressed by Rizzo \emph{et~al.}\ in
+the context of the NERD
 framework~\cite{rizzo2011nerd,rizzo2012nerd}.
 We have decided for a~type-agnostic approach,
 which we motivate in the following.
@@ -498,7 +498,7 @@ well interlinked LOD cloud dataset namespaces, like Freebase
 AlchemyAPI and Zemanta.
 
 In order to address the problem of different namespaces in results,
-an approach as presented by Glaser \emph{et al.}\ 
+an approach as presented by Glaser \emph{et~al.}\ 
 in~\cite{glaser2009sameas} based on \texttt{owl:sameAs} links
 could be used.
 In practice, however, while many resources in the Linked Data
@@ -514,7 +514,7 @@ An example of a~good equivalence link is shown in \autoref{code:sameas}.
   <http://rdf.freebase.com/rdf/en.barack_obama> .
 \end{lstlisting}
 
-\noindent As Halpin \emph{et al.}\ show
+\noindent As Halpin \emph{et~al.}\ show
 in a~study~\cite{halpin2010owlsameas}, the problem
 with \texttt{owl:sameAs} is that people tend to use it
 in different ways with different intentions.
@@ -560,7 +560,7 @@ with the LOD cloud.
 The problem is that each service has implemented
 its own typing system and providing mappings for all of them
 is a~time-consuming, cumbersome task.
-While Rizzo \emph{et al.}\ have defined mappings in the context
+While Rizzo \emph{et~al.}\ have defined mappings in the context
 of the NERD framework~\cite{rizzo2011nerd,rizzo2012nerd},
 we decided for a~different approach.
 As all services provide links into the LOD cloud,
@@ -691,7 +691,7 @@ be the result of up to four agreeing (or disagreeing) API calls.
 
 \subsection{The Need for Providing Provenance Metadata}
 
-Hartig \emph{et al.}\ mention in~\cite{hartig2010provenance}
+Hartig \emph{et~al.}\ mention in~\cite{hartig2010provenance}
 reasons to justify the need for provenance metadata.
 Among those reasons are linked dataset replication and distribution
 on the Web with not necessarily identical namespaces:
@@ -718,7 +718,7 @@ we have decided to use the Provenance
 Vocabulary~\cite{hartig2012provenance}
 by Hartig and Zhao with the prefix \texttt{prv},
 the HTTP Vocabulary in RDF~\cite{koch2011http}
-by Koch \emph{et al.}\ with prefix \texttt{http},
+by Koch \emph{et~al.}\ with prefix \texttt{http},
 and a~vocabulary for representing content in
 RDF~\cite{koch2011content}
 by the same authors with prefix \texttt{cnt}.
