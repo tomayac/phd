@@ -29,7 +29,7 @@ They differentiate two types of event detection techniques.
   \textit{``\emph{Retrospective} event detection is the task of grouping stories
   in a~corpus where each group uniquely identifies an event.
   \emph{On-line} event detection is the problem of labeling
-  each document as it arrives in sequence with a New or Old flag,
+  each document as it arrives in sequence with a~New or Old flag,
   indicating whether or not the current document is the
   first story discussing a~novel event at that time''.}
 \end{quotation}
@@ -38,12 +38,12 @@ Allan, Papka, and Lavrenko use the following definitions~\cite{allan1998eventdet
 
 \begin{quotation}
   \textit{``The goal of those tasks [new event detection and event tracking]
-  is to monitor a stream of broadcast news stories
+  is to monitor a~stream of broadcast news stories
   so as to determine the relationships between the stories
   based on the real-world events that they describe.
   \emph{New event detection} requires identifying those news stories
   that discuss an event that has not already been reported in earlier stories.
-  \emph{Event tracking} means starting from a few sample stories
+  \emph{Event tracking} means starting from a~few sample stories
   and  finding all subsequent stories that discuss the same event''.}
 \end{quotation}
 
@@ -174,6 +174,25 @@ as explained in \autoref{sec:wikipedia-recent-changes}.
 Our \emph{Wikipedia Live Monitor} is partly based on an application called
 \emph{Wikistream}, developed by Ed Summers \emph{et~al.}, which was described in~%
 \cite{summers2011odetonode}.
+In~cite{georgescu2013extractingwikipedia}, Georgescu
+\emph{et~al.}\ conduct an in-depth analysis of
+event-related updates in Wikipedia by examining
+different indicators for events including language,
+meta annotations, and update bursts.
+They then study how these indicators can be employed
+for automatically detecting event-related updates.
+In~\cite{tenthij2012modelingwikipedia}, ten Thij
+\emph{et~al.}\ propose a~model for predicting the popularity
+of promoted content, inspired by the analysis of
+the page-view dynamics on Wikipedia. 
+Mestyán, Yasseri, and Kertész show
+in~\cite{mestyan2012boxoffice} that box office success of
+movies can be predicted well in advance by measuring
+and analyzing the activity level of editors and viewers
+of corresponding entries to the movie in Wikipedia
+by applying a~minimalistic predictive model
+for the financial success of movies based on
+collective activity data of online users.
 
 \begin{figure*}[!ht]
   \centering
@@ -181,14 +200,13 @@ Our \emph{Wikipedia Live Monitor} is partly based on an application called
   \caption[Screenshot with an article cluster of four concurrently edited articles]
     {Screenshot with an article cluster of four concurrently edited articles
     (ru, en, pt, ca). All breaking news criteria are fulfilled,
-    the cluster is a breaking news candidate.
+    the cluster is a~breaking news candidate.
     Cross-language social network search results for en and pt can be seen.}
   \label{fig:screenshotwikilivemon}
 \end{figure*}
 
 \section{Implementation Details}
 
-\vspace{-0.5em}
 \subsection{Wikipedia Recent Changes}
 \label{sec:wikipedia-recent-changes}
 
