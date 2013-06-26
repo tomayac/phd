@@ -16,7 +16,6 @@ var GLOBAL_config = {
   FLICKR_SECRET: 'a4a150addb7d59f1',
   FLICKR_KEY: 'b0f2a04baa5dd667fb181701408db162',
   YFROG_KEY: '89ABGHIX5300cc8f06b447103e19a201c7599962',
-  LOCKERZ_KEY: 'f42ed850-c341-46ca-8360-dc47c049b73a',
   INSTAGRAM_KEY: '47dcb5ea3b5b4c7595ee25081caca1bb',
   INSTAGRAM_SECRET: '8579591.f59def8.8ca970406d154bc1904da1b1d7cab559',
   GOOGLE_KEY: 'AIzaSyC5GxhDFxBHTKCLNMYtYm6o1tiagi65Ufc',
@@ -45,7 +44,6 @@ var GLOBAL_config = {
     'youtu.be',
     'youtube.com',
     'twitpic.com',
-    'lockerz.com',
     'picplz.com',
     'qik.com',
     'ustre.am',
@@ -1110,10 +1108,10 @@ var mediaFinder = {
                     var timestamp = Date.parse(item.created_at);
                     var publicationDate = getIsoDateString(timestamp);
                     var micropost = cleanMicropost(item.text);
-                    var userProfileUrl = 'http://twitter.com/' + item.from_user;
+                    var userProfileUrl = 'http://twitter.com/' + item.user.screen_name;
                     var mediaUrl = url;
                     var micropostUrl = 'http://twitter.com/' +
-                        item.from_user + '/status/' + item.id_str;
+                        item.user.screen_name + '/status/' + item.id_str;
                     // vine.co
                     if (mediaUrl.indexOf('https://vine.co') === 0) {
                       var options = {
@@ -1133,8 +1131,8 @@ var mediaFinder = {
                                 timestamp: timestamp,
                                 publicationDate: publicationDate,
                                 socialInteractions: {
-                                  likes: null,
-                                  shares: null,
+                                  likes: item.favorite_count,
+                                  shares: item.retweet_count,
                                   comments: null,
                                   views: null
                                 }
@@ -1167,8 +1165,8 @@ var mediaFinder = {
                               timestamp: timestamp,
                               publicationDate: publicationDate,
                               socialInteractions: {
-                                likes: null,
-                                shares: null,
+                                likes: item.favorite_count,
+                                shares: item.retweet_count,
                                 comments: null,
                                 views: null
                               }
@@ -1205,8 +1203,8 @@ var mediaFinder = {
                                 timestamp: timestamp,
                                 publicationDate: publicationDate,
                                 socialInteractions: {
-                                  likes: null,
-                                  shares: null,
+                                  likes: item.favorite_count,
+                                  shares: item.retweet_count,
                                   comments: null,
                                   views: null
                                 }
@@ -1240,8 +1238,8 @@ var mediaFinder = {
                                 timestamp: timestamp,
                                 publicationDate: publicationDate,
                                 socialInteractions: {
-                                  likes: null,
-                                  shares: null,
+                                  likes: item.favorite_count,
+                                  shares: item.retweet_count,
                                   comments: null,
                                   views: null
                                 }
@@ -1282,8 +1280,8 @@ var mediaFinder = {
                                 timestamp: timestamp,
                                 publicationDate: publicationDate,
                                 socialInteractions: {
-                                  likes: null,
-                                  shares: null,
+                                  likes: item.favorite_count,
+                                  shares: item.retweet_count,
                                   comments: null,
                                   views: null
                                 }
@@ -1315,8 +1313,8 @@ var mediaFinder = {
                               timestamp: timestamp,
                               publicationDate: publicationDate,
                               socialInteractions: {
-                                likes: null,
-                                shares: null,
+                                likes: item.favorite_count,
+                                shares: item.retweet_count,
                                 comments: null,
                                 views: null
                               }
@@ -1819,51 +1817,6 @@ var mediaFinder = {
           }
         });
       },
-      /*
-      Lockerz: function(pendingRequests) {
-        var currentService = 'Lockerz';
-        if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
-        var params = {
-          search: query
-        };
-        params = querystring.stringify(params);
-        var headers = GLOBAL_config.HEADERS;
-        var options = {
-          url: 'http://api.plixi.com/api/tpapi.svc/json/photos?' + params,
-          headers: headers
-        };
-        if (GLOBAL_config.DEBUG) console.log(currentService + ' ' + options.url);
-        request.get(options, function(err, reply, body) {
-          var results = [];
-          try {
-            body = JSON.parse(body);
-            if (body.List) {
-              body.List.forEach(function(item) {
-                results.push({
-                  mediaUrl: item.BigImageUrl,
-                  posterUrl: item.ThumbnailUrl,
-                  micropostUrl: 'http://lockerz.com/s/' + item.TinyAlias,
-                  micropost: cleanMicropost(item.Message),
-                  userProfileUrl: 'http://pics.lockerz.com/gallery/' + item.UserId,
-                  type: 'photo',
-                  timestamp: item.UploadDate * 1000,
-                  publicationDate: new Date(item.UploadDate * 1000),
-                  socialInteractions: {
-                    likes: item.LikedVotes,
-                    shares: item.Grabs,
-                    comments: item.CommentCount,
-                    views: item.Views
-                  }
-                });
-              });
-            }
-            collectResults(results, currentService, pendingRequests);
-          } catch(e) {
-            collectResults(results, currentService, pendingRequests);
-          }
-        });
-      }
-      */
     };
     if (services[service]) {
       services[service]();
