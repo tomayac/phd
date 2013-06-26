@@ -1036,70 +1036,43 @@ var mediaFinder = {
             function(err, body) {
           try {
             var results = [];
-            if ((body.results) && (body.results.length)) {
-              var items = body.results;
-              Step(
-                function() {
-                  var group = this.group();
-                  for (var i = 0, len = items.length; i < len; i++) {
-                    var cb = group();
-                    (function(item) {
-                    var mediaUrl = '';
-                    if (item.entities && item.entities.media &&
-                        item.entities.media.length > 0) {
-                      mediaUrl = item.entities.media[0].media_url ?
-                          item.entities.media[0].media_url :
-                          item.entities.media[0].media_url_https;
-                      params = {
-                        id: item.id_str,
-                        trim_user: true
-                      };
-                      params = querystring.stringify(params);
-                      var options = {
-                        url: 'https://api.twitter.com/1/statuses/show.json?' + params,
-                        headers: GLOBAL_config.HEADERS
-                      };
-                      request.get(options, function(err, reply, body2) {
-                        try {
-                          body2 = JSON.parse(body2);
-                          var timestamp = Date.parse(item.created_at);
-                          var publicationDate = getIsoDateString(timestamp);
-                          var micropost = cleanMicropost(item.text);
-                          var userProfileUrl = 'http://twitter.com/' + item.from_user;
-                          var micropostUrl = 'http://twitter.com/' +
-                              item.from_user + '/status/' + item.id_str;
-                          results.push({
-                            mediaUrl: mediaUrl,
-                            posterUrl: mediaUrl + ':thumb',
-                            micropostUrl: micropostUrl,
-                            micropost: micropost,
-                            userProfileUrl: userProfileUrl,
-                            type: 'photo',
-                            timestamp: timestamp,
-                            publicationDate: publicationDate,
-                            socialInteractions: {
-                              likes: null,
-                              shares: body2.retweet_count ? body2.retweet_count : 0,
-                              comments: null,
-                              views: null
-                            }
-                          });
-                          cb();
-                        } catch(e) {
-                          cb();
-                        }
-                      });
-                    } else {
-                      cb();
+            if ((body.statuses) && (body.statuses.length)) {
+              var items = body.statuses;
+              for (var i = 0, len = items.length; i < len; i++) {
+                var item = items[i];
+                var mediaUrl = '';
+                if (item.entities && item.entities.media &&
+                    item.entities.media.length > 0) {
+                  mediaUrl = item.entities.media[0].media_url ?
+                      item.entities.media[0].media_url :
+                      item.entities.media[0].media_url_https;
+                  var timestamp = Date.parse(item.created_at);
+                  var publicationDate = getIsoDateString(timestamp);
+                  var micropost = cleanMicropost(item.text);
+                  var userProfileUrl = 'http://twitter.com/' +
+                      item.user.screen_name;
+                  var micropostUrl = 'http://twitter.com/' +
+                      item.user.screen_name + '/status/' + item.id_str;
+                  results.push({
+                    mediaUrl: mediaUrl,
+                    posterUrl: mediaUrl + ':thumb',
+                    micropostUrl: micropostUrl,
+                    micropost: micropost,
+                    userProfileUrl: userProfileUrl,
+                    type: 'photo',
+                    timestamp: timestamp,
+                    publicationDate: publicationDate,
+                    socialInteractions: {
+                      likes: item.favorite_count,
+                      shares: item.retweet_count,
+                      comments: null,
+                      views: null
                     }
-                    })(items[i]);
-                  }
-                },
-                function() {
-                  collectResults(results, currentService, pendingRequests);
+                  });
                 }
-              );
+              }
             }
+            collectResults(results, currentService, pendingRequests);
           } catch(e) {
             collectResults([], currentService, pendingRequests);
           }
@@ -1109,7 +1082,7 @@ var mediaFinder = {
         var currentService = 'Twitter';
         if (GLOBAL_config.DEBUG) console.log(currentService + ' *** ' + query);
         twit.search(
-            query + ' AND (' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + ') -"RT "',
+            query + ' AND %28' + GLOBAL_config.MEDIA_PLATFORMS.join(' OR ') + '%29 -"RT "',
             {
               rpp: 20,
               result_type: 'recent',
@@ -1118,8 +1091,8 @@ var mediaFinder = {
             function(err, body) {
           try {
             var results = [];
-            if ((body.results) && (body.results.length)) {
-              var items = body.results;
+            if ((body.statuses) && (body.statuses.length)) {
+              var items = body.statuses;
               var itemStack = [];
               var numberOfUrls = 0;
               var pendingUrls = 0;
