@@ -28,6 +28,7 @@
       left: null
     },
     mediaGalleryBigItems: {},
+    speechTexts: {},
 
     // settings
     photosOnly: false,
@@ -869,6 +870,7 @@
       illustrator.clusters = [];
       illustrator.mediaGalleryZIndex = 1;
       illustrator.mediaGalleryBigItems = {};
+      illustrator.speechTexts = {};
     },
 
     showStatusMessage: function(message) {
@@ -1478,25 +1480,25 @@
       // clustered at all or not?
       var clusteredOrNot = function(callback) {
         if (isSimilar) {
-          illustrator.speak('The two media items are ' +
+          illustrator.prepareSpeak('The two media items are ' +
           (similarTiles === overall ?
               'exact duplicates.' : 'near-duplicates.'), callback);
         } else {
-          illustrator.speak('The two media items are different.', callback);
+          illustrator.prepareSpeak('The two media items are different.', callback);
         }
       };
 
       // same amount of faces?
       var sameAmountOfFaces = function(callback) {
         if (facesLeft === 0 && facesRight === 0) {
-          illustrator.speak('Neither the left, nor the right media item ' +
-              'contain detected faces.', callback);
+          illustrator.prepareSpeak('Neither the left, nor the right media '+
+              'item contain detected faces.', callback);
         } else if (hasEqualFaces) {
-          illustrator.speak('Both, the left and the right media item ' +
+          illustrator.prepareSpeak('Both, the left and the right media item ' +
               'contain ' + facesLeft + ' detected ' +
               (facesLeft === 1 ? 'face.' : 'faces.'), callback);
         } else {
-          illustrator.speak('The left media item contains ' +
+          illustrator.prepareSpeak('The left media item contains ' +
               (facesLeft === 0 ? 'no ' : facesLeft + ' ') + 'detected ' +
               (facesLeft === 1 ? 'face' : 'faces') +
               (hasEqualFaces ? ' and ' : ', while ') + 'the right media item ' +
@@ -1508,12 +1510,8 @@
 
       // how many tiles?
       var tileStatistics = function(callback) {
-        var matchingTiles = document.querySelectorAll('.matchingTile');
-        for (var i = 0, len = matchingTiles.length; i < len; i++) {
-          matchingTiles[i].classList.add('highlightTile');
-        }
         if (similarTiles > 0) {
-          illustrator.speak('Out of overall ' + overall + ' tiles, ' +
+          illustrator.prepareSpeak('Out of overall ' + overall + ' tiles, ' +
               (isSimilar ? '' : 'only ') + similarTiles +
               ' from the minimum required ' +
               minimumRequired + ' tiles ' +
@@ -1521,46 +1519,63 @@
               'clustered. This corresponds to ' +
               (Math.round(percent) == percent ?
                   percent : 'roughly ' + Math.round(percent)) + ' ' +
-              'percent of all tiles.', function(message) {
-                for (var i = 0, len = matchingTiles.length; i < len; i++) {
-                  matchingTiles[i].classList.remove('highlightTile');
-                }
-                callback(message);
-              });
+              'percent of all tiles.', callback);
           } else {
-            illustrator.speak('Out of overall ' + overall + ' tiles, ' +
-                'not a single one was similar enough to be clustered.',
-                callback);
+            illustrator.prepareSpeak('Out of overall ' + overall + ' tiles, ' +
+                'not a single one was similar enough to be clustered.', callback);
           }
       };
 
       // how many nulls?
       var nullStatistics = function(callback) {
         if (nulls > 0) {
-          var nullTiles = document.querySelectorAll('.checkerbordTile');
-          for (var i = 0, len = nullTiles.length; i < len; i++) {
-            nullTiles[i].classList.add('highlightTile');
-          }
-          illustrator.speak('However, ' + nulls + ' ' +
+          illustrator.prepareSpeak('However, ' + nulls + ' ' +
               (nulls > 1 ?
                   'tiles were not considered, as they are ' :
                   'tile was not considered, as it is ') +
               'either too bright or too dark, which ' +
-              'is a common source of clustering issues.', function(message) {
-                for (var i = 0, len = nullTiles.length; i < len; i++) {
-                  nullTiles[i].classList.remove('highlightTile');
-                }
-                callback(message);
-              });
+              'is a common source of clustering issues.', callback);
         } else {
           callback();
         }
       };
 
-      clusteredOrNot(function() {
-        tileStatistics(function() {
-          nullStatistics(function() {
-            sameAmountOfFaces(function() {
+      // prepare speech data
+      async.parallel({
+        one: clusteredOrNot,
+        two: tileStatistics,
+        three: nullStatistics,
+        four: sameAmountOfFaces
+      },
+      // say pre-cached things
+      function(err, results) {
+        var matchingTiles = document.querySelectorAll('.matchingTile');
+        var nullTiles = document.querySelectorAll('.checkerbordTile');
+        illustrator.speak(results.one, function(message) {
+          // highlight matching tiles
+          for (var i = 0, len = matchingTiles.length; i < len; i++) {
+            matchingTiles[i].classList.add('highlightTile');
+          }
+          illustrator.speak(results.two, function(message) {
+            // unhighlight matching tiles
+            for (var i = 0, len = matchingTiles.length; i < len; i++) {
+              matchingTiles[i].classList.remove('highlightTile');
+            }
+            // highlight null-tiles
+            for (var i = 0, len = nullTiles.length; i < len; i++) {
+              nullTiles[i].classList.add('highlightTile');
+            }
+            illustrator.speak(results.three, function(message) {
+              // unhighlight null-tiles
+              for (var i = 0, len = nullTiles.length; i < len; i++) {
+                nullTiles[i].classList.remove('highlightTile');
+              }
+              illustrator.speak(results.four, function(message) {
+                // delete cached speech data
+                for (var speechTextId in results) {
+                  delete illustrator.speechTexts[results[speechTextId]];
+                }
+              });
             });
           });
         });
@@ -2188,42 +2203,39 @@
         audio.parentNode.removeChild(audio);
       }
     },
-    speak: function(message, opt_callback) {
+    prepareSpeak: function(message, opt_callback) {
       if (!message) {
         return false;
       }
 
-      illustrator.showStatusMessage('Saying "' + message + '"');
+      illustrator.showStatusMessage('Preparing speak message "' + message + '"');
 
       var url = illustrator.SPEECH_SERVER + encodeURIComponent(message);
-
       var handleXhrError = function(url) {
         illustrator.showStatusMessage('Error while trying to load ' + url);
       };
+      var speechTextId = Date.now() + '_' + Math.random();
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
           if (xhr.status == 200) {
             try {
               var speech = JSON.parse(xhr.responseText);
-              var audio = document.createElement('audio');
-              audio.src = speech.base64;
-              audio.addEventListener('ended', function() {
-                if (audio) {
-                  audio.parentNode.removeChild(audio);
-                }
-                if (opt_callback) {
-                  opt_callback(message);
-                }
-              });
-              document.body.appendChild(audio);
-              audio.play();
+              illustrator.speechTexts[speechTextId] = {
+                base64: speech.base64,
+                message: message
+              };
+              if (opt_callback) {
+                opt_callback(null, speechTextId);
+              }
             } catch(e) {
               if (illustrator.DEBUG) console.log(e);
               handleXhrError(url);
+              opt_callback(e, null);
             }
           } else {
             handleXhrError(url);
+            opt_callback('Error loading ' + url, null);
           }
         }
       };
@@ -2233,6 +2245,26 @@
       xhr.open("GET", url, true);
       xhr.send(null);
       return false;
+    },
+    speak: function(speechTextId, opt_callback) {
+      if (!illustrator.speechTexts[speechTextId]) {
+        return false;
+      }
+
+      illustrator.showStatusMessage('Saying "' + illustrator.speechTexts[speechTextId].message + '"');
+
+      var audio = document.createElement('audio');
+      audio.src = illustrator.speechTexts[speechTextId].base64;
+      audio.addEventListener('ended', function() {
+        if (audio) {
+          audio.parentNode.removeChild(audio);
+        }
+        if (opt_callback) {
+          opt_callback(illustrator.speechTexts[speechTextId].message);
+        }
+      });
+      document.body.appendChild(audio);
+      audio.play();
     }
   };
 
