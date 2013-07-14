@@ -52,7 +52,7 @@
     mediaGallerySize: 25,
     mediaGalleryWidth: 1200,
     mediaItemHeight: 150,
-    speechOutputEnabled: false,
+    speechOutputEnabled: true,
 
     init: function() {
       if (illustrator.DEBUG) console.log('Initializing app');
@@ -367,31 +367,13 @@
               break;
             }
           }
-          if (cluster.translations) {
-            var micropostCandidates = cluster.translations;
-            var maxLength = 0;
-            var minLength = Infinity;
-            var longestMicropost;
-            var shortestMicropost;
-            for (var i = 0, len = micropostCandidates.length; i < len; i++) {
-              var micropostLength = micropostCandidates[i].length;
-              if (micropostLength > maxLength) {
-                longestMicropost = micropostCandidates[i];
-              }
-              if (micropostLength < minLength) {
-                shortestMicropost = micropostCandidates[i];
-              }
-            }
-  console.log('Shortest post:\n' + shortestMicropost)
-  console.log('Longest post:\n' + longestMicropost)
-            var micropost = shortestMicropost;
-
+          if (cluster.speechId) {
             if (illustrator.speechOutputEnabled) {
               illustrator.removeAllAudio();
-              illustrator.speak(micropost);
+              illustrator.speak(cluster.speechId);
             }
           } else {
-            console.log('Translations not yet finished');
+            console.log('Translations or speech preparation not yet finished');
           }
         }
       }, true /* This is important, else, the event never fires */);
@@ -2129,6 +2111,7 @@
       xhr.onload = function(e) {
         try {
           var response = JSON.parse(xhr.responseText);
+          // map translations to their particular clusters
           for (var i = 0, len = response.translations.length; i < len; i++) {
             var index = clusterIndexes[i];
             if (!illustrator.clusters[index].translations) {
@@ -2136,6 +2119,25 @@
             }
             illustrator.clusters[index].translations.push(
                 response.translations[i]);
+          }
+          // select shortest translation for speech output
+          for (var i = 0, len1 = illustrator.clusters.length; i < len1; i++) {
+            var micropostCandidates = illustrator.clusters[i].translations;
+            var minLength = Infinity;
+            var shortestMicropost = undefined;
+            for (var j = 0, len2 = micropostCandidates.length; j < len2; j++) {
+              var micropostLength = micropostCandidates[j].length;
+              if (micropostLength < minLength) {
+                shortestMicropost = micropostCandidates[j];
+              }
+            }
+            (function(clusterIndex) {
+              illustrator.prepareSpeak(shortestMicropost, function(err,
+                  speechId) {
+                illustrator.showStatusMessage('Speech ready for cluster ' + clusterIndex);
+                illustrator.clusters[clusterIndex].speechId = speechId;
+              });
+            })(i);
           }
           illustrator.extractEntities();
         } catch(e) {
