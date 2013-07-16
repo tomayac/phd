@@ -226,7 +226,8 @@ DBpedia is a~Semantic Web knowledge base
 with the objective of automatically extracting
 pre-structured tabular data from the human-generated info-boxes
 from the online encyclopedia
-Wikipedia.\footnote{\url{http://en.wikipedia.org/wiki/Main_Page}}
+Wikipedia.\footnote{\url{http://en.wikipedia.org/wiki/Main_Page},
+accessed July 16, 2013}
 This pre-structured information is then made available
 on the World Wide Web in many formats,
 for example, in JSON~\cite{crockford2006json}
@@ -256,10 +257,10 @@ they make the node value appear in a~bold face \textbf{like so}.
 Visually, there is no way to differentiate between the two,
 however, semantically the difference exists and is well-defined:
 \texttt{<strong>} should be used when
-one wants to give special emphasis on something,
-screen readers will typically read out such text
+one wants to give special emphasis on something.
+Screen readers will typically read out such text
 with a~more emphasized voice.
-In contrast \texttt{<b>} should be used
+In contrast, \texttt{<b>} should be used
 if only visually one wants to create a~bold face look.
 In the following, we present a~list of semantic HTML tags
 and attributes and their meaning.
@@ -322,14 +323,14 @@ and attributes and their meaning.
   \item \texttt{<details>} specifies a~disclosure widget
         from which the user can obtain additional information or
         controls, \texttt{<datalist>} specifies the list that
-        represent predefined options for input elements.
+        represents predefined options for input elements.
   \item \texttt{<keygen>} specifies a~key pair generator control,
         \texttt{<output>} specifies the result of a~calculation,
         \texttt{<ruby>} allows one or more spans of phrasing
         content to be marked with ruby annotations.
 \end{itemize}
 
-\paragraph{HTML5 Input Attributes:}
+\paragraph{HTML5 Input Type Attributes:}
 
 \begin{itemize}
   \item \texttt{datetime} specifies a~control for setting the
@@ -367,7 +368,7 @@ and attributes and their meaning.
 
 In this subsection, we describe how structured data
 can be included in HTML documents
-by either overloading existing HTML attributes,
+by either overloading existing HTML attributes
 or by adding new ones.
 
 \subsubsection{Microformats}
@@ -375,7 +376,8 @@ or by adding new ones.
 Microformats~\cite{celik2006microformats} are a~set of
 open data mark-up formats developed
 and defined by the Microformats
-community.\footnote{\url{http://microformats.org/discuss}}
+community.\footnote{\url{http://microformats.org/discuss},
+accessed July 16, 2013}
 Microformats are not an official standard,
 but rather a~widely adopted grass-roots-driven movement
 with origins in the blogging scene.
@@ -388,7 +390,7 @@ then on machines.
 A~concrete example of Microformat mark-up in HTML
 can be seen in \autoref{code:microformats}.
 There are currently nine stable
-Microformats,\footnote{\url{http://microformats.org/wiki/Main_Page\#Specifications}}
+Microformats,\footnote{\url{http://microformats.org/wiki/Main_Page\#Specifications}, accessed July 16, 2013}
 as listed below:
 
 \begin{itemize}
@@ -493,7 +495,7 @@ a~set of new attributes to HTML:
   \item \texttt{itemref} properties that are not descendants of
         the element with the \texttt{itemscope} attribute
         can be associated with the item using this attribute.
-        Provides a~list of elements to web crawlers to find
+        It provides a~list of elements to Web crawlers to find
         additional property values of the item
         elsewhere in the document.
 \end{itemize}
@@ -517,7 +519,7 @@ An example of Microdata in HTML can be seen in \autoref{code:microdata}.
 
 \section{Resource Description Framework (RDF)} \label{sec:rdf}
 
-The Resource Description Framework (RDF)~\cite{klyne2004rdf}
+The Resource Description Framework (RDF,~\cite{klyne2004rdf})
 defines a~set of W3C standards for the formal description of
 resources that are identified by URIs.
 RDF is a~core component of the Semantic Web.
@@ -527,7 +529,7 @@ copyrights, \emph{etc.}\ of documents, however,
 applying a~definition of the term \emph{resource}
 beyond the WWW context,
 RDF is now also used to describe metadata
-of any URI-identifiable entity.
+of any URI-identifiable entity like cities, genes, \emph{etc.}
 
 \subsection{Triples as a~Data Structure}
 
@@ -549,9 +551,9 @@ or \emph{Prince William is married to Kate Middleton}.
 Each of these sentences has a~subject (\emph{A~cat}),
 a~predicate (\emph{is a}), and an object (\emph{mammal}).
 Every subject, predicate, and object can be identified by a~URI.
-This concept is very powerful,
-as it allows to express the same concept,
-represented by a~URI (like, for example, mammal by
+This idea is very powerful,
+as it allows to express the same concept
+represented by a~URI (for example, mammal by
 \url{http://dbpedia.org/resource/Mammal})
 with different terms in different languages
 (like, for example, Säugetier, mammal, or nisäkkäät).
@@ -562,25 +564,26 @@ is used by the Resource Description Framework.
 
 \subsection{Important RDF Serialization Syntaxes}
 
-The knowledge represented in the RDF triple data structure
-needs to be serialized in order to be stored
+Knowledge or facts represented in the RDF triple data structure
+need to be serialized in order to be stored
 or transmitted over the Internet.
 Several serialization formats exist,
 each of which with its particular advantages
 and disadvantages, mostly around readability for human beings
 and parsability for machines.
-Most people prefer the Turtle~\cite{prudhommeaux2013turtle}
+According to our experience, most people prefer the Turtle~\cite{prudhommeaux2013turtle}
 format for its readability,
 whereas for machines, oftentimes RDF/XML~\cite{beckett2004rdfxml}
 is the easiest to work with.
 
 \subsubsection{RDF Sample Graph}
 In the following, we will illustrate the various
-RDF serialization formats
-with an RDF sample graph, which is introduced here.
+RDF serialization formats with an RDF sample graph
+inspired by a~default example of the Apache Any23 project
+(Anything To Triples, \url{http://any23.org/}).
 It contains data about a~fictive FOAF~\cite{brickley2010foaf}
-person named \emph{John X. Foobar},
-and an email address with an SHA1 checksum of
+person named \emph{John X. Foobar}
+with an email address with the SHA1 checksum of
 \emph{cef817456278b70cee8e5a1611539\-ef9d928810e}.
 The actual email address is obscured to avoid spam emails.
 \autoref{fig:sample-rdf-graph} shows the graphical representation
@@ -592,81 +595,6 @@ of this sample graph.
   \caption{Sample RDF graph visualized}
   \label{fig:sample-rdf-graph}
 \end{figure}
-
-\subsubsection{The Turtle Syntax} \label{sec:turtle}
-
-Turtle~\cite{prudhommeaux2013turtle},
-or the Terse RDF Triple Language, was defined by Dave Beckett.
-It is a~superset of N-Triples (see \autoref{sec:n-triples}) and
-a~subset of Notation3 (see \autoref{sec:notation3}).
-It has reached a~\emph{de facto} standard status,
-with the RDF Working Group publishing the new Turtle specification
-as a~Last Call Working Draft on July 10, 2012.
-Its media type is \texttt{text/turtle}
-(the sometimes still observable media type
-\texttt{application/x-turtle} is deprecated),
-the recommended file extension is \texttt{.ttl},
-the encoding is UTF-8.
-\autoref{code:turtle-syntax} shows the previously
-introduced sample graph serialized in Turtle.
-
-\begin{lstlisting}[caption={[Sample graph in Turtle syntax]{Sample graph in Turtle syntax,
-  the syntax is equivalent to \autoref{code:notation3-syntax}}},
-  label={code:turtle-syntax}]
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-
-_:node15urahancx74223 a foaf:Person ;
-  foaf:name "John X. Foobar" ;
-  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
-\end{lstlisting}
-
-\subsubsection{The Notation3 Syntax} \label{sec:notation3}
-
-Notation3~\cite{bernerslee2011notation3} was introduced
-by Tim Berners-Lee.
-Notation3 has some features that go beyond
-the pure expressiveness of RDF, like rules,
-support for variables, and quantification.
-Its media type is \texttt{text/n3},
-the recommended file extension is \texttt{.n3},
-the encoding is always UTF-8.
-\autoref{code:notation3-syntax} shows the previously
-introduced sample graph serialized in Notation3.
-
-\begin{lstlisting}[caption={Sample graph in Notation3 syntax},
-  label={code:notation3-syntax}]
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-
-_:node15urahancx74223 a foaf:Person ;
-  foaf:name "John X. Foobar" ;
-  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
-\end{lstlisting}
-
-\subsubsection{The N-Triples Syntax} \label{sec:n-triples}
-
-The N-Triples~\cite{grant2004ntriples} syntax was primarily
-developed by Dave Beckett and Art Barstow.
-N-Triples is a~subset of Turtle (see \autoref{sec:turtle}),
-which in turn is a~subset of Notation3
-(see \autoref{sec:notation3}).
-There are very few variations to express a~graph in N-Triples,
-which makes it an ideal syntax for testing purposes, however,
-as it is missing some shortcuts of Turtle, it is quite verbose.
-Its media type is \texttt{text/plain}, the recommended file extension is \texttt{.nt},
-and the encoding is 7-bit US-ASCII
-(and explicitly \emph{not} UTF-8).
-\autoref{code:ntriples-syntax} shows the previously
-introduced sample graph serialized in N-Triples.
-
-\begin{lstlisting}[caption={Sample graph in N-Triples syntax},
-  label={code:ntriples-syntax}]
-_:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
-    <http://xmlns.com/foaf/0.1/Person> .
-_:1 <http://xmlns.com/foaf/0.1/name>
-    "John X. Foobar" .
-_:1 <http://xmlns.com/foaf/0.1/mbox_sha1sum>
-    "cef817456278b70cee8e5a1611539ef9d928810e" .
-\end{lstlisting}
 
 \subsubsection{The RDF/XML Syntax}
 
@@ -698,6 +626,83 @@ introduced sample graph serialized in RDF/XML.
 </rdf:RDF>
 \end{lstlisting}
 
+\subsubsection{The N-Triples Syntax} \label{sec:n-triples}
+
+The N-Triples~\cite{grant2004ntriples} syntax was primarily
+developed by Dave Beckett and Art Barstow.
+N-Triples is a~subset of Turtle (see \autoref{sec:turtle}),
+which in turn is a~subset of Notation3
+(see \autoref{sec:notation3}).
+There are very few variations to express a~graph in N-Triples,
+which makes it an ideal syntax for testing purposes, however,
+as it is missing some shortcuts of Turtle, it is quite verbose.
+Its media type is \texttt{text/plain}, the recommended file extension is \texttt{.nt},
+and the encoding is 7-bit US-ASCII
+(and explicitly \emph{not} UTF-8).
+\autoref{code:ntriples-syntax} shows the previously
+introduced sample graph serialized in N-Triples.
+
+\begin{lstlisting}[caption={Sample graph in N-Triples syntax},
+  label={code:ntriples-syntax}]
+_:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
+    <http://xmlns.com/foaf/0.1/Person> .
+_:1 <http://xmlns.com/foaf/0.1/name>
+    "John X. Foobar" .
+_:1 <http://xmlns.com/foaf/0.1/mbox_sha1sum>
+    "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
+\subsubsection{The Turtle Syntax} \label{sec:turtle}
+
+Turtle~\cite{prudhommeaux2013turtle},
+or the Terse RDF Triple Language, was defined by Dave Beckett.
+It is a~superset of N-Triples (see \autoref{sec:n-triples}) and
+a~subset of Notation3 (see \autoref{sec:notation3}).
+It has reached a~\emph{de~facto} standard status,
+with the RDF Working Group publishing the new Turtle specification
+as a~W3C Candidate Recommendation on February 19, 2013.
+Its media type is \texttt{text/turtle}
+(the sometimes still observable media type
+\texttt{application/x-turtle} is deprecated),
+the recommended file extension is \texttt{.ttl},
+the encoding is UTF-8.
+\autoref{code:turtle-syntax} shows the previously
+introduced sample graph serialized in Turtle.
+
+\begin{lstlisting}[caption={[Sample graph in Turtle syntax]{Sample graph in Turtle syntax,
+  the syntax is equivalent to \autoref{code:notation3-syntax}}},
+  label={code:turtle-syntax}]
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:node15urahancx74223 a foaf:Person ;
+  foaf:name "John X. Foobar" ;
+  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
+\subsubsection{The Notation3 Syntax} \label{sec:notation3}
+
+Notation3~\cite{bernerslee2011notation3} was introduced
+by Tim Berners-Lee.
+Notation3 has some features that go beyond
+the pure expressiveness of RDF like rules,
+support for variables, and quantification.
+Its media type is \texttt{text/n3},
+the recommended file extension is \texttt{.n3},
+the encoding is always UTF-8.
+\autoref{code:notation3-syntax} shows the previously
+introduced sample graph serialized in Notation3,
+which, given the present trivial example,
+is syntactically equal to Turtle.
+
+\begin{lstlisting}[caption={Sample graph in Notation3 syntax},
+  label={code:notation3-syntax}]
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:node15urahancx74223 a foaf:Person ;
+  foaf:name "John X. Foobar" ;
+  foaf:mbox_sha1sum "cef817456278b70cee8e5a1611539ef9d928810e" .
+\end{lstlisting}
+
 \subsubsection{The RDFa Syntax}
 
 RDFa~\cite{adida2012rdfa} has a~special role
@@ -708,16 +713,17 @@ It uses the rendered hypertext content of (X)HTML
 for the RDFa markup,
 so that data publishers can use the same document
 for human- and machine-readable content.
-The contained RDF triples can be extracted with distillers,
-in consequence RDFa can be considered
-as another serialization syntax for RDF,
+The contained RDF triples can be extracted with distillers.
+In consequence, RDFa can be considered
+another serialization syntax for RDF,
 with the same expressive power as
 RDF/XML~\cite{beckett2004rdfxml},
 Turtle~\cite{prudhommeaux2013turtle}, \emph{etc.}
 Its media type is \texttt{application/xhtml+xml},
 the recommended file extension is \texttt{.html}.
 RDFa shares some design goals
-with Microformats~\cite{celik2006microformats}.
+with Microformats~\cite{celik2006microformats}
+and Microdata~\cite{hickson2012microdata}.
 Where Microformats specify both a~syntax
 for embedding structured data into HTML
 \emph{and} a~vocabulary of specific terms for each Microformat,
@@ -739,7 +745,7 @@ The concrete attributes are as follows.
         another resource.
   \item \texttt{href} and \texttt{resource} specify
         the partner resource.
-  \item \texttt{property} specify a~property for
+  \item \texttt{property} specifies a~property for
         the content of an element.
   \item \texttt{content} optional attribute that overrides
         the content of the element when using
@@ -752,6 +758,7 @@ The concrete attributes are as follows.
         that the metadata is about).
 \end{itemize}
 
+An additional simplified subset of RDFa is RDFa Lite~\cite{sporny2012rdfaalite}, which is aligned with Microdata.
 \autoref{code:rdfa-syntax} shows the previously introduced
 sample graph serialized in RDFa.
 
@@ -800,7 +807,7 @@ interconnected by means of graphs of data.
 Where the Web of today is a~graph of documents,
 the Semantic Web is envisioned to be a~huge global graph,
 formed by many individual graphs.
-If one party publishes facts about an entity,
+If one party publishes facts about an entity
 and a~different party publishes different facts
 about the same entity,
 then the overall knowledge about that entity
@@ -814,13 +821,13 @@ SPARQL query like the one in \autoref{code:sparql}
 could be used to get results from the graph,
 like the email addresses of every person in the world.
 SPARQL queries, unlike traditional databases, are not necessarily
-guaranteed to return \emph{all} existing results.
+guaranteed to return \emph{all} existing results (completeness).
 
-\begin{lstlisting}[caption={[SPARQL query returning names and
+\begin{lstlisting}[caption={[Fictive SPARQL query returning names and
   email addresses]
-  {SPARQL query returning the names and email addresses of every
-  person in the world.
-  Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}.}},
+  {Fictive SPARQL query returning the names and email addresses of every
+  person in the world
+  (\url{http://en.wikipedia.org/wiki/SPARQL\#Benefits})}},
   label={code:sparql}]
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 SELECT ?name ?email
@@ -842,20 +849,20 @@ and \texttt{foaf:mbox} respectively.
 While this sounds like a~very powerful idea,
 in practice SPARQL endpoints
 like the DBpedia SPARQL
-endpoint\footnote{\url{http://dbpedia.org/sparql}}
+endpoint\footnote{\url{http://dbpedia.org/sparql}, accessed July 16, 2013}
 typically only allow for querying a~local graph
 for performance reasons.
 
 \subsection{Different SPARQL Query Variations}
 
-The SPARQL Query Language currently specifies four different query variants, which we list in the following. 
+The SPARQL Query Language currently specifies four different query variants, which we will list in the following. 
 
 \subsubsection{SELECT}
 
 The \texttt{SELECT} query variant is used to extract
 raw values from a~SPARQL endpoint.
-The results are returned in a~table format.
-A~sample query is given in \autoref{code:sparql}.
+The results are returned in a~tabular format.
+A~sample query was given in \autoref{code:sparql}.
 
 \subsubsection{DESCRIBE}
 
@@ -892,16 +899,17 @@ but only a~person named John X. Foobar):\\
 
 The \texttt{CONSTRUCT} query variant is used to extract
 information from the SPARQL endpoint
-and transform the results into valid RDF
+and to transform the results into valid RDF
 specified by a~graph template.
 The result is an RDF graph formed by taking
 each query solution in the solution sequence,
 substituting for the variables in the graph template,
-and combining the triples into
+and combining the resulting triples into
 a~single RDF graph by set union.
-An example query is given below:\\
+An example query is given below.\\
 
-\noindent Given the following RDF graph:\\
+\noindent Given the following RDF graph,
+serialized in Turtle syntax:\\
 
 \texttt{@prefix foaf: <http://xmlns.com/foaf/0.1/> .}\\
 \texttt{\indent \_:a foaf:name "Alice" .}\\
@@ -952,8 +960,8 @@ Tim Berners-Lee defines the four rules for Linked Data in a~W3C Design Issue~\ci
 \end{enumerate}
 
 Linked Data uses RDF~\cite{klyne2004rdf} to create
-typed links between things in the world,
-the result is oftentimes referred to as the Web of Data.
+typed links between things in the world.
+The result is oftentimes referred to as the \emph{Web of Data}.
 As outlined before, RDF encodes statements
 about things in the form of
 \texttt{(subject, predicate, object)} triples.
@@ -976,7 +984,7 @@ can be seen in \autoref{code:rdflink}.
   escapechar=§]
 <http://data.linkedmdb.org/resource/film/77> §\linewrap§
   <http://www.w3.org/2002/07/owl#sameAs> §\linewrap§
-  <http://dbpedia.org/page/Pulp\_Fiction> .
+  <http://dbpedia.org/page/Pulp_Fiction> .
 \end{lstlisting}
 
 \subsection{The Linking Open Data Cloud Diagram}
@@ -1009,17 +1017,18 @@ The latest LOD cloud diagram as of September 2011 can be seen in \autoref{fig:lo
 \end{figure}
 
 \section{Conclusions}
-In this chapter, we have first introduced the Semantic Web,
+
+In this chapter, we have first introduced the Semantic Web
 and compared it to the non-semantic Web.
-We have shown how structured data in form of tables
+We have shown how structured data in the form of tables
 is a~first step towards richer semantics.
 An example of converting structured data from Wikipedia
-to machine-readable data is the knowledge base DBpedia.
+into machine-readable data is the knowledge base DBpedia.
 Further, we have looked at the intrinsic semantics
 of HTML in versions 4 and 5,
 and how through additional attributes
 even richer semantics can be added
-by the annotation formats Microformats and Microdata.
+by the annotation formats Microdata and Microformats.
 We have introduced the Resource Description Format (RDF)
 and its different serializations.
 On top of RDF, we have detailed
@@ -1027,15 +1036,13 @@ how the Semantic Web query language SPARQL
 can be used to express queries across data sources.
 Finally, we have shown how data on the Web
 can be exposed as so-called Linked Data,
-an effort which gets visible in the Linking Open Data cloud.
-With these Semantic Web background technologies,
+an effort which is visualized in the Linking Open Data cloud.
+By introducing these Semantic Web technologies,
 we have set the foundations for the coming chapters
 that build upon those pillars.
 
 \section*{Chapter Notes}
 This chapter is partly based on the following publications:
-\cite{boyd2007socialnetworksites}
-\cite{cyganiak2011lodcloud}
 \todo{Add publications}
 
 \bibliographystyle{plainnat}
