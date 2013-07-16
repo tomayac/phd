@@ -12,7 +12,7 @@
 
 For the task of making sense out of social network microposts,
 our contributions are methods to consolidate and rank
-the results of multiple named-entity recognition and
+the results of multiple named entity recognition and
 disambiguation Web services that we have unified in form
 of a~wrapper Web service that (i) takes care of both
 consolidation and ranking, and that
@@ -95,7 +95,7 @@ from different social networks.
 The extensions first retrieve all status updates
 from the contacts that are displayed
 on the current user's timeline.
-Second, the extensions perform named-entity extraction (NEE)
+Second, the extensions perform named entity extraction (NEE)
 and disambiguation via Natural Language Processing (NLP)
 using a~remote NLP API on each of the microposts
 in order to add semantic meaning to them.
@@ -117,9 +117,9 @@ like users' geographic locations.
   \label{fig:facebookswarmnlp}
 \end{figure}
 
-\subsection{A~Wrapper API for Named-Entity Disambiguation}
+\subsection{A~Wrapper API for Named Entity Disambiguation}
 
-As mentioned before, in order to perform named-entity extraction
+As mentioned before, in order to perform named entity extraction
 and disambiguation, we rely on a~wrapper API
 that calls existing third-party NLP APIs in the background
 and that delivers the combined results of these APIs
@@ -138,13 +138,13 @@ used for our browser extensions.
 
 We regard related work from different angles.
 First, we look into different approaches
-for named-entity disambiguation,
+for named entity disambiguation,
 which is relevant for adding meaning to microposts.
 Second, we look into efforts in mashing up Web services,
 which is important for tracking data provenance
 when using multiple APIs in combination.
 
-\subsection{Entity Disambiguation Using Lexical Databases}
+\subsection{Named Entity Disambiguation Using Lexical Databases}
 
 In~\cite{choudhury2009youtubetags},
 Choudhury \emph{et~al.}\ describe a~framework for
@@ -175,10 +175,10 @@ If there are more than one matching synsets,
 the tags' and their context tags' similarity is computed
 to decide on an already existing tag URI.
 
-\subsection{Entity Disambiguation with Semantic Coherence and News Trends}
+\subsection{Named Entity Disambiguation with Semantic Coherence and News Trends}
 
 In~\cite{fernandez2007identityrank},
-Fernández \emph{et~al.}\ examine named-entity disambiguation
+Fernández \emph{et~al.}\ examine named entity disambiguation
 in the context of news annotation.
 Their approach consists of three steps:
 finding the candidate instances in the NEWS
@@ -196,7 +196,7 @@ and second, the occurrences of candidate entities
 in past articles in the same categories
 in order to find semantic coherences.
 
-\subsection{Disambiguation with Disambiguation Dictionaries}
+\subsection{Named Entity Disambiguation with Disambiguation Dictionaries}
 
 In~\cite{nguyen2008namedentity},
 Nguyen \emph{et~al.}\ show how disambiguation dictionaries
@@ -379,7 +379,7 @@ AlchemyAPI's concept tagging API is capable of abstraction, \emph{i.e.},
 understanding how concepts relate and tag them accordingly
 (``Hillary Clinton'', ``Michelle Obama'', and ``Laura Bush" are all
 tagged as ``First Ladies of the United States'').
-In practice, the difference between named-entity extraction
+In practice, the difference between named entity extraction
 and concept tagging is subtle.
 In consequence, we treat entities and concepts the same.
 Overall, AlchemyAPI results are very accurate
@@ -424,7 +424,7 @@ DBpedia Spotlight~\cite{mendes2011dbpediaspotlight}
 is a~tool for annotating mentions of DBpedia resources in text,
 providing a~solution for linking unstructured information sources
 to the Linked Open Data cloud through DBpedia.
-DBpedia Spotlight performs named-entity extraction,
+DBpedia Spotlight performs named entity extraction,
 including entity detection and disambiguation
 with adjustable precision and recall.
 DBpedia Spotlight allows users to configure the annotations
@@ -467,14 +467,14 @@ play an active role,
 however, we aim for leveraging the additional data
 for better micropost analysis in the future.
 
-\section{Consolidating Named-Entity Disambiguation Results} 
+\section{Consolidating Named Entity Disambiguation Results} 
 \label{sec:consolidate}
 
 In this section, we motivate the use of multiple
-named-entity disambiguation Web services in \emph{parallel}
+named entity disambiguation Web services in \emph{parallel}
 with the objective of obtaining named entity candidates
 for a~textual document such as a~micropost.
-The task of evaluating and aligning named-entity extraction and
+The task of evaluating and aligning named entity extraction and
 disambiguation APIs and their typed output
 has been formally addressed by Rizzo \emph{et~al.}\ in
 the context of the NERD
@@ -541,7 +541,7 @@ This is taken care of by the third-party NLP APIs
 that we use for our experiments, namely OpenCalais,
 Zemanta, DBpedia Spotlight, and AlchemyAPI.
 These APIs take a~textual document as an input,
-perform named-entity extraction and disambiguation on it,
+perform named entity extraction and disambiguation on it,
 and finally link the detected named entities back
 into the LOD cloud.
 We use these APIs in parallel, and by combining their results,
@@ -583,7 +583,7 @@ of just Zemanta in isolation,
 \autoref{code:googlealchemyapi} shows the output
 of just AlchemyAPI in isolation,
 and finally, \autoref{code:googlecombined} shows the consolidated
-output of the two named-entity recognition APIs together. 
+output of the two named entity recognition APIs together. 
 In this example, the entity names differ (``Google Inc.''
 vs. ``Google''). However, going down the list of URLs for
 each entity from the two services, the consolidation algorithm
@@ -606,7 +606,7 @@ Finally, we repeat the process for all other services.
 
 \newpage
 
-\begin{lstlisting}[caption={Output of Zemanta in isolation.},
+\begin{lstlisting}[caption={Output of Zemanta in isolation},
   label={code:googlezemanta}]
 [
   {
@@ -627,7 +627,7 @@ Finally, we repeat the process for all other services.
 ]
 \end{lstlisting}
 
-\begin{lstlisting}[caption={Output of AlchemyAPI in isolation.},
+\begin{lstlisting}[caption={Output of AlchemyAPI in isolation},
   label={code:googlealchemyapi}]
 [
   {
@@ -651,9 +651,9 @@ Finally, we repeat the process for all other services.
 \newpage
 
 \begin{lstlisting}[caption={
-   [Consolidated output of two named-entity recognition APIs]
-   {Consolidated output of two named-entity recognition APIs,
-    namely Zemanta and AlchemyAPI.}
+   [Consolidated output of two named entity recognition APIs]
+   {Consolidated output of two named entity recognition APIs,
+    namely Zemanta and AlchemyAPI}
   },
   label={code:googlecombined}]
 [
@@ -753,7 +753,7 @@ we group them in a~named graph.
 We use the TriG~\cite{bizer2007trig} syntax,
 an example can be seen in \autoref{code:trig}.
 
-\begin{lstlisting}[caption={Example named graph in TriG syntax.},
+\begin{lstlisting}[caption={Example named graph in TriG syntax},
   label={code:trig}]
 :G = {
   <https://www.facebook.com/Tomayac/posts/10150175940867286> ctag:tagged [
@@ -838,9 +838,10 @@ in which a~certain statement was made,
 it is essentially unimportant
 what representation the resource returns in future.
 
-\begin{lstlisting}[caption={Shortened overview of the provenance
+\begin{lstlisting}[caption={[Shortened overview of the provenance
+       RDF in Turtle syntax]{Shortened overview of the provenance
        RDF in Turtle syntax for an automatically annotated
-       micropost.},
+       micropost}},
   label={code:provenance},escapechar=§]
 :G = {
   <https://www.facebook.com/Tomayac/posts/10150177486072286> ctag:tagged [
@@ -908,7 +909,7 @@ what representation the resource returns in future.
   ] .
 \end{lstlisting}
 
-\section{Conclusion}                                                        
+\section{Conclusions}                                                        
 
 In this chapter, we have shown how the Provenance
 Vocabulary can be used to keep track of the original

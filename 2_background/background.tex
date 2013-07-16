@@ -27,7 +27,7 @@ and classification of social networks,
 and then introducing popular social networks
 and some of their core features.
 
-\section{The Web and Semantics}
+\section{The World Wide Web and Semantics}
 
 Tim Berners Lee, inventor of the World Wide Web (W3, WWW),
 or simply, the \emph{Web},
@@ -55,7 +55,7 @@ of modern semantics with his 1897
 The \emph{Semantic Web} brings the two worlds---the
 World Wide Web and semantics---together.
 
-\section{Semantic Web}
+\section{The Semantic Web}
 
 The lexical database
 WordNet~\cite{fellbaum1998wordnet,miller1995wordnet}
@@ -120,7 +120,7 @@ more intelligent price comparison services, \emph{etc.}
     \label{fig:fundamental-shift-2}
     \includegraphics[width=0.468\textwidth]{fundamental-shift-2.png}
   }
-  \caption{Fundamental shift from moving bits to moving bits with a~meaning.}
+  \caption{Fundamental shift from moving bits to moving bits with a~meaning}
   \label{fig:fundamental-shift}  
 \end{figure}
 
@@ -180,7 +180,7 @@ Celtic            & 6 & 3 & 0 & 3 &  8 & 9 &  9  \\
 Benfica           & 6 & 2 & 1 & 3 &  7 & 8 &  7  \\
 FC Copenhagen     & 6 & 2 & 1 & 2 &  5 & 8 &  7  \\
     \end{tabular}
-    \caption{Sample table with structured data for sports results.}
+    \caption{Sample table with structured data for sports results}
     \label{tab:sample-table-structured-data}
 \end{table}
 
@@ -432,9 +432,9 @@ as listed below:
 \end{itemize}
 
 \begin{lstlisting}[caption={
-   [Sample code snippet with embedded hCard Microformat mark-up.]
+   [Sample code snippet with embedded hCard Microformat mark-up]
    {Sample code snippet with embedded \texttt{hCard} Microformat
-    mark-up. Source: \url{http://microformats.org/wiki/hcard}.}
+    mark-up (\url{http://microformats.org/wiki/hcard})}
   },
   label={code:microformats}]
 <div class="vcard">
@@ -500,9 +500,9 @@ a~set of new attributes to HTML:
 An example of Microdata in HTML can be seen in \autoref{code:microdata}.
 
 \begin{lstlisting}[caption={
-  [Sample code snippet with Microdata mark-up.]
-  {Sample code snippet with Microdata mark-up.
-   Source: \url{http://www.w3.org/TR/microdata/}.}},
+  [Sample code snippet with Microdata mark-up]
+  {Sample code snippet with Microdata mark-up
+   (\url{http://www.w3.org/TR/microdata/})}},
   label={code:microdata}]
 <div itemscope>
   <p>My name is <span itemprop="name">Neil</span>.</p>
@@ -588,7 +588,7 @@ of this sample graph.
 \begin{figure}[!ht]
 \centering
   \includegraphics[width=\linewidth]{sample-rdf-graph.png} 
-  \caption{A~sample RDF graph visualized.}
+  \caption{A~sample RDF graph visualized}
   \label{fig:sample-rdf-graph}
 \end{figure}
 
@@ -609,8 +609,8 @@ the encoding is UTF-8.
 \autoref{code:turtle-syntax} shows the previously
 introduced sample graph serialized in Turtle.
 
-\begin{lstlisting}[caption={A~sample graph in Turtle syntax,
-  the syntax is equivalent to \autoref{code:notation3-syntax}.},
+\begin{lstlisting}[caption={[A~sample graph in Turtle syntax]{A~sample graph in Turtle syntax,
+  the syntax is equivalent to \autoref{code:notation3-syntax}}},
   label={code:turtle-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
@@ -632,7 +632,7 @@ the encoding is always UTF-8.
 \autoref{code:notation3-syntax} shows the previously
 introduced sample graph serialized in Notation3.
 
-\begin{lstlisting}[caption={A~sample graph in Notation3 syntax.},
+\begin{lstlisting}[caption={A~sample graph in Notation3 syntax},
   label={code:notation3-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
@@ -657,7 +657,7 @@ and the encoding is 7-bit US-ASCII
 \autoref{code:ntriples-syntax} shows the previously
 introduced sample graph serialized in N-Triples.
 
-\begin{lstlisting}[caption={A~sample graph in N-Triples syntax.},
+\begin{lstlisting}[caption={A~sample graph in N-Triples syntax},
   label={code:ntriples-syntax}]
 _:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
     <http://xmlns.com/foaf/0.1/Person> .
@@ -681,7 +681,7 @@ the encoding is UTF-8.
 \autoref{code:rdfxml-syntax} shows the previously
 introduced sample graph serialized in RDF/XML.
 
-\begin{lstlisting}[caption={A~sample graph in RDF/XML syntax.},
+\begin{lstlisting}[caption={A~sample graph in RDF/XML syntax},
   label={code:rdfxml-syntax}]
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF
@@ -754,7 +754,7 @@ The concrete attributes are as follows.
 \autoref{code:rdfa-syntax} shows the previously introduced
 sample graph serialized in RDFa.
 
-\begin{lstlisting}[caption={A~sample graph in RDFa syntax.},
+\begin{lstlisting}[caption={A~sample graph in RDFa syntax},
   label={code:rdfa-syntax}]
 <div about="_:1" typeof="http://xmlns.com/foaf/0.1/Person">           
   <span property="http://xmlns.com/foaf/0.1/mbox_sha1sum">
@@ -788,7 +788,7 @@ The results of SPARQL queries can be result sets or RDF graphs.
 SPARQL became an official W3C Recommendation in 2008.
 It was standardized by the RDF Data Access Working Group (DAWG).
 
-\subsection{The Vision of the Web as a~Giant, Single Database}
+\subsection{The Vision of the Web as a~Giant Single Database}
 
 The Web as we know it today is a~\emph{network of documents},
 interconnected by hyperlinks that everyone can participate in
@@ -815,8 +815,8 @@ like the email addresses of every person in the world.
 SPARQL queries, unlike traditional databases, are not necessarily
 guaranteed to return \emph{all} existing results.
 
-\begin{lstlisting}[caption={[SPARQL query returning the names and
-  email addresses of every person in the world.]
+\begin{lstlisting}[caption={[SPARQL query returning names and
+  email addresses]
   {SPARQL query returning the names and email addresses of every
   person in the world.
   Source: \url{http://en.wikipedia.org/wiki/SPARQL\#Benefits}.}},
@@ -967,11 +967,11 @@ and a~description from DBpedia~\cite{auer2007dbpedia}
 are indeed talking about the same movie
 can be seen in \autoref{code:rdflink}.
 
-\begin{lstlisting}[caption={[Exemplary RDF link.]{Exemplary RDF
+\begin{lstlisting}[caption={[Exemplary RDF link]{Exemplary RDF
   link stating that a~description of the movie Pulp Fiction from
   the Linked Movie Database~\cite{hassanzadeh2009linkedmovie}
   and a~description from DBpedia are indeed talking
-  about the same movie.}},
+  about the same movie}},
   label={code:rdflink},
   escapechar=§]
 <http://data.linkedmdb.org/resource/film/77> §\linewrap§
@@ -1003,14 +1003,12 @@ The latest LOD cloud diagram as of September 2011 can be seen in \autoref{fig:lo
 \begin{figure}[!ht]
 \centering
   \includegraphics[width=0.95\textwidth,height=0.9\textheight,keepaspectratio]{lod-cloud.png}    
-  \caption[The Linked Open Data cloud as of September 2010.]
-  {The Linked Open Data cloud as of September 2011, by Richard
-   Cyganiak and Anja Jentzsch.
-   Source: \url{http://lod-cloud.net/}. \todo{Check final orientation}}    
+  \caption[Linking Open Data cloud diagram as of September 2011]
+  {Linking Open Data cloud diagram as of September 2011, by Richard Cyganiak and Anja Jentzsch \url{http://lod-cloud.net/} \todo{Check final orientation}}    
   \label{fig:lod-cloud}
 \end{figure}
 
-\section{Conclusion}
+\section{Conclusions}
 In this chapter, we have first introduced the Semantic Web,
 and compared it to the non-semantic Web.
 We have shown how structured data in form of tables

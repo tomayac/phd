@@ -5,11 +5,11 @@
 Mobile devices such as smartphones, tablets, or digital cameras
 together with social networks enable people to create,
 share, and consume enormous amounts of media items
-like videos or photos, both on the road, or at home.
+like videos or photos both on the road or at home.
 Such mobile devices---by pure definition---accompany
 their owners almost wherever they may go.
 In consequence, mobile devices are omnipresent
-at all sorts of events.
+at all sorts of events to capture noteworthy moments.
 Exemplary events can be keynote speeches at conferences,
 music concerts in stadiums,
 or even natural catastrophes like earthquakes
@@ -24,9 +24,9 @@ for an event is hard}
 
 Common media item search operations,
 for example, searching for \emph{the} official video clip
-for a~certain hit record on an online video platform,
+for a~certain hit record on an online video platform
 can in the simplest case be achieved based on potentially
-shallow human-generated metadata,
+shallow human-generated metadata
 or based on more profound content analysis techniques
 like optical character recognition,
 automatic speech recognition,
@@ -35,7 +35,7 @@ More advanced scenarios, however, like retrieving all
 (or just the most representative) media items
 that were created at a~given event
 with the objective of creating \emph{event summaries} or
-\emph{media item compilations} covering the event in question,
+\emph{media item compilations} covering the event in question
 are hard, if not impossible, to fulfill at large scale.
 The main research question of this thesis
 can be formulated as follows.
@@ -49,14 +49,14 @@ from social networks?''}
 
 \textbf{(iv) Contributions}
 
-In this thesis, we develop and evaluate
+In the context of this thesis, we have developed and evaluated
 a~novel interactive application and related methods
 for media item enrichment,
 leveraging social networks, utilizing the Web of Data,
 techniques known from Content-based Image Retrieval~(CBIR)
 and Content-based Video Retrieval~(CBVR),
 and fine-grained media item addressing schemes
-like Media Fragments URIs,
+like Media Fragments URIs
 to provide a~scalable and near real-time solution
 to realize the abovementioned scenario
 of event summarization and media item compilation.
@@ -69,7 +69,7 @@ For any event with given event title(s),
 our approach can be divided in the following six steps.
 
 \begin{enumerate}
-  \item Via the textual search functionality of
+  \item Via the textual search APIs (Application Programming Interfaces) of
         different social networks,
         we retrieve a~list of potentially event-relevant
         microposts that either contain media items directly,
@@ -78,12 +78,12 @@ our approach can be divided in the following six steps.
   \item Using third-party
         Natural Language Processing (NLP) tools,
         we recognize and disambiguate named entities
-        in the microposts to predetermine their relevance.
+        in microposts to predetermine their relevance.
   \item We extract the binary media item data
         from social networks or media item hosting platforms
         and relate it to the originating microposts.
   \item Using CBIR and CBVR techniques, we first deduplicate
-        duplicate and near-duplicate media items,
+        duplicate and near-duplicate media items
         and then cluster similar media items.
   \item We rank the deduplicated and clustered list
         of media items and their related microposts
@@ -91,6 +91,7 @@ our approach can be divided in the following six steps.
   \item In order to generate interactive and user-customizable
         media galleries that visually and audially summarize the
         event in question, we compile the top-$n$ ranked
-        media items and microposts in an aesthetic way.
+        media items and microposts in aesthetically pleasing
+        and functional ways.
 \end{enumerate}
 \end{abstracts}

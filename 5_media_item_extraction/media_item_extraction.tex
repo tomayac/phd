@@ -172,10 +172,9 @@ comparable to the level of access that common Web search engines have.
   \centering
   \includegraphics[width=0.7\linewidth,
     trim=16px 17px 12px 15px,clip]{davidsimonds.jpg}
-  \caption[David Simonds illustrates social networks as walled
-    gardens.]
-    {David Simonds illustrates social networks as walled
-    gardens.}
+  \caption[Social networks as walled
+    gardens illustrated by David Simonds]
+    {Social networks as walled gardens illustrated by David Simonds}
   \label{fig:walled-gardens}
 \end{figure}
 
@@ -216,7 +215,7 @@ The media extractor was used to query for media items
 that match the search term \emph{hamburg}.
 \autoref{code:facebook} shows sample output of the media extractor
 for a~Facebook post, which was processed
-with named-entity extraction and disambiguation 
+with named entity extraction and disambiguation 
 as detailed in \autoref{cha:micropost-annotation}.
 Below, we explain the data format of our media extractor.
 
@@ -258,9 +257,9 @@ Below, we explain the data format of our media extractor.
   \end{description}    
 \end{description}
 
-\begin{lstlisting}[caption={Sample output of the media extractor
-  showing a~Facebook post processed with named-entity extraction
-  and disambiguation (slightly edited for legibility).},
+\begin{lstlisting}[caption={[Sample output of the media extractor]{Sample output of the media extractor
+  showing a~Facebook post processed with named entity extraction
+  and disambiguation (slightly edited for legibility)}},
   label={code:facebook}]
 {
   "mediaUrl": "http://video.ak.fbcdn.net/...",
@@ -329,7 +328,7 @@ it is more robust to use API access wherever possible,
 and only fall back to the more brittle Web scraping
 for the parts not covered by API access.
 
-\subsubsection{Special Role of Twitter}
+\paragraph{Special Role of Twitter:}
 
 Twitter plays a~special role, as it can be used as
 a third-order support social network,
@@ -657,7 +656,7 @@ event venue, and event city work consistently well.
 \end{tabular}
 \caption[Sample photos for some of the considered nine events]
   {Sample photos for some of the considered nine events
-         (showing only exact or near-duplicate media items).}
+         (showing only exact or near-duplicate media items)}
 \label{fig:sequences}
 \end{figure*}
 
@@ -713,7 +712,7 @@ announcements, and technical analysis becomes alive.
 We will have a~closer look at media item ranking in
 \autoref{cha:media-item-ranking}.
 
-\section{Conclusion}
+\section{Conclusions}
 
 In this chapter, we have presented a~generic media extractor
 for gathering media items shared on social networks to
@@ -749,7 +748,7 @@ Nonetheless, it remains important to view the media and the
 associated text as a~whole, since the text
 could convey a~sentiment about,
 or an explanation of the visual data.
-Using named-entity recognition as outlined in
+Using named entity recognition as outlined in
 \autoref{cha:micropost-annotation},
 the important semantic elements in the message text get identified. 
 The content of the message can subsequently be used

@@ -113,9 +113,55 @@ typically via third-party applications.
 In this section, we introduce several social networks
 and some of their key features
 that are relevant for our approach.
+As we treat all networks the same---%
+independent from their not always publicly known user population---%
+they are listed in alphabetic order.
 For active participation,
 all social networks require users to be logged in.
 In the description below, we thus assume a~logged in user.
+
+\subsection{Facebook}
+
+Facebook (\url{http://www.facebook.com/})
+is a~social networking service launched in February 2004,
+operated and owned by the American multinational
+Internet corporation Facebook, Inc.
+At time of writing, Facebook is the most popular social network
+with one billion monthly active
+users\footnote{\url{http://newsroom.fb.com/Key-Facts},
+accessed November 19, 2012}
+as of October 2012.
+Facebook has native photo and video support,
+allowing people to upload an unlimited amount of media items.
+Photos and videos can also be recorded \emph{ad hoc} via webcam.
+People can \emph{Like} content via a~designated Like button
+that can also be embedded on other websites.
+Initially, the button was called the \emph{Awesome} button,
+but eventually\footnote{\url{http://www.quora.com/Facebook-Inc-company/Whats-the-history-of-the-Awesome-Button-that-eventually-became-the-Like-button-on-Facebook}}
+got rebranded to its current form.
+Individual microposts can also be shared.
+Facebook has a~bidirectional relationship model (friend model),
+with an optional unidirectional relationship model (follow model),
+typically for following celebrities, remote friends, \emph{etc.}
+
+\subsection{Flickr}
+
+Flickr (\url{http://www.flickr.com/})
+is a~photo and video hosting online community
+created by Ludicorp in 2004 and acquired by Yahoo! in 2005.
+Users can upload a~limited or unlimited number of photos or videos
+to the service, depending on their account type (Free or Pro).
+People can \emph{Favorite} photos they like
+via a~designated Favorite button.
+Flickr has a~unidirectional relationship model (follow model),
+however, also allows people to mark other users as friends
+or family \emph{without} the other party having to confirm.
+Following an urgent plea from Flickr
+users\footnote{\url{http://dearmarissamayer.com/}},
+where they complained that Yahoo!
+had semi-abandoned the service for too long,
+Flickr is now said to be revived under new CEO Marissa
+Mayer\footnote{\url{http://www.flickr.com/dearinternet}}.
 
 \subsection{\googleplus}
 
@@ -143,6 +189,79 @@ that can also be embedded on other websites.
 Individual microposts can also be shared.
 \googleplus has a~unidirectional relationship model
 (follow model).
+
+\subsection{Img.ly}
+
+Img.ly (\url{http://img.ly/})
+is a~photo hosting service operated by 9elements GmbH
+and founded in 2009.
+It integrates deeply with Twitter, however,
+can also be used independently.
+Img.ly integrates with Twitter's \emph{Tweet} button. 
+The service has no own relationship model,
+but uses a~user's social graph on Twitter.
+
+\subsection{Imgur}
+
+Imgur (\url{http://imgur.com/})
+is a~photo hosting service
+founded by Alan Schaaf in February 2009.
+While the service is deeply integrated with Twitter
+and Facebook, it can be used independently as well.
+Imgur integrates with all major social networks,
+and also has designated \emph{Like} and \emph{Dislike} buttons.
+The service has no own relationship model,
+but uses a~user's social graph on Facebook.
+
+\subsection{Instagram}
+\label{sec:instagram}
+
+Instagram (\url{http://instagram.com/})
+is a~mobile photo sharing application
+that was acquired by Facebook in April 2012.
+The application allows users to apply filters to photos.
+These photos can then be shared on external social networks
+like Facebook, Twitter, or \googleplus,
+and are also visible on Instagram's own social network.
+The service launched in October 2010.
+Instagram has native photo support, but,
+does not support videos.
+People can \emph{Like} content via a~designated Like button
+from within the Instagram application.
+Instagram has a~unidirectional relationship model (follow model).
+
+\subsection{Lockerz}
+
+Lockerz (\url{http://lockerz.com/}) is an international
+social commerce website based in Seattle, WA. 
+In 2011, Lockerz acquired the photo sharing service Plixi,
+whih was formerly known as TweetPhoto.
+Lockerz keeps Plixi's service as a~media platform running
+under the new Lockerz branding.
+While the service is deeply integrated with Twitter,
+it can be used independently as well.
+People can \emph{Love} content they like via
+a~designated Love button,
+but the service is also integrated with all major social networks.
+
+\subsection{MobyPicture}
+
+MobyPicture (\url{http://www.mobypicture.com/})
+is a~mobile messaging service
+owned by entrepreneur Mathys van Abbe.
+Users of the service can upload an unlimited number of
+photos and videos to the service.
+MobyPicture integrates with a~number of
+third-party social networks.
+The service natively supports videos and photos,
+which can either be uploaded, or be recorded \emph{ad hoc}
+via webcam.
+People can \emph{Favorite} content they like via
+a~designated Favorite button,
+however, the service also integrates with Google's
+\emph{\plusone} button and Twitter's \emph{Tweet} button. 
+MobyPicture has a~unidirectional relationship model
+(follower model).
 
 \subsection{Myspace}
 
@@ -174,29 +293,29 @@ with an optional unidirectional relationship model (follow model),
 typically meant for following celebrities like artists,
 musicians, \emph{etc.}
 
-\subsection{Facebook}
+\subsection{Photobucket}
 
-Facebook (\url{http://www.facebook.com/})
-is a~social networking service launched in February 2004,
-operated and owned by the American multinational
-Internet corporation Facebook, Inc.
-At time of writing, Facebook is the most popular social network
-with one billion monthly active
-users\footnote{\url{http://newsroom.fb.com/Key-Facts},
-accessed November 19, 2012}
-as of October 2012.
-Facebook has native photo and video support,
-allowing people to upload an unlimited amount of media items.
-Photos and videos can also be recorded \emph{ad hoc} via webcam.
-People can \emph{Like} content via a~designated Like button
-that can also be embedded on other websites.
-Initially, the button was called the \emph{Awesome} button,
-but eventually\footnote{\url{http://www.quora.com/Facebook-Inc-company/Whats-the-history-of-the-Awesome-Button-that-eventually-became-the-Like-button-on-Facebook}}
-got rebranded to its current form.
-Individual microposts can also be shared.
-Facebook has a~bidirectional relationship model (friend model),
-with an optional unidirectional relationship model (follow model),
-typically for following celebrities, remote friends, \emph{etc.}
+Photobucket (\url{http://photobucket.com/})
+is a~photo and video hosting service
+founded in 2003 by Alex Welch and Darren Crystal.
+It was acquired by Fox Interactive Media in 2007.
+In June 2011, Twitter announced an exclusive partnership
+with Photobucket that made the service
+the default photo sharing platform for Twitter,
+used for its native media item support.
+
+\subsection{Twitpic}
+
+Twitpic (\url{http://twitpic.com/})
+is a~service that allows users to upload photos and videos.
+It optionally integrates with Twitter.
+Twitpic was launched in 2008 by Noah Everett.
+While Twitpic can be used independently from Twitter,
+the integration is made easy with Twitpic usernames and passwords
+being the same as the ones on Twitter.
+Twitpic integrates with Twitter via the \emph{Tweet} button.
+The service has no own relationship model,
+but uses a~user's social graph on Twitter.
 
 \subsection{Twitter}
 \label{sec:twitter}
@@ -234,33 +353,16 @@ In addition to that, Twitter offers
 a~\emph{Tweet} button that can be embedded on other websites.
 Twitter has a~unidirectional relationship model (follow model).
 
-\subsection{Photobucket}
+\subsection{Yfrog}
 
-Photobucket (\url{http://photobucket.com/})
-is a~photo and video hosting service
-founded in 2003 by Alex Welch and Darren Crystal.
-It was acquired by Fox Interactive Media in 2007.
-In June 2011, Twitter announced an exclusive partnership
-with Photobucket that made the service
-the default photo sharing platform for Twitter,
-used for its native media item support.
-
-\subsection{Instagram}
-\label{sec:instagram}
-
-Instagram (\url{http://instagram.com/})
-is a~mobile photo sharing application
-that was acquired by Facebook in April 2012.
-The application allows users to apply filters to photos.
-These photos can then be shared on external social networks
-like Facebook, Twitter, or \googleplus,
-and are also visible on Instagram's own social network.
-The service launched in October 2010.
-Instagram has native photo support, but,
-does not support videos.
-People can \emph{Like} content via a~designated Like button
-from within the Instagram application.
-Instagram has a~unidirectional relationship model (follow model).
+Yfrog (\url{http://yfrog.com/})
+is a~photo and video hosting service run by ImageShack
+that was launched in February 2009.
+While the service is deeply integrated with Twitter,
+it can be used independently as well.
+Yfrog integrates with Twitter's \emph{Tweet} button.
+The service has no own relationship model,
+but uses a~user's social graph on Twitter.
 
 \subsection{YouTube}
 
@@ -275,105 +377,6 @@ Videos can be uploaded, or be recorded \emph{ad hoc} via webcam.
 People can \emph{Like} or \emph{Dislike} content
 via designated Like or Dislike buttons.
 YouTube has a~unidirectional relationship model (follow model).
-
-\subsection{Flickr}
-
-Flickr (\url{http://www.flickr.com/})
-is a~photo and video hosting online community
-created by Ludicorp in 2004 and acquired by Yahoo! in 2005.
-Users can upload a~limited or unlimited number of photos or videos
-to the service, depending on their account type (Free or Pro).
-People can \emph{Favorite} photos they like
-via a~designated Favorite button.
-Flickr has a~unidirectional relationship model (follow model),
-however, also allows people to mark other users as friends
-or family \emph{without} the other party having to confirm.
-Following an urgent plea from Flickr
-users\footnote{\url{http://dearmarissamayer.com/}},
-where they complained that Yahoo!
-had semi-abandoned the service for too long,
-Flickr is now said to be revived under new CEO Marissa
-Mayer\footnote{\url{http://www.flickr.com/dearinternet}}.
-
-\subsection{MobyPicture}
-
-MobyPicture (\url{http://www.mobypicture.com/})
-is a~mobile messaging service
-owned by entrepreneur Mathys van Abbe.
-Users of the service can upload an unlimited number of
-photos and videos to the service.
-MobyPicture integrates with a~number of
-third-party social networks.
-The service natively supports videos and photos,
-which can either be uploaded, or be recorded \emph{ad hoc}
-via webcam.
-People can \emph{Favorite} content they like via
-a~designated Favorite button,
-however, the service also integrates with Google's
-\emph{\plusone} button and Twitter's \emph{Tweet} button. 
-MobyPicture has a~unidirectional relationship model
-(follower model).
-
-\subsection{Twitpic}
-
-Twitpic (\url{http://twitpic.com/})
-is a~service that allows users to upload photos and videos.
-It optionally integrates with Twitter.
-Twitpic was launched in 2008 by Noah Everett.
-While Twitpic can be used independently from Twitter,
-the integration is made easy with Twitpic usernames and passwords
-being the same as the ones on Twitter.
-Twitpic integrates with Twitter via the \emph{Tweet} button.
-The service has no own relationship model,
-but uses a~user's social graph on Twitter.
-
-\subsection{Img.ly}
-
-Img.ly (\url{http://img.ly/})
-is a~photo hosting service operated by 9elements GmbH
-and founded in 2009.
-It integrates deeply with Twitter, however,
-can also be used independently.
-Img.ly integrates with Twitter's \emph{Tweet} button. 
-The service has no own relationship model,
-but uses a~user's social graph on Twitter.
-
-\subsection{Yfrog}
-
-Yfrog (\url{http://yfrog.com/})
-is a~photo and video hosting service run by ImageShack
-that was launched in February 2009.
-While the service is deeply integrated with Twitter,
-it can be used independently as well.
-Yfrog integrates with Twitter's \emph{Tweet} button.
-The service has no own relationship model,
-but uses a~user's social graph on Twitter.
-
-\subsection{Imgur}
-
-Imgur (\url{http://imgur.com/})
-is a~photo hosting service
-founded by Alan Schaaf in February 2009.
-While the service is deeply integrated with Twitter
-and Facebook, it can be used independently as well.
-Imgur integrates with all major social networks,
-and also has designated \emph{Like} and \emph{Dislike} buttons.
-The service has no own relationship model,
-but uses a~user's social graph on Facebook.
-
-\subsection{Lockerz}
-
-Lockerz (\url{http://lockerz.com/}) is an international
-social commerce website based in Seattle, WA. 
-In 2011, Lockerz acquired the photo sharing service Plixi,
-whih was formerly known as TweetPhoto.
-Lockerz keeps Plixi's service as a~media platform running
-under the new Lockerz branding.
-While the service is deeply integrated with Twitter,
-it can be used independently as well.
-People can \emph{Love} content they like via
-a~designated Love button,
-but the service is also integrated with all major social networks.
 
 \section{Decentralized Social Networks}
 All social networks presented up to now are centralized networks.
@@ -505,7 +508,7 @@ monitoring and analytics.
   \label{tab:platforms}  
 \end{sidewaystable}
 
-\section{Conclusion}
+\section{Conclusions}
 Alongside the Semantic Web background technologies
 that were introduced in the previous chapter,
 social networking sites form the backbone of this thesis.

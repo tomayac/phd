@@ -79,6 +79,7 @@
 \usepackage[intoc]{nomencl} % load nomencl extension; include in TOC
 %\nomrefpage % to include page numbers after abbrevations
 \renewcommand{\nomname}{Glossary} % rename nomenclature
+\renewcommand\lstlistlistingname{List of Listings}
 \renewcommand{\nomlabel}[1]{\textbf{#1}} % make abbreviations bold
 \makenomenclature % used to be \makeglossary
 \newcommand{\g}{\footnote{For all abbreviations see the glossary on page \pageref{nom}.}} % type "\g" to refer to glossary
