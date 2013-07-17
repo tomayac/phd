@@ -496,9 +496,9 @@ the following conditions have to be fulfilled.
     We note that we do not \emph{recognize} faces, but only \emph{detect} them.
 \end{enumerate}
 
-The simplified algorithm pseudocode can be seen in \autoref{code:clustering}.
-In the actual implementation, some speed improvements,
-like, for example, looking up already calculated
+The algorithm pseudocode can be seen in \autoref{code:clustering}.
+In the actual implementation some speed improvements,
+for example, looking up already calculated
 distances\footnote{\texttt{distances[outerItem][innerItem] =
 distances[innerItem][outerItem]}}
 have been applied;
@@ -508,7 +508,7 @@ The clusters are then recalculated dynamically
 whenever either $\textit{tiles\_threshold}$ or $\textit{similarity\_threshold}$ change.
 The given values of $\textit{rows} = \textit{cols} = 10$ and
 $\textit{tiles\_threshold} = 67 = \lceil \textit{rows} \cdot \textit{cols} \cdot 2/3 \rceil$
-and $\textit{similarity\_threshold} = 10$ were determined empirically
+and $\textit{similarity\_threshold} = 15$ were determined empirically
 on a~large corpus of event-related media items
 and are known to deliver solid results.
 The corpus has been made available publicly,
@@ -589,7 +589,7 @@ clusters = {}
 \subsection{Experiments}
 
 We have evaluated the near-duplicate photo clustering
-on two events from recent history with high social network coverage
+on two events from, at time of writing, recent history with high social network coverage
 that we will briefly describe in the following.
 
 \paragraph{Grammy Awards Nominations 2013:}
@@ -597,16 +597,16 @@ that we will briefly describe in the following.
 The Grammy Award---or short Grammy---is an award by
 the National Academy of Recording Arts and Sciences of the United States
 to recognize outstanding achievement in the music industry.
-The annual ceremony features performances by prominent artists,
-and some of the awards are presented in a~widely viewed televised ceremony.
+The annual ceremony features performances by prominent artists.
+Some of the awards are presented in a~widely viewed televised ceremony.
 On December 5, 2012, the nominees for the 55\superscript{th} Annual Grammy Awards
 were announced at an event broadcasted live by CBS
 titled \emph{Grammy Nominations Concert
-Live}\footnote{\url{http://en.wikipedia.org/wiki/2013_Grammy_Awards},
-accessed December 7, 2012},
+Live},\footnote{\url{http://en.wikipedia.org/wiki/2013_Grammy_Awards},
+accessed December 7, 2012}
 during which Taylor Swift and LL~Cool~J revealed the nominees
 in several key categories, including the so-called Big Four:
-Album, Record and Song of the Year and Best New Artist.
+Album, Record and Song of the Year, and Best New Artist.
 CBS suggested the hashtag \texttt{\#GRAMMYNoms} for the event.
 
 \paragraph{Victoria's Secret Fashion Show 2012:}
@@ -671,24 +671,26 @@ and 949 photos for the \emph{Grammy Awards Nominations 2013} event.
 These photos were collected using the media item extraction framework
 described in \autoref{cha:media-item-extraction}
 using a~mix of hashtag searches with the official event hashtags combined
-with full-text searches for event titles and variations thereof.
+with full-text searches for event titles and variations thereof~%
+\cite{becker2010eventidentification,becker2012plannedevents}.
 Due to the short-lived nature of social networks,
 the returned results of the media item extraction process itself
-are not reproducible; our focus in this chapter
-is on media item deduplication and clustering.
+are not reproducible.
+Additionally, our focus in this chapter
+is on media item deduplication and clustering, not extraction.
 The concrete clustering parameters for the algorithm were set as listed below.
 
 \begin{enumerate}
   \item $\textit{rows}$ = $\textit{cols}$ = $10$
   \item $\textit{tiles\_threshold}$ = $67$
-  \item $\textit{similarity\_threshold}$ = $10$
+  \item $\textit{similarity\_threshold}$ = $15$
 \end{enumerate}
 
 In the following, we discuss the clustering and deduplication results.
 \autoref{fig:topvsfashionshow} and \autoref{fig:topgrammy} show the top clusters
 for the \emph{Victoria's Secret Fashion Show 2012} and the 
 \emph{Grammy Awards Nominations 2013} events respectively.
-We will then pick some representative examples from both events
+We then pick some representative examples from both events
 and have a~closer look at the clustering algorithm's strengths and weaknesses.
 
 \begin{figure}[!ht]
@@ -711,7 +713,7 @@ and have a~closer look at the clustering algorithm's strengths and weaknesses.
 and a~heart-shaped pink spotlight as central elements of both photos. 
 Even though the model is shot from different angles and at different times,
 the photos are successfully clustered due to the very identifying colors
-and the high tile similarity. 
+and the high tile-wise similarity. 
 
 \begin{figure}[!ht]
   \centering
@@ -746,7 +748,7 @@ the photos are successfully clustered.
   \label{fig:lightingconditions}
 \end{figure}
 
-\autoref{fig:zoomed} shows two photos of the same model
+\autoref{fig:zoomed} shows two photos of the same fashion model,
 where the left photo is a~zoomed version of the right photo 
 with added black bars so that the resulting photo
 has a~square aspect ratio.
@@ -774,26 +776,44 @@ the photos are correctly clustered.
 \paragraph{Algorithm Weaknesses:}
 
 \autoref{fig:white} shows five media items with pure white
-as the dominating color and a~pure black font,
-where users had taken screenshots of the Grammy results from Web pages.
+as the dominating color and a~pure black font
+stemming from screenshots of the Grammy results from Web pages.
 The algorithm in its previously described form clusters such media items.
 This may or may not be desired.
-Likewise at the other end of the color spectrum,
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=1\linewidth]{./white.png}
+  \caption[Pure white as dominating color stemming from screenshots]
+    {Pure white as dominating color stemming from screenshots
+    (bad quality caused by down-scaling via the originating social networks)}
+  \label{fig:white}
+\end{figure}
+
+Likewise, at the other end of the color spectrum,
 \autoref{fig:bwtolerance} shows two media items of a~woman
 with pure black as the dominating color,
-one time with, and the other time without added black bars
+one time with and the other time without added black bars
 to fit a~letterbox aspect ratio.
 In its previously described form, the algorithm
 does \emph{not} cluster such media items
-(unless a~really small number $\textit{tiles\_threshold}$ 
+(unless a~very small number $\textit{tiles\_threshold}$ 
 of required similar tiles is selected).
-
 In the majority of cases, though, clustering such media items \emph{is} desired.
 Our response to both issues is to ignore a~certain part
 of the color spectrum in the algorithm's similarity measure.
 In the concrete case, ignoring pure white and pure black correctly fixed
 the clustering in our chosen example events in all but one cases,
 without negatively impacting previously correctly formed clusters.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.55\linewidth]{./bwtolerance.png}
+  \caption[Black bars added to fit a~16:9 image in a~4:3 letterbox]
+    {Black bars added to fit a~16:9 image in a~4:3 letterbox
+    (the white border is part of the original photo)}
+  \label{fig:bwtolerance}
+\end{figure}
 
 Finally, \autoref{fig:weakness} shows two entirely different media items
 that were incorrectly clustered as the tile histograms
@@ -806,34 +826,6 @@ Second, the way the algorithm works,
 which is best understood by looking at \autoref{fig:algorithmdebugtwoclusters},
 causes the tiles of very tiny media items like the ones in question to blur.
 
-We have experienced in our experiments that there is no single perfect
-combination of algorithm parameters,
-so the only way to address this issue (besides ignoring too small media items,
-which in practice may be the easiest and best solution)
-is to make the parameters flexible.
-In our graphical user interface we have created sliders
-that let the user interactively preview clustering changes.
-As noted before, a~screenshot of the application
-is available online at the URL \url{http://twitpic.com/c02qfs/full}.
-
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=1\linewidth]{./white.png}
-  \caption[Pure white as dominating color stemming from screenshots]
-    {Pure white as dominating color stemming from screenshots
-    (bad quality caused by down-scaling via the originating social networks)}
-  \label{fig:white}
-\end{figure}
-
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=0.55\linewidth]{./bwtolerance.png}
-  \caption[Black bars added to fit a~16:9 image in a~4:3 letterbox]
-    {Black bars added to fit a~16:9 image in a~4:3 letterbox
-    (the white border is part of the original photo)}
-  \label{fig:bwtolerance}
-\end{figure}
-
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.4\linewidth]{./weakness.png}
@@ -841,9 +833,19 @@ is available online at the URL \url{http://twitpic.com/c02qfs/full}.
   \label{fig:weakness}
 \end{figure}
 
+We have experienced in our experiments that there is no single perfect
+combination of algorithm parameters,
+so the only way to address this issue (besides ignoring too small media items,
+which in practice may be the easiest and best solution)
+is to make the parameters flexible.
+In our graphical user interface, we have created sliders
+that let the user interactively preview clustering changes.
+As noted before, a~screenshot of the application
+is available online at the URL \url{http://twitpic.com/c02qfs/full}.
+
 \section{Video Deduplication}
 
-In the previous subsection, we have introduced
+In the previous section, we have introduced
 an algorithm for photo deduplication.
 In the upcoming section, we will outline the conceptual framework
 of how this algorithm can be combined with the previously introduced
