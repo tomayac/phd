@@ -830,7 +830,7 @@ and the \texttt{http:methodName} ``GET''.
 \subsection{Provenance RDF Overview}
 
 This section provides a~shortened overview of the provenance RDF
-in Turtle syntax for a~micropost that was automatically
+serialized in Turtle syntax for a~micropost that was automatically
 tagged with the label ``BibTeX''
 and the assigned meaning
 \url{http://dbpedia.org/resource/BibTeX}.
@@ -935,7 +935,7 @@ results. These references to the original calls
 are to be understood as the identification of Web resources,
 \emph{i.e.}, the results of a~request.
 We have shown how a~concrete multi-source Web service can
-automatically maintain provenance metadata,
+automatically maintain provenance metadata
 both for entirely machine-generated content,
 but also for partly (or completely) human-generated content.
 Being able to track back the origin of a~triple
@@ -948,8 +948,9 @@ that a~combined result is based on two separate sub-results
 takes up a~lot of space.
 The verbosity is mainly due to the used vocabularies,
 the Provenance Vocabulary and the HTTP Vocabulary in RDF.
-Future work will be to explore ways
-to simplify drastically in order to come to
+
+Future work will focus on exploring ways
+to drastically simplify the annotations in order to obtain
 less verbose provenance descriptions.
 While it is always easier to come up with a~specialized vocabulary
 that does one task well, broader reuse and acceptance
