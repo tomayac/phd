@@ -38,66 +38,24 @@ Events, such as sports matches or concerts are
 largely illustrated by social media,
 albeit distributed over many social networks.
 
-In this section, we tackle the challenge of reconciling
-social media that illustrates known events,
-but that is spread over various social networks
-with the objective of creating visual summaries of them.
+In this chapter, we tackle the challenge of reconciling
+social media data that illustrates known events,
+but that is spread over various social networks,
+all with the objective of creating visual event summaries.
 We propose a~social-network-agnostic
-approach to the extraction of photos and videos covering events.
-We want to emphasize that we do \emph{not} perform event detection: 
-the events we are dealing with are known beforehand
-and we use specific human-chosen search terms
-to find illustrating media.
-
-\section{Related Work}
-
-Related work covers research
-that aims to collect, align, and organize media
-for trends or events.
-Liu \emph{et~al.}\ combine semantic inferencing and visual analysis
-to automatically find media to illustrate
-events~\cite{liu2011events}.
-They interlink large datasets of event metadata
-and media with the Linking Open Data
-Cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
-In~\cite{liu2011socialmedia}, they show how visual summaries
-of past events providing viewers with a~more compelling feeling
-of the event's atmosphere can be created
-based on a~method to automatically detect and identify events
-from social media sharing web sites.
-Approaches to alignment use visual, temporal,
-and spacial similarity measures to map multiple photo streams of
-the same events~\cite{yang2011photostream}.
-Other ways to collect and order media from social networks use
-media-driven metadata such as geospatial
-information~\cite{crandall2009mappingphotos}.
-Becker \emph{et~al.}\ show in~\cite{becker2010eventidentification}
-how to exploit the rich context associated with social media
-content, including user-provided annotations
-and automatically generated information.
-Using this rich context, they define document similarity metrics
-to enable online clustering of media to events.
-In~\cite{becker2012plannedevents}, the same authors develop 
-recall-oriented query formulation strategies
-based on noisy event metadata
-from event aggregation platforms.
-
-\section{Social Networks and Media Items}                                    \label{sec:social-networks}
+approach for the extraction of photos and videos covering events.
+We want to emphasize that in this chapter we do \emph{not}
+put the focus on event detection (we have done that in \autoref{cha:eventdetection}). 
+The events we are dealing with in this chapter
+were known beforehand and we use specific
+human-chosen search terms to find illustrating media.
 
 We first recall the definitions previously made in
-\autoref{sec:definition} and add a~formal definition
-borrowed from~\cite{liu2011events}
-of what we mean by \emph{event}.
-Most social networks offer a~search functionality that allows for
-content to be retrieved based on search terms,
-with or without more advanced search operators
-such as exclusion, inclusion, phrase search, \emph{etc.}
-Each social network has special constraints
-regarding the supported search operators or filtering options.
-We define the term \emph{media item extraction}
-as follows.
-
-\subsection{Definitions}
+\autoref{sec:definition} and add formal definitions
+of the terms \emph{event},
+\emph{media item extraction},
+\emph{Application Programming Interface},
+and \emph{Web scraping}.
 
 \begin{description}
   \item[Social Network:]
@@ -120,7 +78,8 @@ as follows.
        or that is scheduled to happen.
        It is an observable occurrence grouping persons,
        places, times, and activities while being often
-       documented by people through different media.
+       documented by people through different media~%
+       \cite{liu2011events}.
   \item[Media Item Extraction:]
        The process of leveraging search functionalities of
        social networks to find references to media items,
@@ -145,10 +104,53 @@ as follows.
        and/or hierarchical structure of Web pages.
 \end{description}
 
+
+\section{Related Work}
+
+Related work covers research
+that aims to collect, align, and organize media
+for trends or events.
+Liu \emph{et~al.}\ combine semantic inferencing and visual analysis
+to automatically find media to illustrate
+events~\cite{liu2011events}.
+They interlink large datasets of event metadata
+and media with the Linking Open Data
+Cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
+In~\cite{liu2011socialmedia}, they show how visual summaries
+of past events providing viewers with a~more compelling feeling
+of the event's atmosphere can be created
+based on a~method to automatically detect and identify events
+from social media sharing websites.
+Approaches to alignment use visual, temporal,
+and spacial similarity measures to map multiple photo streams of
+the same events~\cite{yang2011photostream}.
+Other ways to collect and order media from social networks use
+media-driven metadata such as geospatial
+information~\cite{crandall2009mappingphotos}.
+Becker \emph{et~al.}\ show in~\cite{becker2010eventidentification}
+how to exploit the rich context associated with social media
+content, including user-provided annotations
+and automatically generated information.
+Using this rich context, they define document similarity metrics
+to enable online clustering of media to events.
+In~\cite{becker2012plannedevents}, the same authors develop 
+recall-oriented query formulation strategies
+based on noisy event metadata
+from event aggregation platforms.
+
+\section{Social Networks and Media Items}                                    \label{sec:social-networks}
+
+Most social networks offer a~search functionality that allows for
+content to be retrieved based on search terms,
+with or without more advanced search operators
+such as exclusion, inclusion, phrase search, \emph{etc.}
+Each social network has special constraints
+regarding the supported search operators or filtering options.
+
 Social networks are often perceived as
 \emph{walled gardens}~\cite{simonds2008walledgarden}
 due to the full control of the network operator
-over content and media on the social network,
+over content and media on the social network in question,
 oftentimes accessible exclusively by social network members.
 This network lock-in effect was excellently illustrated
 by David Simonds in a~cartoon that first appeared
@@ -158,9 +160,9 @@ reproduced in \autoref{fig:walled-gardens}.
 While some social networks (\emph{e.g.}, Twitter)
 have full read and write access via specified APIs,
 other social networks (\emph{e.g.}, \googleplus)
-currently only have read APIs access.
+currently only have read API access.
 In some cases, however, API access is limited,
-so that not all desired information gets exposed
+so that not all desired pieces of information is exposed
 (\emph{e.g.}, view counts with Img.ly),
 which forces people interested in that data
 to fall back to Web scraping.
@@ -187,7 +189,7 @@ data formats used by the considered social networks.
 We then explain the architecture
 of different kinds of media item extractors.
 Finally, we describe the various processing steps
-applied to each collected media item.
+that we apply to each collected media item.
 
 \subsection{Abstraction Layer Data Format}
 \label{sec:data-format}
@@ -195,21 +197,23 @@ applied to each collected media item.
 Each social network uses a~different data representation schema.
 While all social networks with API access are
 JSON-based~\cite{crockford2006json}, the differences in both 
-social network class and media item support level,
+supported social network features and media item support level,
 outlined in detail in
 \autoref{sec:description-of-popular-social-networks} and
 \autoref{sec:classification-of-social-networks},
 are also reflected in the returned JSON data.
 We therefore propose a~common abstraction layer 
-on top of the native data formats of all considered social networks
-outlined in \autoref{tab:platforms} in order to gain
+on top of the native data formats of all considered social networks.
+This abstraction layer is outlined in \autoref{tab:platforms}
+and allows us to gain
 an agnostic view on the underlying social networks.
-Naturally, any abstraction can only represent the
+It's in the nature of any abstraction
+that it can only represent the
 greatest common divisor of all social networks.
 We explain the abstraction layer in the following
 with the help of a~concrete example,
 stemming from a~query to the media extractor
-that gets explained in more detail
+that will be explained in more detail
 in the upcoming \autoref{sec:media-item-extractors}.
 The media extractor was used to query for media items
 that match the search term \emph{hamburg}.
@@ -238,11 +242,11 @@ Below, we explain the data format of our media extractor.
     profile on the social network
   \item[\texttt{type}] Type of the media item,
     can be \texttt{photo} or \texttt{video}
-  \item[\texttt{timestamp}] Number of milliseconds since
-    1 January 1970 00:00:00 UTC when the micropost was
-    published
+  \item[\texttt{timestamp}] Number of milliseconds between
+    1 January 1970 00:00:00 UTC and the moment
+    when the micropost was published
   \item[\texttt{publicationDate}] Date in ISO 8601
-    format when the micropost was published
+    format (YYYY-MM-DDTHH:MM:SSZ) when the micropost was published
   \item[\texttt{socialInteractions}] Container for social
     interactions
   \begin{description}  
@@ -259,7 +263,7 @@ Below, we explain the data format of our media extractor.
 
 \begin{lstlisting}[caption={[Sample output of the media extractor]{Sample output of the media extractor
   showing a~Facebook post processed with named entity extraction
-  and disambiguation (slightly edited for legibility)}},
+  and disambiguation (slightly shortened for legibility)}},
   label={code:facebook}]
 {
   "mediaUrl": "http://video.ak.fbcdn.net/...",
@@ -304,37 +308,36 @@ We have developed a~combined media extractor composed of
 separate media item extractors for the seven social networks
 \googleplus, Myspace, Facebook, Twitter, Instagram, YouTube,
 and Flickr, with additional support for the media sharing
-platforms Img.ly, Imgur, Lockerz, Yfrog, MobyPicture, and Twitpic.
+platforms Img.ly, Imgur, Lockerz,\footnote{Dysfunctional since April 2013 when the service shut down its API access} Yfrog, MobyPicture, and Twitpic.
 The media extractor takes as input a~search term that is relevant
 to a~known event, \emph{e.g.}, the term \emph{boston celtics}
 for a~recent match of the Basketball team Boston Celtics.
 This search term gets forwarded to the search APIs
-of the social networks in parallel.
+of all social networks in parallel.
 Each social network has a~30 seconds timeout window
 to deliver its results.
-When the timeout is reached,
+When the timeout is reached
 or when all social networks have responded,
-the available results are represented according to the data format
+the available results are aligned according to the data format
 defined in \autoref{sec:data-format}.
 Media items and the relevant metadata like view count, comments,
-\emph{etc.}\ are retrieved either directly, or via Web scraping.
+\emph{etc.}\ are retrieved either directly or via Web scraping.
 For some social networks, \emph{e.g.}, Img.ly,
 a~combination of Web scraping and API access is required
 since the API does not return all necessary fields
 of our data format.
 While we could default to Web scraping
 to obtain all relevant data,
-it is more robust to use API access wherever possible,
+it is more robust to use API access wherever possible
 and only fall back to the more brittle Web scraping
 for the parts not covered by API access.
 
 \paragraph{Special Role of Twitter:}
 
-Twitter plays a~special role, as it can be used as
+Twitter (\autoref{sec:twitter})
+plays a~special role, as it can be used as
 a third-order support social network,
-as detailed previously in
-\autoref{sec:twitter}
-and \autoref{sec:classification-of-social-networks}.
+as was detailed previously in \autoref{sec:classification-of-social-networks}.
 This means that the micropost text is located on Twitter,
 but the referenced media items are located
 on third-party media platforms.
@@ -344,9 +347,11 @@ We search for the search term in question (\emph{e.g.},
 following up from the example before, \emph{boston celtics}),
 but combine it with the short URL domain parts of
 the media platforms.
-For example, the short domain URL of the social network Flickr
+For example, the short domain URL of the social network Flickr 
+(\autoref{sec:flickr})
 is \url{flic.kr}, where the long domain URL is \url{flicker.com}.
-The short domain URL of Instagram is \url{instagr.am},
+The short domain URL of Instagram 
+(\autoref{sec:instagram}) is \url{instagr.am},
 where the long domain URL is \url{instagram.com}, \emph{etc.}
 We have created a~list of all known short domain URLs for the 
 considered media platforms so that the complete search query
@@ -357,8 +362,8 @@ combined with this list of short domain URLs:
 
 \noindent The complete data flow is illustrated in the
 architectural diagram in \autoref{fig:architecture}.
-As a~side note, Twitter on its website now has its limited own
-media extractor~\cite{wang2012twitter}
+As a~side note, Twitter on its website now has its own
+media extractor based on Twitter Cards~\cite{wang2012twitter}
 with support for some of of the media platforms,
 however, our own media extractor goes beyond Twitter's offer,
 especially since Facebook-owned Instagram's latest break-up with
@@ -376,14 +381,12 @@ Twitter.\footnote{\url{http://techcrunch.com/2012/12/05/kevin-systrom-on-pulling
 
 \section{Evaluation}
 
-We have run experiments in the period of January 10--19, 2012
-in which we have selected nine events.
+We have run experiments in the time period of January 10 to 19, 2012,
+during which we have randomly selected nine events
+that received broad social media coverage.
 For these events, we have collected media items and microposts
-using our media extractor
-
-\subsection{Events Considered}
-
-We give a~short overview of the nine selected events
+using our media extractor.
+In the following, we will provide a~short summary of the nine selected events
 in order to give the reader the necessary background knowledge.
 
 \begin{description}
@@ -401,20 +404,33 @@ in order to give the reader the necessary background knowledge.
        in the Las Vegas Convention Center. Not open to the public,
        the Consumer Electronics Association-sponsored show
        typically hosts previews of products and new product
-       announcements.\footnote{\url{http://www.cesweb.org/},
+       announcements.
+       CES Las Vegas took place from January 11 to 13,
+       2012.\footnote{\url{http://www.cesweb.org/},
        accessed November 21, 2012}
+       
+       \textbf{Cut the Rope Launch:}
+       On January 10, 2012 during Microsoft's keynote at CES, the
+       HTML5 version of the popular mobile game \textit{Cut the
+       Rope} was announced. This is a~sub-event of CES Las
+       Vegas.\footnote{\url{http://ces.cnet.com/8301-33377_1-57356403/},
+       accessed November 21, 2012}
+       
+       \textbf[Ubuntu TV Launch:}
+       Ubuntu TV by Canonical, based on the user interface Unity,
+       is a~variant of the Ubuntu operating system, designed to be
+       a~Linux distribution specially adapted for embedded systems
+       in televisions. It was announced by Canonical on January
+       10, 2012, at
+       CES.\footnote{\url{http://www.theverge.com/2012/1/9/2695387/ubuntu-tv-video-hands-on},
+       accessed November 21, 2012}       
+       
   \item[Costa Concordia Disaster]
        The Costa Concordia is an Italian cruise ship that hit
        a~reef and partially sank on January 13, 2012 off the
        Italian coast. The vessel ran aground at Isola del Giglio,
        Tuscany, resulting in the evacuation of 4,211
        people.\footnote{\url{http://en.wikipedia.org/wiki/Costa_Concordia_disaster},
-       accessed November 21, 2012}
-  \item[Cut the Rope Launch]
-       On January 10, 2012 during Microsoft's keynote at CES, the
-       HTML5 version of the popular mobile game \textit{Cut the
-       Rope} was announced. This is a~sub-event of CES Las
-       Vegas.\footnote{\url{http://ces.cnet.com/8301-33377_1-57356403/},
        accessed November 21, 2012}
   \item[Dixville Notch]
        Dixville Notch is an unincorporated village in Dixville
@@ -432,7 +448,7 @@ in order to give the reader the necessary background knowledge.
        the Iliad group. On January 10, 2012, a~long-awaited mobile
        phone package for \EUR{19.99} with calls included to 40
        countries, texts, multimedia messages and Internet was
-       announced by the Iliad group's Chief Strategy Officer,
+       announced by the Iliad group's Chief Strategy Officer
        Xavier
        Niel.\footnote{\url{http://www.nytimes.com/2012/01/11/technology/iliad-takes-aim-at-top-mobile-operators-in-france.html},
        accessed November 21, 2012}
@@ -440,20 +456,13 @@ in order to give the reader the necessary background knowledge.
        The Stop Online Piracy Act (SOPA) is a~bill of the United
        States proposed in 2011 to fight online trafficking in
        copyrighted intellectual property and counterfeit goods.
-       On January 18, the English Wikipedia, Reddit, and several
+       On January 18, the English Wikipedia, and several
        other Internet companies coordinated a~service blackout
-       to protest SOPA and its sister bill, the Protect IP Act.
+       to protest SOPA and its sister bill, the Protect IP Act
+       (PIPA).
        Other companies, including Google, posted links and
        photos in an effort to raise
        awareness.\footnote{\url{http://sopablackout.org/learnmore/},
-       accessed November 21, 2012}
-  \item[Ubuntu TV Launch]
-       Ubuntu TV by Canonical, based on the user interface Unity,
-       is a~variant of the Ubuntu operating system, designed to be
-       a~Linux distribution specially adapted for embedded systems
-       in televisions. It was announced by Canonical on January
-       10, 2012, at
-       CES.\footnote{\url{http://www.theverge.com/2012/1/9/2695387/ubuntu-tv-video-hands-on},
        accessed November 21, 2012}
   \item[Christian Wulff Case]
        Since December 2011, former German President Christian
