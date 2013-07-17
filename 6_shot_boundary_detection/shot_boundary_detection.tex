@@ -10,14 +10,20 @@
 
 \section{Introduction} \label{sec:videoshotboundarydetection}
 
-In video production and filmmaking, a~\emph{shot is a~series of frames
-that runs for an uninterrupted period of time}.
+In the previous chapter, we have motivated
+the need for deduplication of duplicate and near-duplicate media items.
+This chapter focuses on camera shot boundary detection,
+which is a~first step towards media item deduplication for videos
+and photos contained in videos.
+In video production and filmmaking, a~\emph{camera shot} is a~series of frames
+that runs for an uninterrupted period of time.
 Shots are always filmed with a~single camera and can be of any duration. 
-Shot boundary detection (also called cut detection or shot transition detection
-or simply shot detection) is a~field of research of video processing.
+Shot boundary detection (also called \emph{cut detection},
+\emph{shot transition detection},
+or simply \emph{shot detection}) is a~field of research of video processing.
 Its subject is the automated detection of transitions between shots
 with hard or soft cuts as the boundaries
-in digital video with, the purpose of temporal segmentation of videos.
+in digital video, with the purpose of temporal segmentation of videos.
 
 In this chapter, we present a~browser-based, client-side, and
 on-the-fly approach to this challenge
@@ -45,7 +51,8 @@ shots for a~sample video.
 \end{figure}
 
 \section{Related Work} 
-Video fragments consist of shots, which are sequences of
+
+As outlined before, video fragments consist of shots, which are sequences of
 consecutive frames from a~single viewpoint,
 representing a~continuous action in time and space.
 The topic of shot boundary detection has already been described
@@ -91,7 +98,7 @@ thereby categorizing different regions of the frame
 with their own color-based, space-invariant fingerprint.
 The results are promising, while computational complexity
 is kept to a~minimum, which is why we have chosen
-a~variation of this approach for our own algorithm.
+to base our algorithm on a~variation of this approach.
 
 \paragraph{Comparison of Mean and Standard Deviations:}
 
@@ -122,7 +129,7 @@ but only allows for time-based navigation
 via the \texttt{currentTime} attribute.
 The algorithm we propose in the sequence of this chapter 
 deals effectively with these limitations
-and we also demonstrate that it works efficiently.
+and we also show that it works efficiently.
 
 \subsection{Details of the Algorithm}
 
@@ -133,12 +140,15 @@ can have similar global histograms,
 we take local histograms into account instead. 
 We therefore split video frames in freely configurable
 rows and columns, \emph{i.e.}, lay a~grid of tiles over each frame.
-The user interface, as can be seen in \autoref{fig:algorithm},
+The user interface that can be seen in \autoref{fig:algorithm}
 currently allows for anything from a~$\mathit{1} \times \mathit{1}$ 
 grid to a~$\mathit{20} \times \mathit{20}$ grid.
-The limits are imposed by still reasonable processing time on consumer PCs.
+The limits are imposed by the reasonable processing time on consumer PCs.
 For each step, we examine a~frame $\mathit{f}$ and its direct
-predecessor $\mathit{f - 1}$.
+predecessor $\mathit{f - 1}$ and calculate their tile histograms.
+We recall that HTML5 streaming video has no notion of frames,
+so by frame we mean a~frame that we have navigated to
+via setting the \texttt{currentTime} attribute.
 Apart from the per-tile average histogram distance,
 the frame distance function further considers
 a~freely configurable number of \emph{most different} and
@@ -148,12 +158,12 @@ of a~video have different intensities of color changes,
 dependent on the movements from frame to frame.
 The idea is thus to boost the influence of movements in the frame
 distance function, and to limit the influence of permanence.
-In the debug view of our approach, as depicted in
+In the debug view of our approach that can be seen in
 \autoref{fig:algorithm}, blue boxes indicate movements,
 while red boxes indicate permanence.
 In the concrete example, Steve Jobs' head and shoulders move
 as he talks, which can be clearly seen
-at the blue boxes in the particular tiles.
+thanks to the blue boxes in the particular tiles.
 Additional movements come from a~swaying flag on the left,
 and a~plant on the right.
 In contrast, the speaker desk, the white background,
@@ -178,12 +188,12 @@ to deliver solid results on a~large corpus of videos,
 albeit for each individual video the optimal settings
 can be manually tweaked to take into account the
 particular video's special characteristics.
-The algorithm pseudo code can be seen in \autoref{code:algorithm}.
+The algorithm pseudocode can be seen in \autoref{code:algorithm}.
 
 We define the average histogram distance between two frames
 $\mathit{f}$ and $\mathit{f - 1}$ as $\mathit{avgHisto_{f}}$.
 In a~first step, we have examined the histogram distance
-data statistically, and observed that while
+data statistically and observed that while
 the overall average frame distance $\mathit{avgDist_{f}}$,
 defined as $$\mathit{avgDist_{f}} =
 \frac{1}{\mathit{nTiles}}\sum_{t=1}^{\mathit{nTiles}}
@@ -198,14 +208,14 @@ We use the standard deviation as a~value for the shot splitting
 threshold~\cite{lienhart1999comparison}
 to obtain very accurate shot splitting results.
 We found the boosting and limiting factors to have an overall
-positive quality impact on more lively videos,
+positive quality impact on more lively videos
 and a~negative quality impact on more monotone videos.
 Best results can be achieved if,
 after changing either the boosting or the limiting factors
 for the most similar or different tiles,
 the value of the shot splitting threshold is adapted
 to the new resulting standard deviation.
-The user interface can do this automatically.
+The user interface can optionally do this automatically.
 
 \begin{figure}
 \centering
@@ -250,7 +260,7 @@ from the \texttt{<video>} tag at the current video position,
 we use the \texttt{drawImage()} function of the 2D context of the
 \texttt{<canvas>} tag,
 which accepts a~video as its first parameter.
-We then analyze the video frame's pixels tile-wise
+We then analyze the video frame's pixels per tile
 and calculate the histograms.
 In order to retrieve the tile-wise pixel data
 from the 2D context of the \texttt{<canvas>},
@@ -267,7 +277,8 @@ of the video frame's data
 that can serve for filmstrip representations of the video.
 
 We have implemented the shot boundary detection algorithm
-as a~stand-alone Web application and as a~browser extension.
+as a~stand-alone Web application and as a~browser extension
+for the popular video hosting platform YouTube.
 Browser extensions are small software programs that users can install
 to enrich their browsing experience with their browser.
 They are typically written using a~combination of standard Web technologies,
@@ -276,7 +287,7 @@ There are several types of extensions; for this work
 we focus on extensions based on so-called \emph{content scripts}.
 Content scripts are JavaScript programs that run in the context of Web pages
 via dynamic code injection.
-By using the standard Document Object Model (DOM),
+By using the standard Document Object Model (DOM)~\cite{lehors2004dom},
 they can modify details of Web pages.
 
 \section{Evaluation}
@@ -286,13 +297,14 @@ comes with its very own challenges that were briefly outlined before.
 First, it is a~question of streaming speed.
 Especially with high-definition (HD) video,
 this can be very demanding.
-We do not attach the analysis \texttt{<video>} tag
-to the DOM tree~\cite{lehors2004dom} to save some CPU cycles,
+We do not attach the analysis \texttt{<video>} and \texttt{canvas} tags
+to the DOM tree~\cite{lehors2004dom} so that the browser
+does not have to render them and thus can save some CPU cycles,
 however, the video playing logic still has to seek the video position
-ahead in one-second steps  and process the encountered still frame.
+ahead in one-second steps and process the encountered still frame.
 Even on a~higher-end computer (our experiments ran on a~MacBook
 Pro, Intel Core 2 Duo 2,66 GHz, 8 GB RAM),
-the process of analyzing and displaying in parallel
+the process of in parallel analyzing and displaying
 a~$\mathit{1280} \times \mathit{720}$ HD video of media type
 \emph{video/mp4; codecs="avc1.64001F, mp4a.40.2"}
 caused an average CPU load of about 70\%.
@@ -320,22 +332,21 @@ detecting near- or exact duplicate videos.
 
 \section{Future Work}
 
-Optimization potential lies in
-improving the analysis speed by dynamically selecting
-lower quality analysis video files,
+There is potential for optimization of the analysis speed
+by dynamically selecting lower quality analysis video files,
 given that videos are oftentimes available in several resolutions,
 like Standard Definition (SD) or High Definition (HD).
 We have checked in how far analysis results differ
 for the various qualities,
 with the result that SD quality is sufficient.
-We have made available the shot detection application online at
+We have made the shot detection application available online at
 \url{http://tomayac.com/youpr0n/} and invite the reader to compare
 the results, \emph{e.g.}, the SD video
 \url{http://tomayac.com/youpr0n/videos/vsfashionshow_sd.mp4} with
 the HD version \url{http://tomayac.com/youpr0n/videos/vsfashionshow_hd.mp4}.
 
 Second, more advanced heuristics for the various user-definable
-options in the analysis process are needed.
+options in the analysis process are possible.
 While there is no optimal configuration for all types of videos,
 there are some key indicators that can help categorize videos
 into classes and propose predefined known working settings
@@ -354,7 +365,7 @@ We had cases where not treating those tiles differently
 at all, \emph{i.e.}, setting
 $\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, 
 led to better results; for example with screencast-type videos,
-typically used to demonstrate and teach the use of software features,
+typically used to demonstrate and teach the use of software features
 that were not recorded with a~real camera,
 but directly recorded from the computer's screen, with ``camera shots''
 then later added with video editing software.
@@ -365,10 +376,10 @@ In this chapter, we have introduced an algorithm for video shot boundary detecti
 that was implemented as a~stand-alone Web application
 and as a~browser extension that adds shot boundary detection to YouTube videos.
 While the task of shot boundary detection is considered resolved for many cases,
-this is not entirely true for the case of streamed Web video.
+this is not true for the case of streaming online Web video.
 With this research, we have proposed and evaluated an approach
 that was shown to deliver consistently good results for all sorts of online videos.
-The biggest remaining challenge is finding optimal algorithm settings
+The biggest remaining challenge is finding \emph{the} optimal algorithm settings
 for a~given video.
 Promising directions for improving the shot boundary detection results
 are video categorization (fast-moving, slow-moving, color, black-and-white, \emph{etc.})\ prior
