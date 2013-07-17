@@ -197,28 +197,28 @@ In the following, we present two representative ones.
 The video hosting platform YouTube%
 \footnote{YouTube: \url{http://www.youtube.com/}}
 allows for deep-linking into videos
-via a~proprietary {\sc url} parameter \texttt{t},
+via a~proprietary URL parameter \texttt{t},
 whose value has to match the regular expression
 \texttt{\textbackslash d+m\textbackslash d+s} (for minutes and seconds),
 as documented in~\cite{youtube2008link}.
 Dailymotion\footnote{Dailymotion: \url{http://www.dailymotion.com/}}
-has similar {\sc url} parameters \texttt{start} and \texttt{end},
+has similar URL parameters \texttt{start} and \texttt{end},
 whose values have to match the regular expression
 \texttt{\textbackslash d+} (for seconds).
-The {\sc css} Backgrounds and Borders Module Level~3 specification%
+The CSS Backgrounds and Borders Module Level~3 specification%
 ~\cite{bos2012css3} defines the \texttt{background-size} property
 that can be used to crop media items visually
 and thus create the illusion of a~spatial media fragment
 when combined with a~wrapping element.
-Media Fragments {\sc uri}~\cite{troncy2012mediafragments}
-specifies a~syntax for constructing media fragments {\sc uri}s
+Media Fragments URI~\cite{troncy2012mediafragments}
+specifies a~syntax for constructing media fragments URIs
 and explains how to handle them
-when used over the {\sc http} protocol~\cite{fielding1999http}.
+when used over the HTTP protocol~\cite{fielding1999http}.
 The syntax is based on the specification of particular name-value pairs
-that can be used in {\sc uri} query strings and {\sc uri} fragment identifiers
+that can be used in URI query strings and URI fragment identifiers
 to restrict a~media resource to a~certain fragment.
 The temporal and spatial dimensions are currently supported
-in the basic version of Media Fragments {\sc uri}s.
+in the basic version of Media Fragments URIs.
 Combinations of dimensions are also possible.
 
 \paragraph{Digital Storytelling:}
@@ -235,7 +235,7 @@ the term \emph{Web~2.0 storytelling},
 where people create \emph{microcontent}---%
 small chunks of content, with each chunk conveying a~primary idea---%
 that gets combined with social media to form coherent stories.
-We use Media Fragments {\sc uri}s to help human annotators
+We use Media Fragments URIs to help human annotators
 understand the results of an algorithm
 by converting dry software debugging data to digital stories.
 
@@ -629,37 +629,6 @@ was aired on December 4, 2012 on CBS
 to an audience of 9.48 million viewers.
 CBS suggested the hashtag \texttt{\#VSFashionShow} for the event.
 
-\subsection{Algorithm Debug View}
-\label{sec:algorithm-debug-view}
-
-In order to illustrate the way the algorithm clusters media items,
-\autoref{fig:algorithmdebugtwoclusters} shows a~debug view of the algorithm
-for two clustered media items related to the 
-\emph{Grammy Awards Nominations 2013} event.
-The red border around the media item indicates at least one detected face.
-Independent from the actual media item's aspect ratio,
-the tile-wise comparison always happens based on a~potentially squeezed
-square aspect ratio version.
-The two slightly different media items (caption insertion, lighting change)
-were clustered, because out of the $10 \cdot 10 = 100$ tiles,
-$85$ of the minimum required $\textit{tiles\_threshold}$ of $67$ tiles differed not more
-than the $\textit{similarity\_threshold}$ of $10$ per tile.
-In both media items, exactly $1$ face was detected.
-A~screenshot of the complete media item clustering application (with a~different event)
-is available online at \url{http://twitpic.com/c02qfs/full} (accessed 02/14/2013).
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.5\linewidth]{./algorithmdebug.png}
-  \caption[Algorithm debug view for two clustered media items]
-  {Algorithm debug view for two clustered media items
-  related to the \emph{Grammy Awards Nominations 2013} event
-  (the red border around the media items indicates at least one detected face)}
-  \label{fig:algorithmdebugtwoclusters}
-\end{figure}
-
-
-
 \subsection{Evaluation}\label{sec:evaluation-chpater6}
 
 We have collected and made available%
@@ -822,8 +791,7 @@ The explanation for this is twofold.
 First, the original source media items were very small thumbnail-like images,
 which hindered face recognition
 (there is actually an \emph{unequal} number of faces in each image).
-Second, the way the algorithm works,
-which is best understood by looking at \autoref{fig:algorithmdebugtwoclusters},
+Second, the way the algorithm works
 causes the tiles of very tiny media items like the ones in question to blur.
 
 \begin{figure}[!ht]
@@ -916,7 +884,38 @@ with the described work-around approach.
 In this section, we describe how media item differences
 can be described with media fragments URIs and speech synthesis.
 We will combine the two techniques for the purpose of
-a~novel algorithm debugging approach.
+introducing a~novel algorithm debugging approach,
+illustrated with our previously described
+media item clustering algorithm.
+
+\subsection{Algorithm Debug View}
+\label{sec:algorithm-debug-view}
+
+In order to illustrate the way the algorithm clusters media items,
+\autoref{fig:algorithmdebugtwoclusters} shows a~debug view of the algorithm
+for two clustered media items related to the 
+\emph{Grammy Awards Nominations 2013} event.
+The red border around the media item indicates at least one detected face.
+Independent from the actual media item's aspect ratio,
+the tile-wise comparison always happens based on a~potentially squeezed
+square aspect ratio version.
+The two slightly different media items (caption insertion, lighting change)
+were clustered, because out of the $10 \cdot 10 = 100$ tiles,
+$85$ of the minimum required $\textit{tiles\_threshold}$ of $67$ tiles differed not more
+than the $\textit{similarity\_threshold}$ of $15$ per tile.
+In both media items, exactly $1$ face was detected.
+A~screenshot of the complete media item clustering application (with a~different event)
+is available online at \url{http://twitpic.com/c02qfs/full} (accessed July 17, 2013).
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.5\linewidth]{./algorithmdebug.png}
+  \caption[Algorithm debug view for two clustered media items]
+  {Algorithm debug view for two clustered media items
+  related to the \emph{Grammy Awards Nominations 2013} event
+  (the red border around the media items indicates at least one detected face)}
+  \label{fig:algorithmdebugtwoclusters}
+\end{figure}
 
 \subsection{Media Fragments Requirements}
 \label{sec:media-fragment-requirements}
@@ -940,7 +939,7 @@ media fragments identifiers need to be capable of expressing the following conce
     video subsegments of any length---including video still frames---need to be supported.
 \end{enumerate}
 
-Media Fragments {\sc uri}~\cite{troncy2012mediafragments}
+Media Fragments URI~\cite{troncy2012mediafragments}
 as described in the basic version of the specification
 supports all three requirements.
 The \emph{temporal dimension} is denoted by the parameter name \texttt{t}
@@ -955,7 +954,7 @@ If only a~single value is present, it corresponds to the begin time,
 except for when it is preceded by a~comma,
 which indicates the end time.
 The temporal dimension is specified as Normal Play Time
-({\sc npt},~\cite{schulzrinne1998realtime}).
+(NPT,~\cite{schulzrinne1998realtime}).
 
 The \emph{spatial dimension} selects an area of pixels from media items.
 In the current version of the specification,
@@ -975,7 +974,7 @@ in common Web browsers, this is not the case for the spatial dimension.
 The intent of the Ontology for Media Resources~\cite{lee2012mediaontology}
 by Lee \emph{et~al.}\ is to bridge different description methods of media resources
 and to provide a~core set of descriptive properties.
-Combined with Media Fragments {\sc uri}, this allows for making statements
+Combined with Media Fragments URI, this allows for making statements
 about media items and fragments thereof.
 An example in RDF Turtle syntax~\cite{prudhommeaux2013turtle}
 is given in \autoref{code:media-fragment}.
@@ -1264,17 +1263,17 @@ or the due to the black-and-white tolerance not considered tiles)
 are visually highlighted to support the human evaluators' understanding,
 as can be seen in \autoref{fig:tile-highlight}
 and in a~screencast available at \url{http://youtu.be/DWqwEnhqTSc}.
-Spatial Media Fragments {\sc uri}s are currently not implemented
+Spatial Media Fragments URIs are currently not implemented
 in any common Web browser~\cite{weinberg2013polyfill}.
 In order to nonetheless support spatial media fragments,
-we use a~so-called JavaScript polyfill for Media Fragments {\sc uri}
+we use a~so-called JavaScript polyfill for Media Fragments URI
 that was developed in the context of this thesis.%
 \footnote{xywh.js: \texttt{https://github.com/tomayac/xywh.js}}
 In Web development, a~polyfill is downloadable code that provides facilities
-by emulating potential future features or {\sc api}s
+by emulating potential future features or APIs
 that are not built-in to a~Web browser~\cite{sharp2010polyfill}.
 Our polyfill---in contrast to an additional earlier
-spatial Media Fragments {\sc uri} polyfill implementation~\cite{weinberg2013polyfill}
+spatial Media Fragments URI polyfill implementation~\cite{weinberg2013polyfill}
 by Fabrice Weinberg---supports more browsers and both image \emph{and} video.
 
 \begin{figure}[!ht]
@@ -1294,13 +1293,15 @@ by Fabrice Weinberg---supports more browsers and both image \emph{and} video.
 \subsection{Evaluation}
 \label{sec:evaluation}
 
+\paragraph{Evaluating Natural Language Generation Systems:}
+
 For the evaluation of natural language generating systems,
 there are three basic techniques.
 First, the \emph{task-based} or \emph{extrinsic} evaluation,
 where the generated text is given to a~person who evaluates
 how well it helps with performing a~given task~\cite{portet2009nlg}.
 Second, there are \emph{automatic metrics}
-such as {\sc bleu}~\cite{papineni2002bleu}, where the generated text
+such as BLEU~\cite{papineni2002bleu}, where the generated text
 is compared to texts written by people based on the same input data.
 Finally, there are \emph{human ratings}, where the generated text
 is given to a~person who is asked to rate the quality and usefulness of the text.
@@ -1308,10 +1309,28 @@ is given to a~person who is asked to rate the quality and usefulness of the text
 For our evaluation, we have chosen the third approach of human ratings,
 as we do not evaluate the natural language generating system in isolation,
 but in \emph{combination with a~visual representation}
-that makes use of spatial Media Fragments {\sc uri}s
+that makes use of spatial Media Fragments URIs
 (\autoref{fig:similar-different} and \autoref{fig:tile-highlight}).
+
+\paragraph{Evaluating Subjective Data:}
+
+A~common subjective evaluation technique
+is the \emph{Mean Opinion Score} (MOS,~\cite{itu1998mos}).
+Traditionally, MOS is used for conducting subjective evaluations
+of telephony network transmission quality,
+however, more recently, MOS has also found
+wider usage in the multimedia community
+for evaluating inherently subjective things
+like perceived quality from the users' perspective. 
+Therefore, a~set of standard subjective tests are conducted,
+where a~number of users rate the quality of test samples
+with scores ranging from 1 (worst) to 5 (best).
+The actual MOS is then the arithmetic mean of all individual scores.
+
+\paragraph{Evaluation Results:}
+
 In the context of this research,
-we have conducted {\sc mos}~\cite{itu1998mos} test sessions
+we have conducted MOS test sessions
 with five external human raters.
 We generated artificially modified deduplicated media item sets
 around media items about the \emph{Backstreet Boys}
@@ -1327,7 +1346,7 @@ for the five human raters, \emph{i.e.}, obviously correct clustering
 We then asked the five human raters to have the system
 automatically explain the algorithm results to them
 as described in \autoref{sec:from-debug-output-to-story}.
-The raters gave {\sc mos} scores ranging from $2$ to $5$,
+The raters gave MOS scores ranging from $2$ to $5$,
 with the overall average values as follows:
 \textbf{Clustering Consent}:~$4.3$, \textbf{Clustering Dissent}:~$3.3$,
 and \textbf{Non-Clustering Dissent}:~$4.1$.
@@ -1363,12 +1382,12 @@ hinder its full applicability in practice.
 Finally, we have successfully demonstrated the feasibility
 of making the task of debugging a~complex algorithm
 more human-friendly by means of a~combined visual and audial approach.
-We have used Media Fragments {\sc uri}
+We have used Media Fragments URI
 together with a~natural language generation framework
 realized through a~speech synthesizer to visually and audially
 describe media item differences.
 Our contribution also includes a~polyfill implementation
-of spatial Media Fragments {\sc uri}s.
+of spatial Media Fragments URIs.
 
 Media item deduplication of both exact and near-duplicate media items
 is a~fundamental step in dealing with huge amounts of social media
