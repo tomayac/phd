@@ -10,6 +10,8 @@
 
 \section{Introduction}
 
+Microposts are the textual metadata that accompany media items.
+\emph{Per~se}, these microposts are nothing but strings.
 For the task of making sense out of social network microposts,
 our contributions are methods to consolidate and rank
 the results of multiple named entity recognition and
@@ -19,6 +21,7 @@ consolidation and ranking, and that
 (ii) transparently tracks the underlying Web services'
 data provenance.
 
+The impact of social networks is ever-growing.
 According to official statistics, Facebook is the biggest
 social network with one billion monthly active
 users\footnote{\url{http://newsroom.fb.com/Key-Facts},
@@ -46,7 +49,7 @@ Similar to the microblogging site Twitter
 with its search
 API,\footnote{\url{https://dev.twitter.com/docs/api/1.1/get/search/tweets},
 accessed November 20, 2012}
-Facebook offers both a~search function on the website,
+Facebook offers both a~search function on the website
 and a~search
 API,\footnote{\url{https://developers.facebook.com/docs/reference/api/},
 accessed November 20, 2012}
@@ -80,11 +83,11 @@ Twitter to perform data analysis on the encountered set of
 \emph{public} microposts by sending extracted data
 to a~central data processing unit.
 Users need to be logged in to Facebook or Twitter for the 
-extensions to work, and must have given
+extensions to work and must have given
 their \emph{explicit agreement} during
 the extension installation process
-for part of their data being shared in an anonymized way.
-While this is far inferior and not comparable at all
+for part of their data to be shared in an anonymized way.
+While this is far inferior and not comparable
 with direct \emph{fire hose} access,
 given a~critical amount of participants,
 it still provides access to a~random sample of microposts
@@ -104,7 +107,7 @@ along each micropost, as illustrated in \autoref{fig:facebookswarmnlp}.
 Finally the extracted named entities
 are sent to a~central Web analytics framework~\cite{kaushik2009analytics}
 to compute basic or advanced trends, for example,
-by ranking the most discussed-about named entities per day,
+by ranking the most discussed named entities per day,
 or by pivoting named entities by Web analytics data,
 like users' geographic locations.
 
@@ -118,6 +121,7 @@ like users' geographic locations.
 \end{figure}
 
 \subsection{A~Wrapper API for Named Entity Disambiguation}
+\label{sec:wrapperapi}
 
 As mentioned before, in order to perform named entity extraction
 and disambiguation, we rely on a~wrapper API
@@ -137,10 +141,10 @@ used for our browser extensions.
 \section{Related Work}
 
 We regard related work from different angles.
-First, we look into different approaches
+First, we look at different approaches
 for named entity disambiguation,
-which is relevant for adding meaning to microposts.
-Second, we look into efforts in mashing up Web services,
+which are relevant for adding meaning to microposts.
+Second, we look at efforts to mash-up Web services,
 which is important for tracking data provenance
 when using multiple APIs in combination.
 
@@ -148,11 +152,11 @@ when using multiple APIs in combination.
 
 In~\cite{choudhury2009youtubetags},
 Choudhury \emph{et~al.}\ describe a~framework for
-semantic enrichment, ranking, and integration
+the semantic enrichment, ranking, and integration
 of Web video tags using Semantic Web technologies.
 This task is more related to microposts
 than it seems at first sight:
-video tags can consist of more than one word,
+video tags can consist of more than one word
 and microposts (especially on Twitter) oftentimes consist
 of just a~few words.
 In order to enrich the typically sparse
@@ -162,12 +166,12 @@ or the video title and video description are used,
 but also social features such as the playlists
 where a~video appears in and related videos.
 Next, the tags are ranked by their co-occurrence
-and in a~final step interlinked to DBpedia~\cite{auer2007dbpedia}
+and in a~final step interlinked with DBpedia~\cite{auer2007dbpedia}
 concepts for greater integration with other datasets.
 The authors disambiguate the tags based on
 WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
 synsets (groups of data elements that are considered
-semantically equivalent for the purposes of information retrieval)
+semantically equivalent for the purpose of information retrieval)
 if possible, \emph{i.e.},
 if there is only one matching synset in WordNet,
 the corresponding WordNet URI in DBpedia is selected.
@@ -234,7 +238,7 @@ Session graphs are created by using only queries as nodes
 with edges between them if they appear in the same user sessions,
 again weighted by co-occurrence frequencies.
 An exemplary entity retrieval query is \emph{hybrid cars},
-semantically bridgeable queries are then \emph{toyota prius},
+semantically bridgeable queries are consequently \emph{toyota prius},
 or \emph{honda civic hybrid}).
 These entities are then ranked and returned to the user.
 
@@ -318,20 +322,20 @@ in order to disambiguate named entities.
 
 \subsubsection{OpenCalais}\label{sec:opencalais}
 
-The
-OpenCalais\footnote{\url{http://www.opencalais.com/documentation/opencalais-documentation},
+The OpenCalais%
+\footnote{\url{http://www.opencalais.com/documentation/opencalais-documentation},
 accessed November 20, 2012}
 Web service automatically creates rich semantic metadata
 for textual documents.
 Using Natural Language Processing (NLP),
-machine learning and other methods, OpenCalais analyzes documents
-and finds the entities within and also returns the facts and
+machine learning, and other methods, OpenCalais analyzes documents
+and finds the entities within, and also returns the facts and
 events hidden within them.
 OpenCalais is the only of the examined Web services
 that provides details on occurrences in concrete sections
 of the submitted coherent text.
 This allows for the exact matching of the location in the text
-where a~certain entity is believed to appear.
+where a~certain entity is detected.
 This is especially useful as OpenCalais
 is also oftentimes capable of recognizing references
 within the text to prior discovered entities
@@ -342,14 +346,16 @@ thanked people for their work in ensuring the victory.
 An OpenCalais response consists of three parts:
 
 \begin{itemize}
-  \item a~list of topics that the text is categorized in.
-  \item a~list of concrete entities that occur in the text.
-  \item a~list of social concept tags.
+  \itemsep0
+  \item a~list of topics that the text is categorized in
+  \item a~list of concrete entities that occur in the text
+  \item a~list of social concept tags
 \end{itemize}
 
 The problem with the extracted entities is
 that they are not always uniquely disambiguated.
-An example is the URL \url{http://d.opencalais.com/pershash-1/cf42394f-4ae9-3e8e-958a-088149c86565.html}
+An example is the named entity
+represented by the URL \url{http://d.opencalais.com/pershash-1/cf42394f-4ae9-3e8e-958a-088149c86565.html}
 that represents the concept of an entity of type \texttt{person}
 named \emph{Barack Hussein Obama}.
 However, a~\texttt{person}-type \emph{Barack Obama} entity from the same document is also represented by the URL
@@ -361,7 +367,7 @@ entities link to other data sources in the
 LOD cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
 In order to discover links to the LOD cloud,
 each returned entity URL has to be retrieved at the expense
-of an HTTP request, and the returned RDF has to be checked
+of an HTTP request and the returned RDF has to be checked
 for said links.
 
 \subsubsection{AlchemyAPI}
@@ -383,8 +389,8 @@ In practice, the difference between named entity extraction
 and concept tagging is subtle.
 In consequence, we treat entities and concepts the same.
 Overall, AlchemyAPI results are very accurate
-and in the majority of cases excellently interlinked
-to well-known members of the LOD cloud,
+and in the majority of cases well interlinked
+with members of the LOD cloud,
 among others with DBpedia~\cite{auer2007dbpedia},
 OpenCyc~\cite{lenat1995cyc},
 and Freebase~\cite{markoff2007freebase}.
@@ -398,7 +404,8 @@ as outlined in \autoref{sec:linked-data-principles}.
 AlchemyAPI also oftentimes returns thematically closely related,
 but for a~concrete text not directly relevant entities
 beyond the abstract concepts from its concept tagging service,
-for example, in a~text about the CEO of a~given company, a~CEO of one of its competitors, but that is not directly mentioned in the text.
+for example, in a~text about the CEO of a~given company,
+the name of the CEO of one of its competitors.
 
 \subsubsection{Zemanta}
 
@@ -416,7 +423,7 @@ Zemanta convinces through very accurate entity disambiguation
 and thus high precision, however, at the cost of recall.
 Where other services return named entities of lower precision,
 the design objectives of Zemanta instead seem to prefer
-not to return anything at all.
+not to return anything over returning returning low-precision results.
 
 \subsubsection{DBpedia Spotlight}
 
@@ -427,12 +434,12 @@ to the LOD cloud through DBpedia.
 DBpedia Spotlight performs named entity extraction,
 including entity detection and disambiguation
 with adjustable precision and recall.
-DBpedia Spotlight allows users to configure the annotations
+DBpedia Spotlight allows users to customize the annotations
 to their specific needs through the DBpedia
 Ontology\footnote{\url{http://wiki.dbpedia.org/Ontology},
 accessed November 20, 2012}
 and quality measures such as prominence, topical pertinence,
-contextual ambiguity and disambiguation confidence.
+contextual ambiguity, and disambiguation confidence.
 
 \subsection{Machine Translation}
 \label{sec:machine-translation}
@@ -460,7 +467,7 @@ using a~set of predefined rules.
 In an initial run, if a~word is known, the tagger
 first assigns the most frequent tag,
 or, if a~word is unknown, it naively assigns the tag ``noun'' to it.
-By applying over and over the processing rules and
+By applying the processing rules over and over again and
 changing the incorrect tags, a~sufficiently high accuracy is achieved.
 In the current processing chain, POS tagging does not yet
 play an active role,
@@ -487,13 +494,13 @@ which we motivate in the following.
 
 From the considered services, only OpenCalais returns data in its
 own namespace (\url{http://d.opencalais.com/*}), which is
-weakly, however, not in all cases,
-interlinked with other datasets in the LOD cloud.
-In contrast, the other services return results either directly
+interlinked with other datasets in the LOD cloud,
+however, not in all cases.
+In contrast, all other services return results either directly
 in the DBpedia namespace (\url{http://dbpedia.org/resource/*}),
 as in the case of DBpedia Spotlight,
 or in the DBpedia namespace together with other
-well interlinked LOD cloud dataset namespaces, like Freebase
+well interlinked LOD cloud dataset namespaces like Freebase
 (\url{http://rdf.freebase.com/rdf/*}) in the cases of
 AlchemyAPI and Zemanta.
 
@@ -503,7 +510,7 @@ in~\cite{glaser2009sameas} based on \texttt{owl:sameAs} links
 could be used.
 In practice, however, while many resources in the Linked Data
 world are marked as equivalent to each other,
-the quality of such equivalence links is not always excellent.
+the quality of such equivalence links is not always optimal.
 An example of a~good equivalence link is shown in \autoref{code:sameas}.
 
 \begin{lstlisting}[caption={Example of a~good equivalence link},
@@ -520,7 +527,7 @@ with \texttt{owl:sameAs} is that people tend to use it
 in different ways with different intentions.
 In~\cite{halpin2010owlsameas},
 the authors differentiate between four separate usage styles,
-ranging from expressing loose relatedness,
+ranging from expressing loose relatedness
 to strict equivalence.
 Despite the different intentions, people tend to incorrectly use
 \texttt{owl:sameAs} habitually, according to the study.
@@ -530,7 +537,7 @@ when the intention of the link creator of the particular
 
 \subsection{Linked Data Principles Applied}
 
-We recall the Linked Data principles, as outlined
+We recall the Linked Data principles, that were outlined
 in \autoref{sec:linked-data-principles}.
 In order to represent extracted named entities from
 social network microposts in an unambiguous way,
@@ -544,21 +551,24 @@ These APIs take a~textual document as an input,
 perform named entity extraction and disambiguation on it,
 and finally link the detected named entities back
 into the LOD cloud.
-We use these APIs in parallel, and by combining their results,
-aim for the emergence effect in the sense of Aristotle:
+We use these APIs in parallel and by combining their results
+aim for the emergence effect%
+\footnote{Aristotle, Metaphysics, Book H 1045a 8--10}
+in the sense of Aristotle:
 \textit{``the totality is not, as it were, a~mere heap,
 but the whole is something besides the
-parts''}.\footnote{Aristotle, Metaphysics, Book H 1045a 8--10}
+parts''}.
 
-We recall the wrapper API described in the introduction of
-this chapter that calls third-party NLP Web services
+We recall the wrapper API described in \autoref{sec:wrapperapi}
+that calls third-party NLP Web services
 in order to return a~combined result of consolidated entities.
 All NLP Web services return lists of entities with
 their respective types and/or subtypes, names,
 relevance, and URIs that interlink the entity in question
 with the LOD cloud.
 The problem is that each service has implemented
-its own typing system and providing mappings for all of them
+its own typing system.
+Providing mappings for all of them
 is a~time-consuming, cumbersome task.
 While Rizzo \emph{et~al.}\ have defined mappings in the context
 of the NERD framework~\cite{rizzo2011nerd,rizzo2012nerd},
@@ -593,15 +603,16 @@ Given the different two entity names (``Google Inc.'' vs.\
 detected names.
 Each service already includes a~relevance score ranging from
 0 (irrelevant) to 1 (relevant).
-The consolidated relevance are the
+The consolidated relevance is calculated via the
 averaged relevance scores of both services.
 While there may be different definitions of relevance
-applied by each service, however,
-those differences not being disclosed,
-the arithmetic mean is the most practicable way to deal with this,
+applied by each service and given
+that these differences are not disclosed,
+the arithmetic mean is a~pragmatic way to deal with the situation,
 especially as all services use relevance scores between 0 and 1.
 We maintain provenance metadata for each URI
-on the JSON representation.
+on the JSON representation,
+as can be seen in \autoref{code:googlecombined}.
 Finally, we repeat the process for all other services.
 
 \newpage
@@ -692,8 +703,8 @@ be the result of up to four agreeing (or disagreeing) API calls.
 \subsection{The Need for Providing Provenance Metadata}
 
 Hartig \emph{et~al.}\ mention in~\cite{hartig2010provenance}
-reasons to justify the need for provenance metadata.
-Among those reasons are linked dataset replication and distribution
+reasons that justify the need for provenance metadata.
+Among these reasons are linked dataset replication and distribution
 on the Web with not necessarily identical namespaces:
 based on the same source data, different publishers can
 create diverging copies of a~linked dataset
@@ -714,7 +725,7 @@ This enables
 which represents the most important reason.
 
 In order to track the contributions of the various sources,
-we have decided to use the Provenance
+we have opted to use the Provenance
 Vocabulary~\cite{hartig2012provenance}
 by Hartig and Zhao with the prefix \texttt{prv},
 the HTTP Vocabulary in RDF~\cite{koch2011http}
@@ -777,7 +788,7 @@ prefix \texttt{prv}, the HTTP Vocabulary in RDF~\cite{koch2011http}
 with prefix \texttt{http}, and the Representing Content in RDF
 vocabulary~\cite{koch2011content} with prefix \texttt{cnt}.
 
-First, we state that \texttt{:G} is both a~\texttt{prv:DataItem}
+As a~first step, we state that \texttt{:G} is both a~\texttt{prv:DataItem}
 and an \texttt{rdfg:Graph}.
 \texttt{:G} is \texttt{prv:createdBy} the process of
 a~\texttt{prv:DataCreation}.
