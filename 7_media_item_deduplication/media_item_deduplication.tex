@@ -850,9 +850,9 @@ an algorithm for photo deduplication.
 In the upcoming section, we will outline the conceptual framework
 of how this algorithm can be combined with the previously introduced
 video shot boundary detection algorithm from \autoref{cha:shot-boundary-detection}.
-This will allows us to, on the one hand,
-directly deduplicate videos on a~shot boundary frame basis,
-or, on the other hand, to detect
+This will allows us to on the one hand
+directly deduplicate videos on a~shot boundary frame basis
+or on the other hand to detect
 whether a~given photo is contained in a~video.
 
 \subsection{Photo-contained-in-Video Workflow}
@@ -872,12 +872,12 @@ with all social network photos,
 some of which are shown in \autoref{fig:topvsfashionshow}.
 We note, however, that especially for longer videos
 (about 4 minutes and longer)
-this approach does not scale due to the sheer number of shot boundaries
+this approach does not scale due to the sheer number of camera shots
 in common videos shared on social networks,
 which causes the process to consume too much time in practice.
 At the expense of exactness, (the few) poster still frames
 that are typically returned by video hosting platform APIs
-can be used, rather than extracting (all) shot boundaries manually.
+can be used rather than extracting (all) shot boundaries manually.
 
 \begin{figure}[!ht]
   \centering
@@ -892,7 +892,7 @@ can be used, rather than extracting (all) shot boundaries manually.
 To detect whether a~given video is contained in another,
 we follow a~similar approach as outlined in the previous subsection,
 with the sole difference being that we need to compare
-all detected shot boundary representative photos of the one video
+all detected shot boundary representative photos of the source video
 with the ones from the other.
 Naturally, this approach is even less scalable
 with regard to system response time.
@@ -906,12 +906,17 @@ recently announced Graph Search product was initially published
 on Facebook,\footnote{\url{https://www.facebook.com/about/graphsearch},
 accessed January 22, 2013} however, people republished the same video 
 multiple times on YouTube.
-As the YouTube-generated poster frames were similar enough,
-and even if the other video meta data like title and description
-were different, with the described work-around approach,
-we were able to effectively deduplicate the videos.
+As the YouTube-generated poster frames were similar enough
+and even if the other video metadata like title and description
+were different, we were able to effectively deduplicate the videos
+with the described work-around approach.
 
 \section{Describing Media Item Differences with Media Fragments URI and Speech Synthesis}
+
+In this section, we describe how media item differences
+can be described with media fragments URIs and speech synthesis.
+We will combine the two techniques for the purpose of
+a~novel algorithm debugging approach.
 
 \subsection{Media Fragments Requirements}
 \label{sec:media-fragment-requirements}
@@ -931,7 +936,7 @@ media fragments identifiers need to be capable of expressing the following conce
     express that these bounding rectangles are within the dimensions
     of the original media item and that each bounding rectangle contains a~face.
   \item Requirements \textit{i} and \textit{ii} need to be fulfilled
-    for both types of media items, photos and videos; in case of the latter,
+    for both types of media items, \emph{i.e.}, photos and videos. In case of the latter,
     video subsegments of any length---including video still frames---need to be supported.
 \end{enumerate}
 
@@ -1023,7 +1028,7 @@ the following clustering conditions have to be fulfilled.
   \item[Cond.~3] If the average colors of a~tile and its counterpart tile
     are within the black-and-white tolerance $\textit{bw\_tolerance}$,
     these tiles are not considered and $\textit{tiles\_threshold}$
-    is decreased accordingly (we talk about $\textit{effective\_tiles\_threshold}$
+    is decreased accordingly (we will talk about $\textit{effective\_tiles\_threshold}$
     in \autoref{sec:debugging-the-algorithm}).
 \end{description}
 
@@ -1057,14 +1062,14 @@ a~potentially squeezed square aspect ratio version.
   \caption[Debug view of the media item deduplication algorithm]{Debug view of the media item deduplication algorithm:
   since no faces are detected in \autoref{fig:near-duplicate},
   the clustering is based on tile similarity;
-  black tiles are not considered due to the chosen black-and-white tolerance)}
+  pure black tiles are not considered due to the chosen black-and-white tolerance)}
   \label{fig:algorithmdebugtilesimilarity}
 \end{figure}
 
 \subsubsection{Debugging the Algorithm}
 \label{sec:debugging-the-algorithm}
 
-In this section, we consider the following three debug scenarios
+In this subsection, we consider the following three debug scenarios
 that occurred most frequently during our previous experiments with human raters.
 They correspond to situations where, given a~set of
 deduplicated and clustered media items, a~human annotator wanted
@@ -1103,7 +1108,7 @@ is the $\textit{bw\_tolerance}$ too high or too low (\textbf{Cond.~3})?
 \subsubsection{Low-Level Debug Output}
 \label{sec:low-level-debug-output}
 
-As a~consequence of the previous subsection, the low-level debug output
+As a~consequence of the previous observations, the low-level debug output
 must include the currently selected $\textit{tiles\_threshold}$ and
 $\textit{similarity\_threshold}$ and how many tiles with the present algorithm settings
 currently fulfill \textbf{Cond.~1}.
@@ -1133,7 +1138,7 @@ to the polar question (yes/no question) whether media items
 are clustered at all or not, it does not help with
 the non-polar \emph{why} question
 (the linguistic term for this type of questions is \emph{wh–question}).
-In the following section, we show how
+In the following subsection, we show how
 this low-level debug output can be lifted.
 
 \subsection{From Debug Output to Story}
@@ -1237,7 +1242,7 @@ that was originally developed by Jonathan Duddington
 in a~JavaScript port called Speak.js,
 made available by Alon Zakai~\cite{zakai2012speakjs}.
 This speech synthesizer uses the formant synthesis method,
-which allows many languages to be provided in a~small size.
+which allows for many languages to be provided in a~small size.
 Rather than using human speech samples at runtime,
 the synthesized speech output is created using additive synthesis
 and an acoustic model, where parameters
@@ -1255,7 +1260,7 @@ shows a~grid of similar, different, and not considered tiles
 from the \emph{Backstreet Boys} media items for the \emph{Everybody} music video.
 While the speech synthesizer reads the generated text,
 the corresponding tiles (\emph{e.g.},~the matching tiles
-or the because of the black-and-white tolerance not considered tiles)
+or the due to the black-and-white tolerance not considered tiles)
 are visually highlighted to support the human evaluators' understanding,
 as can be seen in \autoref{fig:tile-highlight}
 and in a~screencast available at \url{http://youtu.be/DWqwEnhqTSc}.
@@ -1263,7 +1268,7 @@ Spatial Media Fragments {\sc uri}s are currently not implemented
 in any common Web browser~\cite{weinberg2013polyfill}.
 In order to nonetheless support spatial media fragments,
 we use a~so-called JavaScript polyfill for Media Fragments {\sc uri}
-that was developed in the context of this chapter.%
+that was developed in the context of this thesis.%
 \footnote{xywh.js: \texttt{https://github.com/tomayac/xywh.js}}
 In Web development, a~polyfill is downloadable code that provides facilities
 by emulating potential future features or {\sc api}s
@@ -1300,7 +1305,7 @@ is compared to texts written by people based on the same input data.
 Finally, there are \emph{human ratings}, where the generated text
 is given to a~person who is asked to rate the quality and usefulness of the text.
 
-For our evaluation, we chose the third approach of human ratings,
+For our evaluation, we have chosen the third approach of human ratings,
 as we do not evaluate the natural language generating system in isolation,
 but in \emph{combination with a~visual representation}
 that makes use of spatial Media Fragments {\sc uri}s
@@ -1343,10 +1348,12 @@ from different angles.
 We have first defined the meaning of \emph{exact} and \emph{near-duplicate} 
 for both photos and videos,
 including the special case of a~photo being contained in a~video.
-Thereafter, we have introduced an algorithm and application
+In a~previous chapter,
+we have introduced an algorithm and application
 for video shot boundary detection
 whose foundations then served for a~more general
-photo deduplication algorithm with semantic features.
+photo deduplication algorithm with semantic features
+in the present chapter.
 We have evaluated the algorithm for two recent events
 that had broad social media coverage.
 Further, we have outlined how the photo deduplication algorithm
@@ -1368,12 +1375,12 @@ is a~fundamental step in dealing with huge amounts of social media
 and media overload in general.
 Highly popular media items not only tend
 to retrieve many social interactions on the social network
-they were initially shared on, but also tend to get shared
-on other social networks.
+they were initially shared on, but also on other social networks.
 Derivates of popular media items further add noise
 to the social media sharing landscape.
-With our media item deduplication algorithms, 
-we have effective and efficient tools to deal with social media overload
+Based on our media item deduplication algorithms, 
+we have contributed effective and efficient tools
+to deal with social media overload
 and to identify the few needles in the cross network haystack. 
 
 \section*{Chapter Notes}
