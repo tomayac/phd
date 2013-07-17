@@ -15,7 +15,11 @@
 
 \section{Introduction}
 
-In this chapter, we will focus on the task of \emph{event detection}.
+We are surrounded by events, most of which we do not care much about.
+In this chapter, we will show an approach towards
+\emph{breaking news event detection}
+of relevant global or local news events
+that is based on concurrent Wikipedia edit spikes.
 Yang, Pierce, and Carbonell define~\cite{yang1998eventdetection} \emph{event detection} as follows.
 
 \begin{quotation}
@@ -60,12 +64,12 @@ is interlinked with
 the Russian article on the same topic.
 As we monitor multiple language versions of Wikipedia in parallel,
 we can exploit this fact to detect \emph{concurrent edit spikes}
-of Wikipedia articles covering the same topics,
-both in only one, and in different languages.
+of Wikipedia articles covering the same topics
+both in only one and in different languages.
 We treat such concurrent edit spikes as signals
 for potential breaking news events, whose plausibility we then check 
 with full-text cross-language searches on multiple social networks.
-Unlike the reverse approach of monitoring social networks first,
+Unlike the reverse approach of monitoring social networks first
 and potentially checking plausibility on Wikipedia second,
 the approach proposed in this chapter has the advantage of
 being less prone to false-positive alerts, while being equally sensitive
@@ -160,7 +164,7 @@ Hu \emph{et~al.}\ provide an analysis of how news break and spread on Twitter~%
 \cite{hu2012breakingnews}.
 The task of linking news events with social media is covered by Tsagkias
 \emph{et~al.}\ in~\cite{tsagkias2011linkingonlinenews}.
-With this work, we stand on the shoulders\footnote{Hence the title of the publication related to this chapter}
+With our work, we stand on the shoulders\footnote{Hence the title of the publication related to this chapter}
 of Osborne \emph{et~al.}\ %
 \cite{osborne2012bieber}, who use Wikipedia page view statistics%
 \footnote{Page view statistics for Wikimedia projects:
@@ -170,8 +174,8 @@ as a~means to filter spurious events
 stemming from event detection over social network streams.
 Our approach reverses theirs, however, instead of the only hourly updated
 page view statistics, we use realtime change notifications,
-as explained in \autoref{sec:wikipedia-recent-changes}.
-Our \emph{Wikipedia Live Monitor} is partly based on an application called
+as will be explained in \autoref{sec:wikipedia-recent-changes}.
+\emph{Wikipedia Live Monitor} is partly based on an application called
 \emph{Wikistream}, developed by Ed Summers \emph{et~al.}, which was described in~%
 \cite{summers2011odetonode}.
 In~\cite{georgescu2013extractingwikipedia}, Georgescu
@@ -189,9 +193,9 @@ Mestyán, Yasseri, and Kertész show
 in~\cite{mestyan2012boxoffice} that box office success of
 movies can be predicted well in advance by measuring
 and analyzing the activity level of editors and viewers
-of corresponding entries to the movie in Wikipedia
+of corresponding articles about the movies in question on Wikipedia
 by applying a~minimalistic predictive model
-for the financial success of movies based on
+for the financial success based on
 collective activity data of online users.
 
 \begin{figure*}[!ht]
@@ -212,10 +216,12 @@ collective activity data of online users.
 
 As described earlier, our application monitors concurrent edit spikes
 on different language versions of Wikipedia.
-In the current implementation, we monitor 42 different Wikipedias, 5 with 
-$\geq$~1,000,000 and 37 with $\geq$~100,000 articles.%
+In the current implementation, we monitor \emph{all}
+285 different Wikipedias, 8 with 
+$\geq$~1,000,000 and 38 with $\geq$~100,000 articles%
 \footnote{List of Wikipedias by size: \url{http://meta.wikimedia.org/wiki/List_of_Wikipedias},
 accessed 02/18/2013}
+including a~long-tail of smaller Wikipedias.
 Changes to any single one article are communicated by a~chat bot
 over Wikipedia's own Internet Relay Chat~(IRC) server (\url{irc.wikimedia.org}),%
 \footnote{Raw IRC feeds of recent changes: \url{http://meta.wikimedia.org/wiki/IRC/Channels\#Raw_feeds}, accessed 02/18/2013}
@@ -245,7 +251,7 @@ We cluster edits of articles about the same topic,
 but written in different languages, in article clusters.
 The example of the English
 \emph{``en:2013\_Russian\_meteor\_event''}
-and the Russian article
+and the corresponding Russian article
 %\emph{``ru:Падение\_метеорита\_на\_Урале\_в\_2013\_году''}
 that are both in the same cluster illustrate this.
 We use the Wikipedia API to retrieve language links for a~given article.
@@ -306,16 +312,16 @@ of the particular article's cluster are know,
 we use these very article titles as search queries for cross-language searches,
 as can be seen in \autoref{fig:screenshotwikilivemon}.
 This approach greatly improves the recall of the social network search,
-however, requires either machine translation, or an at least basic understanding
+however, requires either machine translation or an at least basic understanding
 of the languages being searched in.
 Currently the plausibility checking step is not yet fully automated,
 as the search results are for the time being meant to be consumed by \emph{human evaluators}.
 Driven by (H1), we assume breaking news events are being discussed on social networks.
 We will show arguments for this assumption in \autoref{sec:premature-evaluation}.
 For now, we expect social networks to be a~short period ahead of Wikipedia.
-In consequence, if the human rater can find positive evidence
+In consequence, if the human evaluater can find positive evidence
 for a~connection between social network activities and Wikipedia edit actions,
-the breaking news candidate is confirmed to indeed be breaking news.
+the breaking news candidate is confirmed to indeed represent breaking news.
 
 \subsection{Application Pseudocode}
 
@@ -394,9 +400,6 @@ timeout.every.240seconds §\textbf{do}§
 \section{Evaluation}
 \label{sec:premature-evaluation}
 
-As noted earlier, in this chapter,
-we do not answer all research questions yet.
-Nevertheless, we extract trends from our experiments so far.
 In \autoref{sec:hypotheses-and-research-questions},
 we have set up three hypotheses.
 (H1) has been proven by Hu \emph{et~al.}\ in~\cite{hu2012breakingnews} for Twitter.
@@ -404,7 +407,7 @@ We argue that it can be generalized to other social networks
 and invite the reader to have a~look at our dataset,
 where the lively discussions about breaking news candidates
 on the considered social networks Twitter, Facebook, and \googleplus
-support the argumentation.
+support the argument.
 It is hard to prove (H2), as the concept of \emph{important breaking news}
 is vague and dependent on one's personal background, however,
 all evidence suggests that (H2) indeed holds true,
@@ -417,7 +420,7 @@ It has to be noted that they look at hourly accumulated page (article) \emph{vie
 where we look at realtime article \emph{edit} log streams.
 Our experiments suggest that the lag time of two hours
 proposed by Osborne \emph{et~al.}\ may be too conservative. 
-An educated guesstimation at this stage is that the lag time
+A~conservative estimation at this stage is that the lag time
 for breaking news is more in the range of 30 minutes,
 and for global breaking news like celebrity deaths
 in the range of five minutes and less,
@@ -427,17 +430,16 @@ followed by more consistent thorough edits.
 
 The (at time of writing) recent breaking news event
 of the resignation of \emph{Pope Benedict~XVI} helps respond to (Q1).
-The three first edit times after the news broke on February 11, 2013
-of the Pope's English Wikipedia article%
+The three first edit times of the Pope's English Wikipedia article%
 \footnote{Edit history en: \url{http://en.wikipedia.org/w/index.php?title=Pope_Benedict_XVI&action=history},
-accessed 02/18/2013} 
-are as follows
+accessed 02/18/2013}
+after the news broke on February 11, 2013 are as follows
 (all times in UTC): 10:58, 10:59, 11:02.
 The edit times of the French article%
 \footnote{Edit history fr: \url{http://fr.wikipedia.org/w/index.php?title=Beno\%C3\%AEt_XVI&action=history}, accessed 02/18/2013}
 are as follows: 11:00, 11:00, 11:01.
-This implies that by looking at only two language versions
-(the actual number of monitored versions is 42) of the Pope article,
+This implies that by looking at only two language versions of Wikipedia
+(the actual number of monitored versions is 285) of the Pope article,
 the system would have reported the news at 11:01.
 The official Twitter account of Reuters announced%
 \footnote{Reuters announces Pope resignation: \url{https://twitter.com/Reuters/status/300922108811284480},
@@ -459,18 +461,20 @@ A~systematic evaluation of (Q2) requires a~commonly shared dataset,
 which we have provided, however, at this point in time, we do not have access to the system
 of Osborne \emph{et~al.}
 
-Regarding \emph{Wikipedia Live Monitor}'s scalability, we could scale the monitoring system
-up to currently \emph{all} 284~Wikipedias on a~standard consumer laptop
+Regarding \emph{Wikipedia Live Monitor}'s scalability,
+we already scale the monitoring system
+up to currently \emph{all} 285~Wikipedias on a~standard consumer laptop
 (mid-2010 MacBook Pro, 2.66~GHz Intel Core~2, 8~GB RAM),
 which once more proves the efficiency of the Node.js architecture
 for this kind of event-driven applications.
-In practice, however, the majority of the smaller Wikipedias being very rarely updated,
-we limit ourselves to the Wikipedias with $\geq$~100,000 articles
-at no remarkable loss of recall.
+In practice, however, the majority of the smaller Wikipedias
+being very rarely updated,
+we note that limiting ourselves to just the Wikipedias
+with $\geq$~100,000 articles would have no remarkable loss of recall.
 
 \section{Future Work}
 
-Future work towards a~thorough scientific evaluation will mainly address two areas.
+Future work will mainly address two areas.
 First, the \emph{automated categorization of edits on Wikipedia}
 needs to be more fine-grained.
 In the context of breaking news detection, not all edits are equally useful.
@@ -490,14 +494,15 @@ More advanced steps can exploit the potential knowledge from Wikipedia edits
 
 In this chapter, we have shown an application called \emph{Wikipedia Live Monitor}
 and released its source code under the Apache~2.0 license.
-This application monitors article edits on 42 different language versions of Wikipedia.
+This application monitors article edits on 285 different language versions of Wikipedia.
 It detects breaking news candidates according to well-defined breaking news criteria,
 whose exact parameters were determined empirically
 and the corresponding dataset made available publicly.
 We have shown how cross-language full-text social network searches are used
 as plausibility checks to avoid false-positive alerts.
-We have shown promising results and actionable next steps
-in future work for improving the application.
+Concluding, our approach has revealed very promising results
+and actionable next steps in future work
+for improving the application.
 
 \bibliographystyle{plainnat}
 \bibliography{backmatter/references}
