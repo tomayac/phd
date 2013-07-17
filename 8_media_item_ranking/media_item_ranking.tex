@@ -29,20 +29,11 @@ further media item ranking criteria that,
 together with media item cluster size,
 allows us to propose more adequate social media item ranking mechanisms.
 
-Evaluating subjective data, like \emph{the} correct ranking
-for a~set of media items, is a~challenging task.
-For different users, there may be different optimal settings.
-A~common subjective evaluation technique
-is the previously introduced \emph{Mean Opinion Score (MOS)}~\cite{itu1998mos}.
-Given a~subjective evaluation criterion
-like the correctness of a~ranking,
-MOS provides a~meaningful way to judge the overall quality of our approach.
-
 \section{Media Item Ranking Criteria}
 
 In this section, we describe several criteria that can serve to rank
 media items retrieved from social networks. 
-We base these criteria on the information available from
+We base these criteria on the information available via
 the media item extractors described in \autoref{cha:media-item-extraction},
 which, given event-related search terms,
 extract raw binary media items and associated microposts
@@ -60,11 +51,11 @@ We have described micropost annotation in detail in \autoref{cha:micropost-annot
 
 This category regards the contents of photos and videos.
 We distinguish \emph{low-} and \emph{high-level} visual ranking criteria.
-High-level criteria include logo detection,
+High-level criteria include among others logo detection,
 face recognition, and camera shot separation.
 Low-level criteria include file size, resolution,
-duration of a~video, geolocation, and time.
-Via \emph{Optical Character Recognition (OCR)}, contained characters can be treated as textual features.
+duration of a~video, geolocation, time, and more.
+Via \emph{Optical Character Recognition (OCR)}, contained texts can be treated as textual feature.
 
 \paragraph{Audial Ranking Criteria:}
 
@@ -74,7 +65,7 @@ of silence, music, speech, or a~mixture thereof in videos.
 Similar to visual features before,
 audial \emph{low-level} features are the average bit rate,
 volume, possibly distorted areas, \emph{etc.}
-Through audio transcription, speech can be treated as textual features.
+Through audio transcription, speech can be treated as textual feature.
 
 \paragraph{Social Ranking Criteria:}
 
@@ -93,7 +84,7 @@ the media gallery that illustrates a~given event and its atmosphere.
 Studies exist for the aesthetics of
 automatic photo book layout~\cite{sandhaus2011photobook},
 photo aesthetics \emph{per~se}~\cite{obrador2012photoaesthetics},
-video and music playlist generation~\cite{knees2006musicplaylist,davidson2010videorecommendation}.
+and video and music playlist generation~\cite{knees2006musicplaylist,davidson2010videorecommendation}.
 However, to the best of our knowledge,
 no media gallery composition aesthetics studies exist
 that examine mixing video \emph{and} photo media items.
@@ -101,7 +92,7 @@ that examine mixing video \emph{and} photo media items.
 \paragraph{Temporal Ranking Criteria:}
 
 This category regards the publication date of media items.
-If media items are clustered, we use the youngest media item
+If media items are clustered, we can use the youngest media item
 as cluster representative.
 Media items can be ranked by recency, as oftentimes more recent items
 are more interesting in the streaming context of social networks.
@@ -117,12 +108,13 @@ of all considered social networks in order to gain
 a~network-agnostic view on the underlying social networks.
 In this section, we detail the part of the abstraction layer
 that models the network-specific social interaction patterns.
-Those interaction patterns must be exposed by the social network 
+Those interaction patterns ideally are exposed by the social network 
 via specific API calls in order to be considered,
 which only is the case for a~subset of the social networks we deal with.
 Social interaction data is to some extent the holy grail of social networks,
-which is the reason why sometimes Web scraping is the last resort,
-as outlined in more detail in \autoref{sec:media-item-extractors}.
+which is the reason why sometimes Web scraping is the last resort
+when not all data is accessible via APIs,
+as we have outlined in more detail in \autoref{sec:media-item-extractors}.
 In \autoref{table:social-interactions}, we have listed
 how we abstract the social interactions in question on each social network.
 In our concrete implementation, we differ unknown values
@@ -174,15 +166,15 @@ Therefore, we need to specify a~merging strategy
 for the associated data of the individual media items
 in the particular cluster.
 \autoref{code:merging} shows the pseudocode of the merging algorithm.
-During the merging step,
-we treat unknown values represented as \texttt{unknown} as \texttt{0}.
+During the merging step, we treat unknown values
+that are represented as \texttt{unknown} as \texttt{0}.
 The alternative to this solution would be to exclude \texttt{unknown} values
 from the merging step.
 However, as in practice a~considerable amount of
 social interaction values are \texttt{unknwon},
 we are forced to proceed with the abovementioned simplification.
 The algorithm accumulates individual social interactions
-and assigns the accumulated social interactions to the cluster.
+and assigns the accumulated values to the cluster.
 
 \begin{lstlisting}[caption=Social interactions merging algorithm,
   label=code:merging, float=!ht, escapechar=§]
@@ -202,19 +194,20 @@ and assigns the accumulated social interactions to the cluster.
 \subsection{Selection of a~Cluster's Visual Representative}  
 
 As outlined in the previous section, similar enough media items
-are clustered and treated as just one media item.
-The previous section introduced
-a~merging algorithm for the social interactions data.
-In this section, we introduce an algorithm for the selection of
+are clustered and treated as just one media item
+by applying the merging algorithm for the social interactions data.
+Now, we introduce an algorithm for the selection of
 a~cluster's visual representative.
 Naturally, through the way the clustering algorithm works,
-the contained media items are already visually similar. 
+the contained media items are already visually similar
+based on high-level features. 
 In consequence, we fall back to using \emph{low-level}
 visual ranking criteria as defined in \autoref{sec:visualrankingcriteria}.
 \autoref{code:clusterrepresentative} shows the cluster representative
-selection algorithm, which is based on the low-level feature \emph{resolution}.
+selection algorithm, which is based on the low-level feature photo or video \emph{resolution}.
 The algorithm selects the media item with the highest megapixel resolution
-as the cluster representative.
+as the cluster representative,
+which is a~solid heuristic for the best possible photo or video quality.
 
 \begin{lstlisting}[caption={[Pseudocode of the cluster visual representative selection algorithm]{Pseudocode of the cluster visual representative selection algorithm that finds the highest quality media item of a~cluster}},
   label=code:clusterrepresentative, float, escapechar=§]
@@ -267,7 +260,7 @@ The factor $ \mathit{clusterSize} $ corresponds to the size of the current clust
 After some experimentation with different event media items sets,
 the factor $ \mathit{recency} $ was empirically determined to be calculated as follows.
 If the youngest media item in the cluster is less than or exactly one day old,
-the value is 8, for two days it is 4, for three days it is 2,
+the value of recency is 8, for two days it is 4, for three days it is 2,
 and for each day more, the value is 1.
 The factor $ \mathit{quality} $ is a~representation of the
 presence of faces and a~media item's photo or video quality.
@@ -277,57 +270,65 @@ were determined as follows:
 $ \alpha = 2 $, $ \beta = 4 $ , $ \gamma = 8 $, $ \delta = 1 $,
 $ \epsilon = 32 $, $ \zeta = 2 $, and $ \eta = 8 $.
 These factors follow the usage patterns of the different actions:
-viewing happens more often than liking, which in turn happens more often than commenting.
-We describe the evaluation in the upcoming section.
+viewing happens more often than liking, which in turn happens more often than commenting, \emph{etc.}
+We describe the evaluation of the ranking formula in the upcoming section.
 
-\section{Evaluation Based on the Super Bowl XLVII Event}
+\section{Evaluation}
 \label{sec-chapter7-evaluation}
 
-\subsection{Super Bowl Analyses by Social Networks}
+Evaluating subjective data, like \emph{the} correct ranking
+for a~set of media items, is a~challenging task.
+For different users, there may be different optimal ranking parameter settings.
+A~common subjective evaluation technique
+is the previously introduced \emph{Mean Opinion Score (MOS)}~\cite{itu1998mos}.
+Given a~subjective evaluation criterion
+like the correctness of a~ranking,
+MOS provides a~meaningful way to judge the overall quality of our approach.
 
-We have evaluated our approach with the (at time of writing)
-recent event of the Super Bowl XLVII%
+\subsection{Event Analyses by Social Networks}
+
+We have evaluated our approach with the, at time of writing,
+recent event of the Super Bowl XLVII,%
 \footnote{\url{http://en.wikipedia.org/wiki/Super_Bowl_XLVII},
-accessed February 8, 2013}.
-This event received broad social media coverage, and the social networks
-Twitter,\footnote{\url{http://blog.twitter.com/2013/02/the-super-tweets-of-sb47.html},
 accessed February 8, 2013}
-Instagram,\footnote{\url{http://blog.instagram.com/post/42254883677/sbroundup},
-accessed February 8, 2013} and
-Facebook\footnote{\url{http://newsroom.fb.com/News/570/Super-Bowl-XLVII-on-Facebook},
-accessed February 8, 2013} all published blog posts with analyses of the event
-on the respective networks,
-whereas the search engine Google%
-\footnote{\url{http://googleblog.blogspot.com/2013/02/m-beyonce-and-ravens-dominate-game-day.html},
-accessed February 8, 2013}
+which was an American football game between
+the American Football Conference champion Baltimore Ravens
+and the National Football Conference champion
+San Francisco 49ers to decide the National Football League
+champion for the 2012 season.
+The Ravens defeated the 49ers by the score of 34--31.
+This event received broad social media coverage
+and the social networks
+Twitter, Instagram, and Facebook all published blog posts
+with analyses of the event on the respective networks,
+whereas the search engine Google
 published an analysis of trending queries during the match.
 In the following, we provide summaries of these different analyses,
 with the expectation to encounter relevant media items
-for each of the mentioned highlights in the final ranked list of media items
+for each of the mentioned highlights in our final ranked list of media items
 stemming from the various social networks.
 
 According to Twitter's analysis,%
 \footnote{\url{http://blog.twitter.com/2013/02/the-super-tweets-of-sb47.html},
 accessed February 8, 2013}
 the five moments that generated the most tweets
-during the game (see the Wikipedia-provided game summary
-\footnote{\url{http://en.wikipedia.org/wiki/Super_Bowl_XLVII},
-accessed February 8, 2013} for details)
-ordered by decreasing number of tweets per minute were
+during the game ordered by decreasing number of tweets per minute were
 the power outage,
 the 108-yard kickoff return for the Ravens touchdown by Jones,
 the moment when the clock expired and the Ravens won,
 Jones catches a~56 yard pass for a~Ravens touchdown,
 and the Gore touchdown for the 49ers.
 Overall, 24.1 million tweets about the game and halftime show were counted,
-a~number that even leaves aside the advertisements.
+a~number that even leaves aside the advertisements,
+which in recent years have become a~highly expected highlight
+of the Super Bowl experience.
 The Twitter article further mentions the performance by superstar artist Beyoncé 
 and a~number of Super Bowl advertisements as highlights of the event.   
 
 Instagram's analysis\footnote{\url{http://blog.instagram.com/post/42254883677/sbroundup},
 accessed February 8, 2013}
 mentions that more than three million photos
-with Super Bowl-related words in their captions were shared and
+with Super Bowl-related terms in their captions were shared and
 at peak more than 450 photos about the game were posted every second.
 During the halftime show, over 200 photos per second were posted about Beyoncé.
 The blog post further highlights how a~TV channel pointed to selected photos
@@ -339,7 +340,7 @@ or by photographing each other how they watched the event.
 Facebook's analysis\footnote{\url{http://newsroom.fb.com/News/570/Super-Bowl-XLVII-on-Facebook},
 accessed February 8, 2013}
 mentions as top five most-talked-about moments of the Super Bowl 
-the moment when the Ravens win the Super Bowl, 
+the moment when the Ravens won the Super Bowl, 
 Beyoncé's halftime performance,
 the power outage in the Superdome,
 Jacoby Jones' 108-yard kickoff return for a~Ravens touchdown, and
@@ -363,8 +364,11 @@ along with searches for big game performers Alicia Keys and Beyoncé.
 
 \subsection{Expected Super Bowl Media Items}
 
-Given the previous social network analyses, we expect to see media items
-on the following topics (in no particular order):
+Given the differing social networks' own analyses
+that we have summarized in the previous subsection,
+we expect to see media items
+on at least the following topics (in no particular order)
+in our own ranked media item set.
 
 \begin{itemize}
   \itemsep0em
