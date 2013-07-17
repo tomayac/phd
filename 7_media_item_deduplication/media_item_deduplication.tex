@@ -118,10 +118,11 @@ while the other attendant takes a~photo.
 \section{Related Work}
 
 Related work in the field of media item deduplication
-and clustering can be separated in different groups,
+and clustering can be separated in different areas,
 which reflects the grouping of our definitions above.
-We further show related work required for the task of 
-algorithm debugging.
+We further show related work on media fragments,
+digital storytelling, and Natural Language Generation,
+which we combine for a~novel algorithm debugging approach.
 
 \paragraph{Image Deduplication and Clustering:}
 
@@ -129,7 +130,7 @@ Work on ordinal measures that serve as a~general tool for
 image matching was performed by Bhat \emph{et~al.}\
 in~\cite{bhat1998imagecorrespondence}.
 Chum \emph{et~al.}\ have proposed a~near-duplicate image detection method
-using min-Hash and term frequency--inverse document frequency (tf--idf)
+using MinHash and term frequency-inverse document frequency (tf-idf)
 weighting~\cite{chum2008nearduplicate}.
 They use a~visual vocabulary of vector quantized local feature descriptors based on
 Scale-Invariant Feature Transform (SIFT)~\cite{lowe1999sift}.
@@ -150,7 +151,7 @@ of images of the same semantics.
 
 \paragraph{Video Deduplication and Clustering:}
 
-More specialized methods for video deduplication exist,
+Specialized methods for video deduplication exist,
 for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate}
 by Min \emph{et~al.}\ who, given the observation that 
 transformations tend to preserve the semantic information conveyed
@@ -161,7 +162,7 @@ detected using trained classifiers.
 In~\cite{oliveira2010nearduplicate}, Oliveira
 \emph{et~al.}\ report on four large-scale online surveys
 wherein they have confirmed that humans perceive videos as near-duplicates
-based on both non-semantic features like different photo or audio
+based on both non-semantic features like different image or audio
 quality, but also based on semantic features like different
 videos of similar content.
 A~survey of video deduplication methods has been conducted by
@@ -173,14 +174,14 @@ In~\cite{okamoto2002videoclustering}, Okamoto \emph{et~al.}\  have proposed an a
 that is based on fixed length video stream segments.
 By generating spatio-temporal images, they employ co-occurrence matrices
 to express features in the time dimension explicitly. 
-Yi \emph{et~al.}\ have proposed motion histograms in~\cite{yi2005motionhistogram},
+Yi \emph{et~al.}\ have proposed motion histograms~\cite{yi2005motionhistogram},
 where the motion content of a~video at pixel level is represented
 as a~Pixel Change Ratio Map (PCRM), which captures the motion intensity,
 spatial location, and size of moving objects in a~video sequence. 
 
-\paragraph{Image and Video Deduplication and Clustering:}
+\paragraph{Image \emph{and} Video Deduplication and Clustering:}
 
-A~method for both photos and videos
+A~method for both images \emph{and} videos
 has been proposed by Yang \emph{et~al.}\ \cite{yang2009nearduplicate}.
 The authors describe a~system for detecting duplicate images and videos
 in a~large collection of multimedia data that uses local difference patterns
@@ -235,7 +236,7 @@ where people create \emph{microcontent}---%
 small chunks of content, with each chunk conveying a~primary idea---%
 that gets combined with social media to form coherent stories.
 We use Media Fragments {\sc uri}s to help human annotators
-to understand the results of an algorithm
+understand the results of an algorithm
 by converting dry software debugging data to digital stories.
 
 \paragraph{Natural Language Generation:}
@@ -258,9 +259,9 @@ used by microplanning into text.
 We determine the popularity of media items
 shared across social networks.
 This task involves the deduplication of extracted media items.
-In the previous section, we have presented an algorithm
+In \autoref{cha:shot-boundary-detection}, we have presented an algorithm
 for on-the-fly shot boundary detection for video media items.
-In this section, we will show how components of this algorithm
+In this chapter, we will show how components of this algorithm
 can be used to deduplicate photos.
 
 \subsection{Problem Statement}
@@ -268,32 +269,27 @@ can be used to deduplicate photos.
 
 Our work is situated in the broader context of summarizing events
 based on social network data.
-In order to get an overview of a~given event based on a~\emph{potentially huge} set
+In order to get an overview of a~given event based on a~\emph{potentially large} set
 of event-related media items, this set of media items needs to be \emph{pruned}
 to exclusively contain highly relevant media items that are as representative
 for the event as possible.
 Rather than showing the viewer all media items,
 clusters of similar media items need to be formed.
 Within each cluster, the most representative media item
-has to be recognized as such, according to well-defined criteria.
+has to be decided on according to well-defined criteria.
 Undesired duplicate or near-duplicate content in the context of social networks
 arises in a~number of situations
 that we will illustrate in the following.
-All shown examples of media items were actually shared on social networks
-and were clustered correctly as near-duplicates
-by our clustering algorithm, which we will detail in
-\autoref{sec:near-duplicate-clustering-algorithm}.
-First, we look at related work for the task of photo deduplication.
 
-\subsection{Duplicate Content}
+\subsubsection{Duplicate Content}
 \label{sec:duplicate-content}
 
 Duplicate content in the context of social networks
 arises whenever people either share exactly the same,
 or an exact copy of a~given media item.
 An example of the latter can be one user uploading the same media item
-to the two different social networks \googleplus and Facebook,
-and an example of the prior can be two users sharing the same
+to the two different social networks \googleplus and Facebook.
+An example of the prior can be two users sharing the same
 YouTube video independently from each other, or re-sharing each other's content.
 
 \subsection{Near-Duplicate Content}
@@ -311,9 +307,9 @@ by our clustering algorithm, which we will detail in
 
 When two people attend the same event
 and create media items at roughly the same time
-and covering the same scene,
+covering the same scene,
 their media items will be similar
-and---the capturing devices' qualities aside---only differ in the viewing angle. 
+and---the capturing devices' quality aside---only differ in the viewing angles. 
 \autoref{fig:viewing-angle} shows a~concrete example.
 
 \begin{figure}[!ht]
@@ -357,7 +353,7 @@ can be seen in \autoref{fig:logo}.
 Cropping refers to the removal of the outer parts of a~media item
 to improve framing, accentuate subject matter,
 or to (lossily) change the aspect ratio.
-Cropping either happens manually via an image editing application,
+Cropping either happens manually via an image editing application
 or, more often, by the social networks themselves
 to obtain a~square aspect ratio
 that better fits the timeline view of users,
@@ -378,11 +374,12 @@ as can be seen in the example in \autoref{fig:cropping}.
 
 \paragraph{Different Keyframes:}
 
-We have shown an approach to camera shot boundary detection in~\cite{steiner2012shotdetection}.
+We have shown an approach to camera shot boundary detection
+in \autoref{cha:shot-boundary-detection} and~\cite{steiner2012shotdetection}.
 Different frames stemming from the same camera shot
-can occur on social networks, when preview heuristics
+can occur on social networks when preview heuristics
 attempt to auto-select a~well-identifying poster frame from a~video with different approaches,
-typically resulting in different frames for different social networks.
+typically resulting in varying frames for different social networks.
 \autoref{fig:camera-shot} shows an example of this phenomenon.
 
 \begin{figure}[!ht]
@@ -395,14 +392,14 @@ typically resulting in different frames for different social networks.
   }
   \caption[Two different frames stemming from the same camera shot]
     {Two different frames stemming from the same camera shot,
-    with the left photo appearing slightly earlier in the video}
+    with the left frame appearing slightly earlier in the video}
   \label{fig:camera-shot}  
 \end{figure}
 
 \paragraph{Aspect Ratio Changes with Squeezing or Stretching:}
 
 Aspect ratio changes can either happen combined with cropping
-(and thus losing parts of the media item), and/or combined with 
+(and thus losing parts of the media item) and/or combined with 
 squeezing or stretching (and thus deforming the media item).
 \autoref{fig:bulged} shows an example where a~media item gets stretched.
 
@@ -420,9 +417,9 @@ squeezing or stretching (and thus deforming the media item).
 
 \paragraph{Photo Filters:}
 
-With the raising popularity of Instagram with its 90 million monthly active users%
-\footnote{\url{http://instagram.com/press/}, accessed 02/14/2013},
-photo filters that, \emph{e.g.}, emulate retro Polaroid\texttrademark\ or tilt-shift effects,
+With the raising popularity of Instagram with its 90 million monthly active users,%
+\footnote{\url{http://instagram.com/press/}, accessed 02/14/2013}
+photo filters that, \emph{e.g.}, emulate retro Polaroid\texttrademark\ or tilt-shift effects
 are a~considerable reason for near-duplicate media content on social networks.
 \autoref{fig:photo-filter} shows a~typical example.
 
@@ -447,15 +444,15 @@ In this section, we describe an algorithm tailored to
 deduplicating and clustering exact-duplicate and near-duplicate media items.
 Design goals for the algorithm include
 the capability to detect exact-duplicate and near-duplicate media items
-in a~timely, entirely \emph{ad hoc} manner, without any pre-calculation.
+in a~timely, entirely \emph{ad hoc} manner without any pre-calculation.
 In general---and especially for big events---event coverage on social networks
 is very broad, \emph{i.e.}, there exist more media items
 than one could consume in a~reasonable time.
-In consequence, it is tolerable for the algorithm to cluster media items aggressively,
+In consequence, it is tolerable for the algorithm to cluster media items aggressively
 rather than leaving too many media items unclustered.
 The algorithm has a~twofold approach to clustering:
-\emph{low-level} analysis, by looking at tile-wise pixel data
-combined with \emph{high-level} analysis, by detecting faces in media items.
+\emph{low-level} analysis by looking at tile-wise pixel data,
+combined with \emph{high-level} analysis by detecting faces in media items.
 In the following, we describe the face detection component
 of our media item clustering algorithm.
 
@@ -468,14 +465,14 @@ Rotation-invariant face detection aims to detect faces with arbitrary
 rotation angles and is crucial as the first step in automatic face detection
 for general applications, as face images on social media are seldom upright and frontal.
 Face detection is a~subclass of the broader class of object detection.
-The Viola--Jones object detection framework proposed in 2001
+The Viola-Jones object detection framework proposed in 2001
 by Paul Viola and Michael
 Jones~\cite{viola2001objectdetection,viola2004facedetection}
 provides competitive object detection rates in realtime
 and was motivated primarily by the problem of face detection.
-We use an algorithm that further improves Viola--Jones,
+We use an algorithm that further improves Viola-Jones,
 based on work by Huang \emph{et~al.}\ \cite{huang2007facedetection}
-and Abramson \emph{et~al.}\ \cite{abramson2007yef},
+and Abramson \emph{et~al.}\ \cite{abramson2007yef}
 in a~JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
 This algorithm is fast enough to be applied to hundreds of media items
 in well less than a~second overall processing time on a~standard laptop
@@ -1130,7 +1127,7 @@ for the music video \emph{Everybody} reads as follows.
 \end{verbatim}
 
 While this low-level debug output is sufficient to respond
-to the polar question (yes--no question) whether media items
+to the polar question (yes/no question) whether media items
 are clustered at all or not, it does not help with
 the non-polar \emph{why} question
 (the linguistic term for this type of questions is \emph{wh–question}).
