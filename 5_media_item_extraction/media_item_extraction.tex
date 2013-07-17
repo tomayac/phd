@@ -374,7 +374,7 @@ Twitter.\footnote{\url{http://techcrunch.com/2012/12/05/kevin-systrom-on-pulling
   \includegraphics[width=1.0\linewidth]{architecture.pdf}
   \caption[Overview of the media extractor]
     {Overview of the media extractor:
-    hybrid approach to the media item extraction process using
+    hybrid approach to the media item extraction task using
     a~combination of API access and Web scraping}
   \label{fig:architecture}
 \end{figure}
@@ -482,13 +482,13 @@ account termination or video takedown by the user
 (Assad, Dixville).
 \autoref{tab:number-media} shows the total
 numbers of retrieved photos and videos of the media extractor.
-Column values marked with $n+$ signify that there were more 
+Table cell values marked with $n+$ signify that there were more 
 results, but that only $n$ results were considered. 
 We have calculated the precisions for each event for both video 
 and photo separately; the overall photo precision was $0.73$,
 and the overall video precision was $0.54$.
 We note that these values were calculated \emph{before}
-any pruning at all, \emph{i.e.}, before taking into account
+any pruning step, \emph{i.e.}, before taking into account
 the additional textual information from microposts like
 potential extracted named entities.
 The dataset is very diverse with respect to photo quality,
@@ -497,13 +497,15 @@ It ranges from entirely sharp screenshots
 in all sorts of formats (\emph{e.g.},
 screenshots of the Google homepage for the Blackout SOPA event
 to screenshots of a~wide banner advertisement),
-to blurry cell phone photos in standard photo formats
+over to blurry cell phone photos in standard photo formats
 (\emph{e.g.}, photos of the stage
 for the Free Mobile Launch event).
 \autoref{fig:sequences} shows sample photos for
 some of the considered nine events.
-We have observed that more than one search session is necessary
-in order to obtain a~satisfactory recall.
+We have observed that more than one search session
+with different combinations of search terms~%
+\cite{becker2010eventidentification,becker2012plannedevents}
+is necessary in order to obtain a~satisfactory recall.
 Query strategies developed by Becker~\cite{becker2012plannedevents}
 that combine different combinations of event title,
 event venue, and event city work consistently well.
@@ -672,11 +674,11 @@ event venue, and event city work consistently well.
 
 Given our broad approach to retrieve media items
 across multiple social networks,
-we observed many duplicate, or near-duplicate media items.
+we observed many duplicate or near-duplicate media items.
 Oftentimes, these duplicates stem from users who
 cross-post to several social networks.
 Instead of trying to filter out cross-posted items,
-we rather keep them and instead cluster them.
+we rather keep them and cluster them.
 We are especially interested in social interactions
 that media items can trigger.
 For example, if one and the same photo
@@ -692,13 +694,13 @@ Similar to exact duplicates,
 by clustering near-duplicate media items,
 we can treat them like exact duplicates to get the same
 network-agnostic viewpoint.
-We will examine media item deduplication and near-deduplication
-in \autoref{cha:media-item-deduplication}
+We will examine reasons for duplicate and near-duplicate
+media item content and ways to deal with it in \autoref{cha:media-item-deduplication}.
 
 \subsection{The Need for Ranking Media Items}
 
 Our ultimate goal is to generate media galleries
-to create visual event summaries.
+that \emph{visually} and \emph{audially} summarize events.
 Especially given high-recall search terms,
 we need a~way to rank and prune media items.
 Popular media items can be displayed bigger, longer,
@@ -708,7 +710,7 @@ For videos, the audio part poses a~challenge.
 In our experiments, we observe that intermixing the audio
 of all videos of an event often generates
 a very characteristic \emph{noise cloud}
-that conveys the event's atmosphere very well.
+that \emph{audially} conveys the event's atmosphere very well.
 A~good example is the Assad Speech event,
 where a~mix of Arabic voices blends nicely
 with the speech of a~US politician.
@@ -721,19 +723,21 @@ We will have a~closer look at media item ranking in
 \section{Conclusions}
 
 In this chapter, we have presented a~generic media extractor
-for gathering media items shared on social networks to
+for extracting media items shared on social networks to
 illustrate known events.
 We have proposed a~common abstraction layer on top of the
 social networks' native data formats to align search results.
 Our approach to extracting media items and associated
 textual microposts covers already most of
-the Western social networks.
+the Western world's social networks.
 Context-aware multimedia analysis will bring a~new range of
 parameters into play since many media items contain a~message
 that is complementary to the text.
 For example, facial detection~\cite{viola2004facedetection}
 and eventually recognition~\cite{wright2009facerecognition}
 can signify the presence of specific people in a~media item.
+Optical Character Recognition (OCR) can generate
+additional textual signals from media items.
 As visual recognition systems grow more powerful,
 more objects will eventually be recognizable by
 machines~\cite{serre2007objectrecognition},
@@ -745,23 +749,22 @@ Extracted features in all three categories
 \emph{visual}---from the media item,
 and \emph{social}---from the social network
 in the form of social interactions)
-can serve as ranking criteria, be it in isolation,
+can serve as ranking criteria, be it in isolation
 or in combination by introducing a~ranking formula.
 As a~result, this will also positively influence
 the diversity of automated summarizations.
 
 Nonetheless, it remains important to view the media and the
-associated text as a~whole, since the text
+accompanying microposts as a~whole, since the text
 could convey a~sentiment about,
 or an explanation of the visual data.
 Using named entity recognition as outlined in
 \autoref{cha:micropost-annotation},
-the important semantic elements in the message text get identified. 
+the important semantic elements in the micropost get identified. 
 The content of the message can subsequently be used
 to narrow down the search space for visual factors
 enabling cross-fertilization between the textual
-and visual analysis, which results in effective context-aware analysis possibilities~\cite{verborgh2012multimediaannotation}.
-
+and visual analysis, which results in effective context-aware analysis possibilities~\cite{verborgh2012multimediaannotation,rizzo2012whatfresh}.
 Finally, by leveraging the \emph{LOD} cloud,
 we can use that knowledge to get a~more diverse view on events.
 At time of writing, the so-called
@@ -777,10 +780,11 @@ new media items that a~pure monolingual search
 would not have revealed---oftentimes,
 and especially in the concrete case,
 at the expense of neutrality.
-We are confident, however, that the additional coverage
+We are confident that the additional coverage
 from more angles helps sharpen one's own viewpoint of an event,
-especially with the option of back-translating microposts
-in foreign languages, which our approach supports,
+especially with the option of translating microposts
+authored in foreign languages%
+---which is supported by our approach---%
 as mentioned in \autoref{sec:machine-translation}.
 
 \section*{Chapter Notes}
