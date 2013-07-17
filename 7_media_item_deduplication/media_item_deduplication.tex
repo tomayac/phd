@@ -24,9 +24,19 @@ The corresponding verb \emph{to duplicate} is defined as to
 The derived term \emph{deduplication} in consequence refers to
 the act of eliminating duplicate or redundant information.
 
+In this chapter, we will treat video
+and photo deduplication separately. 
+Our goal is to deduplicate media items \emph{on-the-fly}
+at the very moment they are extracted from social networks.
+Due to this limitation, we cannot rely on any preprocessing
+that state-of-the-art algorithms rely on.
+Our approaches to video and photo near-duplicate
+and exact duplicate detection are founded
+on a~tile-wise histogram-based pixel comparison algorithm.
+
 \subsection{Definitions}
 
-We define a~social media item as either a~photo (image) or video
+We have defined a~social media item as either a~photo (image) or video
 that was \emph{publicly} shared or published
 on at least one social network.
 In the following, we will use the shorter term media item
@@ -37,10 +47,10 @@ what we mean with \emph{duplicate media items} for various cases.
 
 We define two media items of type photo as \emph{exact duplicates}
 if their pixel contents are exactly the same.
-This implies that by our definition, a~scaled or recompressed version
-of the same photo is \emph{not} an exact duplicate. 
+This implies that by our definition a~scaled or recompressed version
+of the same photo is \emph{not} considered an exact duplicate. 
 Similarly, a~rotated version of a~photo is also \emph{not}
-an exact duplicate. 
+considered an exact duplicate. 
 In contrast, two photo files with different file names
 or different Exchangeable image file
 format\footnote{\url{http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2010_E.pdf},
@@ -62,8 +72,8 @@ rotated photos up to a~certain degree, \emph{etc.}
 Near-duplicate photos typically occur if event attendants
 stand close to each other and thus take photos
 from a~similar standpoint.
-Another scenario is a~user applying a~photo effect to a~photo
-(like an Instagram filter) and then sharing both the modified
+Another scenario is when a~user applyies a~photo effect to a~photo
+(like an Instagram filter) and then shares both the modified
 and the unmodified version.
 
 \paragraph{Duplicates for Videos:}
@@ -73,15 +83,16 @@ if their pixel contents are frame by frame exactly the same.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
 We make \emph{no} requirements on the audio, \emph{i.e.},
-a video in two different languages, however, that fulfills the 
-pixel contents equality condition, is considered exact duplicate.
+a~video that has been dubbed in two different languages,
+but that fulfills the pixel contents equality condition,
+is considered exact duplicate.
 Typical scenarios where exact duplicate videos can occur is,
 for example, two users sharing the same YouTube video
 independently from each other.
 
 \paragraph{Near-Duplicates for Videos:}
 
-We define two media items of type video as \emph{near-duplicates},
+We define two media items of type video as \emph{near-duplicates}
 if their pixel contents per frame differ no more
 than a~given threshold.
 In practice, we lower this condition and instead of every frame
@@ -100,37 +111,9 @@ the pixel contents of any of the frames of a~video media item.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
 Typically, this phenomenon occurs if two event attendants
-of the same event both cover the event from almost the same
+of the same event both cover it from almost the same
 standpoint, however, if the one attendant takes a~video,
 while the other attendant takes a~photo.
-
-\subsection{Motivation}
-
-In this chapter, we will treat video
-and photo deduplication separately. 
-Our goal is to deduplicate media items on-the-fly
-at the very moment they are extracted from social networks.
-Due to this limitation, we cannot rely on any preprocessing
-that state-of-the-art algorithms rely on.
-This is why we dedicate a~whole section entirely to on-the-fly
-shot boundary detection for online video,
-which is by no means a~solved problem.
-The contribution of our approach is that it is entirely Web-based
-and on-the-fly, which introduces interesting new challenges
-that traditional approaches to shot boundary detection
-do not have to cope with.
-Our Web-based approach abstracts away most of the low-level details
-like the video codec, in favor of the high-level \texttt{<video>}
-API, however, this also comes at a~cost.
-A~major issue is the uncertain streaming speed,
-where traditional approaches have immediate access
-to the video file on disk.
-An additional challenge is the unknown key frame distribution
-of the target videos, which---together with streaming speed
-issues---makes exact frame-wise video navigation impossible.
-Our approaches to video and photo near-duplicate
-and exact duplicate detection are founded
-on a~tile-wise histogram-based pixel comparison algorithm.
 
 \section{Related Work}
 
