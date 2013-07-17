@@ -346,7 +346,7 @@ thanked people for their work in ensuring the victory.
 An OpenCalais response consists of three parts:
 
 \begin{itemize}
-  \itemsep0
+  \itemsep0em
   \item a~list of topics that the text is categorized in
   \item a~list of concrete entities that occur in the text
   \item a~list of social concept tags
@@ -785,7 +785,12 @@ of a~group of triples contained in a~named graph
 requests to third-party APIs.
 We use the Provenance Vocabulary~\cite{hartig2012provenance} with
 prefix \texttt{prv}, the HTTP Vocabulary in RDF~\cite{koch2011http}
-with prefix \texttt{http}, and the Representing Content in RDF
+with prefix \texttt{http},
+the Identity of Resources on the Web ontology%
+\footnote{\url{http://www.ontologydesignpatterns.org/ont/web/irw.owl\#},
+accessed July 16, 2013} (IRW)
+with the prefix \texttt{irw},
+and the Representing Content in RDF
 vocabulary~\cite{koch2011content} with prefix \texttt{cnt}.
 
 As a~first step, we state that \texttt{:G} is both a~\texttt{prv:DataItem}
@@ -798,7 +803,8 @@ a~\texttt{prvTypes:DataProvidingService}
 to be precise (simplified as
 \texttt{http://tomayac.no.de/entity-extraction/combined}
 in \autoref{code:provenance}).
-This service is \texttt{prv:operatedBy} a~human
+This service is \texttt{prv:operatedBy} a~human,
+in the concrete case ourselves,
 (\texttt{http://tomayac.com/thomas\_steiner.rdf\#me}).
 Time is important for provenance,
 so the \texttt{prv:performedAt} date of
@@ -810,12 +816,12 @@ which are \texttt{prv:retrievedBy} a~\texttt{prv:DataAcess}
 that is \texttt{prv:performedAt} a~certain time,
 and \texttt{prv:performedBy} a~non-human actor
 (our API) that is \texttt{prv:operatedBy}
-a~human (\texttt{http://tomayac.com/thomas\_steiner.rdf\#me}.
+the same human as before.
 For the \texttt{prv:DataAccess}
-(there is one for each third-party API involved),
+(there is one for each involved API),
 we \texttt{prv:accessedService} from
 a~\texttt{prv:DataProvidingService} of which we
-\texttt{prv:accessedResource} at
+\texttt{prv:accessedResource} that is available at
 a~certain \texttt{irw:WebResource}.
 Therefore, we \texttt{prvTypes:exchangedHTTPMessage} which is an
 \texttt{http:Request} using \texttt{http:httpVersion} ``1.1''
