@@ -61,17 +61,17 @@ In~\cite{davidson2010videorecommendation}, Davidson \emph{et~al.}\ show how visu
 textual, and social features can be used for personalized video recommendations.
 A service called Storify~\cite{fincham2011storify} lets users manually combine
 microposts, photos, videos, and other elements onto one page for the purpose
-of storytelling or summarizing an event,
+of storytelling or summarizing an event
 and share stories permanently on the Web.
 Finally, social networks present photos and videos
-often in grid-like galleries,\footnote{\url{http://twitpic.com/904yka/full}}
+often in grid-like galleries,\footnote{\url{http://twitpic.com/904yka/full}, accessed July 17, 2013}
 sometimes scaled based on the amount of comments.
 When unique media items have been collected,
-the remaining task is to summarize events by selecting the most relevant media fragments. 
+the remaining task is to summarize events by selecting the most relevant media items or media fragments. 
 Fabro and B\"osz\"orm\'enyi~\cite{delfabro2012summarization} detail
 the summarization and presentation of events from content retrieved from social media.
 Nowadays, many domain-specific methods already exhibit good accuracy,
-for example in the sports domain~\cite{li2001sportsvideo,li2010americanfootball}. However, the challenge is to find methods that are content-agnostic.
+for example, in the sports domain~\cite{li2001sportsvideo,li2010americanfootball}. However, the challenge is to find methods that are content-agnostic.
 Methods that exploit semantic information~(\emph{e.g.},~\cite{chen2009videosummarization}) 
 will likely provide high-quality results in the future,
 but today's most relevant summaries are produced by user interaction~\cite{olsen2011videosummarization}.
@@ -88,16 +88,19 @@ the resulting subset $M_{final} \subset M_{start}$
 is the result after the application of $f$ to $M_{start}$: $f(M_{start})=M_{ranked}$
 and pruning the ranked set $M_{ranked}$ to only include members
 whose rank is greater than $t$, with the resulting set named $M_{final}$.
-Each media item $m_i$ can either be an instance of a~video or photo.
+Each media item $m_i$ can either be an instance of video or photo.
 For each point $t_x$ on a~timeline $T$, the state of the media gallery
 at $t_x$ is defined for each media item $m_i$
 as a~set $S_x$ of $n$ tuples $s_{x,i}$, where
 $s_{x,i}=\langle \mathit{left}$, $\mathit{top}$, $\mathit{width}$, $\mathit{height}$,
 $\mathit{alpha}$, $\mathit{z\mbox{-}index}$, $\mathit{animation}$,
 $\mathit{start}$, $\mathit{playing}$, $\mathit{volume} \rangle$.
-The first six properties are defined as in CSS, the $\mathit{animation}$ property
-allows for the definition of CSS transitions
-and transformations as defined in~\cite{jackson2013csstransitions,fraser2012csstransforms},
+The first six properties are defined as in CSS~%
+\cite{bos2011css}, the $\mathit{animation}$ property
+allows for the definition of CSS transitions as defined in~%
+\cite{jackson2013csstransitions}
+and CSS transformations as defined in~%
+\cite{fraser2012csstransforms},
 the $\mathit{start}$ property defines the start time in a~video.
 The property $\mathit{playing}$ describes whether a~video is currently paused or playing.
 Finally, the property $\mathit{volume}$ describes the volume level
@@ -118,8 +121,9 @@ to illustrate an event and its atmosphere.
 Audial aesthetics thus consist of aspects like volume level normalization,
 avoiding multiple videos playing music in parallel, smooth transitions, \emph{etc.}
 We remark that through selective mixing of audio tracks
-of event-related videos, ``noise clouds'' very characteristic
-for the event atmosphere can be observed.
+of event-related videos, ``noise clouds''
+that are very characteristic
+for an event's atmosphere can be observed.
 We support this by allowing users to play more than one video at a~time.
 
 \paragraph{Visual aesthetics:}
@@ -132,7 +136,8 @@ the number of visible (moving) media items
 at a~time should be limited.
 We will treat this topic in more detail in \autoref{sec:user-studies}.
 Depending on the event, a~consistent or a~contrast-rich overall
-appearance of items may be desired, also for transitions.
+appearance of items may be desired,
+this also applies to transitions.
 
 \section{Motivation for Automated Media Gallery Generation}
 \label{sec:motivation-chapter-8}
@@ -154,8 +159,8 @@ finally, to \emph{rank} the resulting media item clusters
 according to well-defined ranking criteria.
 In this chapter, we treat the challenge of \emph{compiling}
 ranked media item clusters in media galleries in ways
-such that the ranking-implied order is (loosely) respected.
-In the previous sections, we have defined
+such that the ranking-implied order is at least loosely respected.
+In the previous section, we have defined
 aesthetic principles for automated media gallery layout~\cite{steiner2012definingaesthetic},
 which we now apply to media gallery styles.
 The task of media gallery compilation is different
@@ -174,8 +179,7 @@ The crucial question is thus whether the media items' aspect ratios
 should be respected, or whether they should be cropped to square,
 or other aspect ratios (\emph{e.g.}, 4:3 or 16:9).
 Respecting the aspect ratio has the advantage that media items
-do not need to be cropped, which may affect important information
-contained in the media item, like, \emph{e.g.}, 
+do not need to be cropped, which may affect important contained information like, \emph{e.g.}, 
 contained faces or text.
 However, due to the unpredictable media item formats,
 compiling media galleries that do not look frayed is harder.
@@ -184,6 +188,8 @@ as the media item formats are predictably the same,
 at the cost of having to decide where to crop.
 Different algorithms (\emph{e.g.},~\cite{suh2003thumbnail})
 beyond this chapter's scope exist to aid this decision.
+
+We use the following terminology.
 A~media gallery is called \emph{balanced} if its shape is rectangular,
 \emph{hole-free} if there are no gaps from missing media items,
 and \emph{order-respecting}
@@ -202,12 +208,12 @@ into two media items with the same aspect ratio%
 ~\cite{chedeau2012lightboxandroid}.
 This works for portrait and landscape orientations,
 however, is not necessarily order-respecting.
-Two other non-order-respecting techniques are (i),~%
+Two other non-order-respecting techniques are (i)~%
 working with pre-defined placeholder patterns
 (small and big squares, portrait and landscape rectangles)
 and then filling the placeholder shapes with media items%
-~\cite{chedeau2012500px},
-or (ii),~working with columns of pre-defined widths
+~\cite{chedeau2012500px}
+or (ii)~working with columns of pre-defined widths
 and then iteratively inserting in the smallest column%
 ~\cite{chedeau2012lightbox}.
 
@@ -227,7 +233,7 @@ The algorithm works by resizing all media items in a~row to the same height
 and adjusting the widths in a~way that the aspect ratios are maintained.
 A~row is filled until a~maximum row height is reached,
 then a~new row (with potentially different height) starts, \emph{etc.}
-This media gallery style is order-respecting, hole-free,
+This media gallery style is strictly order-respecting, hole-free,
 and can be balanced by adjusting the number
 of media items in $+1$ steps.
 
@@ -266,11 +272,12 @@ that we call \emph{Loose Order, Varying Size (LOVS)}
 can be seen in \autoref{fig:b} and \autoref{fig:d},
 with the details explained in~\cite{chedeau2012facebook}.
 The algorithm works by cropping all images to a~square aspect ratio,
-which allows for organizing media items such that one big square always
+which allows for organizing media items in a~way such
+that one big square always
 contains two horizontal blocks, each with two pairs of small squares.
 The media gallery is then formed by iteratively filling
-big or small squares until a~square is full,
-and then adding it to the smallest column.
+big or small squares until a~square is full
+and then adding the square to the smallest column.
 This media gallery style allows any media item to become big,
 while still being loosely order-respecting and always hole-free.
 Balancing the gallery is slightly harder,
@@ -288,7 +295,7 @@ media items with faces, media items available in High-Density quality,
 or media items with interesting details~%
 \cite{suh2003thumbnail}.
 Users may want to decide what media items to feature,
-albeit we aim for an automatized solution.
+albeit we aim for an automated solution.
 Evaluating subjective data like \emph{the} correct presentation form
 for a~set of media items is a~challenging task.
 For different users and different media galleries,
@@ -300,8 +307,8 @@ for our evaluation, as previously motivated.
 
 We have conducted two types of surveys. 
 Survey~A via multiple social networks, where we simply asked people to ``Like''
-and/or comment on their favorite style of media gallery,
-and Survey~B via email to a~company-internal ``miscellaneous'' mailing list,
+and/or comment on their favorite style of media gallery
+and Survey~B that was distributed via email to a~company-internal ``miscellaneous'' mailing list,
 where we asked people to rate media galleries via MOS, with optional comments. 
 Survey~A and Survey~B used different media items in the media galleries,
 as to have some measure in how far content has an impact.
@@ -341,7 +348,7 @@ The data of Survey~B is available.%
 accessed June 1, 2013}
 For privacy reasons, we have posted the media galleries
 as non-public microposts on social networks,
-which is why we are not able to share the data of Survey~A.
+which is why we are unable to share the data of Survey~A.
 
 \subsection{Maintaining Provenance Information with Downloadable Media Galleries}
 
@@ -349,7 +356,7 @@ Media galleries consist of individual media items,
 each with its specific pieces of provenance data
 like creator, originating social network, \emph{etc.}
 In the context of the application that we have developed
-in the context of this research and
+in the context of this thesis and
 that will be described in full detail in \autoref{sec:socialmediaillustrator},
 this provenance data is maintained in the form of HTML hyperlinks
 back to the originating social networks.
@@ -398,9 +405,10 @@ We have opted to extend the traditional slideshow model
 by adhering to the media gallery paradigm of our two preferred styles
 Loose Order, Varying Size (\emph{LOVS}) and Strict Order, Equal Size (\emph{SOES}).
 Given a~media gallery in either \emph{LOVS} or \emph{SOES} style,
-each media item can be focused.
+each media item can be focused,
+\emph{i.e.}, be put prominently in the foreground.
 When a~media item is focused, it smoothly transitions
-from its origin in the media gallery to the center,
+from its original location in the media gallery to the center,
 while in parallel it is zoomed to double its size.
 All other media items that are currently not focused are faded out
 in a~black-and-white variant and blurred, in order to put the maximum emphasis
@@ -434,7 +442,7 @@ and add an audio component to the interactive slideshow.
 As media items of type video typically already have an audio track,
 it is thus straight-forward to play the video once it is focused
 in the slideshow.
-In contrast photos do not have audible information associated with them.
+In contrast, photos do not have audible information associated with them.
 We can, however, use the (potentially machine-translated,
 see \autoref{sec:machine-translation}) textual information
 of any of the media items in the particular media item's media cluster
@@ -447,18 +455,18 @@ We use the set of extracted and disambiguated named entities
 the insights gained from part-of-speech tagging
 (see \autoref{sec:part-of-speech-tagging})
 to select the one textual description
-from the entire set of textual descriptions in the cluster
+from the entire set of textual descriptions in each cluster
 that \textit{(i)} maximizes the number of named entities
 and that \textit{(ii)} has the most diverse set of words
 identified as nouns, verbs, and adjectives.
-Following this simple heuristic, we avoid choosing
-a~textual description that consists of only a~list of tags,
+Following this heuristic, we effectively avoid choosing
+a~textual description that only consists of a~list of tags,
 as is often the case with, \emph{e.g.},
 Instagram (see \autoref{sec:instagram}).
 We convert the textual description of a~media item
 to audial information with the help of a~text-to-speech system.
 We use the eSpeak~\cite{duddington2012espeak} speech synthesizer
-that was described earlier in \autoref{sec:text-to-speech-espeak}.
+that was described earlier in \autoref{sec:from-debug-output-to-story}.
 
 \begin{figure}[!ht]
   \centering
@@ -472,13 +480,15 @@ that was described earlier in \autoref{sec:text-to-speech-espeak}.
 
 Media galleries that summarize given events
 can be generated following the steps described in the previous chapters,
-starting with micropost annotation (\autoref{cha:micropost-annotation}), continuing with media item extraction
+starting with micropost annotation (\autoref{cha:micropost-annotation}),
+followed by event detection (\autoref{cha:eventdetection}),
+continuing with media item extraction
 (\autoref{cha:media-item-extraction}),
 over to media item deduplication and clustering
 (\autoref{cha:shot-boundary-detection} and  
-\autoref{cha:media-item-deduplication}), and finally
+\autoref{cha:media-item-deduplication}), 
 media item ranking (\autoref{cha:media-item-ranking}) and
-media item compilation (\autoref{cha:media-item-compilation}).
+finally media item compilation (\autoref{cha:media-item-compilation}).
 We have developed an application called \emph{Social Media Illustrator}
 for the automated generation of
 media galleries that visually and audially summarize events
@@ -507,7 +517,9 @@ These search terms can be official event hashtags
 (\emph{e.g.}, \texttt{\#VSFashionShow}
 for the event described in \autoref{sec:vsfashionshow}),
 but more commonly a~combination of names of the involved actors,
-event names, event locations, or times, like, for example, \emph{Stanley Cup 2013}.
+event names, event locations, or times~%
+\cite{becker2010eventidentification,becker2012plannedevents}
+like, for example, \emph{Stanley Cup 2013}.
 Search results for each search term appear in the results panel
 in the lower part of the graphical user interface
 in form of a~so-called search bundle.
@@ -533,12 +545,12 @@ for three search terms.
 Via the parameter settings on the left side, 
 fine-grained control over the deduplicating
 and matching algorithm is possible. 
-The configurable options are best described in \autoref{sec:media-item-deduplication-algorithm}.
+The configurable options are described in \autoref{sec:media-item-deduplication-algorithm}.
 Changes to any of the parameters are reflected in realtime
 in the results panel below, which facilitates finding the optimal 
 settings for a~given result set consisting of result bundles.
-\autoref{fig:mediaitemdeduplication} shows the deduplication debug view
-accessible by right-clicking two media items.
+\autoref{fig:mediaitemdeduplication} shows the deduplication debug view (see \autoref{sec:media-item-deduplication-algorithm})
+that is accessible by right-clicking two arbitrary media items.
 
 \begin{figure}[!ht]
   \centering
@@ -623,14 +635,14 @@ we have examined different algorithms for the automated generation
 of media galleries.
 While some of the described algorithms do not fulfill our requirements
 with regard to respecting the ranking-implied order,
-two of them---namely \emph{LOVS} and \emph{SOES}---do fulfill them,
+two of them---namely \emph{LOVS} and \emph{SOES}---do fulfill them
 and are in consequence considered.
 We have created an application that auto-generates the
 two media gallery styles \emph{SOES} and \emph{LOVS},
 and evaluated users' perceived quality with two separate surveys. 
 The trend is that users prefer \emph{LOVS}.
 Future work will be on evaluating more media gallery styles
-and advanced heuristics for media item cropping,
+and advanced heuristics for media item cropping
 tailored to social network media items.
 As outlined earlier, such social media items
 do not necessarily share the same properties as
