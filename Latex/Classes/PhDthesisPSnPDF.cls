@@ -181,7 +181,8 @@
     \graphicspath{{frontmatter/figures/EPS/}{frontmatter/figures/}}
 \fi
 
-\usepackage{refcheck}
+% Used to find unreferenced labels
+% \usepackage{refcheck}
 
 %:-------------------------- page layout -----------------------
 
