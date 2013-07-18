@@ -52,7 +52,7 @@
 % insert a centered figure with caption and description
 % parameters 1:filename, 2:title, 3:description and label
 \newcommand{\figuremacro}[3]{
-	\begin{figure}[!ht]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=1\textwidth]{#1}
 		\caption[#2]{\textbf{#2} - #3}
@@ -64,7 +64,7 @@
 % parameters 1:filename, 2:title, 3:description and label, 4: textwidth
 % textwidth 1 means as text, 0.5 means half the width of the text
 \newcommand{\figuremacroW}[4]{
-	\begin{figure}[!ht]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=#4\textwidth]{#1}
 		\caption[#2]{\textbf{#2} - #3}
@@ -104,7 +104,7 @@
 }
 
 \newcommand{\InsertFig}[3]{
-  \begin{figure}[!ht]
+  \begin{figure}[!h]
     \begin{center}
       \leavevmode
       #1
