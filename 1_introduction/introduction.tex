@@ -150,7 +150,11 @@ amongst which social network research, multimedia content analysis,
 Semantic Web and Natural Language Processing (NLP),
 human factors in computing systems,
 and Web services.
-In consequence, we have broken our contributions down into
+Early on in the process of this thesis,
+we have sought and incorporated expert feedback based on
+a~Doctoral Consortium paper~%
+\cite{steiner2011enrichingunstructured}.
+We have broken our contributions down into
 the following topics.
 
 \subsection{Social Network Multimedia and Data Analysis}
@@ -158,103 +162,129 @@ the following topics.
 We have worked on methods for the aggregation, extraction,
 deduplication, clustering, and compilation
 of social media contents from
-multiple social networks.
-\todo{What fresh media citation}
+multiple social networks~%
+\cite{rizzo2012whatfresh}.
 Those methods were applied and evaluated
-for the enhancement of conference experiences.
-\todo{Confomaton citations}
-\todo{icme2013 citation}
+for the enhancement of conference experiences~%
+\cite{khrouf2012aggregatingsocialmedia,khrouf2012confomaton}.
 
 \subsection{Application of Semantic Web and NLP Techniques}
 
 In order to make sense out of social network microposts,
 we have worked on methods to consolidate and rank
 the results of multiple named entity recognition and
-disambiguation APIs and to track their data provenance.
-\todo{Adding Meaning to Social Network citations}
+disambiguation APIs and to track their data provenance~%
+\cite{steiner2011addingmeaning}.
 We have applied and evaluated those methods
 for the consumer-oriented detection of trending microposts
-on a~major commercial social network.
-\todo{A~tweet consumers' look citation}
+on a~major commercial social network~%
+\cite{steiner2011tweetconsumers}.
+
 
 \subsection{Video Content and Metadata Analysis}
 
 We have worked on methods for named entity extraction and
 disambiguation for online videos based on closed captions
 and other textual metadata, which make online video
-more accessible, searchable, and interconnected.
-\todo{SemWebVid citation}
+more accessible, searchable, and interconnected~%
+\cite{steiner2010semwebvid,steiner2010semwebvidchallenge}.
 Further, we have combined those textual methods with 
 video content analysis methods for the on-the-fly detection
-of shot boundaries for online videos.
-\todo{Enabling on-the-fly citation}
+of shot boundaries for online videos~%
+\cite{steiner2012shotdetection}.
 We have defined aesthetic principles
 for the automated generation of media gallery layouts
 for visual and audial event summarization
-based on social network multimedia data.
-\todo{Defining aesthetic principles citation}
+based on social network multimedia data~%
+\cite{steiner2012definingaesthetic}.
         
 \subsection{Crowdsourcing}
 
 The video content analysis methods mentioned before
 were combined with methods for the crowdsourced detection
-of events in online videos.
-\todo{Crowdsourcing event detection citation}
+of events in online videos~%
+\cite{steiner2011crowdsourcingevent}.
 We have further worked on crowdsourcing methods
-for the extraction of knowledge items from arbitrary Web pages.
-\todo{SEKI@home citations}
+for the extraction of knowledge items from arbitrary Web pages~%
+\cite{steiner2012sekiathome,steiner2012sekiathomechallenge}.
 
 \subsection{Studies}
 
 We have contributed an examination of Linked Data usage and
-visualization techniques of a~major commercial search engine.
-\todo{How Google is using citation}
+visualization techniques of a~major commercial search engine~%
+\cite{steiner2010howgoogleisusing}.
 In addition to that, we have studied the usefulness and relevance
 of social network updates which were added to search engine
-results pages (SERP) of a~major commercial search engine.
-\todo{Adding realtime coverage citation}
+results pages (SERP) of a~major commercial search engine~%
+\cite{steiner2012addingrealtime}.
 
 \subsection{Multimodal Search Engines}
 
 We have worked on an examination of context-aware querying
-for multimodal search engines.
-\todo{Context-aware querying citation}
+for multimodal search engines~%
+\cite{etzold2012contextawarequerying,steiner2012isearch}.
 Further, we have studied user interface constraints on
 mobile and desktop devices for a~multimodal search engine
-and demonstrated that those constraints can be overcome.
-\todo{One size does not fit all citation}
+and demonstrated that those constraints can be overcome~%
+\cite{steiner2012onesizedoesnotfitall}.
+
 
 \subsection{Web Service Description}
 
 We have worked on methods for the semantic description of Web APIs,
 their discoverability, their automated consumption,
-their semantic interlinking, and their social aspects.
-\todo{RESTdesc citations}
+their semantic interlinking, and their social aspects~%
+\cite{verborgh2011descriptionandinteraction,verborgh2011efficientruntime,verborgh2011integratingdata,verborgh2012capturingthefunctionality,verborgh2012functionalcomposition,verborgh2012functionaldescriptions,verborgh2012missinglinks,verborgh2012restdesc,verborgh2012socialdescriptionrevolution}.
 We have studied the feasibility of truly RESTful behavior
-for Web APIs in the sense of Dr. Roy Fielding.
-\todo{Fulfilling the hypermedia constraint citation}
+for Web APIs in the sense of Dr. Roy Fielding~%
+\cite{steiner2011fulfilling}.
         
 \subsection{Standardization and Specifications}        
 We have helped to shape a~W3C specification on media
-fragment addressing schemes for audio and video items.
-\todo{Media Fragments citation}
+fragment addressing schemes for audio and video items~%
+\cite{troncy2012mediafragments}.
 Further, we have worked on the definition of a~unified framework
-for the description of multimedia content objects.
-\todo{Introducing a~unified framework citation}
+for the description of multimedia content objects~%
+\cite{axenopoulos2012isearch,daras2011unifiedframework}.
 Finally, we have contributed to a~white paper on the
-Future Media Internet Architecture.
-\todo{FMIA citation}
+Future Media Internet Architecture~%
+\cite{alduan2011futureinternet}.
 
 \subsection{Others}
 
 We have developed methods for unobtrusively fixing
-common annoyances on arbitrary Web pages.
-\todo{xkcd citation}
+common annoyances on arbitrary Web pages~%
+\cite{steiner2012xkcd37}.
 
 \section{Thesis Structure}
 
 The remainder of this thesis is structured as follows. 
-\todo{Add thesis structure}
+
+\autoref{cha:background} introduces the Semantic Web and its technologies.
+Starting from the non-semantic Web,
+we show how structured data can be added to Web pages
+and briefly present DBpedia as a~knowledge base
+founded on structured data extracted from Wikipedia.
+We then continue with the Resource Description Framework
+and explain how it represents facts with triples.
+We provide examples of RDF's different serialization formats.
+Afterwards, we outline the Semantic Web vision of
+a~global giant database and present the Semantic Web
+query language SPARQL.
+We close the chapter with an introduction of Sir Tim Berners-Lee's
+Linked Data principles and show how data publisher that publish
+datasets according to those principles are visualized in the
+Linking Open Data cloud.
+
+\autoref{cha:social-networks}
+\autoref{cha:micropost-annotation}
+\autoref{cha:eventdetection}
+\autoref{cha:media-item-extraction}
+\autoref{cha:shot-boundary-detection}
+\autoref{cha:media-item-deduplication}
+\autoref{cha:media-item-ranking}
+\autoref{cha:media-item-compilation}
+\autoref{cha:future-work}
 
 Each chapter is closed by a~final section called
 \emph{Chapter Notes}, which contains references to publications
