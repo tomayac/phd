@@ -58,7 +58,7 @@ representing a~continuous action in time and space.
 The topic of shot boundary detection has already been described
 extensively in literature.
 While some specific issues still remain open
-(notably detecting gradual transitions and detected false positives
+(notably detecting gradual transitions and detected false-positives
 due to large movement or illumination changes),
 the problem is considered resolved for many
 cases~\cite{yuan2007shotboundary,hanjalic2002shotboundary}.
@@ -314,17 +314,17 @@ hardware, software, or format limitations can cause video frames
 to be dropped''}.
 In practice, this causes the analysis environment
 to be far from optimal.
-In our experiments we differentiated between false positives,
+In our experiments we differentiated between false-positives,
 \emph{i.e.}, shot changes that were detected,
 but not existent, and misses, \emph{i.e.},
 shot changes that were existent,
 but not detected.
 Compared to a~set of videos with manually annotated shot changes,
-our algorithm detected fewer false positives than misses.
+our algorithm detected fewer false-positives than misses.
 The reasons were gradual transitions and shots
 shorter than one second (below our detection resolution)
 for misses, and large movements in several tiles
-for false positives.
+for false-positives.
 Overall, we reached an accuracy of about 86\%,
 which is not optimal, but given the challenges
 sufficient for our use case of
