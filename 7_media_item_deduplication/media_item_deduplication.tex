@@ -312,7 +312,7 @@ their media items will be similar
 and---the capturing devices' quality aside---only differ in the viewing angles. 
 \autoref{fig:viewing-angle} shows a~concrete example.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[Viewing angle 1]{
     \includegraphics[height=2.7cm]{stage1.jpg}
@@ -333,7 +333,7 @@ or to claim ownership of a~media item.
 An example of caption, logo, and lower third insertion
 can be seen in \autoref{fig:logo}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[Blank]{
     \includegraphics[width=0.26\textwidth]{speaker1.jpg}
@@ -359,7 +359,7 @@ to obtain a~square aspect ratio
 that better fits the timeline view of users,
 as can be seen in the example in \autoref{fig:cropping}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[Original]{
     \includegraphics[height=3cm]{kid1.jpg}
@@ -382,7 +382,7 @@ attempt to auto-select a~representative poster frame from a~video with different
 typically resulting in varying frames for different social networks.
 \autoref{fig:camera-shot} shows an example of this phenomenon.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[Frame 1]{
     \includegraphics[height=3cm]{camera1.jpg}
@@ -403,7 +403,7 @@ Aspect ratio changes can either happen combined with cropping
 squeezing or stretching (and thus deforming the media item).
 \autoref{fig:bulged} shows an example where a~media item gets stretched.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[Original]{
     \includegraphics[height=3cm]{lordoftherings.jpg}
@@ -423,7 +423,7 @@ photo filters that, \emph{e.g.}, emulate retro Polaroid\texttrademark\ or tilt-s
 are a~considerable reason for near-duplicate media content on social networks.
 \autoref{fig:photo-filter} shows a~typical example.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[Original]{
     \includegraphics[width=0.25\textwidth]{clickclickdecker1.jpg}
@@ -662,14 +662,14 @@ for the \emph{Victoria's Secret Fashion Show 2012} and the
 We then pick some representative examples from both events
 and have a~closer look at the clustering algorithm's strengths and weaknesses.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=1.0\linewidth]{./vsfashionshow_clusters.png}
   \caption{Top clusters for the \emph{Victoria's Secret Fashion Show 2012} event}
   \label{fig:topvsfashionshow}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.95\textwidth,height=0.9\textheight,keepaspectratio]{./grammy_clusters.png}
   \caption{Top clusters for the \emph{Grammy Awards Nominations 2013} event}
@@ -684,7 +684,7 @@ Even though the model is shot from different angles and at different times,
 the photos are successfully clustered due to the very identifying colors
 and the high tile-wise similarity. 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.4\linewidth]{./person.png}
   \caption{High tile-wise similarity of a~dominating color}
@@ -698,7 +698,7 @@ whereas the right photo covers the entire stage.
 Due to the high tile-wise similarity of the scene detail,
 the photos are successfully clustered.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.5\linewidth]{./scene.png}
   \caption{Cropped view of a~stage scene}
@@ -710,7 +710,7 @@ under different lighting conditions.
 Due to the tile color tolerances and the high tile-wise similarity,
 the photos are successfully clustered.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.5\linewidth]{./viewing_angle.png}
   \caption{Stage and detail of a~stage under different lighting conditions}
@@ -723,7 +723,7 @@ with added black bars so that the resulting photo
 has a~square aspect ratio.
 Despite the differences, the photos are successfully clustered.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.35\linewidth]{./zoom.png}
   \caption{Zoomed view of a~model with black bars left and right}
@@ -735,7 +735,7 @@ however, with a~different person.
 Due to the dominating tile-wise similarity of the stage tiles,
 the photos are correctly clustered.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\linewidth]{./stage.png}
   \caption{Two views of the same stage with different person}
@@ -750,7 +750,7 @@ stemming from screenshots of the Grammy results from Web pages.
 The algorithm in its previously described form clusters such media items.
 This may or may not be desired.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=1\linewidth]{./white.png}
   \caption[Pure white as dominating color stemming from screenshots]
@@ -775,7 +775,7 @@ In the concrete case, ignoring pure white and pure black correctly fixed
 the clustering in our chosen example events in all but one cases,
 without negatively impacting previously correctly formed clusters.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.55\linewidth]{./bwtolerance.png}
   \caption[Black bars added to fit a~16:9 image in a~4:3 letterbox]
@@ -794,7 +794,7 @@ which hindered face recognition
 Second, the way the algorithm works
 causes the tiles of very tiny media items like the ones in question to blur.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.4\linewidth]{./weakness.png}
   \caption{Entirely different photos with similar tile histograms}
@@ -847,7 +847,7 @@ At the expense of exactness, (the few) poster still frames
 that are typically returned by video hosting platform APIs
 can be used rather than extracting (all) shot boundaries manually.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=1.0\linewidth]{./vsfashionshowboundaries.png}
   \caption[Excerpt of detected shot boundaries in an event video]
@@ -907,7 +907,7 @@ In both media items, exactly $1$ face was detected.
 A~screenshot of the complete media item clustering application (with a~different event)
 is available online at \url{http://twitpic.com/c02qfs/full} (accessed July 15, 2013).
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.5\linewidth]{./algorithmdebug.png}
   \caption[Algorithm debug view for two clustered media items]
@@ -985,7 +985,7 @@ is given in \autoref{code:media-fragment}.
   that contains a~face; and
   \textit{(ii)}~a~tile of dimensions $ 10 \times 10 $ pixels
   starting at pixel coordinates $ (0, 0) $ of red color}},
-  label=code:media-fragment, float=!h]
+  label=code:media-fragment, float=!ht]
 @base <http://example.org/> .
 @prefix ma: <http://www.w3.org/ns/ma-ont> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -1043,14 +1043,14 @@ Independent of the actual media items' aspect ratios,
 the tile-wise comparison always happens based on
 a~potentially squeezed square aspect ratio version.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.9\linewidth]{./backstreetboys.png}
   \caption[\emph{Near-duplicate} music video \emph{Everybody} by the \emph{Backstreet Boys}]{\emph{Near-duplicate} music video \emph{Everybody} by the \emph{Backstreet Boys} shared independently on Facebook and \googleplus}
   \label{fig:near-duplicate}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \subfloat[From Facebook user]{
     \includegraphics[width=0.35\linewidth]{debug1.png}
@@ -1276,14 +1276,14 @@ Our polyfill---in contrast to an additional earlier
 spatial Media Fragments URI polyfill implementation~\cite{weinberg2013polyfill}
 by Fabrice Weinberg---supports more browsers and both image \emph{and} video.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.75\linewidth]{./similar-different.png}
   \caption[Similar and different corresponding tile pairs]{Similar (upper row) and different (lower row) corresponding tile pairs for the media items from a~Facebook (left column) and a~Google+ user (right column); checkered tiles are not considered due to the black-and-white tolerance}
   \label{fig:similar-different}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.75\linewidth]{./tile-highlight.png}
   \caption[Due to the black-and-white tolerance not considered checkered tiles]{Due to the black-and-white tolerance not considered checkered tiles, as the text-to-speech system explains: \textit{``However, 22 tiles were not considered, as they are either too bright or too dark, which is a~common source of clustering issues.''}}
