@@ -31,7 +31,7 @@ at the very moment they are extracted from social networks.
 Due to this limitation, we cannot rely on any preprocessing
 that state-of-the-art algorithms rely on.
 Our approaches to video and photo near-duplicate
-and exact duplicate detection are founded
+and exact-duplicate detection are founded
 on a~tile-wise histogram-based pixel comparison algorithm.
 
 \subsection{Definitions}
@@ -43,21 +43,21 @@ In the following, we will use the shorter term media item
 rather than the full term and define
 what we mean with \emph{duplicate media items} for various cases.
 
-\paragraph{Exact Duplicates for Photos:}
+\paragraph{exact-duplicates for Photos:}
 
-We define two media items of type photo as \emph{exact duplicates}
+We define two media items of type photo as \emph{exact-duplicates}
 if their pixel contents are exactly the same.
 This implies that by our definition a~scaled or recompressed version
-of the same photo is \emph{not} considered an exact duplicate. 
+of the same photo is \emph{not} considered an exact-duplicate. 
 Similarly, a~rotated version of a~photo is also \emph{not}
-considered an exact duplicate. 
+considered an exact-duplicate. 
 In contrast, two photo files with different file names
 or different Exchangeable image file
 format\footnote{\url{http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2010_E.pdf},
 accessed July 15, 2013}
-(Exif) data are considered exact duplicate
+(Exif) data are considered exact-duplicate
 if their pixel contents are exactly the same.
-Exact duplicate photos typically occur if users share content 
+exact-duplicate photos typically occur if users share content 
 from one social network on another, for example,
 if one user posts a~photo on Instagram that then someone else
 (or even the same user) posts on Facebook.
@@ -78,15 +78,15 @@ and the unmodified version.
 
 \paragraph{Duplicates for Videos:}
 
-We define two media items of type video as \emph{exact duplicates}
+We define two media items of type video as \emph{exact-duplicates}
 if their pixel contents are frame by frame exactly the same.
 In practice, we lower this condition and instead of every frame
 only consider frames at shot boundaries.
 We make \emph{no} requirements on the audio, \emph{i.e.},
 a~video that has been dubbed in two different languages,
 but that fulfills the pixel contents equality condition,
-is considered exact duplicate.
-Typical scenarios where exact duplicate videos can occur is,
+is considered exact-duplicate.
+Typical scenarios where exact-duplicate videos can occur is,
 for example, two users sharing the same YouTube video
 independently from each other.
 
@@ -277,7 +277,7 @@ Rather than showing the viewer all media items,
 clusters of similar media items need to be formed.
 Within each cluster, the most representative media item
 has to be decided on according to well-defined criteria.
-Undesired duplicate or near-duplicate content in the context of social networks
+Undesired exact-duplicate or near-duplicate content in the context of social networks
 arises in a~number of situations
 that we will illustrate in the following.
 
@@ -439,7 +439,7 @@ are a~considerable reason for near-duplicate media content on social networks.
 \label{sec:near-duplicate-clustering-algorithm}
 
 In the previous section, we have outlined
-reasons and sources for duplicate and near-duplicate content.
+reasons and sources for exact-duplicate and near-duplicate content.
 In this section, we describe an algorithm tailored to
 deduplicating and clustering exact-duplicate and near-duplicate media items.
 Design goals for the algorithm include
@@ -1390,7 +1390,7 @@ with the evaluation method Mean Opinion Score (MOS).
 Our contribution also includes a~polyfill implementation
 of spatial Media Fragments URIs.
 
-Media item deduplication of both exact and near-duplicate media items
+Media item deduplication of both exact- and near-duplicate media items
 is a~fundamental step in dealing with huge amounts of social media
 and media overload in general.
 Highly popular media items not only tend

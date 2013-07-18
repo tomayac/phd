@@ -118,7 +118,7 @@ from social networks or media item hosting platforms
 and relate it to the originating microposts
 (symbolized by the central cloud).
 Using CBIR and CBVR techniques, we first deduplicate
-duplicate and near-duplicate media items,
+exact-duplicate and near-duplicate media items,
 and then cluster similar media items
 (symbolized by the green, red, and orange markers).
 We rank the deduplicated and clustered list
@@ -258,6 +258,10 @@ common annoyances on arbitrary Web pages~%
 
 \section{Thesis Structure}
 
+Each chapter is closed by a~final section called
+\emph{Chapter Notes}, which contains references to the publications
+that the chapter is based upon
+and in some cases pointers to related material for further reading.
 The remainder of this thesis is structured as follows. 
 
 \paragraph{\autoref{cha:background}:}
@@ -320,16 +324,36 @@ in order to avoid false-positive alerts,
 \emph{and} on social networks.
 
 \paragraph{\autoref{cha:media-item-extraction}:}
+
+In this chapter, we describe how media items can be extracted
+from different social networks.
+We introduce an alignment scheme that acts as an abstraction layer
+to overcome the underlying differences in data structure of 
+the supported social networks.
+We evaluate the media item extractors with different events
+and motivate the need for media item deduplication and ranking.
+
 \paragraph{\autoref{cha:shot-boundary-detection}:}
+
+In this chapter, we present an algorithm and an 
+accompanying application for the task of detecting
+camera shot boundaries on-the-fly in streaming Web video,
+which is a~required step for the deduplication of videos
+and photos contained in videos.
+We evaluated the approach with videos from a~popular video hosting platform in form of a~browser extension.
+
 \paragraph{\autoref{cha:media-item-deduplication}:}
+
+This chapter is about the on-the-fly deduplication and clustering
+of media items extracted from social networks.
+We analyze reasons for the occurrence of exact-duplicate
+and near-duplicate media items and introduce an algorithm
+tailored to this task, incorporating matching conditions
+that are based on the findings of the analysis.
+
 \paragraph{\autoref{cha:media-item-ranking}:}
 \paragraph{\autoref{cha:media-item-compilation}:}
 \paragraph{\autoref{cha:future-work}:}
-
-Each chapter is closed by a~final section called
-\emph{Chapter Notes}, which contains references to publications
-that the chapter is based upon,
-and in some cases pointers to related material for further reading.
 
 \bibliographystyle{plainnat}
 \clearpage
