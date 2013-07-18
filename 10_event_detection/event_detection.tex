@@ -56,11 +56,11 @@ We have developed an application called \emph{Wikipedia Live Monitor}
 that monitors article edits on different language versions of Wikipedia---%
 as they happen in realtime.
 Wikipedia articles in different languages are highly interlinked.
-For example, the English article \emph{``en:2013\_Russian\_meteor\_event''}
+For example, the English article \texttt{en:2013\_Russian\_meteor\_event}
 on the topic of the February 15 meteoroid
 that exploded over the region of Chelyabinsk Oblast, Russia,
 is interlinked with 
-%\emph{``ru:Падение\_метеорита\_на\_Урале\_в\_2013\_году''},
+\texttt{ru:{\fontencoding{T2A}\selectfont Падение\_метеорита\_на\_Урале\_в\_2013\_году}},
 the Russian article on the same topic.
 As we monitor multiple language versions of Wikipedia in parallel,
 we can exploit this fact to detect \emph{concurrent edit spikes}
@@ -239,9 +239,9 @@ A~sample chat message with the components separated
 by the asterisk character \texttt{`*'}
 announcing a~change can be seen in the following.
 \texttt{"[[Juniata River]]
-http://en.wikipedia.org/w/index.php?diff=516269072\&oldid=514-659029 *
-Jo\-hanna-Hypatia * (+67)
-Category:Place names of Native American origin in\\Pennsylvania"}.
+http://en.wikipedia.org/w/index.php?diff=\-516269072\&oldid=514-659029 *
+Johanna-Hypatia * (+67)
+Category:Place names of Native American origin in Pennsylvania"}.
 The message components are (i)~article name, (ii)~revision URL,
 (iii)~Wikipedia editor handle, and (iv)~change size and change description.
 
@@ -250,13 +250,13 @@ The message components are (i)~article name, (ii)~revision URL,
 We cluster edits of articles about the same topic,
 but written in different languages, in article clusters.
 The example of the English
-\emph{``en:2013\_Russian\_meteor\_event''}
+\texttt{en:2013\_Russian\_meteor\_event}
 and the corresponding Russian article
-%\emph{``ru:Падение\_метеорита\_на\_Урале\_в\_2013\_году''}
+\texttt{ru:{\fontencoding{T2A}\selectfont Падение\_метеорита\_на\_Урале\_в\_2013\_году}}
 that are both in the same cluster illustrate this.
 We use the Wikipedia API to retrieve language links for a~given article.
 The URL pattern for the API is as follows.
-\url{http://$LANGUAGE.wikipedia.org/w/api.php?action=query&format=json&-prop=langlinks&titles=$ARTICLE}.
+\texttt{http://\$LANGUAGE.\-wikipedia.org/w/api.php?action=query\&prop=langlinks\&titles=\$ARTICLE\&form\-at=json}.
 
 \subsection{Comparing Article Revisions}
 \label{sec:comparing-article-revisions}
@@ -265,7 +265,7 @@ The Wikipedia API provides means to retrieve the actual changes
 that were made during an edit including additions, deletions,
 and modifications in a~\texttt{diff}-like manner.
 The URL pattern is as follows.
-\url{http://$LANGUAGE.wikipedia.org/w/api.php?action=compare&torev=$TO&fromrev=$FROM&format=json}. %$%
+\texttt{http://\$LANGUAGE.wikipedia.org/w/api.php?action=co\-mpare\&torev=\$TO\&fromrev=\$FROM\&format=json}.
 This allows us to classify edits in categories like, \emph{e.g.},
 negligible trivial edits (punctuation correction) and 
 major important edits (new paragraph for an article),
@@ -505,4 +505,5 @@ and actionable next steps in future work
 for improving the application.
 
 \bibliographystyle{plainnat}
+\clearpage
 \bibliography{backmatter/references}

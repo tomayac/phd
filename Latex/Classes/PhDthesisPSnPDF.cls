@@ -54,7 +54,7 @@
 %:-------------------------- packages for fancy things -----------------------
 
 \usepackage[utf8]{inputenc}
-\usepackage[T5,T1]{fontenc}
+\usepackage[T5,T2A,T1]{fontenc}
 
 \usepackage{amssymb}
 \usepackage[pdftex]{graphicx} % for improved inclusion of graphics
