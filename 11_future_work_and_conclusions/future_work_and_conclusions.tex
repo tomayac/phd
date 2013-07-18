@@ -32,11 +32,17 @@ short textual microposts, which oftentimes lack context.
 As this task required the orchestration of several services
 in combination, we have shown how provenance information
 can be preserved to make the involved steps traceable.
+We have shown how Wikipedia edits
+that we capture in realtime can be clustered by language
+for the task of detecting breaking news event candidates.
+An accompanying application called \emph{Wikipedia Live Monitor}
+was developed and publicly released in the same context.
 We have examined how media items can be extracted from 
 various social networks and how the different
 underlying social network messages and interactions
 can be aligned by an abstraction layer.
-Further, we have detected camera shots in videos and 
+Further, we have introduced an algorithm
+to detect camera shots in streaming video and 
 annotated them semantically with media fragments URIs.
 This task is a~required step for video deduplication,
 which we have tackled together with photo deduplication.
@@ -44,7 +50,7 @@ We have determined social-network-specific reasons
 for the occurrence of duplicate and near-duplicate content
 on social networks.
 Based on these findings, we have developed and algorithm
-that is tailored to find such occurrences of duplicate
+that is tailored to detect such occurrences of duplicate
 and near-duplicate content.
 This algorithm has multiple matching conditions,
 which makes it hard for a~non-expert user to determine
@@ -52,25 +58,20 @@ why or why not media items have been matched.
 Driven by this observation, we have researched
 if speech synthesis together with dynamic media fragment creation
 can help non-expert users understand the algorithm's output,
-which in consequence allowed us to improve it significantly.
+which in consequence allowed us to significantly improve it.
 We have introduced a~ranking formula for social media clusters
-that, based on novel a~social interaction abstraction layer,
-ranks clusters by popularity and selects from each cluster
+that, based on a~social interaction abstraction layer,
+ranks clusters by popularity and from each cluster selects
 the visually most appealing cluster representative media item.
 Afterwards, we have discussed and evaluated several
 media gallery compilation algorithms
 that fulfill media gallery aesthetics criteria,
 which we have defined.
-Further, we have created an interactive,
+Finally, we have created an interactive,
 speech-synthesis-supported visualization format
-on top of prior media gallery compilation algorithms.
-Finally, we have shown how Wikipedia edits
-that we capture in realtime can be clustered by language
-for the task of detecting breaking news event candidates.
-An accompanying application called Wikipedia Live Monitor
-was developed and publicly released in the same context.
+on top of our media gallery compilation algorithms.
 
-Based on a~very open event definition---%
+Based on a~very open event definition from WordNet---%
 \textit{``something that happens at a~given place and time''}---%
 we have identified the need to
 visually and audially summarize events
@@ -78,17 +79,17 @@ of personal or public interest.
 The increasingly important role of first-hand eye-witness
 social media data at recent events like the
 Boston Marathon bombings 2013%
-\footnote{\url{http://en.wikipedia.org/wiki/Boston_Marathon_bombings}, accessed June 19, 2013}
+\footnote{\url{http://en.wikipedia.org/wiki/Boston_Marathon_bombings}, accessed July 15, 2013}
 or the Occupy Gezi movement 2013 in Turkey%
-\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed June 19, 2013}
+\footnote{\url{http://en.wikipedia.org/wiki/2013_Taksim_Gezi_Park_protests}, accessed July 15, 2013}
 drastically confirm the observation that there is a~strong demand
 for social-network-based event summarization.
 Since the beginning, we have openly shared our progress
 in form of screenshots for the different tasks
 of the application
-(\url{http://twitpic.com/tag/TomsPhD})
+(\url{http://twitpic.com/tag/TomsPhD}, accessed July 15, 2013)
 and have also documented our progress in general
-(\url{http://tomayac.com/tweets/search?q=%23TomsPhD}).
+(\url{http://tomayac.com/tweets/search?q=%23TomsPhD}, accessed July 15, 2013).
 This has allowed us to get early feedback on ideas
 and visualizations already at the design phase.
 The way interactive mode works in media galleries
@@ -96,52 +97,55 @@ that was detailed in \autoref{sec:interactivemediagalleries}
 is a~result of this early-stage feedback loop. 
 An earlier iteration of interactive mode
 is documented in the screenshot available at
-\url{http://twitpic.com/c94j02},
+\url{http://twitpic.com/c94j02} (accessed July 15, 2013),
 where the background media items were already blurred,
 but not yet transformed into black-and-white.
 Especially with media items of type photo,
-through steadily monitoring at the time current events,
-we have learned that media galleries
-need to be tailored to handle all sorts of photo formats,
+through steadily monitoring (at time of writing) current events,
+we have learned that social media galleries
+need to be specifically tailored to handle all sorts of photo formats,
 as screenshots in non-standard aspect ratios
 are more common than expected.
 Some examples are documented in a~screenshot available
-at \url{http://twitpic.com/bvjmgc}.
+at \url{http://twitpic.com/bvjmgc} (accessed July 15, 2013).
 We were also surprised by the diversity of the media items
 related to a~given event.
 Where media galleries of traditional sources
 like news agencies feature strictly event-related media items,
 media galleries created by our approach also feature
-media items of humorous nature like memes, photo montages,
+media items of humorous nature like memes,%
+\footnote{An Internet meme is an idea, style, or action that spreads, often as mimicry, from person to person via the Internet, as with imitating the concept}
+photo montages,
 or parody images.
-This can be attributed to the less formal requirements
+On the one hand, this can be attributed to the less formal requirements
 regarding the political correctness of media galleries 
-created through our approach on the one hand,
-and even more to the naivety of non-professional
-photographers and cinematographers
+created through our approach.
+On the other hand, it can be traced back to the insouciant naivety
+of non-professional photographers and cinematographers
 that are responsible for the majority of social network media items on the other.
 A~good example is documented in the screenshot available at
-\url{http://twitpic.com/bvwz7x}.
+\url{http://twitpic.com/bvwz7x} (accessed July 15, 2013).
 
 Our initial research question was the following.
 \textit{``Can user-customizable media galleries
 that summarize given events be
 created solely based on textual and multimedia data
 from social networks?''}
-Concluding, the answer is clearly a~\emph{yes}.
+Concluding, the answer is clearly \emph{yes}.
 Media galleries based on social network multimedia data 
-can be faster to generate, more authentic and concise,
-more flexible and customizable, more comprehensive and diverse, and finally more interesting to consume than
+are faster to generate, more authentic and concise,
+more flexible and customizable, more comprehensive and diverse, and finally oftentimes more interesting to consume than
 traditional media galleries.
 For any serious use case, human final inspection will
 always be required, even in the long-term,
 as we will outline in the next subsection.
-With our research and the application Social Media Illustrator,
+With our research and the applications
+\emph{Social Media Illustrator} and \emph{Wikipedia Live Monitor},
 we have contributed valuable tools,
 methods, design ideas, and algorithms
 to facilitate and automate the otherwise tedious task
 of manually generating media galleries.
-This allows users of the application
+This allows users of these applications
 to focus on tasks where humans excel,
 like, \emph{e.g.}, interpreting the effect of events on society,
 putting events in relation to each other,
@@ -154,9 +158,10 @@ or identifying reasons that caused them.
 An aspect that we have left aside so far is the \emph{verification}
 of the \emph{credibility} and \emph{authenticity} of both sources
 and media items themselves that get shared on social networks.
-The growing importance of truly first-hand eyewitness social media in news coverage---%
+The growing importance and usage of truly first-hand eyewitness
+social media in traditional news media---%
 or even social media being \emph{the} actual news,
-as to some extent it was the case with the Boston Marathon bombings
+as to some extent it was the case with the Boston Marathon bombings,
 makes social networks also an increasingly popular focus of \emph{intentionally false information}.
 The distribution of false information in form of media items
 can have all sorts of motivations, ranging from (sometimes fun)
@@ -177,7 +182,7 @@ verifying weather conditions
 (were the known weather conditions at the time
 when the event happened the same as the depicted ones?),
 analyzing media items for known patterns of pixel manipulation
-(are traces of, for example, pixel duplication tool usage visible?),
+(are traces of, for example, image editing software usage visible?),
 or finally, verifying media item metadata
 (do the data in the Exif block look valid?).
 Research on media item verification is ongoing,
@@ -188,10 +193,11 @@ The Managing Editor of the company, Markham Nolan,
 has covered the topic of media item verification
 in a~TED Talk, which is available online.%
 \footnote{\url{http://www.ted.com/talks/markham_nolan_how_to_separate_fact_and_fiction_online.html},
-accessed June 16, 2013}
+accessed July 15, 2013}
 A~future research direction can be to automate
 this entirely manual process, albeit, having a~human in the loop
-is, all potential automation aside, still required for many use cases.
+will---all potential automation aside---still be required
+and desirable for many use cases.
 
 \subsection{Evaluation of Subjective Data}
 
@@ -199,18 +205,16 @@ is, all potential automation aside, still required for many use cases.
 
 In many of the tasks from the previous chapters
 we had to deal with subjective data and how to evaluate it.
-In contrast to \emph{objectivity}, where people see things
+In contrast to \emph{objectivity} (where people see things
 from a~standpoint \emph{free} from human perception and its influences,
 human cultural interventions, past experiences,
-and expectation of the result,
+and expectation of the result),
 the contrasting term \emph{subjectivity} is used to refer to the condition
-of being a~\emph{subject} and the subject's perspective, experiences,
+of being a~\emph{subject}, under the influence of the subject's perspective, experiences,
 feelings, beliefs, and desires~\cite{honderich2005oxford}.
 In the following, we list some of the subjective things
 that were evaluated in this thesis.
-As a~first example, there is event detection,
-where the subjective decision is whether or not a~given detected breaking news event candidate is indeed newsworthy (\autoref{cha:eventdetection}) and for whom.
-As a~second example, there are media gallery aesthetics and media gallery usefulness
+As a~first example, there are media gallery aesthetics and media gallery usefulness
 (\autoref{cha:media-item-compilation}),
 where the subjective decision is whether
 or not generated media galleries are aesthetically pleasing 
@@ -219,8 +223,10 @@ of the summarized event.
 Further examples are the subjective decisions on a~media item set's
 ranking (\autoref{cha:media-item-ranking}),
 its clustering and deduplication (\autoref{cha:media-item-deduplication}, \autoref{cha:shot-boundary-detection}),
-the set itself (\autoref{cha:media-item-extraction}),
-and finally the extracted and disambiguated named entities
+and the set itself (\autoref{cha:media-item-extraction}).
+In addition to that, there is also event detection,
+where the subjective decision is whether or not a~given detected breaking news event candidate is indeed newsworthy (\autoref{cha:eventdetection}) and for whom.
+Finally, there are the extracted and disambiguated named entities
 from the accompanying microposts for media items
 (\autoref{cha:micropost-annotation}).
 
@@ -246,7 +252,7 @@ where, when faced with several one-armed bandits,
 the objective is to determine the most profitable one.
 The compromise or tension with such experiments is to
 greedily decide on bandits that have performed well in the past
-and the risk of trying new ones.
+and taking the risk of trying new ones.
 Highly developed mathematical models exist~\cite{scott2010bandits}
 to optimize this problem.
 Compared to more classical A/B tests, where two variants 
@@ -256,10 +262,10 @@ more focus is gradually put on well-performing variants.
 
 In the online retail industry, multi-armed bandit experiments
 have found broad adoption as they are easy to set up and efficient in finding actionable results.
-They are used extensively for, \emph{e.g.}, the optimization 
+They are used extensively, \emph{e.g.}, for the optimization 
 of conversions for things like
 online purchases, newsletter sign-ups, or click-throughs.
-Typical experiment factors are headings, button colors and shapes,
+Typical experiment factors are heading texts, button colors and shapes,
 as well as page layout variants.
 Multi-armed bandits experiments are in consequence standard features
 of common off-the-shelf Web analytics software like, for example,
@@ -267,12 +273,12 @@ Google Analytics (\url{http://google.com/analytics}).
 
 Our hypothesis is that multi-armed bandit experiments can be used 
 to evaluate the sort of subjective data we generate
-with our application Social Media Illustrator, given that we 
+with our application \emph{Social Media Illustrator}, given that we 
 properly define our optimization criteria.
 Unlike with, \emph{e.g.}, online purchases,
 where the optimization criterion are conversions,%
-\footnote{That is, people who do not just put items in the virtual shopping cart,
-but who then actually buy them}
+\footnote{The amount of people who do not just put items in the virtual shopping cart,
+but who then proceed to and successfully complete the checkout process}
 with media galleries there is no direct optimization criterion.
 However, our assumption is that we can use indirect criteria like
 interaction with the media gallery
@@ -294,7 +300,7 @@ with regard to discovering aspects that were not part
 of a~multi-armed bandit experiment and thus never tested,
 but that a~study participant may have noted in a~free-form question.
 In the long-term, the proposed approach
-can be the seed for more targeted user studies.
+can thus be the seed for \emph{more targeted user studies}.
 
 \subsection{Application Domains}
 
@@ -315,7 +321,7 @@ is a~form of journalism that reflects the increased role
 of numerical data in the production and distribution of information
 in the digital era.
 It touches on the fields of design, computer science, and statistics.
-Interactive media galleries and the cross-network search capabilities enabled by our application Social Media Illustrator
+Interactive media galleries and the cross-network search capabilities enabled by our application \emph{Social Media Illustrator}
 can greatly facilitate the data journalism task of researching news stories and exploring multimedia data.
 
 \paragraph{Event Pages of Social Networks:}
@@ -323,7 +329,7 @@ can greatly facilitate the data journalism task of researching news stories and 
 Some social networks like Facebook or \googleplus
 offer their users the creation of events where
 event-related media items can be manually or automatically
-uploaded when event attendees check in to an event.
+uploaded when event attendees \emph{check in} to an event.
 Naturally, interactive media galleries embedded on
 social network sites themselves will only feature media items
 from the social network in question and not include foreign ones.
@@ -357,15 +363,16 @@ of a~commercial automatic event archiving tool called Seen
 (\url{http://beta.seen.co/}),
 which, based on manually entered event metadata like event name,
 location, and dates, uses a~necessarily provided Twitter hashtag
-to create a~complete permanent archive of all event-related tweets,
+to create a~complete and permanent archive of all event-related tweets,
 media items, and slide decks.
 Based on term frequency and co-occurrence analyses,
 the event is split into subevents
 and each subevent's hot topics are tried to be detected.
 The application's main data source is Twitter,
 links to certain media hosting platforms are followed.
-Seen does not deduplicate and cluster
-similar media items.
+At time of writing, Seen does not yet deduplicate and cluster
+similar media items,
+albeit the tool is being actively worked on.
 A~screenshot of Seen can be found in \autoref{fig:seen}.
 
 \begin{figure}
@@ -384,10 +391,11 @@ in form of event-related photos, videos, tweets, slide decks,
 and event contributors.
 Similar to Mahaya's product Seen,
 the application's main data source is Twitter.
-The manually entered event's official hashtag and potentially existing
+The manually entered official event hashtag and potentially existing
 official Twitter account serve to encounter event-related content.
-Eventifier does not deduplicate and cluster
-similar media items.
+At time of writing, Eventifier does not yet
+deduplicate and cluster similar media items,
+however, this feature is said to be implemented.
 A~screenshot of Eventifier can be seen in \autoref{fig:eventifier}.
 
 \begin{figure}
@@ -444,18 +452,18 @@ In the previous paragraphs, we have characterized
 commercial and non-commercial tools for the tasks
 of event summarization and event archiving. 
 \autoref{table:toolcomparison} shows how these tools
-compare against our own application Social Media Illustrator,
+compare against our own application \emph{Social Media Illustrator},
 which, for reference, is depicted again in \autoref{fig:socialmediaillustrator}.
-The unique selling point of our application
-are its interactive media galleries that together with speech synthesis
-as outlined in \autoref{sec:interactivemediagalleries}
-allow for truly one of its kind experience when it comes to 
+What sets our application apart
+are its interactive media galleries that,
+together with speech synthesis as outlined in \autoref{sec:interactivemediagalleries}
+allow for novel kinds of experiences when it comes to 
 event summary consumption.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.95\textwidth,height=0.9\textheight,keepaspectratio]{socialmediaillustrator.png}
-  \caption[Our own academic event summarization tool Social Media Illustrator]{Our own academic event summarization tool Social Media Illustrator (\url{http://social-media-illustrator.herokuapp.com/})}
+  \caption[Our own academic event summarization tool \emph{Social Media Illustrator}]{Our own academic event summarization tool \emph{Social Media Illustrator} (\url{http://social-media-illustrator.herokuapp.com/})}
   \label{fig:socialmediaillustrator}
 \end{figure}
 
@@ -482,60 +490,56 @@ event summary consumption.
 
 \section{Closing Words}
 
-In this thesis, we have touched on several research fields,
-and some of the encountered problems and challenges,
-like, for example, named entity extraction and disambiguation
+In this thesis, we have touched on multiple areas of research.
+Some of the encountered problems and challenges,
+for example, named entity extraction and disambiguation
 for short and oftentimes sloppily-authored microposts
-or video deduplication,
-certainly deserve a~thesis on their own.
+or also video deduplication,
+certainly deserve a~thesis of their own.
 We have opted for a~pragmatic approach in such cases
 and have not shied back from either using third-party tools
 or working with approximations or heuristics, 
 which work well enough for our use case.
-From the beginning we have envisioned an application
+From the beginning, we have envisioned an application
 that would facilitate the tedious work
 of compiling media galleries manually.
-This application, Social Media Illustrator,
+This application, \emph{Social Media Illustrator},
 forms part of the deliverables of the thesis.
 We have separated the task of building this application
 in several actionable steps and have contributed 
 scientific publications for each of them.
-The chapters of this thesis follow the steps loosely.  
+The chapters of this thesis follow these steps loosely.  
 As a~reminder, the concrete steps were the following:
 (i)~micropost annotation,
 (ii)~event detection,
 (iii)~media item extraction,
 (iv)~media item deduplication,
-(v)~media item ranking,
-and finally (vi)~media item compilation.
-The main topic of our thesis are events.
-In \autoref{cha:eventdetection}, we have thus 
-explored the world of breaking news event detection,
-which closes the circle.
-We are now in the position to first accurately detect events
+(v)~media item ranking, and
+(vi)~media item compilation.
+At the end of this thesis,
+we are now in the position to first accurately detect events
 and second, to visually and audially summarize them
-in an optionally fully-automated or semi-automated manner.
+in an optionally fully-automated or semi-automated manner,
+so the circle has been closed.
 
-While initially we had envisioned an application
-similar to the one we have developed,
-we were ourselves surprised by the broad range
-of possible future use cases ranging from end users
-reviving the atmosphere of a~concert
+We were ourselves surprised by the broad range
+of possible future use cases, ranging from end users
+reviving the atmosphere of a~concert,
 to data journalists researching political events
-of potentially global interest
+of potentially global interest,
 to finally disaster relief workers coordinating 
-their efforts based on information derived from our application.
+their efforts based on information derived from our applications.
 We are excited to improve, extend, and adapt
-Social Media Illustrator in the future
-with concrete future research opportunities
+\emph{Social Media Illustrator} and \emph{Wikipedia Live Monitor}
+in the future with concrete future research opportunities
 that were outlined earlier in this chapter.
-This thesis marks the end of my doctorate,
+This thesis marks the end of this doctorate,
 but it certainly does not mark the end of this work.
 
 \begin{flushright}
 \textit{``The Software shall be used for Good, not Evil''}.%
 \footnote{\url{https://github.com/douglascrockford/JSLint/blob/master/jslint.js\#L16},
-accessed June 24, 2013}~---Douglas Crockford
+accessed July 15, 2013}~---Douglas Crockford
 \end{flushright}
 
 \section*{Chapter Notes}
