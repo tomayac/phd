@@ -322,6 +322,8 @@ The application uses social networks for plausibility checks
 in order to avoid false-positive alerts,
 \emph{i.e.}, a~breaking news event has to be reflected on Wikipedia
 \emph{and} on social networks.
+We evaluate the event detection system with various
+global and local news events for its timeliness and accuracy.
 
 \paragraph{\autoref{cha:media-item-extraction}:}
 
@@ -330,7 +332,7 @@ from different social networks.
 We introduce an alignment scheme that acts as an abstraction layer
 to overcome the underlying differences in data structure of 
 the supported social networks.
-We evaluate the media item extractors with different events
+We evaluate the media item extractors with nine different events
 and motivate the need for media item deduplication and ranking.
 
 \paragraph{\autoref{cha:shot-boundary-detection}:}
@@ -340,7 +342,7 @@ accompanying application for the task of detecting
 camera shot boundaries on-the-fly in streaming Web video,
 which is a~required step for the deduplication of videos
 and photos contained in videos.
-We evaluated the approach with videos from a~popular video hosting platform in form of a~browser extension.
+We evaluate the approach with videos from a~popular video hosting platform in form of a~browser extension.
 
 \paragraph{\autoref{cha:media-item-deduplication}:}
 
@@ -350,8 +352,25 @@ We analyze reasons for the occurrence of exact-duplicate
 and near-duplicate media items and introduce an algorithm
 tailored to this task, incorporating matching conditions
 that are based on the findings of the analysis.
+We evaluate the algorithm with two events
+and show its effectiveness.
 
 \paragraph{\autoref{cha:media-item-ranking}:}
+
+In this chapter, we focus on ranking media item clusters
+that contain visually similar media items.
+We show how social interactions from different social networks
+can be merged in order to obtain a~network-agnostic view
+on the performance of the clustered media items.
+Further, we show an algorithm for the selection of
+one representative media item per cluster that represents
+all media items contained in the same cluster.
+We then propose a~ranking formula that is based on both
+social interactions and other features.
+We evaluate our ranking formula by comparing the ranked results
+for a~given event with event highlight summaries regarding the same event
+that were created by different social networks.
+
 \paragraph{\autoref{cha:media-item-compilation}:}
 \paragraph{\autoref{cha:future-work}:}
 
