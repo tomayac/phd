@@ -171,6 +171,9 @@ var mediaFinder = {
             if (video.status === 'fail' || video.live_playback) {
               return callback(url);
             }
+            if (!video.url_encoded_fmt_stream_map) {
+              return callback(url);
+            }
             video.sources = decodeStreamMap(video.url_encoded_fmt_stream_map);
             if (!video.sources) {
               return callback(url);
