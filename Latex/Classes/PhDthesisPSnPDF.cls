@@ -61,6 +61,7 @@
 %\usepackage{wrapfig} % to include figure with text wrapping around it
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption} % for improved layout of figure captions with extra margin, smaller font than text
 \usepackage{subfig}
+\usepackage{upquote}
 \usepackage{fancyhdr} % for better header layout
 \usepackage{eucal}
 \usepackage[english]{babel}
