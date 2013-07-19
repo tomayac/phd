@@ -20,7 +20,8 @@
 % An macro that you may use frequently is the figuremacro (see introduction.tex)
 \include{Latex/Macros/MacroFile1}
 
-
+\nobibliography{backmatter/references}
+\bibliographystyle{plainnat}
 
 %: ----------------------------------------------------------------------
 %:                  TITLE PAGE: name, degree,..
@@ -238,9 +239,9 @@
 % in-text refs: author (year) without brackets
 % (this works with package natbib)
 
-\renewcommand{\bibname}{References} % changes the header; default: Bibliography
-\clearpage
-\bibliography{backmatter/references} % adjust this to fit your BibTex file
+%\renewcommand{\bibname}{References} % changes the header; default: Bibliography
+%\clearpage
+%\bibliography{backmatter/references} % adjust this to fit your BibTex file
 
 \end{tiny}
 \end{multicols}

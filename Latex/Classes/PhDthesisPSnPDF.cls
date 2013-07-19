@@ -68,6 +68,7 @@
 \usepackage[usenames, dvipsnames]{color}
 \usepackage[perpage]{footmisc}
 \usepackage[sort,numbers,sectionbib]{natbib}
+\usepackage{bibentry}
 \usepackage{chapterbib}
 \usepackage{ifthen}
 \usepackage{multicol} % for pages with multiple text columns, e.g. References
@@ -129,6 +130,9 @@
 %--> http://www.uni-giessen.de/partosch/eurotex99/ oberdiek/print/sli4a4col.pdf
 %--> http://me.in-berlin.de/~miwie/tex-refs/html/latex-packages.html
 %-->
+
+    % References (with fix for bibentry compatibility)
+    %\makeatletter\let\saved@bibitem\@bibitem\makeatother
     \usepackage[ pdftex, plainpages = false, pdfpagelabels,
                  pdfpagelayout = useoutlines,
                  bookmarks,
@@ -145,21 +149,24 @@
                  hyperindex = true,
                  hyperfigures
                  ]{hyperref}
-     \def\appendixautorefname{Appendix}
-     \def\chapterautorefname{Chapter}
-     \def\sectionautorefname{Section}
-     \def\subsectionautorefname{Subsection}
-     \def\subsubsectionautorefname{Subsection}
-     \def\figureautorefname{Figure}
-     \def\subfloatautorefname{Subfigure}
-     \def\subfigureautorefname{Subfigure}     
-     \def\tableautorefname{Table}
+    %\makeatletter\let\@bibitem\saved@bibitem\makeatother
+    \def\appendixautorefname{Appendix}
+    \def\chapterautorefname{Chapter}
+    \def\sectionautorefname{Section}
+    \def\subsectionautorefname{Subsection}
+    \def\subsubsectionautorefname{Subsection}
+    \def\figureautorefname{Figure}
+    \def\subfloatautorefname{Subfigure}
+    \def\subfigureautorefname{Subfigure}     
+    \def\tableautorefname{Table}
 
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
     %\usepackage[pdftex]{graphicx}
     \pdfcompresslevel=9
     \graphicspath{{frontmatter/figures/PNG/}{frontmatter/figures/PDF/}{frontmatter/figures/}}
 \else
+    % References (with fix for bibentry compatibility)
+    %\makeatletter\let\saved@bibitem\@bibitem\makeatother
     \usepackage[ dvips,
                  bookmarks,
                  bookmarksopen = true,
@@ -175,7 +182,7 @@
                  hyperindex = true,
                  hyperfigures
                  ]{hyperref}
-
+    %\makeatletter\let\@bibitem\saved@bibitem\makeatother
     \DeclareGraphicsExtensions{.eps, .ps}
     \usepackage{epsfig}
     \usepackage{graphicx}
