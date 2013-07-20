@@ -271,7 +271,7 @@ Starting from the non-semantic Web,
 we show how structured data can be added to Web pages
 and briefly present DBpedia as a~knowledge base
 founded on structured data extracted from Wikipedia.
-We then continue with the Resource Description Framework
+We then continue with the Resource Description Framework~(RDF)
 and explain how it represents facts with triples.
 We provide examples of RDF's different serialization formats.
 Afterwards, we outline the Semantic Web vision of
@@ -296,6 +296,8 @@ that classifies them by their level of media item support.
 
 \paragraph{\autoref{cha:micropost-annotation}:}
 
+A~micropost is defined as a~textual status message
+on a~social network.
 In this chapter, we describe how microposts can be semantically annotated
 in order to make sense of their contents.
 We show how we have developed two browser extensions to obtain access
@@ -327,6 +329,9 @@ global and local news events for its timeliness and accuracy.
 
 \paragraph{\autoref{cha:media-item-extraction}:}
 
+A~media item is defined as
+a~photo or video file that is publicly shared or published
+on at least one social network.
 In this chapter, we describe how media items can be extracted
 from different social networks.
 We introduce an alignment scheme that acts as an abstraction layer
@@ -337,6 +342,8 @@ and motivate the need for media item deduplication and ranking.
 
 \paragraph{\autoref{cha:shot-boundary-detection}:}
 
+In video production and filmmaking, a~\emph{camera shot} is a~series of frames
+that runs for an uninterrupted period of time.
 In this chapter, we present an algorithm and an 
 accompanying application for the task of detecting
 camera shot boundaries on-the-fly in streaming Web video,
@@ -354,7 +361,11 @@ tailored to this task, incorporating matching conditions
 that are based on the findings of the analysis.
 We evaluate the algorithm with two events
 and show its effectiveness.
-We further show a~novel approach to debugging algorithms
+A~media fragment is a~part of a media file
+of the same media content type
+as its parent resource, \emph{i.e.}, photo or video,
+that can be identified using a URI.
+We show a~novel approach to debugging algorithms
 by combining media fragments URIs and speech synthesis,
 so that non-expert human raters can understand why or why not
 media items are clustered.
@@ -383,6 +394,7 @@ We define aesthetic principles that media galleries should fulfill
 based on high-level and low-level features.
 We show different media gallery styles and analyze their 
 advantages and disadvantages.
+Examples of media gallery styles are interactive style, aspect-ratio-preserving style, or order-preserving style, among others. 
 Further, we present an approach to make media galleries interactive
 by using a~speech synthesis system combined with media item animations.
 At the end of the chapter, we describe the application
