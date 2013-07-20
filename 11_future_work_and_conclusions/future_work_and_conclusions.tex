@@ -1,4 +1,3 @@
-
 % this file is called up by thesis.tex
 % content in this file will be fed into the main document
 
@@ -14,7 +13,7 @@
 \fi
 
 % ----------------------------------------------------------------------
-%: ------------------------------- content ----------------------------- 
+%: ------------------------------- content -----------------------------
 % ----------------------------------------------------------------------
 
 \section{Conclusions}
@@ -38,12 +37,12 @@ that we capture in realtime can be clustered by language
 for the task of detecting breaking news event candidates.
 An accompanying application called \emph{Wikipedia Live Monitor}
 was developed and publicly released in the same context.
-We have examined how media items can be extracted from 
+We have examined how media items can be extracted from
 various social networks and how the different
 underlying social network messages and interactions
 can be aligned by an abstraction layer.
 Further, we have introduced an algorithm
-to detect camera shots in streaming video and 
+to detect camera shots in streaming video and
 annotated them semantically with media fragments URIs.
 This task is a~required step for video deduplication,
 which we have tackled together with photo deduplication.
@@ -95,7 +94,7 @@ This has allowed us to get early feedback on ideas
 and visualizations already at the design phase.
 The way interactive mode works in media galleries
 that was detailed in \autoref{sec:interactivemediagalleries}
-is a~result of this early-stage feedback loop. 
+is a~result of this early-stage feedback loop.
 An earlier iteration of interactive mode
 is documented in the screenshot available at
 \url{http://twitpic.com/c94j02} (accessed July 15, 2013),
@@ -119,7 +118,7 @@ media items of humorous nature like memes,%
 photo montages,
 or parody images.
 On the one hand, this can be attributed to the less formal requirements
-regarding the political correctness of media galleries 
+regarding the political correctness of media galleries
 created through our approach.
 On the other hand, it can be traced back to the insouciant naivety
 of non-professional photographers and cinematographers
@@ -133,7 +132,7 @@ that summarize given events be
 created solely based on textual and multimedia data
 from social networks?''}
 Concluding, the answer is clearly \emph{yes}.
-Media galleries based on social network multimedia data 
+Media galleries based on social network multimedia data
 are faster to generate, more authentic and concise,
 more flexible and customizable, more comprehensive and diverse, and finally oftentimes more interesting to consume than
 traditional media galleries.
@@ -173,7 +172,7 @@ Occurrences of false information can include
 media items stemming from unrelated events being published as event-related,
 manipulation  of photos or videos to modify, add, or remove persons or objects in media items,
 or wrong statements in the accompanying microposts.
-Manual approaches to recognize false information 
+Manual approaches to recognize false information
 can include carefully checking the account publishing history
 of the originating source (does the social network user seem legit?),
 comparison of depicted scenes with independent media,
@@ -188,7 +187,7 @@ or finally, verifying media item metadata
 (do the data in the Exif block look valid?).
 Research on media item verification is ongoing,
 an example is~\cite{gupta2013fakingsandy} by Gupta \emph{et~al.}
-The first commercial companies are beginning to offer media item 
+The first commercial companies are beginning to offer media item
 verification as a~service, \emph{e.g.}, Storyful (\url{http://storyful.com/}).
 The Managing Editor of the company, Markham Nolan,
 has covered the topic of media item verification
@@ -218,7 +217,7 @@ that were evaluated in this thesis.
 As a~first example, there are media gallery aesthetics and media gallery usefulness
 (\autoref{cha:media-item-compilation}),
 where the subjective decision is whether
-or not generated media galleries are aesthetically pleasing 
+or not generated media galleries are aesthetically pleasing
 and at the same time useful for getting an understanding
 of the summarized event.
 Further examples are the subjective decisions on a~media item set's
@@ -233,10 +232,10 @@ from the accompanying microposts for media items
 
 \paragraph{Subjective Data Evaluation Strategies:}
 
-Common strategies for the evaluation of subjective data were 
+Common strategies for the evaluation of subjective data were
 examined by Brabb and Morrison in~\cite{brabb1964evaluation}.
 In the multimedia context, the main evaluation strategies are
-the use of Likert scales~\cite{likert1932likertscale} 
+the use of Likert scales~\cite{likert1932likertscale}
 and the Mean Opinion Score~\cite{itu1998mos},
 which we have chosen for our evaluation purposes,
 as we were mainly interested in the perceived quality of our tasks.
@@ -256,14 +255,14 @@ greedily decide on bandits that have performed well in the past
 and taking the risk of trying new ones.
 Highly developed mathematical models exist~\cite{scott2010bandits}
 to optimize this problem.
-Compared to more classical A/B tests, where two variants 
+Compared to more classical A/B tests, where two variants
 are tested against each other, multi-armed bandit experiments
 are statistically just as valid and can oftentimes return results earlier, as already during the experiment
 more focus is gradually put on well-performing variants.
 
 In the online retail industry, multi-armed bandit experiments
 have found broad adoption as they are easy to set up and efficient in finding actionable results.
-They are used extensively, \emph{e.g.}, for the optimization 
+They are used extensively, \emph{e.g.}, for the optimization
 of conversions for things like
 online purchases, newsletter sign-ups, or click-throughs.
 Typical experiment factors are heading texts, button colors and shapes,
@@ -272,9 +271,9 @@ Multi-armed bandits experiments are in consequence standard features
 of common off-the-shelf Web analytics software like, for example,
 Google Analytics (\url{http://google.com/analytics}).
 
-Our hypothesis is that multi-armed bandit experiments can be used 
+Our hypothesis is that multi-armed bandit experiments can be used
 to evaluate the sort of subjective data we generate
-with our application \emph{Social Media Illustrator}, given that we 
+with our application \emph{Social Media Illustrator}, given that we
 properly define our optimization criteria.
 Unlike with, \emph{e.g.}, online purchases,
 where the optimization criterion are conversions,%
@@ -349,16 +348,16 @@ Our work has already sparked initial interest~\cite{meier2013wikipedia}
 in the disaster response community.
 We will focus future work primarily on this aspect.
 
-\subsection{Commercial Activity in the Field of Social-Network-Based Event Summarization}
+\subsection[Commercial Activity in the Field of Event Summarization]{Commercial Activity in the Field of Social-Network-Based Event Summarization}
 
 The research fields of event summarization and event archiving
-based on social network multimedia data have resulted in 
+based on social network multimedia data have resulted in
 interesting business creations in recent months.
 Albeit similarities to our work exist,
 there are still many differences in the details.
 
 \paragraph{Mahaya:}
- 
+
 The company Mahaya has launched a~beta-version
 of a~commercial automatic event archiving tool called Seen
 (\url{http://beta.seen.co/}),
@@ -388,7 +387,7 @@ A~screenshot of Seen can be found in \autoref{fig:seen}.
 
 Eventifier \url{http://eventifier.co/}) is a~commercial tool
 that facilitates the automated permanent archiving of events
-in form of event-related photos, videos, tweets, slide decks, 
+in form of event-related photos, videos, tweets, slide decks,
 and event contributors.
 Similar to Mahaya's product Seen,
 the application's main data source is Twitter.
@@ -451,14 +450,14 @@ A~screenshot of Media Finder can be seen in \autoref{fig:mediafinder}.
 
 In the previous paragraphs, we have characterized
 commercial and non-commercial tools for the tasks
-of event summarization and event archiving. 
+of event summarization and event archiving.
 \autoref{table:toolcomparison} shows how these tools
 compare against our own application \emph{Social Media Illustrator},
 which, for reference, is depicted again in \autoref{fig:socialmediaillustrator}.
 What sets our application apart
 are its interactive media galleries that,
 together with speech synthesis as outlined in \autoref{sec:interactivemediagalleries}
-allow for novel kinds of experiences when it comes to 
+allow for novel kinds of experiences when it comes to
 event summary consumption.
 
 \begin{figure}
@@ -499,7 +498,7 @@ or also video deduplication,
 certainly deserve a~thesis of their own.
 We have opted for a~pragmatic approach in such cases
 and have not shied back from either using third-party tools
-or working with approximations or heuristics, 
+or working with approximations or heuristics,
 which work well enough for our use case.
 From the beginning, we have envisioned an application
 that would facilitate the tedious work
@@ -507,9 +506,9 @@ of compiling media galleries manually.
 This application, \emph{Social Media Illustrator},
 forms part of the deliverables of the thesis.
 We have separated the task of building this application
-in several actionable steps and have contributed 
+in several actionable steps and have contributed
 scientific publications for each of them.
-The chapters of this thesis follow these steps loosely.  
+The chapters of this thesis follow these steps loosely.
 As a~reminder, the concrete steps were the following:
 (i)~micropost annotation,
 (ii)~event detection,
@@ -528,7 +527,7 @@ of possible future use cases, ranging from end users
 reviving the atmosphere of a~concert,
 to data journalists researching political events
 of potentially global interest,
-to finally disaster relief workers coordinating 
+to finally disaster relief workers coordinating
 their efforts based on information derived from our applications.
 We are excited to improve, extend, and adapt
 \emph{Social Media Illustrator} and \emph{Wikipedia Live Monitor}

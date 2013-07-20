@@ -60,7 +60,7 @@ In order to perform data mining,
 a~statistically significant amount of microposts is necessary.
 Having access to \emph{all} microposts of a~service is referred to as
 having access to the \emph{fire hose}.
-Typically, developers are only granted access to a~smaller random 
+Typically, developers are only granted access to a~smaller random
 sample of microposts (colloquially referred to as \emph{garden hose} access).
 While Twitter grants all developers \emph{garden hose} access to its Streaming
 APIs,\footnote{\url{https://dev.twitter.com/docs/streaming-apis},
@@ -82,7 +82,7 @@ These extensions inject JavaScript code into Facebook and
 Twitter to perform data analysis on the encountered set of
 \emph{public} microposts by sending extracted data
 to a~central data processing unit.
-Users need to be logged in to Facebook or Twitter for the 
+Users need to be logged in to Facebook or Twitter for the
 extensions to work and must have given
 their \emph{explicit agreement} during
 the extension installation process
@@ -116,7 +116,7 @@ like users' geographic locations.
   \includegraphics[width=0.75\textwidth]{facebook-swarm-nlp.png}
   \caption[Facebook Swarm NLP browser extension]
     {Facebook Swarm NLP browser extension.
-    Extracted named entities have a~pale yellow background.}     
+    Extracted named entities have a~pale yellow background.}
   \label{fig:facebookswarmnlp}
 \end{figure}
 
@@ -179,7 +179,7 @@ If there are more than one matching synsets,
 the tags' and their context tags' similarity is computed
 to decide on an already existing tag URI.
 
-\subsection{Named Entity Disambiguation with Semantic Coherence and News Trends}
+\subsection[Named Entity Disambiguation with Semantic Coherence]{Named Entity Disambiguation with Semantic Coherence and News Trends}
 
 In~\cite{fernandez2007identityrank},
 Fernández \emph{et~al.}\ examine named entity disambiguation
@@ -273,8 +273,8 @@ purely on using triples to make statements about triples
 (\emph{i.e.}, stay in the RDF world),
 whereas our approach uses RDF to make statements
 about potentially any API result.
- 
-Web service specifications in the context of the 
+
+Web service specifications in the context of the
 first-generation standards represented by WSDL~\cite{christensen2001wsdl},
 SOAP~\cite{gudgin2007soap}, and UDDI~\cite{sabbouh2001uddi}
 are occasionally referred to collectively as \emph{WS-*}.
@@ -286,7 +286,7 @@ This allows for the combination of several APIs.
 However, it does not credit back concrete outputs of a~combined API
 to the underlying APIs.
 
-\section{Structuring Unstructured Textual Data} 
+\section{Structuring Unstructured Textual Data}
 \label{sec:structuring}
 
 When we speak of adding structure to unstructured textual data,
@@ -299,7 +299,7 @@ which can stand for the football club, or the city of Barcelona.
 An \emph{entity} is defined by
 WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
 as \textit{``that which is perceived or known or inferred
-to have its own distinct existence (living or nonliving)''}. 
+to have its own distinct existence (living or nonliving)''}.
 Typically, named entities from a~text can be persons, companies,
 organizations, geographies, but also things like quantities,
 expressions of time, books, albums, authors, \emph{etc.}
@@ -398,7 +398,7 @@ AlchemyAPI also provides links to other data sources, however,
 sometimes the returned URLs result in \texttt{404 Not found}.
 One example that we came across during our tests was the URL
 \url{http://umbel.org/umbel/ne/wikipedia/George\_W.\_Bush.rdf}, which should represent the concept of the person George W. Bush.
-The URL does serve as a~Semantic Web identifier, however, 
+The URL does serve as a~Semantic Web identifier, however,
 harms the third Linked Data principle,
 as outlined in \autoref{sec:linked-data-principles}.
 AlchemyAPI also oftentimes returns thematically closely related,
@@ -474,7 +474,7 @@ play an active role,
 however, we aim for leveraging the additional data
 for better micropost analysis in the future.
 
-\section{Consolidating Named Entity Disambiguation Results} 
+\section{Consolidating Named Entity Disambiguation Results}
 \label{sec:consolidate}
 
 In this section, we motivate the use of multiple
@@ -505,7 +505,7 @@ well interlinked LOD cloud dataset namespaces like Freebase
 AlchemyAPI and Zemanta.
 
 In order to address the problem of different namespaces in results,
-an approach as presented by Glaser \emph{et~al.}\ 
+an approach as presented by Glaser \emph{et~al.}\
 in~\cite{glaser2009sameas} based on \texttt{owl:sameAs} links
 could be used.
 In practice, however, while many resources in the Linked Data
@@ -580,7 +580,7 @@ in a~true Linked Data manner if need be.
 We illustrate the approach with an example:
 \textit{``Google Inc.\ is an American multinational corporation
 which provides Internet-related products and services,
-including Internet search, cloud computing, software and 
+including Internet search, cloud computing, software and
 advertising technologies.''}
 If we use the just mentioned text
 as an input for the NLP wrapper API,
@@ -593,7 +593,7 @@ of just Zemanta in isolation,
 \autoref{code:googlealchemyapi} shows the output
 of just AlchemyAPI in isolation,
 and finally, \autoref{code:googlecombined} shows the consolidated
-output of the two named entity recognition APIs together. 
+output of the two named entity recognition APIs together.
 In this example, the entity names differ (``Google Inc.''
 vs. ``Google''). However, going down the list of URLs for
 each entity from the two services, the consolidation algorithm
@@ -846,7 +846,7 @@ these facts were generated via two calls,
 one using the HTTP method \texttt{GET},
 and the other \texttt{POST}.
 It is to be noted that statements
-such as in \autoref{code:provenance} 
+such as in \autoref{code:provenance}
 refer to the triple objects as an identifier for a~Web resource
 (where the Web resource is a~representation of the result of the
 API call at the time where it was \texttt{prv:performedAt}).
@@ -909,7 +909,7 @@ what representation the resource returns in future.
             [
               http:fieldName "Content-Type" ;
               http:fieldValue "application/x-www-form-urlencoded" ;
-            ]   
+            ]
           )
           http:body [
             a cnt:ContentAsText ;
@@ -926,7 +926,7 @@ what representation the resource returns in future.
   ] .
 \end{lstlisting}
 
-\section{Conclusions}                                                        
+\section{Conclusions}
 
 In this chapter, we have shown how the Provenance
 Vocabulary can be used to keep track of the original
@@ -963,7 +963,7 @@ This chapter is partly based on the following publications.
 \begin{itemize}
   \item \bibentry{steiner2011addingmeaning}.
   \item \bibentry{steiner2013addingmeaning}.
-  \item \bibentry{van2013named}.  
+  \item \bibentry{van2013named}.
 \end{itemize}
 
 \bibliographystyle{plainnat}

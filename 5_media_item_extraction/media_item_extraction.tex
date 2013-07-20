@@ -34,7 +34,7 @@ communities\footnote{\url{http://www.citizenside.com/},
 accessed July 15, 2013}
 have even specialized in aggregating and brokering
 such user-generated content.
-Events, such as sports matches or concerts are 
+Events, such as sports matches or concerts are
 largely illustrated by social media,
 albeit distributed over many social networks.
 
@@ -45,7 +45,7 @@ all with the objective of creating visual event summaries.
 We propose a~social-network-agnostic
 approach for the extraction of photos and videos covering events.
 We want to emphasize that in this chapter we do \emph{not}
-put the focus on event detection (we have done that in \autoref{cha:eventdetection}). 
+put the focus on event detection (we have done that in \autoref{cha:eventdetection}).
 The events we are dealing with in this chapter
 were known beforehand and we use specific
 human-chosen search terms to find illustrating media.
@@ -66,7 +66,7 @@ and \emph{Web scraping}.
   \item[Media Item:]
        A~media item is defined as
        a~photo\footnote{We choose the term \emph{photo}
-       over the term \emph{image} as 
+       over the term \emph{image} as
        Facebook, Twitter, and \googleplus use it}
        or video file that is publicly shared or published
        on at least one social network.
@@ -84,7 +84,7 @@ and \emph{Web scraping}.
   \item[Media Item Extraction:]
        The process of leveraging search functionalities of
        social networks to find references to media items,
-       which allows for storing those media items in binary form.       
+       which allows for storing those media items in binary form.
   \item[Application Programming Interface (API):]
        An API is a~programmatic specification intended to be used
        as an interface by software components on client and server
@@ -134,7 +134,7 @@ content, including user-provided annotations
 and automatically generated information.
 Using this rich context, they define document similarity metrics
 to enable online clustering of media to events.
-In~\cite{becker2012plannedevents}, the same authors develop 
+In~\cite{becker2012plannedevents}, the same authors develop
 recall-oriented query formulation strategies
 based on noisy event metadata
 from event aggregation platforms.
@@ -197,13 +197,13 @@ that we apply to each collected media item.
 
 Each social network uses a~different data representation schema.
 While all social networks with API access are
-JSON-based~\cite{crockford2006json}, the differences in both 
+JSON-based~\cite{crockford2006json}, the differences in both
 supported social network features and media item support level,
 outlined in detail in
 \autoref{sec:description-of-popular-social-networks} and
 \autoref{sec:classification-of-social-networks},
 are also reflected in the returned JSON data.
-We therefore propose a~common abstraction layer 
+We therefore propose a~common abstraction layer
 on top of the native data formats of all considered social networks.
 This abstraction layer is outlined in \autoref{tab:platforms}
 and allows us to gain
@@ -220,7 +220,7 @@ The media extractor was used to query for media items
 that match the search term \emph{hamburg}.
 \autoref{code:facebook} shows sample output of the media extractor
 for a~Facebook post, which was processed
-with named entity extraction and disambiguation 
+with named entity extraction and disambiguation
 as detailed in \autoref{cha:micropost-annotation}.
 Below, we explain the data format of our media extractor.
 
@@ -233,12 +233,12 @@ Below, we explain the data format of our media extractor.
   \item[\texttt{micropost}] Container for a~micropost
   \begin{description}
     \item[\texttt{html}] Text of the micropost,
-      possibly with HTML      markup
+      possibly with HTML markup
     \item[\texttt{plainText}] Text of the micropost with
       potential HTML markup removed
     \item[\texttt{entities}] Extracted and disambiguated
       named entities from the micropost text
-  \end{description}      
+  \end{description}
   \item[\texttt{userProfileUrl}] Deep link to the user's
     profile on the social network
   \item[\texttt{type}] Type of the media item,
@@ -250,7 +250,7 @@ Below, we explain the data format of our media extractor.
     format (YYYY-MM-DDTHH:MM:SSZ) when the micropost was published
   \item[\texttt{socialInteractions}] Container for social
     interactions
-  \begin{description}  
+  \begin{description}
   \item[\texttt{likes}] Number of times a~micropost was liked, or
     \texttt{unknown}
   \item[\texttt{shares}] Number of times a~micropost was shared, or
@@ -259,7 +259,7 @@ Below, we explain the data format of our media extractor.
     received, or \texttt{unknown}
   \item[\texttt{views}] Number of views a~micropost reached, or
     \texttt{unknown}
-  \end{description}    
+  \end{description}
 \end{description}
 
 \begin{lstlisting}[caption={[Sample output of the media extractor]{Sample output of the media extractor
@@ -348,13 +348,13 @@ We search for the search term in question (\emph{e.g.},
 following up from the example before, \emph{boston celtics}),
 but combine it with the short URL domain parts of
 the media platforms.
-For example, the short domain URL of the social network Flickr 
+For example, the short domain URL of the social network Flickr
 (\autoref{sec:flickr})
 is \url{flic.kr}, where the long domain URL is \url{flicker.com}.
-The short domain URL of Instagram 
+The short domain URL of Instagram
 (\autoref{sec:instagram}) is \url{instagr.am},
 where the long domain URL is \url{instagram.com}, \emph{etc.}
-We have created a~list of all known short domain URLs for the 
+We have created a~list of all known short domain URLs for the
 considered media platforms so that the complete search query
 for Twitter is the actual search term,
 combined with this list of short domain URLs:
@@ -414,7 +414,7 @@ in order to give the reader the necessary background knowledge.
        HTML5 version of the popular mobile game \textit{Cut the
        Rope} was announced. This is a~sub-event of CES Las
        Vegas.\footnote{\url{http://ces.cnet.com/8301-33377_1-57356403/},
-       accessed July 15, 2013}\\       
+       accessed July 15, 2013}\\
        \textbf{Ubuntu TV Launch:}
        Ubuntu TV by Canonical, based on the user interface Unity,
        is a~variant of the Ubuntu operating system, designed to be
@@ -422,7 +422,7 @@ in order to give the reader the necessary background knowledge.
        in televisions. It was announced by Canonical on January
        10, 2012, at
        CES.\footnote{\url{http://www.theverge.com/2012/1/9/2695387/ubuntu-tv-video-hands-on},
-       accessed July 15, 2013}       
+       accessed July 15, 2013}
   \item[Costa Concordia Disaster]
        The Costa Concordia is an Italian cruise ship that hit
        a~reef and partially sank on January 13, 2012 off the
@@ -483,9 +483,9 @@ account termination or video takedown by the user
 (Assad, Dixville).
 \autoref{tab:number-media} shows the total
 numbers of retrieved photos and videos of the media extractor.
-Table cell values marked with $n+$ signify that there were more 
-results, but that only $n$ results were considered. 
-We have calculated the precisions for each event for both video 
+Table cell values marked with $n+$ signify that there were more
+results, but that only $n$ results were considered.
+We have calculated the precisions for each event for both video
 and photo separately; the overall photo precision was $0.73$,
 and the overall video precision was $0.54$.
 We note that these values were calculated \emph{before}
@@ -537,11 +537,11 @@ event venue, and event city work consistently well.
     \hline
     \textbf{Total} & 15 & 12 & 58 & 20 & 80 & 22 & 27 & 14 & 61 & 10 & 85 & 21 & 60 & 12 & 20 & 20 & 52 & 12\\
     \hline
-    \textbf{Relevant} & 12 & 7 & 39 & 18 & 61 & 15 & 8 & 2 & 46 & 4 & 76 & 14 & 43 & 5 & 18 & 13 & 39 & 7\\    
+    \textbf{Relevant} & 12 & 7 & 39 & 18 & 61 & 15 & 8 & 2 & 46 & 4 & 76 & 14 & 43 & 5 & 18 & 13 & 39 & 7\\
     \hline
-    \hline    
+    \hline
     \textbf{Precision} & .80 & .58 & .67 & .90 & .76 & .55 & .30 & .14 & .75 & .40 & .89 & .67 & .71 & .42 & .90 & .65 & .75 & .58\\
-    \hline  
+    \hline
   \end{tabular}
   \caption[Number of photos and videos collected for nine events]{Number of photos and videos collected for nine events happening between January 10--19, 2012 grouped by social networks, separated in photo (P) and video (V) results. Overall \textbf{photo precision: 0.73}. Overall \textbf{video precision: 0.54}. Note that this is before post-processing. \todo{Check final orientation}}
   \label{tab:number-media}
@@ -551,116 +551,116 @@ event venue, and event city work consistently well.
 \begin{tabular}{p{\textwidth}}
 \eventtitle{Blackout SOPA}
 \begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate2.jpg}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate3.jpg}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate4.jpg}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate5.jpg}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate6.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate7.png}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate8.jpg}
-	\end{thumbsequence}
-	\newstrip
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate9.png}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate10.png}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate11.jpg}
-		\includegraphics[height=\thumbheight]{sopa/looseduplicate12.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\setlength\fboxsep{0pt}
-		\setlength\fboxrule{0.1mm}
-		\fbox{\includegraphics[height=\thumbheight]{sopa/looseduplicate13.png}}
-		\fbox{\includegraphics[height=\thumbheight]{sopa/looseduplicate14.jpg}}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate1.jpg}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate2.jpg}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate3.jpg}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate4.jpg}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate5.jpg}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate6.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate7.png}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate8.jpg}
+  \end{thumbsequence}
+  \newstrip
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate9.png}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate10.png}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate11.jpg}
+    \includegraphics[height=\thumbheight]{sopa/looseduplicate12.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \setlength\fboxsep{0pt}
+    \setlength\fboxrule{0.1mm}
+    \fbox{\includegraphics[height=\thumbheight]{sopa/looseduplicate13.png}}
+    \fbox{\includegraphics[height=\thumbheight]{sopa/looseduplicate14.jpg}}
 \end{thumbsequence}
 \end{tabular}
-	
+
 \begin{tabular}{p{\textwidth}}
 \eventtitle{Christian Wulff Case}
-	\begin{thumbsequence}
-		\doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate1.jpg}}
-		\doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate2.jpg}}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate3.jpg}}
-		\doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate4.jpg}}
-	\end{thumbsequence}
+  \begin{thumbsequence}
+    \doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate1.jpg}}
+    \doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate2.jpg}}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate3.jpg}}
+    \doublebox{\includegraphics[height=\thumbheight]{wulff/exactduplicate4.jpg}}
+  \end{thumbsequence}
 \end{tabular}
 
 \begin{tabular}{p{\textwidth}}
 \eventtitle{Free Mobile Launch}
-	\begin{thumbsequence}
-		\doublebox{\includegraphics[height=\thumbheight]{free/exactduplicate1.jpg}}
-		\doublebox{\includegraphics[height=\thumbheight]{free/exactduplicate2.jpg}}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate1.png}
-		\includegraphics[height=\thumbheight]{free/looseduplicate2.png}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate7.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate8.jpg}
-	\end{thumbsequence}
-	\\[4pt]
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate15.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate16.png}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate9.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate10.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate11.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate3.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate4.jpg}
-	\end{thumbsequence}
-	\newstrip
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate12.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate13.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate14.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{free/looseduplicate5.jpg}
-		\includegraphics[height=\thumbheight]{free/looseduplicate6.jpg}
-	\end{thumbsequence}
+  \begin{thumbsequence}
+    \doublebox{\includegraphics[height=\thumbheight]{free/exactduplicate1.jpg}}
+    \doublebox{\includegraphics[height=\thumbheight]{free/exactduplicate2.jpg}}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate1.png}
+    \includegraphics[height=\thumbheight]{free/looseduplicate2.png}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate7.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate8.jpg}
+  \end{thumbsequence}
+  \\[4pt]
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate15.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate16.png}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate9.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate10.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate11.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate3.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate4.jpg}
+  \end{thumbsequence}
+  \newstrip
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate12.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate13.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate14.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{free/looseduplicate5.jpg}
+    \includegraphics[height=\thumbheight]{free/looseduplicate6.jpg}
+  \end{thumbsequence}
 \end{tabular}
 
 \begin{tabular}{p{\textwidth}}
 \eventtitle{Costa Concordia Disaster}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{concordia/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{concordia/looseduplicate2.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{concordia/looseduplicate3.jpg}
-		\includegraphics[height=\thumbheight]{concordia/looseduplicate4.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{concordia/looseduplicate5.jpg}
-		\includegraphics[height=\thumbheight]{concordia/looseduplicate6.jpg}
-	\end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{concordia/looseduplicate1.jpg}
+    \includegraphics[height=\thumbheight]{concordia/looseduplicate2.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{concordia/looseduplicate3.jpg}
+    \includegraphics[height=\thumbheight]{concordia/looseduplicate4.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{concordia/looseduplicate5.jpg}
+    \includegraphics[height=\thumbheight]{concordia/looseduplicate6.jpg}
+  \end{thumbsequence}
 \end{tabular}
 
 \begin{tabular}{p{\textwidth}}
 \eventtitle{CES Las Vegas}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate1.jpg}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate2.jpg}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate3.jpg}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate4.jpg}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate5.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate6.jpg}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate7.jpg}
-	\end{thumbsequence}
-	\begin{thumbsequence}
-		\includegraphics[height=\thumbheight]{ces/looseduplicate8.jpg}
-	\end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate1.jpg}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate2.jpg}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate3.jpg}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate4.jpg}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate5.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate6.jpg}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate7.jpg}
+  \end{thumbsequence}
+  \begin{thumbsequence}
+    \includegraphics[height=\thumbheight]{ces/looseduplicate8.jpg}
+  \end{thumbsequence}
 \end{tabular}
 \caption[Sample photos for some of the considered nine events]
   {Sample photos for some of the considered nine events
@@ -760,7 +760,7 @@ could convey a~sentiment about,
 or an explanation of the visual data.
 Using named entity recognition as outlined in
 \autoref{cha:micropost-annotation},
-the important semantic elements in the micropost get identified. 
+the important semantic elements in the micropost get identified.
 The content of the message can subsequently be used
 to narrow down the search space for visual factors
 enabling cross-fertilization between the textual

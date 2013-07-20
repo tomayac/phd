@@ -17,7 +17,7 @@ which is a~first step towards media item deduplication for videos
 and photos contained in videos.
 In video production and filmmaking, a~\emph{camera shot} is a~series of frames
 that runs for an uninterrupted period of time.
-Shots are always filmed with a~single camera and can be of any duration. 
+Shots are always filmed with a~single camera and can be of any duration.
 Shot boundary detection (also called \emph{cut detection},
 \emph{shot transition detection},
 or simply \emph{shot detection}) is a~field of research of video processing.
@@ -41,16 +41,16 @@ shots for a~sample video.
 \begin{figure}
 \centering
     \includegraphics[height=0.8\textheight,keepaspectratio]{./stevejobs.png}
-  \caption[Camera shots for a~sample video on  
+  \caption[Camera shots for a~sample video on
     a~major online video portal]
-    {Camera shots for a~sample video on 
+    {Camera shots for a~sample video on
     a~major online video portal, detected on-the-fly via
     our shot boundary algorithm incorporated
     in a~browser extension}
   \label{fig:screenshotcamerashots}
 \end{figure}
 
-\section{Related Work} 
+\section{Related Work}
 
 As outlined before, video fragments consist of shots, which are sequences of
 consecutive frames from a~single viewpoint,
@@ -127,7 +127,7 @@ in the context of a~Web browser and on-the-fly.
 Streaming (HTML5) video has no notion of frames,
 but only allows for time-based navigation
 via the \texttt{currentTime} attribute.
-The algorithm we propose in the sequence of this chapter 
+The algorithm we propose in the sequence of this chapter
 deals effectively with these limitations
 and we also show that it works efficiently.
 
@@ -137,11 +137,11 @@ In this section, we discuss our shot boundary detection algorithm,
 which falls in the category of histogram-based algorithms.
 Since visually dissimilar video frames
 can have similar global histograms,
-we take local histograms into account instead. 
+we take local histograms into account instead.
 We therefore split video frames in freely configurable
 rows and columns, \emph{i.e.}, lay a~grid of tiles over each frame.
 The user interface that can be seen in \autoref{fig:algorithm}
-currently allows for anything from a~$\mathit{1} \times \mathit{1}$ 
+currently allows for anything from a~$\mathit{1} \times \mathit{1}$
 grid to a~$\mathit{20} \times \mathit{20}$ grid.
 The limits are imposed by the reasonable processing time on consumer PCs.
 For each step, we examine a~frame $\mathit{f}$ and its direct
@@ -231,15 +231,15 @@ The user interface can optionally do this automatically.
   algorithm,
   label=code:algorithm, float]
 for frame in frames
-  f = frame.index  
-  for tile in tiles of frame      
+  f = frame.index
+  for tile in tiles of frame
     avgHisto[f][tile] = getTilewiseDiff()
- 
+
   mostDiffTiles = getMostDiffTiles(avgHisto[f])
   mostSimTiles = getMostSimTiles(avgHisto[f])
- 
-  for tile in tiles of frame    
-    factor = 1  
+
+  for tile in tiles of frame
+    factor = 1
     if tile in mostDiffTiles
       factor = boostingFactor
     else if tile in mostSimTiles
@@ -295,7 +295,7 @@ they can modify details of Web pages.
 On-the-fly shot detection in streaming video
 comes with its very own challenges that were briefly outlined before.
 First, it is a~question of streaming speed.
-Especially with high-definition (HD) video,
+Especially with High Definition (HD) video,
 this can be very demanding.
 We do not attach the analysis \texttt{<video>} and \texttt{canvas} tags
 to the DOM tree~\cite{lehors2004dom} so that the browser
@@ -328,7 +328,7 @@ for false-positives.
 Overall, we reached an accuracy of about 86\%,
 which is not optimal, but given the challenges
 sufficient for our use case of
-detecting near- or exact-duplicate videos. 
+detecting near- or exact-duplicate videos.
 
 \section{Future Work}
 
@@ -353,7 +353,7 @@ into classes and propose predefined known working settings
 based on the standard deviation $\mathit{stdDev_{f}}$
 and the overall average frame distance $\mathit{avgDist_{f}}$.
 Both are dependent on the values of $\mathit{boostingFactor}$,
-$\mathit{limitingFactor}$, $\mathit{rows}$, and $\mathit{columns}$. 
+$\mathit{limitingFactor}$, $\mathit{rows}$, and $\mathit{columns}$.
 Interpreting our results, there is evidence
 that low complexity settings are sufficient in most cases,
 \emph{i.e.}, a~number of $\mathit{rows}$ and $\mathit{columns}$
@@ -363,7 +363,7 @@ The same applies to the number of to-be-considered most different
 or similar tiles $\mathit{tileLimit}$.
 We had cases where not treating those tiles differently
 at all, \emph{i.e.}, setting
-$\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$, 
+$\mathit{boostingFactor} = \mathit{limitingFactor} = \mathit{1}$,
 led to better results; for example with screencast-type videos,
 typically used to demonstrate and teach the use of software features
 that were not recorded with a~real camera,

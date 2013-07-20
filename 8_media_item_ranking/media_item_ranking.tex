@@ -19,10 +19,10 @@ and \autoref{fig:topgrammy} show the
 most intuitive ranking criterion one can imagine (besides publication time):
 ranking by occurrence popularity.
 The more often a~media item (or a~near-duplicate)
-appears in any of the considered social networks, 
+appears in any of the considered social networks,
 the higher it should be ranked.
 However, ranking by occurrence popularity (or media item cluster size)
-disregards one of the most valuable features of social networks: 
+disregards one of the most valuable features of social networks:
 the social aspects.
 In consequence, in this chapter, we will introduce
 further media item ranking criteria that,
@@ -32,7 +32,7 @@ allows us to propose more adequate social media item ranking mechanisms.
 \section{Media Item Ranking Criteria}
 
 In this section, we describe several criteria that can serve to rank
-media items retrieved from social networks. 
+media items retrieved from social networks.
 We base these criteria on the information available via
 the media item extractors described in \autoref{cha:media-item-extraction},
 which, given event-related search terms,
@@ -108,7 +108,7 @@ of all considered social networks in order to gain
 a~network-agnostic view on the underlying social networks.
 In this section, we detail the part of the abstraction layer
 that models the network-specific social interaction patterns.
-Those interaction patterns ideally are exposed by the social network 
+Those interaction patterns ideally are exposed by the social network
 via specific API calls in order to be considered,
 which only is the case for a~subset of the social networks we deal with.
 Social interaction data is to some extent the holy grail of social networks,
@@ -127,7 +127,7 @@ of the abstraction layer's data format:
 \begin{description}
   \item[\texttt{socialInteractions}] Container for social
     interactions
-  \begin{description}  
+  \begin{description}
   \item[\texttt{likes}] Number of times a~micropost was liked, or
     \texttt{unknown}
   \item[\texttt{shares}] Number of times a~micropost was shared, or
@@ -136,7 +136,7 @@ of the abstraction layer's data format:
     received, or \texttt{unknown}
   \item[\texttt{views}] Number of views a~micropost reached, or
     \texttt{unknown}
-  \end{description}    
+  \end{description}
 \end{description}
 
 \begin{table}[!ht]
@@ -178,8 +178,8 @@ and assigns the accumulated values to the cluster.
 
 \begin{lstlisting}[caption=Social interactions merging algorithm,
   label=code:merging, float=!ht, escapechar=§]
-§\textbf{Input: cluster}§, cluster of visually similar media items 
-§\textbf{Output: cluster}§, cluster with merged social interactions 
+§\textbf{Input: cluster}§, cluster of visually similar media items
+§\textbf{Output: cluster}§, cluster with merged social interactions
 
 §\textbf{for}§ mediaItem §\textbf{in}§ cluster
   cluster.likes += isUnknown(mediaItem.likes) ? 0 : mediaItem.likes
@@ -191,7 +191,7 @@ and assigns the accumulated values to the cluster.
 §\textbf{return}§ cluster
 \end{lstlisting}
 
-\subsection{Selection of a~Cluster's Visual Representative}  
+\subsection{Selection of a~Cluster's Visual Representative}
 
 As outlined in the previous section, similar enough media items
 are clustered and treated as just one media item
@@ -200,7 +200,7 @@ Now, we introduce an algorithm for the selection of
 a~cluster's visual representative.
 Naturally, through the way the clustering algorithm works,
 the contained media items are already visually similar
-based on high-level features. 
+based on high-level features.
 In consequence, we fall back to using \emph{low-level}
 visual ranking criteria as defined in \autoref{sec:visualrankingcriteria}.
 \autoref{code:clusterrepresentative} shows the cluster representative
@@ -213,24 +213,24 @@ which is a~solid heuristic for the optimal photo or video quality.
   label=code:clusterrepresentative, float, escapechar=§]
 §\textbf{Input:}§ cluster, cluster of visually similar media items
 §\textbf{Output:}§ cluster, cluster with visual representative
-  
+
 maxResolution = 0
 
 §\textbf{for}§ mediaItem §\textbf{in}§ cluster
-  
-  §\textit{\# Ensure that videos will always be preferred}§  
+
+  §\textit{\# Ensure that videos will always be preferred}§
   §\textbf{if}§ mediaItem.type == 'video' §\textbf{then}§
     mediaItem.width = mediaItem.height = INFINITY
-  §\textbf{end if}§ 
-    
+  §\textbf{end if}§
+
   resolution = mediaItem.width * mediaItem.height
   §\textbf{if}§ resolution >= maxResolution §\textbf{then}§
     maxResolution = resolution
     cluster.representative = mediaItem
-  §\textbf{end if}§  
+  §\textbf{end if}§
 §\textbf{end for}§
 
-§\textbf{return}§ cluster     
+§\textbf{return}§ cluster
 \end{lstlisting}
 
 \subsection{Ranking Formula}
@@ -256,7 +256,7 @@ For a~given set of media item clusters, a~ranking is calculated as follows.
 The factors $ \mathit{likes}, \mathit{shares}, \mathit{comments},$ and $ \mathit{views} $
 stem from the individual media items as described in \autoref{sec:social-interactions-abstraction-layer}
 and \autoref{sec:merging-social-interactions}.
-The factor $ \mathit{clusterSize} $ corresponds to the size of the current cluster. 
+The factor $ \mathit{clusterSize} $ corresponds to the size of the current cluster.
 After some experimentation with different event media items sets,
 the factor $ \mathit{recency} $ was empirically determined to be calculated as follows.
 If the youngest media item in the cluster is less than or exactly one day old,
@@ -322,8 +322,8 @@ Overall, 24.1 million tweets about the game and halftime show were counted,
 a~number that even leaves aside the advertisements,
 which in recent years have become a~highly expected highlight
 of the Super Bowl experience.
-The Twitter article further mentions the performance by superstar artist Beyoncé 
-and a~number of Super Bowl advertisements as highlights of the event.   
+The Twitter article further mentions the performance by superstar artist Beyoncé
+and a~number of Super Bowl advertisements as highlights of the event.
 
 Instagram's analysis\footnote{\url{http://blog.instagram.com/post/42254883677/sbroundup},
 accessed July 15, 2013}
@@ -339,8 +339,8 @@ or by photographing each other how they watched the event.
 
 Facebook's analysis\footnote{\url{http://newsroom.fb.com/News/570/Super-Bowl-XLVII-on-Facebook},
 accessed July 15, 2013}
-mentions as top five most-talked-about moments of the Super Bowl 
-the moment when the Ravens won the Super Bowl, 
+mentions as top five most-talked-about moments of the Super Bowl
+the moment when the Ravens won the Super Bowl,
 Beyoncé's halftime performance,
 the power outage in the Superdome,
 Jacoby Jones' 108-yard kickoff return for a~Ravens touchdown, and
@@ -376,7 +376,7 @@ in our own ranked media item set.
   \item the performances of Beyoncé and Alicia Keys
   \item the advertisements
   \item the match itself from people at the stadium
-  \item the Super Bowl watchers around the world 
+  \item the Super Bowl watchers around the world
 \end{itemize}
 
 \autoref{fig:loose_order} and \autoref{fig:strict_order} show media items
@@ -401,7 +401,7 @@ For details on media gallery generation, we refer the reader to the upcoming
   \caption[Ranked Super Bowl media gallery in Strict Order, Equal Sizes style]
   {Ranked Super Bowl XLVII media gallery in Strict Order, Equal Sizes~(SOES) style \todo{Check final orientation}}
   \label{fig:strict_order}
-\end{sidewaysfigure}  
+\end{sidewaysfigure}
 
 \subsection{Evaluation Approach}
 
@@ -423,7 +423,7 @@ which is why we limit ourselves to rating the top-10 returned results,
 a~technique that is also known as \emph{pooling}
 in the Information Retrieval community~\cite{liu2009learningtorank}.
 Screenshots of some of the events we tested with
-and the particular top-ranked media items can be seen in 
+and the particular top-ranked media items can be seen in
 \autoref{fig:qualcomm}, \autoref{fig:blackberry}, and \autoref{fig:facebookgraphsearch}.
 
 \begin{figure}[!ht]
@@ -465,7 +465,7 @@ We arranged for post-test conversations with each human rater
 in order to understand their motivations for their ratings.
 After talking to the human raters it became clear that
 lower scores were mostly caused by outliers in the media item set.
-Further discussions with the human raters revealed that 
+Further discussions with the human raters revealed that
 if at a~first glance the context to the event in question was missing,
 the raters heavily downgraded the corresponding media items.
 We note that in order to test the visual ranking aspect in isolation,
@@ -488,13 +488,13 @@ videos that only made sense when seen in motion.
     \backslashbox{\textbf{Event}}{\textbf{Rank}} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} & \textbf{avg} & \textbf{var} \\ \hline
     \textbf{Facebook} & 3.8 & 3.3 & 4.9 & 4.2 & 3.9 & 5.0 & 3.7 & 4.8 & 4.8 & 3.1 & \textbf{3.6} & \textbf{0.4}\\ \hline
     \textbf{BlackBerry} & 4.9 & 4.8 & 5.0 & 3.2 & 5.0 & 4.4 & 4.1 & 3.8 & 4.5 & 2.7 & \textbf{3.8} & \textbf{0.8} \\ \hline
-    \textbf{Qualcomm}& 4.9 & 4.7 & 4.9 & 5.0 & 2.4 & 4.1 & 3.1 & 5.0 & 2.1 & 3.7 & \textbf{3.6} & \textbf{1.0} \\ \hline 
+    \textbf{Qualcomm}& 4.9 & 4.7 & 4.9 & 5.0 & 2.4 & 4.1 & 3.1 & 5.0 & 2.1 & 3.7 & \textbf{3.6} & \textbf{1.0} \\ \hline
     \textbf{Super Bowl}& 5.0 & 4.1 & 5.0 & 3.2 & 5.0 & 2.8 & 4.1 & 4.6 & 3.3 & 4.0 & \textbf{3.9} & \textbf{0.9} \\
     \hline
   \end{tabular}
   \caption[Mean Opinion Scores (MOS) for top-10 ranked media items]
     {Mean Opinion Scores (MOS) for the top-10 ranked media items of four events (overall MOS: 3.7, variance: 0.8)}
-  \label{table:top-10-mos} 
+  \label{table:top-10-mos}
 \end{table}
 
 \section{Conclusions}

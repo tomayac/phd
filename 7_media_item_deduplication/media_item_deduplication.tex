@@ -25,7 +25,7 @@ The derived term \emph{deduplication} in consequence refers to
 the act of eliminating duplicate or redundant information.
 
 In this chapter, we will treat video
-and photo deduplication separately. 
+and photo deduplication separately.
 Our goal is to deduplicate media items \emph{on-the-fly}
 at the very moment they are extracted from social networks.
 Due to this limitation, we cannot rely on any preprocessing
@@ -48,16 +48,16 @@ what we mean with \emph{duplicate media items} for various cases.
 We define two media items of type photo as \emph{exact-duplicates}
 if their pixel contents are exactly the same.
 This implies that by our definition a~scaled or recompressed version
-of the same photo is \emph{not} considered an exact-duplicate. 
+of the same photo is \emph{not} considered an exact-duplicate.
 Similarly, a~rotated version of a~photo is also \emph{not}
-considered an exact-duplicate. 
+considered an exact-duplicate.
 In contrast, two photo files with different file names
 or different Exchangeable image file
 format\footnote{\url{http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2010_E.pdf},
 accessed July 15, 2013}
 (Exif) data are considered exact-duplicate
 if their pixel contents are exactly the same.
-exact-duplicate photos typically occur if users share content 
+exact-duplicate photos typically occur if users share content
 from one social network on another, for example,
 if one user posts a~photo on Instagram that then someone else
 (or even the same user) posts on Facebook.
@@ -141,10 +141,10 @@ both low-level features and surrounding texts.
 Also in the context of Web pages, Cai
 \emph{et~al.}\ \cite{cai2004hierarchicalclustering} have proposed
 a~hierarchical clustering method using visual, textual, and link analysis.
-Goldberger \emph{et~al.}\ \cite{goldberger2006unsupervisedclustering} 
+Goldberger \emph{et~al.}\ \cite{goldberger2006unsupervisedclustering}
 have combined discrete and continuous image models based on a~mixture of Gaussian densities
 with a~generalized version of the information bottleneck principle
-for unsupervised hierarchical image set clustering. 
+for unsupervised hierarchical image set clustering.
 Chen \emph{et~al.}\ \cite{chen2003cbir} have introduced an image retrieval approach,
 which tackles the semantic gap problem by learning similarities
 of images of the same semantics.
@@ -153,7 +153,7 @@ of images of the same semantics.
 
 Specialized methods for video deduplication exist,
 for example~\cite{min2011nearduplicatevideo,wu2009nearduplicate}
-by Min \emph{et~al.}\ who, given the observation that 
+by Min \emph{et~al.}\ who, given the observation that
 transformations tend to preserve the semantic information conveyed
 by the video content, propose an approach for identifying
 near-duplicate videos by making use of both low-level visual
@@ -173,11 +173,11 @@ that groups frames with similar visual content while maintaining their temporal 
 In~\cite{okamoto2002videoclustering}, Okamoto \emph{et~al.}\  have proposed an approach
 that is based on fixed length video stream segments.
 By generating spatio-temporal images, they employ co-occurrence matrices
-to express features in the time dimension explicitly. 
+to express features in the time dimension explicitly.
 Yi \emph{et~al.}\ have proposed motion histograms~\cite{yi2005motionhistogram},
 where the motion content of a~video at pixel level is represented
 as a~Pixel Change Ratio Map (PCRM), which captures the motion intensity,
-spatial location, and size of moving objects in a~video sequence. 
+spatial location, and size of moving objects in a~video sequence.
 
 \paragraph{Image \emph{and} Video Deduplication and Clustering:}
 
@@ -309,19 +309,19 @@ When two people attend the same event
 and create media items at roughly the same time
 covering the same scene,
 their media items will be similar
-and---the capturing devices' quality aside---only differ in the viewing angles. 
+and---the capturing devices' quality aside---only differ in the viewing angles.
 \autoref{fig:viewing-angle} shows a~concrete example.
 
 \begin{figure}[!ht]
   \centering
   \subfloat[Viewing angle 1]{
     \includegraphics[height=2.7cm]{stage1.jpg}
-  }                
+  }
   \subfloat[Viewing angle 2]{
     \includegraphics[height=2.7cm]{stage2.jpg}
   }
   \caption{Slightly different viewing angles of a~concert stage}
-  \label{fig:viewing-angle}  
+  \label{fig:viewing-angle}
 \end{figure}
 
 \paragraph{Logo, Watermark, Lower Third, or Caption Insertion:}
@@ -337,7 +337,7 @@ can be seen in \autoref{fig:logo}.
   \centering
   \subfloat[Blank]{
     \includegraphics[width=0.26\textwidth]{speaker1.jpg}
-  }                
+  }
   \subfloat[Caption]{
     \includegraphics[width=0.26\textwidth]{speaker2.jpg}
   }
@@ -345,7 +345,7 @@ can be seen in \autoref{fig:logo}.
     \includegraphics[width=0.26\textwidth]{speaker3.jpg}
   }
   \caption{Caption, logo, and lower third insertion for a~speaker}
-  \label{fig:logo}  
+  \label{fig:logo}
 \end{figure}
 
 \paragraph{Cropping:}
@@ -363,13 +363,13 @@ as can be seen in the example in \autoref{fig:cropping}.
   \centering
   \subfloat[Original]{
     \includegraphics[height=3cm]{kid1.jpg}
-  }                
+  }
   \subfloat[Cropped]{
     \includegraphics[height=3cm]{kid2.jpg}
   }
   \caption[Original and cropped version of a~photo]
   {Original and cropped version of a~photo (including a~slight color variation)}
-  \label{fig:cropping}  
+  \label{fig:cropping}
 \end{figure}
 
 \paragraph{Different Keyframes:}
@@ -386,20 +386,20 @@ typically resulting in varying frames for different social networks.
   \centering
   \subfloat[Frame 1]{
     \includegraphics[height=3cm]{camera1.jpg}
-  }                
+  }
   \subfloat[Frame 2]{
     \includegraphics[height=3cm]{camera2.jpg}
   }
   \caption[Two different frames stemming from the same camera shot]
     {Two different frames stemming from the same camera shot,
     with the left frame appearing slightly earlier in the video}
-  \label{fig:camera-shot}  
+  \label{fig:camera-shot}
 \end{figure}
 
 \paragraph{Aspect Ratio Changes with Squeezing or Stretching:}
 
 Aspect ratio changes can either happen combined with cropping
-(and thus losing parts of the media item) and/or combined with 
+(and thus losing parts of the media item) and/or combined with
 squeezing or stretching (and thus deforming the media item).
 \autoref{fig:bulged} shows an example where a~media item gets stretched.
 
@@ -407,12 +407,12 @@ squeezing or stretching (and thus deforming the media item).
   \centering
   \subfloat[Original]{
     \includegraphics[height=3cm]{lordoftherings.jpg}
-  }                
+  }
   \subfloat[Stretched]{
     \includegraphics[height=3cm]{lordoftheringsstretched.jpg}
   }
   \caption{Original and stretched version of a~photo}
-  \label{fig:bulged}  
+  \label{fig:bulged}
 \end{figure}
 
 \paragraph{Photo Filters:}
@@ -427,12 +427,12 @@ are a~considerable reason for near-duplicate media content on social networks.
   \centering
   \subfloat[Original]{
     \includegraphics[width=0.25\textwidth]{clickclickdecker1.jpg}
-  }                
+  }
   \subfloat[With photo filter]{
     \includegraphics[width=0.25\textwidth]{clickclickdecker2.jpg}
   }
   \caption{Original and version with an applied photo filter of a~photo}
-  \label{fig:photo-filter}  
+  \label{fig:photo-filter}
 \end{figure}
 
 \subsection{Near-Duplicate Photo Clustering Algorithm}
@@ -535,14 +535,14 @@ histograms = {}
 faces = {}
 §\textbf{for}§ item §\textbf{in}§ mediaItems
   faces[item] = getFaces(item)
-  
+
   histograms[item] = {}
   §\textbf{for}§ tile §\textbf{in}§ item
     histograms[item][tile] = getHistogram(tile)
   §\textbf{end for}§
-§\textbf{end for}§  
+§\textbf{end for}§
 
-    
+
 §\textit{\# Calculates tile-wise distances}§
 distances = {}
 §\textbf{for}§ outerItem §\textbf{in}§ mediaItems
@@ -557,33 +557,33 @@ distances = {}
   §\textbf{end for}§
 §\textbf{end for}§
 
-  
+
 §\textit{\# Calculates clusters}§
 clusters = {}
-§\textbf{for}§ outerItem §\textbf{in}§ mediaItems  
-  clusters[outerItem] = []  
+§\textbf{for}§ outerItem §\textbf{in}§ mediaItems
+  clusters[outerItem] = []
   §\textbf{for}§ innerItem §\textbf{in}§ mediaItems
     §\textbf{if}§ outerItem == innerItem §\textbf{then}§ continue
-    
+
     similarTiles = 0
     distance = distances[outerItem][innerItem]
-    §\textbf{for}§ tile §\textbf{in}§ distance      
+    §\textbf{for}§ tile §\textbf{in}§ distance
       §\textbf{if}§ distance[tile] <= SIMILARITY_THRESHOLD §\textbf{then}§
         similarTiles++
       §\textbf{end if}§
     §\textbf{end for}§
-         
+
     §\textit{\# Check condition 1 (tiles)}§
     §\textbf{if}§ similarTiles >= TILES_THRESHOLD §\textbf{then}§
       §\textit{\# Check condition 2 (faces)}§
       §\textbf{if}§ faces[outerItem] == faces[innerItem] §\textbf{then}§
         clusters[outerItem].push(innerItem)
       §\textbf{end if}§
-    §\textbf{end if}§    
+    §\textbf{end if}§
   §\textbf{end for}§
 §\textbf{end for}§
 
-§\textbf{return}§ clusters        
+§\textbf{return}§ clusters
 \end{lstlisting}
 
 \subsection{Experiments}
@@ -600,7 +600,7 @@ to recognize outstanding achievement in the music industry.
 The annual ceremony features performances by prominent artists.
 Some of the awards are presented in a~widely viewed televised ceremony.
 On December 5, 2012, the nominees for the 55\superscript{th} Annual Grammy Awards
-were announced at an event broadcasted live by CBS
+were announced at an event broadcasted live by the broadcast network CBS
 titled \emph{Grammy Nominations Concert
 Live},\footnote{\url{http://en.wikipedia.org/wiki/2013_Grammy_Awards},
 accessed July 15, 2013}
@@ -635,7 +635,7 @@ We have collected and made available%
 \footnote{\url{https://www.dropbox.com/sh/2llvjaut32juwrx/7eGLodfP_2},
 accessed July 15, 2013}
 datasets for both events with
-379 photos for the \emph{Victoria's Secret Fashion Show 2012} event 
+379 photos for the \emph{Victoria's Secret Fashion Show 2012} event
 and 949 photos for the \emph{Grammy Awards Nominations 2013} event.
 These photos were collected using the media item extraction framework
 described in \autoref{cha:media-item-extraction}
@@ -657,7 +657,7 @@ The concrete clustering parameters for the algorithm were set as listed below.
 
 In the following, we discuss the clustering and deduplication results.
 \autoref{fig:topvsfashionshow} and \autoref{fig:topgrammy} show the top clusters
-for the \emph{Victoria's Secret Fashion Show 2012} and the 
+for the \emph{Victoria's Secret Fashion Show 2012} and the
 \emph{Grammy Awards Nominations 2013} events respectively.
 We then pick some representative examples from both events
 and have a~closer look at the clustering algorithm's strengths and weaknesses.
@@ -676,13 +676,13 @@ and have a~closer look at the clustering algorithm's strengths and weaknesses.
   \label{fig:topgrammy}
 \end{figure}
 
-\paragraph{Algorithm Strengths:} 
+\paragraph{Algorithm Strengths:}
 
 \autoref{fig:personclose} has a~brunette fashion model in a~pink robe
-and a~heart-shaped pink spotlight as central elements of both photos. 
+and a~heart-shaped pink spotlight as central elements of both photos.
 Even though the model is shot from different angles and at different times,
 the photos are successfully clustered due to the very identifying colors
-and the high tile-wise similarity. 
+and the high tile-wise similarity.
 
 \begin{figure}[!ht]
   \centering
@@ -718,7 +718,7 @@ the photos are successfully clustered.
 \end{figure}
 
 \autoref{fig:zoomed} shows two photos of the same fashion model,
-where the left photo is a~zoomed version of the right photo 
+where the left photo is a~zoomed version of the right photo
 with added black bars so that the resulting photo
 has a~square aspect ratio.
 Despite the differences, the photos are successfully clustered.
@@ -766,7 +766,7 @@ one time with and the other time without added black bars
 to fit a~letterbox aspect ratio.
 In its previously described form, the algorithm
 does \emph{not} cluster such media items
-(unless a~very small number $\textit{tiles\_threshold}$ 
+(unless a~very small number $\textit{tiles\_threshold}$
 of required similar tiles is selected).
 In the majority of cases, though, clustering such media items \emph{is} desired.
 Our response to both issues is to ignore a~certain part
@@ -872,14 +872,14 @@ For example, the 3:19 minutes long video of Mark Zuckerberg explaining
 the design and engineering challenges behind Facebook's
 recently announced Graph Search product was initially published
 on Facebook,\footnote{\url{https://www.facebook.com/about/graphsearch},
-accessed July 15, 2013} however, people republished the same video 
+accessed July 15, 2013} however, people republished the same video
 multiple times on YouTube.
 As the YouTube-generated poster frames were similar enough
 and even if the other video metadata like title and description
 were different, we were able to effectively deduplicate the videos
 with the described work-around approach.
 
-\section{Describing Media Item Differences with Media Fragments URI and Speech Synthesis}
+\section[Describing Media Item Differences with Media Fragments URI]{Describing Media Item Differences with Media Fragments URI and Speech Synthesis}
 
 In this section, we describe how media item differences
 can be described with media fragments URIs and speech synthesis.
@@ -893,7 +893,7 @@ media item clustering algorithm.
 
 In order to illustrate the way the algorithm clusters media items,
 \autoref{fig:algorithmdebugtwoclusters} shows a~debug view of the algorithm
-for two clustered media items related to the 
+for two clustered media items related to the
 \emph{Grammy Awards Nominations 2013} event.
 The red border around the media item indicates at least one detected face.
 Independent from the actual media item's aspect ratio,
@@ -1009,7 +1009,7 @@ As an additional semantic feature, the algorithm considers detected faces.
 It is capable of deduplicating media items of type video and/or photo.
 In the case of video, frames at camera shot boundaries are used.
 To illustrate the algorithm debugging mechanics,
-we use a~running example of two media items related to a~music video by the 
+we use a~running example of two media items related to a~music video by the
 band Backstreet Boys, which can be seen in \autoref{fig:near-duplicate}.
 For media items to be clustered,
 the following clustering conditions have to be fulfilled.
@@ -1320,7 +1320,7 @@ of telephony network transmission quality,
 however, more recently, MOS has also found
 wider usage in the multimedia community
 for evaluating inherently subjective things
-like perceived quality from the users' perspective. 
+like perceived quality from the users' perspective.
 Therefore, a~set of standard subjective tests are conducted,
 where a~number of users rate the quality of test samples
 with scores ranging from 1 (worst) to 5 (best).
@@ -1363,7 +1363,7 @@ Without exception, they liked the system and encouraged future development.
 
 In this chapter, we have treated the topic of media item deduplication
 from different angles.
-We have first defined the meaning of \emph{exact} and \emph{near-duplicate} 
+We have first defined the meaning of \emph{exact} and \emph{near-duplicate}
 for both photos and videos,
 including the special case of a~photo being contained in a~video.
 In a~previous chapter,
@@ -1398,10 +1398,10 @@ to retrieve many social interactions on the social network
 they were initially shared on, but also on other social networks.
 Derivates of popular media items further add noise
 to the social media sharing landscape.
-Based on our media item deduplication algorithms, 
+Based on our media item deduplication algorithms,
 we have contributed effective and efficient tools
 to deal with social media overload
-and to identify the few needles in the cross network haystack. 
+and to identify the few needles in the cross network haystack.
 
 \section*{Chapter Notes}
 This chapter is partly based on the following publications.

@@ -77,7 +77,7 @@ by Sir Tim Berners-Lee,
 in a~May 2001 article co-published with James Hendler
 and Ora Lassila
 in the Scientific American~\cite{bernerslee2001semanticweb}.
-Therein, the authors write: 
+Therein, the authors write:
 
 \begin{quotation}
 \textit{``The Semantic Web will bring structure to the meaningful
@@ -115,13 +115,13 @@ more intelligent price comparison services, \emph{etc.}
   \subfloat[Bits without meaning.]{
     \label{fig:fundamental-shift-1}
     \includegraphics[width=0.3\textwidth]{fundamental-shift-1.png}
-   }                
+   }
   \subfloat[Bits with a~meaning.]{
     \label{fig:fundamental-shift-2}
     \includegraphics[width=0.468\textwidth]{fundamental-shift-2.png}
   }
   \caption{Fundamental shift from moving bits to moving bits with a~meaning}
-  \label{fig:fundamental-shift}  
+  \label{fig:fundamental-shift}
 \end{figure}
 
 \subsection{The Non-Semantic Web} \label{sec:non-semantic-web}
@@ -162,7 +162,7 @@ the meaning of the columns in
 
 \begin{small_itemize}
   \item[] P = matches \textbf{P}layed
-  \item[] W = \textbf{W}ins 
+  \item[] W = \textbf{W}ins
   \item[] D = \textbf{D}raws
   \item[] L = \textbf{L}osses
   \item[] F = Goals \textbf{F}or
@@ -339,7 +339,7 @@ and attributes and their meaning.
   \item \texttt{datetime-local} specifies a~control for setting
         the element’s value to a~string representing a~local date
         and time (with no timezone information).
-  \item \texttt{date} specifies a~control for setting the 
+  \item \texttt{date} specifies a~control for setting the
         element’s value to a~string representing a~date,
         \texttt{month} specifies a~control for setting the
         element’s value to a~string representing a~month,
@@ -421,7 +421,7 @@ as listed below:
         agreement, abstention or indifference, and disagreement
         to hyperlinks.
   \item \texttt{XFN} is a~format for representing human
-        relationships using hyperlinks, which enables Web authors
+        relationships (XHTML Friends Network) using hyperlinks, which enables Web authors
         to indicate their relationships to people.
   \item \texttt{XMDP} is a~format for defining metadata profile
         documents (XHTML Meta Data Profile), which enables Web
@@ -429,9 +429,9 @@ as listed below:
   \item \texttt{XOXO} is a~format for defining a~new
         XHTML~\cite{pemberton2000xhtml}
         document type for subsetting and extending XHTML,
-        which serves as the basis for XHTML-friendly outlines for
-        processing by XML engines, and for easy interactive
-        rendering by browsers.
+        which serves as the basis for XHTML-friendly outlines
+        (eXtensible Open XHTML Outlines) for processing by XML engines
+        and for easy interactive rendering by browsers.
 \end{itemize}
 
 \begin{lstlisting}[caption={
@@ -445,7 +445,7 @@ as listed below:
   <div class="adr">
     <span class="type">Work</span>:
     <div class="street-address">169 University Avenue</div>
-    <span class="locality">Palo Alto</span>,  
+    <span class="locality">Palo Alto</span>,
     <abbr class="region" title="California">CA</abbr>&nbsp;&nbsp;
     <span class="postal-code">94301</span>
     <div class="country-name">USA</div>
@@ -456,7 +456,7 @@ as listed below:
   <div class="tel">
     <span class="type">Fax</span> +1-650-289-4041
   </div>
-  <div>Email: 
+  <div>Email:
    <span class="email">info@commerce.net</span>
   </div>
 </div>
@@ -464,7 +464,7 @@ as listed below:
 
 \subsubsection{Microdata}
 
-Microdata~\cite{hickson2012microdata} defines a~way to annotate 
+Microdata~\cite{hickson2012microdata} defines a~way to annotate
 content (or items) with specific machine-readable labels,
 for example, to allow scripts to provide services that are
 customized to a~website.
@@ -581,9 +581,9 @@ In the following, we will illustrate the various
 RDF serialization formats with an RDF sample graph
 inspired by a~default example of the Apache Anything To Triples project
 (Any23,~\url{http://any23.org/}, accessed July 15, 2013).
-It contains data about a~fictive FOAF~\cite{brickley2010foaf}
+It contains data about a~fictive FOAF (Friend of a~friend,~\cite{brickley2010foaf})
 person named \emph{John X. Foobar}
-with an email address with the SHA1 checksum of
+with an email address with the SHA1 (secure hash algorithm) checksum of
 \emph{cef817456278b70cee8e5a1611539\-ef9d928810e}.
 The actual email address is obscured to avoid spam emails.
 \autoref{fig:sample-rdf-graph} shows the graphical representation
@@ -591,7 +591,7 @@ of this sample graph.
 
 \begin{figure}[!ht]
 \centering
-  \includegraphics[width=\linewidth]{sample-rdf-graph.png} 
+  \includegraphics[width=\linewidth]{sample-rdf-graph.png}
   \caption{Sample RDF graph visualized}
   \label{fig:sample-rdf-graph}
 \end{figure}
@@ -764,14 +764,14 @@ sample graph serialized in RDFa.
 
 \begin{lstlisting}[caption={Sample graph in RDFa syntax},
   label={code:rdfa-syntax}]
-<div about="_:1" typeof="http://xmlns.com/foaf/0.1/Person">           
+<div about="_:1" typeof="http://xmlns.com/foaf/0.1/Person">
   <span property="http://xmlns.com/foaf/0.1/mbox_sha1sum">
     cef817456278b70cee8e5a1611539ef9d928810e
-  </span> 
+  </span>
   <span property="http://xmlns.com/foaf/0.1/name">
     John X. Foobar
   </span>
-</div> 
+</div>
 \end{lstlisting}
 
 \section{SPARQL: Semantic Web Query Language}
@@ -855,7 +855,7 @@ for performance reasons.
 
 \subsection{Different SPARQL Query Variations}
 
-The SPARQL Query Language currently specifies four different query variants, which we will list in the following. 
+The SPARQL Query Language currently specifies four different query variants, which we will list in the following.
 
 \subsubsection{SELECT}
 
@@ -926,7 +926,7 @@ serialized in Turtle syntax:\\
 \texttt{vcard}~\cite{dawson1998vcard}
 properties from the FOAF information:\\
 
-\texttt{@prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#> .}\\ 
+\texttt{@prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0\#> .}\\
 \texttt{\indent <http://example.org/person\#Alice> vcard:FN "Alice" .}
 
 \section{Linked Data}
@@ -935,7 +935,7 @@ Linked Data~\cite{bernerslee2006linkeddata}
 defines a~set of agreed-on best practices and
 principles for interconnecting and publishing
 structured data on the Web.
-It uses Web technologies like HTTP~\cite{fielding1999http}
+It uses Web technologies like the Hypertext Transfer Protocol~(HTTP~,~\cite{fielding1999http})
 and URIs~\cite{bernerslee2005uri}
 to create typed links between different sources.
 The portal \url{http://linkeddata.org/} (accessed July 15, 2013)
@@ -954,7 +954,7 @@ Tim Berners-Lee defines the four rules for Linked Data in a~W3C Design Issue~\ci
   \item Use URIs as names for things.
   \item Use HTTP URIs so that people can look up those names.
   \item When someone looks up a~URI, provide useful information,
-        using the standards (RDF*, SPARQL).
+        using the standards (RDF, SPARQL).
   \item Include links to other URIs,
         so that they can discover more things.
 \end{enumerate}
@@ -1009,9 +1009,9 @@ in~\cite{bizer2011statelodcloud}.
 The latest LOD cloud diagram as of September 2011 can be seen in \autoref{fig:lod-cloud}.
 
 \begin{figure}[!ht]
-\centering  \includegraphics[height=0.8\textheight,keepaspectratio]{lod-cloud.png}    
+\centering  \includegraphics[height=0.8\textheight,keepaspectratio]{lod-cloud.png}
   \caption[Linking Open Data cloud diagram as of September 2011]
-  {Linking Open Data cloud diagram as of September 2011, by Richard Cyganiak and Anja Jentzsch \url{http://lod-cloud.net/} (accessed July 15, 2013) \todo{Check final orientation}}    
+  {Linking Open Data cloud diagram as of September 2011, by Richard Cyganiak and Anja Jentzsch \url{http://lod-cloud.net/} (accessed July 15, 2013) \todo{Check final orientation}}
   \label{fig:lod-cloud}
 \end{figure}
 
