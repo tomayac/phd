@@ -56,6 +56,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T5,T2A,T1]{fontenc}
 
+\usepackage{currvita}
+\usepackage{csquotes}
 \usepackage{amssymb}
 \usepackage[pdftex]{graphicx} % for improved inclusion of graphics
 %\usepackage{wrapfig} % to include figure with text wrapping around it
