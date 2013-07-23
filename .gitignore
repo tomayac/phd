@@ -20,3 +20,5 @@
 .texpadtmp
 .git
 .DS_Store
+*.bcf
+*.run.xml
