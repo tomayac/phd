@@ -20,9 +20,6 @@
 % An macro that you may use frequently is the figuremacro (see introduction.tex)
 \include{Latex/Macros/MacroFile1}
 
-\nobibliography{backmatter/references}
-\bibliographystyle{plainnat}
-
 %: ----------------------------------------------------------------------
 %:                  TITLE PAGE: name, degree,..
 % ----------------------------------------------------------------------
@@ -86,6 +83,10 @@
 %: --------------------------------------------------------------
 %:                  FRONT MATTER: dedications, abstract,..
 % --------------------------------------------------------------
+
+\addbibresource{backmatter/references}
+\DeclareBibliographyCategory{onlyfullcite}
+\newcommand\onlyfullcite[1]{\fullcite{#1}\addtocategory{onlyfullcite}{#1}}
 
 \begin{document}
 
@@ -221,7 +222,7 @@
 \begin{multicols}{2} % \begin{multicols}{ # columns}[ header text][ space]
 \begin{tiny} % tiny(5) < scriptsize(7) < footnotesize(8) < small (9)
 
-\bibliographystyle{Latex/Classes/PhDbiblio-url2} % Title is link if provided
+%\bibliographystyle{Latex/Classes/PhDbiblio-url2} % Title is link if provided
 % --------------------------------------------------------------
 % Various bibliography styles exit. Replace above style as desired.
 
