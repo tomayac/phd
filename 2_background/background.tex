@@ -77,7 +77,6 @@ by Sir Tim Berners-Lee,
 in a~May 2001 article co-published with James Hendler
 and Ora Lassila
 in the Scientific American~\cite{bernerslee2001semanticweb}.
-Therein, the authors write:
 
 \begin{quotation}
 \textit{``The Semantic Web will bring structure to the meaningful
@@ -161,6 +160,7 @@ the meaning of the columns in
 \autoref{tab:sample-table-structured-data} is clear:
 
 \begin{small_itemize}
+  \small
   \item[] P = matches \textbf{P}layed
   \item[] W = \textbf{W}ins
   \item[] D = \textbf{D}raws
@@ -558,9 +558,8 @@ represented by a~URI (for example, mammal by
 with different terms in different languages
 (like, for example, Säugetier, mammal, or nisäkkäät).
 Everyone can extend the set of concepts
-simply by creating a~URI on the Web.
-This form of knowledge representation
-is used by the Resource Description Framework.
+simply by creating a~URI on the Web,
+which is exploited by RDF.
 
 \subsection{Important RDF Serialization Syntaxes}
 
@@ -642,6 +641,7 @@ and the encoding is 7-bit US-ASCII
 \autoref{code:ntriples-syntax} shows the previously
 introduced sample graph serialized in N-Triples.
 
+\pagebreak
 \begin{lstlisting}[caption={Sample graph in N-Triples syntax},
   label={code:ntriples-syntax}]
 _:1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
@@ -694,6 +694,7 @@ introduced sample graph serialized in Notation3,
 which, given the present trivial example,
 is syntactically equal to Turtle.
 
+\pagebreak
 \begin{lstlisting}[caption={Sample graph in Notation3 syntax},
   label={code:notation3-syntax}]
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -760,7 +761,7 @@ The concrete attributes are as follows.
 
 An additional simplified subset of RDFa is RDFa Lite~\cite{sporny2012rdfaalite}, which is aligned with Microdata.
 \autoref{code:rdfa-syntax} shows the previously introduced
-sample graph serialized in RDFa.
+sample graph in RDFa.
 
 \begin{lstlisting}[caption={Sample graph in RDFa syntax},
   label={code:rdfa-syntax}]
@@ -781,8 +782,6 @@ SPARQL Protocol and RDF Query Language.
 The SPARQL specification~\cite{prudhommeaux2008sparql}
 defines the syntax and semantics
 of the SPARQL query language for RDF.
-RDF~\cite{klyne2004rdf} is a~directed, labeled
-graph data format for representing information on the Web.
 SPARQL can be used to express queries
 across diverse data sources,
 whether the data is stored natively as RDF,
@@ -846,8 +845,7 @@ to be of type \texttt{foaf:Person}~\cite{brickley2010foaf},
 whose name and email address are the values
 of the triples with the predicates \texttt{foaf:name}
 and \texttt{foaf:mbox} respectively.
-While this sounds like a~very powerful idea,
-in practice SPARQL endpoints
+However, in practice SPARQL endpoints
 like the DBpedia SPARQL
 endpoint\footnote{\url{http://dbpedia.org/sparql}, accessed July 15, 2013}
 typically only allow for querying a~local graph
@@ -856,6 +854,8 @@ for performance reasons.
 \subsection{Different SPARQL Query Variations}
 
 The SPARQL Query Language currently specifies four different query variants, which we will list in the following.
+Each query variant is accompanied by a~basic example query
+with the particular result.
 
 \subsubsection{SELECT}
 
@@ -881,7 +881,7 @@ a~simple \texttt{true} or \texttt{false} result
 for a~query on a~SPARQL endpoint.
 No information is returned about the possible query solutions,
 just whether or not a~solution exists.
-An example query with a~sample response is given below:\\
+An example \texttt{ASK} query with a~sample response is given below:\\
 
 \noindent Given the RDF graph in \autoref{fig:sample-rdf-graph}
 and the following SPARQL \texttt{ASK} query:\\
@@ -906,6 +906,9 @@ each query solution in the solution sequence,
 substituting for the variables in the graph template,
 and combining the resulting triples into
 a~single RDF graph by set union.
+If any such instantiation produces a~triple
+containing an unbound variable or an illegal RDF construct,
+then that triple is not included in the output RDF graph.
 An example query is given below.\\
 
 \noindent Given the following RDF graph,
