@@ -1,0 +1,31 @@
+(i) Mobile devices and social networks are omnipresent
+
+Mobile devices such as smartphones, tablets, or digital cameras together with social networks enable people to create, share, and consume enormous amounts of media items like videos or photos both on the road or at home. Such mobile devices—by pure definition—accompany their owners almost wherever they may go. In consequence, mobile devices are omnipresent at all sorts of events to capture noteworthy moments. Exemplary events can be keynote speeches at conferences, music concerts in stadiums, or even natural catastrophes like earthquakes that affect whole areas or countries. At such events—given a stable network connection—part of the event-related media items are published on social networks both as the event happens or afterwards, once a stable network connection has been established again.
+
+(ii) Finding representative media items for an event is hard
+
+Common media item search operations, for example, searching for the official video clip for a certain hit record on an online video platform can in the simplest case be achieved based on potentially shallow human-generated metadata or based on more profound content analysis techniques like optical character recognition, automatic speech recognition, or acoustic fingerprinting. More advanced scenarios, however, like retrieving all (or just the most representative) media items that were created at a given event with the objective of creating event summaries or media item compilations covering the event in question are hard, if not impossible, to fulfill at large scale. The main research question of this thesis can be formulated as follows.
+
+(iii) Research question
+
+"Can user-customizable media galleries that summarize given events be created solely based on textual and multimedia data from social networks?"
+
+(iv) Contributions
+
+In the context of this thesis, we have developed and evaluated a novel interactive application and related methods for media item enrichment, leveraging social networks, utilizing the Web of Data, techniques known from Content-based Image Retrieval (CBIR) and Content-based Video Retrieval (CBVR), and fine-grained media item addressing schemes like Media Fragments URIs to provide a scalable and near realtime solution to realize the abovementioned scenario of event summarization and media item compilation.
+
+(v) Methodology
+
+For any event with given event title(s), (potentially vague) event location(s), and (arbitrarily fine-grained) event date(s), our approach can be divided in the following six steps.
+
+1) Via the textual search APIs (Application Programming Interfaces) of different social networks, we retrieve a list of potentially event-relevant microposts that either contain media items directly, or that provide links to media items on external media item hosting platforms.
+
+2) Using third-party Natural Language Processing (NLP) tools, we recognize and disambiguate named entities in microposts to predetermine their relevance.
+
+3) We extract the binary media item data from social networks or media item hosting platforms and relate it to the originating microposts.
+
+4) Using CBIR and CBVR techniques, we first deduplicate exact-duplicate and near-duplicate media items and then cluster similar media items.
+
+5) We rank the deduplicated and clustered list of media items and their related microposts according to well-defined ranking criteria.
+
+6) In order to generate interactive and user-customizable media galleries that visually and audially summarize the event in question, we compile the top-$n$ ranked media items and microposts in aesthetically pleasing and functional ways.

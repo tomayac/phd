@@ -1,0 +1,31 @@
+(i) Els dispositius mòbils i les xarxes socials són omnipresents
+
+Els dispositius mòbils com telèfons intel · ligents, tauletes, o càmeres digitals, juntament amb les xarxes socials permeten als usuaris crear, compartir i consumir enormes quantitats d'elements multimèdia com vídeos o fotos, tant a la carretera o a casa. Aquests dispositius mòbils—per pura definició—acompanyen als seus propietaris gairebé allà on vagi. En conseqüència, els dispositius mòbils són omnipresents en tot tipus d'esdeveniments per capturar els moments notables. Exemples d'esdeveniments poden ser discursos en conferències, concerts de música als estadis, o fins i tot catàstrofes naturals com els terratrèmols que afecten a zones o països sencers. En aquests esdeveniments—donat una xarxa estable de connexió—part de l'esdeveniment articles relacionats amb els mitjans de comunicació es publiquen a les xarxes socials, tant com l'esdeveniment ocorre o després, una vegada que una connexió de xarxa estable s'ha establert de nou.
+
+(ii) Trobar elements multimèdia representatives per a un esdeveniment és dur
+
+Operacions de recerca d'elements comuns dels mitjans de comunicació, per exemple, buscar el videoclip oficial d'un determinat disc d'èxit en una plataforma de vídeo en línia pot, en el cas més simple pot aconseguir basant-potencial superficial metadades generats per l'home o en base a tècniques més profundes d'anàlisi de contingut com òptica reconeixement de caràcters, reconeixement automàtic de la parla, o fingerprinting acústic. Els escenaris més avançats, però, com la recuperació de tots (o només els més representatius) els elements multimèdia que s'han creat en un esdeveniment determinat amb l'objectiu de crear resums d'esdeveniments o mitjans compilacions d'elements que cobreixen l'esdeveniment en qüestió és difícil, si no impossible, de complir a gran escala. La principal pregunta de recerca d'aquesta tesi es pot formular de la següent manera.
+
+(iii) Problema d'investigació
+
+"Els esdeveniments poden galeries mitjans personalitzables per l'usuari que resumeixen donat crear únicament sobre la base de dades de text i multimèdia de les xarxes socials?"
+
+(iv) Les aportacions
+
+En el context d'aquesta tesi, s'han desenvolupat i avaluat una nova aplicació interactiva i mètodes relacionats per l'element d'enriquiment dels mitjans de comunicació, aprofitant les xarxes socials, la utilització de la web de les dades, les tècniques conegudes de Recuperació d'Imatges basat en contingut (CBIR) i vídeo basat en contingut Recuperació (CBVR) i de gra fi element multimèdia esquemes de direccionament, com Fragments de Mitjans URI per proporcionar una solució escalable en temps real i proper a adonar-se de la situació del resum d'esdeveniments i compilació element multimèdia esmentada.
+
+(v) Metodologia
+
+En qualsevol cas, amb el títol de determinat esdeveniment (s), (possiblement vaga) lloc de l'esdeveniment (s), i (arbitràriament de gra fi) Data de l'esdeveniment (s), el nostre enfocament es pot dividir en els següents sis passos.
+
+1) A través de la recerca textual APIs (Interfícies de Programació d'Aplicacions) de les diferents xarxes socials, es recupera una llista de potencialment microposts esdeveniments rellevants que o bé contenen elements multimèdia directament o que proporcionen enllaços a articles sobre el tema de mitjans de comunicació externa plataformes d'allotjament.
+
+2) L'ús d'eines de Processament de Llenguatge Natural de tercers (NLP), reconeixem i eliminar l'ambigüitat de les entitats nomenades en microposts a predeterminar la seva rellevància.
+
+3) Extraiem les dades dels elements de comunicació binaris de les xarxes socials o mitjans element plataformes de hosting i relacionar-lo amb els microposts originàries.
+
+4) Ús de CBIR i tècniques CBVR, primer deduplicar elements multimèdia exactes duplicats i gairebé duplicats i després els mitjans de comunicació de clúster articles similars.
+
+5) Ens situem la llista de deduplicació i agrupada dels elements multimèdia i els seus microposts relacionats d'acord amb criteris de classificació ben definits.
+
+6) Per tal de generar galeries de mitjans interactius i personalitzables per l'usuari que visualment i audially resumir l'esdeveniment en qüestió, compilem els articles més $ n $ mitjans qualificació i microposts en estèticament agradable i funcional maneres.
