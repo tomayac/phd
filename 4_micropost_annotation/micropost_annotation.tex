@@ -723,8 +723,7 @@ This enables
 (fighting the cause) or
 (ii) to correct the concrete error in an RDF annotation
 (fighting the symptom), and
-(iii) to judge the trustworthiness and quality of a~dataset,
-which represents the most important reason.
+(iii) most importantly, to judge the trustworthiness and quality of a~dataset.
 
 In order to track the contributions of the various sources,
 we have opted to use the Provenance
@@ -747,7 +746,7 @@ accessed July 15, 2013}
 Triplify,\footnote{\url{http://triplify.org/Overview},
 accessed July 15, 2013}
 and D2R
-Server.\footnote{\texttt{http://wifo5-03.informatik.uni-mannheim.de/bizer/d2r-server/publishing/},
+Server.\footnote{\texttt{http://wifo5-03.informatik.uni-mannheim.de/bizer/d2r-server/},
 accessed July 15, 2013}
 
 While our wrapper API supports two output formats
@@ -945,16 +944,18 @@ is of crucial importance,
 especially given the network effect which is one of the
 Linked Data benefits.
 The generated triples are very verbose,
-and in consequence stating even simple facts like
+and in consequence stating even relatively simple facts like
 that a~combined result is based on two separate sub-results
 takes up a~lot of space.
 The verbosity is mainly due to the used vocabularies,
-the Provenance Vocabulary and the HTTP Vocabulary in RDF.
+namely the Provenance Vocabulary and the HTTP Vocabulary in RDF,
+which on the one hand is good as it encourages vocabulary reuse,
+but on the other hand comes at the abovementioned expenses.
 
 Future work will focus on exploring ways
 to drastically simplify the annotations in order to obtain
 less verbose provenance descriptions.
-While it is always easier to come up with a~specialized vocabulary
+While it is always easier to propose a~specialized vocabulary
 that does one task well, broader reuse and acceptance
 can be gained by reusing existing vocabularies.
 
