@@ -83,10 +83,10 @@ under the terms of the Apache~2.0 license at
 
 Shortly after the celebrity news website TMZ
 broke the premature news that the King of Pop \emph{Michael Jackson}~(MJ) had died,%
-\footnote{MJ dead: \url{http://www.tmz.com/2009/06/25/michael-jackson-dies-death-dead-cardiac-arrest/},
+\footnote{\url{http://www.tmz.com/2009/06/25/michael-jackson-dies-death-dead-cardiac-arrest/},
 accessed July 15, 2013}
 the Internet slowed down.%
-\footnote{Internet slow-down: \url{http://news.bbc.co.uk/2/hi/technology/8120324.stm},
+\footnote{\url{http://news.bbc.co.uk/2/hi/technology/8120324.stm},
 accessed July 15, 2013}
 Initially, Wikipedia's website administrators started noting abnormal load spikes~%
 \cite{vibber2009currentevents}. Shortly afterwards, caching issues
@@ -98,7 +98,7 @@ and the circumstances of the (at the time) officially still unconfirmed fatality
 While Wikipedia engineers have worked hard
 to ensure that future load spikes
 do not take the site down again, there is without dispute a~lot of research potential
-in analyzing such editing activity.
+in analyzing editing activity.
 
 \subsection{Hypotheses and Research Questions}
 \label{sec:hypotheses-and-research-questions}
@@ -135,7 +135,7 @@ We are led by the following hypotheses.
 
 In this chapter, we do not answer all research questions yet,
 however, lay the foundation stone for future research in this area
-by introducing the \emph{Wikipedia Live Monitor} application.
+by introducing \emph{Wikipedia Live Monitor}.
 
 \section{Related Work}
 
@@ -150,8 +150,7 @@ at some specific time and place.''}
 Classic streaming analysis of social network microposts so far has been mainly
 focused on Twitter, a~microblogging social network that provides access
 to a~sampled stream of generated microposts by means of its Streaming API.%
-\footnote{Twitter Streaming API:
-\url{https://dev.twitter.com/docs/api/1.1/get/statuses/sample},
+\footnote{\url{https://dev.twitter.com/docs/api/1.1/get/statuses/sample},
 accessed July 15, 2013}
 Petrovi\'{c} \emph{et~al.}\ explain~\cite{petrovic2010streamingfirststory}:
 \textit{``in the streaming model of computation,
@@ -166,8 +165,7 @@ The task of linking news events with social media is covered by Tsagkias
 With our work, we stand on the shoulders\footnote{Hence the title of the publication related to this chapter}
 of Osborne \emph{et~al.}\ %
 \cite{osborne2012bieber}, who use Wikipedia page view statistics%
-\footnote{Page view statistics for Wikimedia projects:
-\url{http://dumps.wikimedia.org/other/pagecounts-raw/},
+\footnote{\url{http://dumps.wikimedia.org/other/pagecounts-raw/},
 accessed July 15, 2013}
 as a~means to filter spurious events
 stemming from event detection over social network streams.
@@ -218,12 +216,12 @@ on different language versions of Wikipedia.
 In the current implementation, we monitor \emph{all}
 285 different Wikipedias, 8 with
 $\geq$~1,000,000 and 38 with $\geq$~100,000 articles%
-\footnote{List of Wikipedias by size: \url{http://meta.wikimedia.org/wiki/List_of_Wikipedias},
+\footnote{\url{http://meta.wikimedia.org/wiki/List_of_Wikipedias},
 accessed July 15, 2013}
 including a~long-tail of smaller Wikipedias.
 Changes to any single one article are communicated by a~chat bot
 over Wikipedia's own Internet Relay Chat~(IRC) server (\url{irc.wikimedia.org}),%
-\footnote{Raw IRC feeds of recent changes: \url{http://meta.wikimedia.org/wiki/IRC/Channels\#Raw_feeds}, accessed July 15, 2013}
+\footnote{\url{http://meta.wikimedia.org/wiki/IRC/Channels\#Raw_feeds}, accessed July 15, 2013}
 so that parties interested in the data can listen to the changes as they happen.
 For each language version, there is a~specific chat room following the pattern
 \texttt{"\#" + language + ".wikipedia"}.
@@ -297,7 +295,7 @@ were \emph{determined empirically} by analyzing Wikipedia edits
 over several hours and repeatedly adjusting the settings until
 major news events happening at the same time were detected.
 The resulting dataset split into three chunks has been made publicly available.%
-\footnote{\emph{Wikipedia Live Monitor} dataset: \url{https://www.dropbox.com/sh/2qsg1zhb8p35fxf/Dghn55y0kh},
+\footnote{\url{https://www.dropbox.com/sh/2qsg1zhb8p35fxf/Dghn55y0kh},
 accessed July 15, 2013}
 
 \subsection{Social Network Plausibility Checks}
@@ -333,11 +331,11 @@ to minimize overhead and maximize scalability.
 \emph{Wikipedia Live Monitor} application.
 The actual implementation is based on
 Martyn Smith's Node.js IRC library%
-\footnote{Node.js IRC library: \url{https://github.com/martynsmith/node-irc},
+\footnote{\url{https://github.com/martynsmith/node-irc},
 accessed July 15, 2013} and
 the WebSockets API and protocol~\cite{hickson2012websockets},
 wrapped by  Guillermo Rauch's library Socket.IO.%
-\footnote{Socket.IO library: \url{http://socket.io/},
+\footnote{\url{http://socket.io/},
 accessed July 15, 2013}
 
 
@@ -347,9 +345,7 @@ accessed July 15, 2013}
 §\textbf{Input: irc, listening on Wikipedia recent changes}§
 §\textbf{Output: breakingNewsCandidates, breaking news candidates}§
 
-monitoringLoop = {}
-articleClusters = {}
-breakingNewsCandidates = {}
+monitoringLoop = articleClusters = breakingNewsCandidates = {}
 
 §\textit{\# Event loop 1:}§
 §\textit{\# When a new message arrives}§
@@ -430,28 +426,28 @@ followed by more consistent thorough edits.
 The (at time of writing) recent breaking news event
 of the resignation of \emph{Pope Benedict~XVI} helps respond to (Q1).
 The three first edit times of the Pope's English Wikipedia article%
-\footnote{Edit history en: \url{http://en.wikipedia.org/w/index.php?title=Pope_Benedict_XVI&action=history},
+\footnote{\url{http://en.wikipedia.org/w/index.php?title=Pope_Benedict_XVI&action=history},
 accessed July 15, 2013}
 after the news broke on February 11, 2013 are as follows
 (all times in UTC): 10:58, 10:59, 11:02.
 The edit times of the French article%
-\footnote{Edit history fr: \url{http://fr.wikipedia.org/w/index.php?title=Beno\%C3\%AEt_XVI&action=history}, accessed July 15, 2013}
+\footnote{\url{http://fr.wikipedia.org/w/index.php?title=Beno\%C3\%AEt_XVI&action=history}, accessed July 15, 2013}
 are as follows: 11:00, 11:00, 11:01.
 This implies that by looking at only two language versions of Wikipedia
 (the actual number of monitored versions is 285) of the Pope article,
 the system would have reported the news at 11:01.
 The official Twitter account of Reuters announced%
-\footnote{Reuters announces Pope resignation: \url{https://twitter.com/Reuters/status/300922108811284480},
+\footnote{\url{https://twitter.com/Reuters/status/300922108811284480},
 accessed July 15, 2013} the news at 10:59.
 Vatican Radio's announcement%
-\footnote{Vatican Radio announces Pope resignation: \url{http://de.radiovaticana.va/Articolo.asp?c=663810},
+\footnote{\url{http://de.radiovaticana.va/Articolo.asp?c=663810},
 accessed July 15, 2013} was made at 10:57:47.
 
 Not all breaking news events have the same global impact as the Pope's resignation,
 however, the proposed system was shown to work very reliably
 also for smaller events of more regional impact, for example,
 when \emph{Indian singer Varsha Bhosle} committed suicide%
-\footnote{Varsha Bhosle suicide: \url{http://en.wikipedia.org/wiki/Varsha_Bhosle},
+\footnote{\url{http://en.wikipedia.org/wiki/Varsha_Bhosle},
 accessed July 15, 2013} on October 8, 2012.
 A~systematic evaluation of (Q1)~compulsorily can only be done by random samples,
 which has turned out positive results so far.
@@ -464,12 +460,12 @@ Regarding \emph{Wikipedia Live Monitor}'s scalability,
 we already scale the monitoring system
 up to currently \emph{all} 285~Wikipedias on a~standard consumer laptop
 (mid-2010 MacBook Pro, 2.66~GHz Intel Core~2, 8~GB RAM),
-which once more proves the efficiency of the Node.js architecture
+which proves the efficiency of the Node.js architecture
 for this kind of event-driven applications.
-In practice, however, the majority of the smaller Wikipedias
+In practice, the majority of the smaller Wikipedias
 being very rarely updated,
-we note that limiting ourselves to just the Wikipedias
-with $\geq$~100,000 articles would have no remarkable loss of recall.
+we note that limiting ourselves to the Wikipedias
+with $\geq$~100,000 articles results in no remarkable loss of recall.
 
 \section{Future Work}
 
