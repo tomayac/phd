@@ -110,6 +110,8 @@ to compute basic or advanced trends, for example,
 by ranking the most discussed named entities per day,
 or by pivoting named entities by Web analytics data,
 like users' geographic locations.
+We remark that the shared data is completely anonymized
+and cannot be traced back to the originating social network users.
 
 \begin{figure}[!ht]
   \centering
@@ -179,7 +181,7 @@ If there are more than one matching synsets,
 the tags' and their context tags' similarity is computed
 to decide on an already existing tag URI.
 
-\subsection[Named Entity Disambiguation with Semantic Coherence]{Named Entity Disambiguation with Semantic Coherence and News Trends}
+\subsection[Named Entity Disambiguation Using Semantic Coherence]{Named Entity Disambiguation Using Semantic Coherence and News Trends}
 
 In~\cite{fernandez2007identityrank},
 Fernández \emph{et~al.}\ examine named entity disambiguation
@@ -200,20 +202,20 @@ and second, the occurrences of candidate entities
 in past articles in the same categories
 in order to find semantic coherences.
 
-\subsection{Named Entity Disambiguation with Disambiguation Dictionaries}
+\subsection{Named Entity Disambiguation Using Disambiguation Dictionaries}
 
 In~\cite{nguyen2008namedentity},
 Nguyen \emph{et~al.}\ show how disambiguation dictionaries
-can be used to disambiguate entities
+can be used to disambiguate named entities
 using Wikipedia disambiguation pages.
-For a~set of entity candidates, all disambiguations are ranked
+For a~set of named entity candidates, all disambiguations are ranked
 using tf-idf (or cosine similarity)~\cite{manning2008ir}.
 The approach is a~hybrid and incremental process
 that utilizes previously identified named entities
-and related terms co-occurring with ambiguous names
-in a~text for entity disambiguation.
+and related terms that  co-occur with ambiguous names
+in a~text for the purpose of entity disambiguation.
 
-\subsection{Disambiguation with Corpuses and Probability}
+\subsection{Disambiguation Using Corpuses and Probability}
 
 Cucerzan shows in~\cite{cucerzan2007largescale}
 the use of a~corpus like Wikipedia for entity disambiguation.
@@ -225,7 +227,7 @@ This happens through a~process of heuristically maximizing
 the agreement between contextual information
 extracted from Wikipedia and the context of a~document.
 
-\subsection{Disambiguation With Search Query Logs}
+\subsection{Disambiguation Using Search Query Logs}
 
 In~\cite{billerbeck2010rankingentities}, Billerbeck \emph{et~al.}\ use
 click graphs and session graphs
@@ -367,7 +369,7 @@ entities link to other data sources in the
 LOD cloud~\cite{bizer2011statelodcloud,cyganiak2011lodcloud}.
 In order to discover links to the LOD cloud,
 each returned entity URL has to be retrieved at the expense
-of an HTTP request and the returned RDF has to be checked
+of an HTTP request and the returned RDF checked
 for said links.
 
 \subsubsection{AlchemyAPI}
@@ -454,8 +456,8 @@ We use the Google Translate
 API,\footnote{\url{https://developers.google.com/translate/v2/getting_started},
 accessed July 15, 2013}
 which, if the source language parameter is left blank,
-tries to first detect the source language,
-and subsequently translates the micropost to English.
+tries to first detect the source language
+before translating to English.
 
 \subsection{Part-of-Speech Tagging}
 \label{sec:part-of-speech-tagging}
@@ -496,13 +498,13 @@ From the considered services, only OpenCalais returns data in its
 own namespace (\url{http://d.opencalais.com/*}), which is
 interlinked with other datasets in the LOD cloud,
 however, not in all cases.
-In contrast, all other services return results either directly
+All other services return results either directly
 in the DBpedia namespace (\url{http://dbpedia.org/resource/*}),
-as in the case of DBpedia Spotlight,
-or in the DBpedia namespace together with other
-well interlinked LOD cloud dataset namespaces like Freebase
-(\url{http://rdf.freebase.com/rdf/*}) in the cases of
-AlchemyAPI and Zemanta.
+as in the case of DBpedia Spotlight.
+Alternatively, AlchemyAPI and Zemanta return results
+in the DBpedia namespace together with
+namespaces like Freebase
+(\url{http://rdf.freebase.com/rdf/*}).
 
 In order to address the problem of different namespaces in results,
 an approach as presented by Glaser \emph{et~al.}\
