@@ -102,9 +102,8 @@ and \emph{Web scraping}.
        and the related concept of \emph{screen scraping}
        is that screen scraping relies on the visual layout of a~Web page,
        while Web scraping relies on the textual
-       and/or hierarchical structure of Web pages.
+       and/or hierarchical structure.
 \end{description}
-
 
 \section{Related Work}
 
@@ -132,7 +131,7 @@ Becker \emph{et~al.}\ show in~\cite{becker2010eventidentification}
 how to exploit the rich context associated with social media
 content, including user-provided annotations
 and automatically generated information.
-Using this rich context, they define document similarity metrics
+Using this rich context, they define similarity metrics
 to enable online clustering of media to events.
 In~\cite{becker2012plannedevents}, the same authors develop
 recall-oriented query formulation strategies
@@ -167,9 +166,17 @@ so that not all desired pieces of information is exposed
 (\emph{e.g.}, view counts with Img.ly),
 which forces people interested in that data
 to fall back to Web scraping.
-It is to be noted that Web scraping \emph{per~se}
-is not an illegal practice, as only public information is being accessed,
+It is to be noted that if the directives in the 
+\texttt{robots.txt} file are respected,
+Web scraping \emph{per~se} is not an illegal practice,
+as only public information is being accessed,
 comparable to the level of access that common Web search engines have.
+The Robot Exclusion Standard,
+also referred to as \texttt{robots.txt} protocol,
+is a~widely respected convention to prevent cooperating Web crawlers
+and other Web robots
+from accessing all or part of a~website
+that is otherwise publicly viewable.
 
 \begin{figure}[!ht]
   \centering
@@ -189,8 +196,8 @@ that we have developed as an abstraction layer on top of the native
 data formats used by the considered social networks.
 We then explain the architecture
 of different kinds of media item extractors.
-Finally, we describe the various processing steps
-that we apply to each collected media item.
+Finally, we describe the processing steps
+that we apply to each extracted media item.
 
 \subsection{Abstraction Layer Data Format}
 \label{sec:data-format}
@@ -199,19 +206,16 @@ Each social network uses a~different data representation schema.
 While all social networks with API access are
 JSON-based~\cite{crockford2006json}, the differences in both
 supported social network features and media item support level,
-outlined in detail in
+as was outlined in detail in
 \autoref{sec:description-of-popular-social-networks} and
 \autoref{sec:classification-of-social-networks},
 are also reflected in the returned JSON data.
 We therefore propose a~common abstraction layer
 on top of the native data formats of all considered social networks.
-This abstraction layer is outlined in \autoref{tab:platforms}
-and allows us to gain
-an agnostic view on the underlying social networks.
-It's in the nature of any abstraction
+It is in the nature of any abstraction
 that it can only represent the
 greatest common divisor of all social networks.
-We explain the abstraction layer in the following
+We show the abstraction layer in the following
 with the help of a~concrete example,
 stemming from a~query to the media extractor
 that will be explained in more detail
@@ -221,10 +225,10 @@ that match the search term \emph{hamburg}.
 \autoref{code:facebook} shows sample output of the media extractor
 for a~Facebook post, which was processed
 with named entity extraction and disambiguation
-as detailed in \autoref{cha:micropost-annotation}.
-Below, we explain the data format of our media extractor.
+as was detailed in \autoref{cha:micropost-annotation}.
 
 \begin{description}
+  \itemsep0em
   \item[\texttt{mediaUrl}] Deep link to a~media item
   \item[\texttt{posterUrl}] Deep link to a~thumbnail for photos
     or still frame for videos
