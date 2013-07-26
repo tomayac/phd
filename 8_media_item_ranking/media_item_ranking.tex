@@ -34,9 +34,13 @@ allows us to propose more adequate social media item ranking mechanisms.
 In this section, we describe several criteria that can serve to rank
 media items retrieved from social networks.
 We base these criteria on the information available via
-the media item extractors described in \autoref{cha:media-item-extraction},
-which, given event-related search terms,
-extract raw binary media items and associated microposts
+the media item extractors 
+described in \autoref{cha:media-item-extraction} and
+the deduplication and clustering algorithm
+described in \autoref{cha:media-item-deduplication}.
+Given event-related search terms,
+via these approaches, we extract raw binary media items and associated textual microposts and detected named entities as described in 
+\autoref{cha:micropost-annotation}
 from multiple social networks.
 
 \paragraph{Textual Ranking Criteria:}
@@ -51,7 +55,7 @@ We have described micropost annotation in detail in \autoref{cha:micropost-annot
 
 This category regards the contents of photos and videos.
 We distinguish \emph{low-} and \emph{high-level} visual ranking criteria.
-High-level criteria include among others logo detection,
+High-level criteria include logo detection,
 face recognition, and camera shot separation.
 Low-level criteria include file size, resolution,
 duration of a~video, geolocation, time, and more.
@@ -71,11 +75,8 @@ Through audio transcription, speech can be treated as textual feature.
 
 This category regards social network effects like shares, mentions,
 view counts, expressions of (dis)likes, user diversity, \emph{etc.}
-Prior work~\cite{khrouf2012aggregatingsocialmedia}
-allows us to not only examine these effects
-on a~\emph{single} social network,
-but in a~network-agnostic way across \emph{multiple} social networks.
-We will detail social aspects more later on in this chapter.
+in a~network-agnostic way across \emph{multiple} social networks.
+We will detail social aspects later in this chapter.
 
 \paragraph{Aesthetic Ranking Criteria:}
 
@@ -244,7 +245,7 @@ a~set of media clusters that match a~given query.
 In the ranking formula, we consider several well-defined ranking criteria
 that were detailed in~\cite{steiner2012definingaesthetic},
 namely visual, audial, textual, temporal, social, and aesthetic.
-For a~given set of media item clusters, a~ranking is calculated as follows.
+For a~given set of media item clusters, a~ranking is calculated as shown in the formula below.
 
 \begin{gather}\label{eq:rankingformula}
   \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
@@ -360,7 +361,8 @@ Mercedes-Benz, Disney’s Oz Great and Powerful movie, Lincoln, and Audi.
 While (at time of writing) no separate statistics are available
 for the video hosting platform YouTube,
 Google's blog post mentions that searches for Gangnam Style were trending on YouTube,
-along with searches for big game performers Alicia Keys and Beyoncé.
+along with searches for big game performers
+in form of the artists Alicia Keys and Beyoncé.
 
 \subsection{Expected Super Bowl Media Items}
 
@@ -370,14 +372,14 @@ we expect to see media items
 on at least the following topics (in no particular order)
 in our own ranked media item set.
 
-\begin{itemize}
-  \itemsep0em
-  \item the power outage
-  \item the performances of Beyoncé and Alicia Keys
-  \item the advertisements
-  \item the match itself from people at the stadium
-  \item the Super Bowl watchers around the world
-\end{itemize}
+\begin{small_itemize}
+  \small
+  \item[] the power outage
+  \item[] the performances of Beyoncé and Alicia Keys
+  \item[] the advertisements
+  \item[] the match itself from people at the stadium
+  \item[] the Super Bowl watchers around the world
+\end{small_itemize}
 
 \autoref{fig:loose_order} and \autoref{fig:strict_order} show media items
 for the search bundle \emph{49ers} and \emph{Baltimore Ravens} arranged
