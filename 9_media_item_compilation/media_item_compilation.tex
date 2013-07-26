@@ -74,7 +74,8 @@ Nowadays, many domain-specific methods already exhibit good accuracy,
 for example, in the sports domain~\cite{li2001sportsvideo,li2010americanfootball}. However, the challenge is to find methods that are content-agnostic.
 Methods that exploit semantic information~(\emph{e.g.},~\cite{chen2009videosummarization})
 will likely provide high-quality results in the future,
-but today's most relevant summaries are produced by user interaction~\cite{olsen2011videosummarization}.
+but today's most relevant summaries are produced by
+manual user interaction~\cite{olsen2011videosummarization}.
 
 \section{Media Gallery Aesthetics}
 
@@ -116,8 +117,6 @@ A schematic media gallery at $t_x$ can be seen in \autoref{fig:media-gallery}.
 
 \paragraph{Audial aesthetics:}
 
-We recall the purpose of our media galleries:
-to illustrate an event and its atmosphere.
 Audial aesthetics thus consist of aspects like volume level normalization,
 avoiding multiple videos playing music in parallel, smooth transitions, \emph{etc.}
 We remark that through selective mixing of audio tracks
@@ -135,9 +134,9 @@ In order to avoid cognitive overload of viewers,
 the number of visible (moving) media items
 at a~time should be limited.
 We will treat this topic in more detail in \autoref{sec:user-studies}.
-Depending on the event, a~consistent or a~contrast-rich overall
-appearance of items may be desired,
-this also applies to transitions.
+Depending on the event,
+a~consistent or a~contrast-rich overall
+appearance and transitions of items may be desired.
 
 \section{Motivation for Automated Media Gallery Generation}
 \label{sec:motivation-chapter-8}
@@ -188,6 +187,13 @@ as the media item formats are predictably the same,
 at the cost of having to decide where to crop.
 Different algorithms (\emph{e.g.},~\cite{suh2003thumbnail})
 beyond this chapter's scope exist to aid this decision.
+Common cropping heuristics include
+maximizing the number of included faces,
+focusing on the detected center of the media item,
+or cropping at detected background areas.
+
+
+\paragraph{Terminology:}
 
 We use the following terminology.
 A~media gallery is called \emph{balanced} if its shape is rectangular,
@@ -372,7 +378,7 @@ can be seen in \autoref{fig:occupygezidump}.
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=1\columnwidth]{occupygezidump.png}
+  \includegraphics[width=0.9\columnwidth]{occupygezidump.png}
   \caption{Downloadable media gallery with provenance data}
   \label{fig:occupygezidump}
 \end{figure}
@@ -415,7 +421,8 @@ in a~black-and-white variant and blurred, in order to put the maximum emphasis
 to the currently focused media item.
 \autoref{fig:interactive-media-gallery} shows three steps of the described transitions and
 \autoref{fig:occupygezi1} shows the final state after the transition.
-A~screencast of the whole animation is available online at \url{https://vine.co/v/bT7eiwjE6DQ} (accessed July 15, 2013).
+A~short screencast of the whole animation is available online
+at the URL \url{https://vine.co/v/bT7eiwjE6DQ} (accessed July 15, 2013).
 
 \begin{figure}[!ht]
   \centering
@@ -478,8 +485,7 @@ that was described earlier in \autoref{sec:from-debug-output-to-story}.
 \section{Social Media Illustrator}
 \label{sec:socialmediaillustrator}
 
-Media galleries that summarize given events
-can be generated following the steps described in the previous chapters,
+Media galleries can be generated following the steps described in the previous chapters,
 starting with micropost annotation (\autoref{cha:micropost-annotation}),
 followed by event detection (\autoref{cha:eventdetection}),
 continuing with media item extraction
@@ -493,7 +499,7 @@ We have developed an application called \emph{Social Media Illustrator}
 for the automated generation of
 media galleries that visually and audially summarize events
 based on media items like videos and photos from multiple social networks.
-The application is publicly available at the URL
+The application is publicly available at
 \url{http://social-media-illustrator.herokuapp.com/} (accessed July 15, 2013).
 \emph{Social Media Illustrator} implements all the abovementioned steps
 and is a~start-to-end solution tailored to both
@@ -550,7 +556,7 @@ Changes to any of the parameters are reflected in realtime
 in the results panel below, which facilitates finding the optimal
 settings for a~given result set consisting of result bundles.
 \autoref{fig:mediaitemdeduplication} shows the deduplication debug view (see \autoref{sec:media-item-deduplication-algorithm})
-that is accessible by right-clicking two arbitrary media items.
+that is accessible by right-clicking two media items.
 
 \begin{figure}[!ht]
   \centering
@@ -615,7 +621,7 @@ Navigation from one media item to the next is possible via the arrow keys.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=1\columnwidth]{app4.png}
-  \caption[Media gallery generation based on the Loose Order, Varying Sizes style]{Media gallery generation based on the Loose Order, Varying Sizes~(LOVS) style}
+  \caption[Media gallery generation based on the Loose Order, Varying Sizes style]{Media gallery generation based on the Loose Order, Varying Sizes style}
   \label{fig:mediagallerycompilation1}
 \end{figure}
 
