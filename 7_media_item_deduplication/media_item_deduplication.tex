@@ -100,7 +100,9 @@ only consider frames at shot boundaries.
 Typical scenarios where near-duplicate videos can occur is through
 logo or subtitle insertion, resizing, re-encoding,
 or aspect-ration changes.
-Note that we do not consider video subsegments near-duplicates.
+Note that we do not consider video subsegments near-duplicates,
+so a~shortened version of an existing video is considered
+different, as a~manual processing step was involved.
 
 \paragraph{Special Case of Photo Contained in a~Video:}
 
@@ -241,7 +243,7 @@ by converting dry software debugging data to digital stories.
 
 \paragraph{Natural Language Generation:}
 
-Natural language generation is the natural language processing task
+Natural language generation is the NLP task
 of generating natural language from a~machine representation system.
 This field is covered in great detail by Reiter and Dale
 in~\cite{reiter2000building}.
@@ -263,10 +265,6 @@ In \autoref{cha:shot-boundary-detection}, we have presented an algorithm
 for on-the-fly shot boundary detection for video media items.
 In this chapter, we will show how components of this algorithm
 can be used to deduplicate photos.
-
-\subsection{Problem Statement}
-\label{sec:problem-statement}
-
 Our work is situated in the broader context of summarizing events
 based on social network data.
 In order to get an overview of a~given event based on a~\emph{potentially large} set
@@ -281,7 +279,7 @@ Undesired exact-duplicate or near-duplicate content in the context of social net
 arises in a~number of situations
 that we will illustrate in the following.
 
-\subsubsection{Duplicate Content}
+\subsection{Exact-Duplicate Content}
 \label{sec:duplicate-content}
 
 Duplicate content in the context of social networks
@@ -312,7 +310,7 @@ their media items will be similar
 and---the capturing devices' quality aside---only differ in the viewing angles.
 \autoref{fig:viewing-angle} shows a~concrete example.
 
-\begin{figure}[!ht]
+\begin{figure}[!p]
   \centering
   \subfloat[Viewing angle 1]{
     \includegraphics[height=2.7cm]{stage1.jpg}
@@ -333,16 +331,16 @@ or to claim ownership of a~media item.
 An example of caption, logo, and lower third insertion
 can be seen in \autoref{fig:logo}.
 
-\begin{figure}[!ht]
+\begin{figure}[!p]
   \centering
   \subfloat[Blank]{
-    \includegraphics[width=0.26\textwidth]{speaker1.jpg}
+    \includegraphics[width=0.28\textwidth]{speaker1.jpg}
   }
   \subfloat[Caption]{
-    \includegraphics[width=0.26\textwidth]{speaker2.jpg}
+    \includegraphics[width=0.28\textwidth]{speaker2.jpg}
   }
   \subfloat[Logo, lower third]{
-    \includegraphics[width=0.26\textwidth]{speaker3.jpg}
+    \includegraphics[width=0.28\textwidth]{speaker3.jpg}
   }
   \caption{Caption, logo, and lower third insertion for a~speaker}
   \label{fig:logo}
@@ -359,7 +357,7 @@ to obtain a~square aspect ratio
 that better fits the timeline view of users,
 as can be seen in the example in \autoref{fig:cropping}.
 
-\begin{figure}[!ht]
+\begin{figure}[!p]
   \centering
   \subfloat[Original]{
     \includegraphics[height=3cm]{kid1.jpg}
@@ -382,7 +380,7 @@ attempt to auto-select a~representative poster frame from a~video with different
 typically resulting in varying frames for different social networks.
 \autoref{fig:camera-shot} shows an example of this phenomenon.
 
-\begin{figure}[!ht]
+\begin{figure}[!p]
   \centering
   \subfloat[Frame 1]{
     \includegraphics[height=3cm]{camera1.jpg}
@@ -474,9 +472,11 @@ We use an algorithm that further improves Viola-Jones,
 based on work by Huang \emph{et~al.}\ \cite{huang2007facedetection}
 and Abramson \emph{et~al.}\ \cite{abramson2007yef}
 in a~JavaScript implementation made available by Liu~\cite{liu2012facedetection}.
-This algorithm is fast enough to be applied to hundreds of media items
+This algorithm runs in the context of a~Web browser and,
+given the relatively small size of social network media items,
+is fast enough to be applied to hundreds of media items
 in well less than a~second overall processing time on a~standard laptop
-(mid-2010 MacBook~Pro).
+(mid-2010 MacBook Pro, 2.66~GHz Intel Core~2, 8~GB RAM).
 
 \subsection{Algorithm Description}
 
@@ -496,31 +496,11 @@ the following conditions have to be fulfilled.
     We note that we do not \emph{recognize} faces, but only \emph{detect} them.
 \end{enumerate}
 
-The algorithm pseudocode can be seen in \autoref{code:clustering}.
-In the actual implementation some speed improvements,
-for example, looking up already calculated
-distances\footnote{\texttt{distances[outerItem][innerItem] =
-distances[innerItem][outerItem]}}
-have been applied;
-these were omitted in the listing for legibility reasons.
-We calculate the histograms and distances only once initially.
-The clusters are then recalculated dynamically
-whenever either $\textit{tiles\_threshold}$ or $\textit{similarity\_threshold}$ change.
-The given values of $\textit{rows} = \textit{cols} = 10$ and
-$\textit{tiles\_threshold} = 67 = \lceil \textit{rows} \cdot \textit{cols} \cdot 2/3 \rceil$
-and $\textit{similarity\_threshold} = 15$ were determined empirically
-on a~large corpus of event-related media items
-and are known to deliver solid results.
-The corpus has been made available publicly,
-see \autoref{sec:evaluation-chpater6} for the details.
-
-\begin{lstlisting}[,caption={[Simplified pseudocode of the deduplication and clustering algorithm]{Simplified pseudocode of the exact- and near-duplicate
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,caption={[Simplified pseudocode of the deduplication and clustering algorithm]{Simplified pseudocode of the exact- and near-duplicate
   media item deduplication and clustering algorithm}},
   label={code:clustering},escapechar=§]
-§\textbf{Input:}§ mediaItems, a~list of media items
-§\textbf{Output:}§ clusters, a~list of clustered media items
-
-§\textbf{init:}§
+§\textbf{Input:}§ mediaItems, a list of media items
+§\textbf{Output:}§ clusters, a list of clustered media items
 
 
 §\textit{\# Algorithm settings}§
@@ -530,17 +510,20 @@ TILES_THRESHOLD = ceil(ROWS * COLS * 2/3)
 SIMILARITY_THRESHOLD = 10
 
 
+§\textbf{init:}§
+
 §\textit{\# Calculates tile-wise histograms}§
 histograms = {}
 faces = {}
 §\textbf{for}§ item §\textbf{in}§ mediaItems
   faces[item] = getFaces(item)
-
+  
   histograms[item] = {}
   §\textbf{for}§ tile §\textbf{in}§ item
     histograms[item][tile] = getHistogram(tile)
   §\textbf{end for}§
 §\textbf{end for}§
+
 
 
 §\textit{\# Calculates tile-wise distances}§
@@ -564,7 +547,6 @@ clusters = {}
   clusters[outerItem] = []
   §\textbf{for}§ innerItem §\textbf{in}§ mediaItems
     §\textbf{if}§ outerItem == innerItem §\textbf{then}§ continue
-
     similarTiles = 0
     distance = distances[outerItem][innerItem]
     §\textbf{for}§ tile §\textbf{in}§ distance
@@ -572,7 +554,6 @@ clusters = {}
         similarTiles++
       §\textbf{end if}§
     §\textbf{end for}§
-
     §\textit{\# Check condition 1 (tiles)}§
     §\textbf{if}§ similarTiles >= TILES_THRESHOLD §\textbf{then}§
       §\textit{\# Check condition 2 (faces)}§
@@ -585,6 +566,24 @@ clusters = {}
 
 §\textbf{return}§ clusters
 \end{lstlisting}
+
+The algorithm pseudocode can be seen in \autoref{code:clustering}.
+In the actual implementation some speed improvements,
+for example, looking up already calculated
+distances\footnote{\texttt{distances[outerItem][innerItem] =
+distances[innerItem][outerItem]}}
+have been applied;
+these were omitted in the listing for legibility reasons.
+We calculate the histograms and distances only once initially.
+The clusters are then recalculated dynamically
+whenever either $\textit{tiles\_threshold}$ or $\textit{similarity\_threshold}$ change.
+The given values of $\textit{rows} = \textit{cols} = 10$ and
+$\textit{tiles\_threshold} = 67 = \lceil \textit{rows} \cdot \textit{cols} \cdot 2/3 \rceil$
+and $\textit{similarity\_threshold} = 15$ were determined empirically
+on a~large corpus of event-related media items
+and are known to deliver solid results.
+The corpus has been made available publicly,
+see \autoref{sec:evaluation-chpater6} for the details.
 
 \subsection{Experiments}
 
@@ -605,9 +604,9 @@ titled \emph{Grammy Nominations Concert
 Live},\footnote{\url{http://en.wikipedia.org/wiki/2013_Grammy_Awards},
 accessed July 15, 2013}
 during which Taylor Swift and LL~Cool~J revealed the nominees
-in several key categories, including the so-called Big Four:
+in the so-called Big Four categories
 Album, Record and Song of the Year, and Best New Artist.
-CBS suggested the hashtag \texttt{\#GRAMMYNoms} for the event.
+CBS suggested the hashtag \texttt{\#GRAMMYNoms}.
 
 \paragraph{Victoria's Secret Fashion Show 2012:}
 \label{sec:vsfashionshow}
@@ -618,7 +617,6 @@ accessed July 15, 2013} is an annual event
 sponsored by Victoria's Secret, a~brand of lingerie and sleepwear.
 The show features some of the world's leading fashion models
 and is used by the brand to promote and market its goods in high-profile settings.
-American network television broadcasts the show during prime time.
 The show is a~lavish event with elaborate costumed lingerie and
 varying music by leading entertainers
 that attracts hundreds of celebrities and entertainers,
@@ -691,11 +689,11 @@ and the high tile-wise similarity.
   \label{fig:personclose}
 \end{figure}
 
-\autoref{fig:scenecrop} shows two different views of a~stage
+\autoref{fig:scenecrop} shows two views of a~stage
 taken at slightly different times.
 The left photo covers a~detail of the scene,
 whereas the right photo covers the entire stage.
-Due to the high tile-wise similarity of the scene detail,
+Due to the tile-wise similarity of the scene detail,
 the photos are successfully clustered.
 
 \begin{figure}[!ht]
@@ -707,7 +705,7 @@ the photos are successfully clustered.
 
 \autoref{fig:lightingconditions} shows two views of a~stage
 under different lighting conditions.
-Due to the tile color tolerances and the high tile-wise similarity,
+Due to the tile color tolerances and the tile-wise similarity,
 the photos are successfully clustered.
 
 \begin{figure}[!ht]
@@ -733,7 +731,7 @@ Despite the differences, the photos are successfully clustered.
 \autoref{fig:stageperson} shows two views of the same stage,
 however, with a~different person.
 Due to the dominating tile-wise similarity of the stage tiles,
-the photos are correctly clustered.
+the photos are clustered.
 
 \begin{figure}[!ht]
   \centering
@@ -773,7 +771,7 @@ Our response to both issues is to ignore a~certain part
 of the color spectrum in the algorithm's similarity measure.
 In the concrete case, ignoring pure white and pure black correctly fixed
 the clustering in our chosen example events in all but one cases,
-without negatively impacting previously correctly formed clusters.
+without negatively impacting previously formed clusters.
 
 \begin{figure}[!ht]
   \centering
@@ -878,6 +876,12 @@ As the YouTube-generated poster frames were similar enough
 and even if the other video metadata like title and description
 were different, we were able to effectively deduplicate the videos
 with the described work-around approach.
+We note that this approach works reasonably well 
+as online videos are still relatively short,
+also given that YouTube per default has an (increasable)
+limit of 15 minutes per video.%
+\footnote{\url{https://support.google.com/youtube/answer/71673?hl=en},
+accessed July 15, 2013}
 
 \section[Describing Media Item Differences with Media Fragments URI]{Describing Media Item Differences with Media Fragments URI and Speech Synthesis}
 
@@ -1078,7 +1082,7 @@ taken by the algorithm that they were unsure about or had decided on differently
 \begin{description}
   \itemsep0em
   \item[Clustering Consent.] Two or more media items are clustered
-    by the algorithm and the human rater agrees.
+    by the algorithm and the human rater also agrees.
     The human rater wants to understand why they were clustered.
   \item[Clustering Dissent.] Two or more media items are clustered
     by the algorithm, but the human rater thinks
@@ -1150,7 +1154,7 @@ the previously defined debug scenarios \textit{Clustering Consent},
 \textit{Clustering Dissent}, and \textit{Non-Clustering Dissent}.
 This results in a~natural language generation task,
 whose three stages according to Reiter's and Dale's
-architecture~\cite{reiter2000building} will be detailed in the following.
+architecture~\cite{reiter2000building} will be detailed in the following paragraphs.
 
 \subsubsection{Generating Natural Language}
 \label{sec:text-to-speech-espeak}
@@ -1207,15 +1211,14 @@ for the music video \emph{Everybody} is represented by Quote~1.
   \item[Clustering Consent] (Quote~1). \textit{``The two media items
     are near-duplicates. Out of overall 100 tiles,
     52 from the minimum required 45 tiles
-    were similar enough to be clustered. This corresponds to 52 percent
-    of all tiles. However, 22 tiles were not considered,
+    were similar enough to be clustered.
+    However, 22 tiles were not considered,
     as they are either too bright or too dark,
     which is a~common source of clustering issues.
     Neither the left, nor the right media item contain detected faces.''}
   \item[Clustering Dissent] (Quote~2). \textit{``The two media items
     are near-duplicates. Out of overall 100 tiles,
-    41 from the minimum required 41 tiles were similar enough to be clustered.
-    This corresponds to 41 percent of all tiles.
+    41 from the minimum required 41 tiles were similar enough to be clustered.    
     However, 26 tiles were not considered, as they are either too bright
     or too dark, which is a~common source of clustering issues.
     Neither the left, nor the right media item contain detected faces.''}
