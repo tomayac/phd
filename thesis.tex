@@ -85,14 +85,6 @@
 % --------------------------------------------------------------
 
 \addbibresource{backmatter/references.bib}
-\DeclareCiteCommand{\fullcite}
-  {\usebibmacro{prenote}}
-  {\usedriver
-     {\defcounter{minnames}{6}%
-      \defcounter{maxnames}{6}}
-     {\thefield{entrytype}}}
-  {\multicitedelim}
-  {\usebibmacro{postnote}}
 \DeclareBibliographyCategory{onlyfullcite}
 \newcommand\onlyfullcite[1]{\fullcite{#1}\addtocategory{onlyfullcite}{#1}}
 

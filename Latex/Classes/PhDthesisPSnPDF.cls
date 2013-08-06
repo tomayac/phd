@@ -70,6 +70,15 @@
 \usepackage[usenames, dvipsnames]{color}
 \usepackage[perpage]{footmisc}
 \usepackage[backend=biber,refsection=chapter,sortcites=true]{biblatex}
+\ExecuteBibliographyOptions{maxbibnames=6,minbibnames=6,maxcitenames=6,mincitenames=6}
+\DeclareCiteCommand{\fullcite}
+  {\usebibmacro{prenote}}
+  {\usedriver
+     {\defcounter{minnames}{6}%
+      \defcounter{maxnames}{6}}
+     {\thefield{entrytype}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
 \usepackage{bibentry}
 \usepackage{ifthen}
 \usepackage{multicol} % for pages with multiple text columns, e.g. References
@@ -222,7 +231,7 @@
 \setlength{\footskip}{2.36cm}
 
 
-%: Uncomment this secion for one-sided printing
+%: Uncomment this section for one-sided printing
 % taken from the original file, but with the first two lanes modified
 % ------------------------------
 %\setlength{\evensidemargin}{1.9cm} % was 1.96cm in original
