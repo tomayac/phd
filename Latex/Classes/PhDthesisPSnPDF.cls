@@ -121,7 +121,8 @@
 %        \pdftrue
 %\fi
 
-%\usepackage[hyphens]{url}
+%\PassOptionsToPackage{hyphens}{url}
+
 \ifpdf
 %-->
 %--> Google.com search "hyperref options"
@@ -156,8 +157,8 @@
     \def\subsectionautorefname{Subsection}
     \def\subsubsectionautorefname{Subsection}
     \def\figureautorefname{Figure}
-    \def\subfloatautorefname{Subfigure}
-    \def\subfigureautorefname{Subfigure}     
+    \def\subfloatautorefname{Figure}
+    \def\subfigureautorefname{Figure}     
     \def\tableautorefname{Table}
 
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
@@ -187,6 +188,8 @@
     \usepackage{graphicx}
     \graphicspath{{frontmatter/figures/EPS/}{frontmatter/figures/}}
 \fi
+
+\usepackage{breakurl}
 
 % Used to find unreferenced labels
 % \usepackage{refcheck}

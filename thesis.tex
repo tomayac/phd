@@ -85,6 +85,14 @@
 % --------------------------------------------------------------
 
 \addbibresource{backmatter/references.bib}
+\DeclareCiteCommand{\fullcite}
+  {\usebibmacro{prenote}}
+  {\usedriver
+     {\defcounter{minnames}{6}%
+      \defcounter{maxnames}{6}}
+     {\thefield{entrytype}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
 \DeclareBibliographyCategory{onlyfullcite}
 \newcommand\onlyfullcite[1]{\fullcite{#1}\addtocategory{onlyfullcite}{#1}}
 
@@ -143,7 +151,13 @@
 
 %: ----------------------- contents ------------------------
 
-\setcounter{secnumdepth}{3} % organisational level that receives a numbers
+\setcounter{secnumdepth}{2} % organisational level that receives a numbers
+
+% make sure that subsubsections without numbering are still indented correctly
+\makeatletter
+\renewcommand{\l@subsubsection}{\@dottedtocline{3}{9em}{2.3em}}
+\makeatother
+
 \setcounter{tocdepth}{3}    % print table of contents for level 3
 \tableofcontents            % print the table of contents
 
