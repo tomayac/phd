@@ -36,6 +36,9 @@
    \LoadClass[pdftex, a4paper]{book}
 \fi
 
+% URLs
+\usepackage[hyphens]{url}
+
 % listings and Verbatim environment
 \usepackage{fancyvrb}
 \usepackage{relsize}
@@ -129,8 +132,6 @@
                           % otherwise a DVI
 %        \pdftrue
 %\fi
-%\usepackage[hyphens]{url}
-\PassOptionsToPackage{hyphens}{url}
 \ifpdf
 %-->
 %--> Google.com search "hyperref options"
