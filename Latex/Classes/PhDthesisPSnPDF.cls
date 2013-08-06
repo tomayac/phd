@@ -156,6 +156,7 @@
                  citecolor = red,
                  anchorcolor = green,
                  hyperindex = true,
+                 hidelinks,
                  hyperfigures
                  ]{hyperref}
     %\makeatletter\let\@bibitem\saved@bibitem\makeatother
