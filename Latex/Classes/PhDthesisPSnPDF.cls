@@ -129,9 +129,8 @@
                           % otherwise a DVI
 %        \pdftrue
 %\fi
-
-%\PassOptionsToPackage{hyphens}{url}
-
+%\usepackage[hyphens]{url}
+\PassOptionsToPackage{hyphens}{url}
 \ifpdf
 %-->
 %--> Google.com search "hyperref options"
@@ -198,7 +197,7 @@
     \graphicspath{{frontmatter/figures/EPS/}{frontmatter/figures/}}
 \fi
 
-\usepackage{breakurl}
+%\usepackage{breakurl}
 
 % Used to find unreferenced labels
 % \usepackage{refcheck}
