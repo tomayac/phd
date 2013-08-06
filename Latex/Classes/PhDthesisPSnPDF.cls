@@ -69,7 +69,7 @@
 \usepackage[english]{babel}
 \usepackage[usenames, dvipsnames]{color}
 \usepackage[perpage]{footmisc}
-\usepackage[backend=biber,refsection=chapter]{biblatex}
+\usepackage[backend=biber,refsection=chapter,sortcites=true]{biblatex}
 \usepackage{bibentry}
 \usepackage{ifthen}
 \usepackage{multicol} % for pages with multiple text columns, e.g. References
