@@ -318,8 +318,10 @@ and attributes and their meaning.
         of a~task, \texttt{<time>} specifies either a~time
         on a~24 hour clock, or a~precise date in the calendar
         (optionally with a~time and a~time-zone offset),
-        \texttt{<command>} specifies a~command that the user
-        can invoke.
+        \texttt{<command>} provides an abstraction layer
+        between user interface and commands,
+        so that multiple user interface elements can refer
+        to the same command. 
   \item \texttt{<details>} specifies a~disclosure widget
         from which the user can obtain additional information or
         controls, \texttt{<datalist>} specifies the list that
@@ -334,33 +336,35 @@ and attributes and their meaning.
 
 \begin{itemize}
   \item \texttt{datetime} specifies a~control for setting the
-        element’s value to a~string representing a~global date
+        element's value to a~string representing a~global date
         and time (with timezone information).
   \item \texttt{datetime-local} specifies a~control for setting
-        the element’s value to a~string representing a~local date
+        the element's value to a~string representing a~local date
         and time (with no timezone information).
   \item \texttt{date} specifies a~control for setting the
-        element’s value to a~string representing a~date,
+        element's value to a~string representing a~date,
         \texttt{month} specifies a~control for setting the
-        element’s value to a~string representing a~month,
+        element's value to a~string representing a~month,
         \texttt{week} specifies a~control for setting the
-        element’s value to a~string representing a~week.
+        element's value to a~string representing a~week.
   \item \texttt{time} specifies a~control for setting the
-        element’s value to a~string representing a~time
+        element's value to a~string representing a~time
         (with no timezone information).
   \item \texttt{number} specifies a~control for setting the
-        element’s value to a~string representing a~number.
+        element's value to a~string representing a~number.
   \item \texttt{range} represents an imprecise control
-        for setting the element’s value to a~string
+        for setting the element's value to a~string
         representing a~number.
   \item \texttt{email} specifies a~control for editing
-        a~list of email addresses given in the element’s value.
+        a~list of email addresses given in the element's value.
+        A~regular expression can be used to validate the email. 
   \item \texttt{url} specifies a~control for editing an
-        absolute URL given in the element’s value.
+        absolute URL given in the element's value.
+        A~regular expression can be used to validate the URL. 
   \item \texttt{search} specifies a~one-line plain-text
-        edit control for entering one or more search terms.
+        edit control for entering one or more textual search terms.
   \item \texttt{color} specifies a~color-well control for
-        setting the element’s value to a~string representing
+        setting the element's value to a~string representing
         a~simple color.
 \end{itemize}
 
@@ -422,7 +426,7 @@ as listed below:
         to hyperlinks.
   \item \texttt{XFN} is a~format for representing human
         relationships (XHTML Friends Network) using hyperlinks, which enables Web authors
-        to indicate their relationships to people.
+        to indicate their relationships to other people.
   \item \texttt{XMDP} is a~format for defining metadata profile
         documents (XHTML Meta Data Profile), which enables Web
         authors to well-define custom meta tags.
@@ -480,7 +484,7 @@ a~set of new attributes to HTML:
         information about it. This attribute precedes the
         \texttt{itemtype} attribute in the HTML element's tag.
   \item \texttt{itemtype} a~valid URL of a~vocabulary that
-        describes the item and its properties context.
+        describes the item in question and its properties context.
   \item \texttt{itemid} indicates a~unique identifier
         of the item in the vocabulary.
   \item \texttt{itemprop} indicates that its containing tag
@@ -503,8 +507,8 @@ a~set of new attributes to HTML:
 An example of Microdata in HTML can be seen in \autoref{code:microdata}.
 
 \begin{lstlisting}[caption={
-  [Sample code snippet with Microdata mark-up]
-  {Sample code snippet with Microdata mark-up
+  [Sample code snippet with embedded Microdata mark-up]
+  {Sample code snippet with embedded Microdata mark-up
    (\url{http://www.w3.org/TR/microdata/})}},
   label={code:microdata}]
 <div itemscope>
@@ -535,7 +539,7 @@ of any URI-identifiable entity like cities, genes, \emph{etc.}
 
 As outlined before, one of the main purposes of the Semantic Web
 is to give information a~well-defined meaning.
-Using an example from Tim Berners-Lee’s
+Using an example from Tim Berners-Lee's
 article~\cite{bernerslee2001semanticweb},
 meaning can be to differentiate between the concepts of
 a~shipping and a~billing address,
@@ -599,6 +603,10 @@ of this sample graph.
 
 RDF/XML~\cite{beckett2004rdfxml} was introduced by
 the W3C as the first RDF serialization syntax.
+In order to encode an RDF graph in XML,
+the nodes and predicates have to be represented
+in XML terms---element names, attribute names,
+element contents, and attribute values.
 Albeit more human-friendly serialization formats
 such as Turtle~\cite{prudhommeaux2013turtle}
 gain more and more traction,
@@ -667,7 +675,7 @@ Its media type is \texttt{text/turtle}
 the recommended file extension is \texttt{.ttl},
 the encoding is UTF-8.
 \autoref{code:turtle-syntax} shows the previously
-introduced sample graph serialized in Turtle.
+introduced sample graph serialized in Turtle syntax.
 
 \begin{lstlisting}[caption={[Sample graph in Turtle syntax]{Sample graph in Turtle syntax,
   the syntax is equivalent to \autoref{code:notation3-syntax}}},
@@ -943,14 +951,15 @@ to create typed links between different sources.
 The portal \url{http://linkeddata.org/} (accessed July 15, 2013)
 defines Linked Data as being
 \textit{``about using the Web to connect related data that
-wasn’t previously linked, or using the Web
+wasn't previously linked, or using the Web
 to lower the barriers to linking data
 currently linked using other methods.''}
 
 \subsection{The Linked Data Principles}
 \label{sec:linked-data-principles}
 
-Tim Berners-Lee defines the four rules for Linked Data in a~W3C Design Issue~\cite{bernerslee2006linkeddata} as follows:
+Tim Berners-Lee defined the four rules for Linked Data in a~W3C Design Issue~\cite{bernerslee2006linkeddata}
+published in 2006 as follows:
 
 \begin{enumerate}
   \item Use URIs as names for things.
@@ -1040,7 +1049,7 @@ can be exposed as so-called Linked Data,
 an effort which is visualized in the Linking Open Data cloud.
 By introducing these Semantic Web technologies,
 we have set the foundations for the coming chapters
-that build upon those pillars.
+that build upon those basic pillars.
 
 \section*{Chapter Notes}
 This chapter is partly based on the following publications.
