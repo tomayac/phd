@@ -32,7 +32,8 @@ Due to this limitation, we cannot rely on any preprocessing
 that state-of-the-art algorithms rely on.
 Our approaches to video and photo near-duplicate
 and exact-duplicate detection are founded
-on a~tile-wise histogram-based pixel comparison algorithm.
+on a~tile-wise histogram-based pixel comparison algorithm
+that was partly introduced in the previous chapter.
 
 \subsection{Definitions}
 
@@ -43,7 +44,7 @@ In the following, we will use the shorter term media item
 rather than the full term and define
 what we mean with \emph{duplicate media items} for various cases.
 
-\paragraph{exact-duplicates for Photos:}
+\paragraph{Exact-duplicates for Photos:}
 
 We define two media items of type photo as \emph{exact-duplicates}
 if their pixel contents are exactly the same.
@@ -72,8 +73,9 @@ rotated photos up to a~certain degree, \emph{etc.}
 Near-duplicate photos typically occur if event attendants
 stand close to each other and thus take photos
 from a~similar standpoint.
-Another scenario is when a~user applyies a~photo effect to a~photo
-(like an Instagram filter) and then shares both the modified
+Another scenario is when a~user applies a~photo effect to a~photo
+(like an Instagram filter) and in the following
+shares both the modified
 and the unmodified version.
 
 \paragraph{Duplicates for Videos:}
