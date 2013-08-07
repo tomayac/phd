@@ -880,16 +880,16 @@ the contents of which is left to the endpoint to decide
 based on what the maintainer deems as useful information.
 An example query is given below:\\
 
-\texttt{DESCRIBE <http://example.org/sparql>}
+\texttt{DESCRIBE <http://example.org/sparql>}\\
 
 \subsubsection{ASK}
 
 The \texttt{ASK} query variant is used to provide
 a~simple \texttt{true} or \texttt{false} result
 for a~query on a~SPARQL endpoint.
-No information is returned about the possible query solutions,
+No information is returned about possible solutions,
 just whether or not a~solution exists.
-An example \texttt{ASK} query with a~sample response is given below:\\
+An example query with a~sample response is given below:\\
 
 \noindent Given the RDF graph in \autoref{fig:sample-rdf-graph}
 and the following SPARQL \texttt{ASK} query:\\
@@ -1055,6 +1055,7 @@ that build upon those basic pillars.
 This chapter is partly based on the following publications.
 
 \begin{itemize}
+  \interlinepenalty10000 
   \item \onlyfullcite{steiner2010howgoogleisusing}.
   \item \onlyfullcite{steiner2011enrichingunstructured}.
 \end{itemize}

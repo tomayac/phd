@@ -73,6 +73,7 @@
 \usepackage[usenames, dvipsnames]{color}
 \usepackage[perpage]{footmisc}
 \usepackage[backend=biber,refsection=chapter,sortcites=true]{biblatex}
+\patchcmd{\bibsetup}{\interlinepenalty=5000}{\interlinepenalty=10000}{}{}
 \ExecuteBibliographyOptions{maxbibnames=6,minbibnames=6,maxcitenames=6,mincitenames=6}
 \DeclareCiteCommand{\fullcite}
   {\usebibmacro{prenote}}
