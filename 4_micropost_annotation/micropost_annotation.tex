@@ -168,7 +168,7 @@ or the video title and video description are used,
 but also social features such as the playlists
 where a~video appears in and related videos.
 Next, the tags are ranked by their co-occurrence
-and in a~final step interlinked with DBpedia~\cite{auer2007dbpedia}
+and in a~final step interlinked with DBpedia~\cite{auer2007dbpedia,lehmann2013dbpedia}
 concepts for greater integration with other datasets.
 The authors disambiguate the tags based on
 WordNet~\cite{miller1995wordnet,fellbaum1998wordnet}
@@ -202,10 +202,10 @@ and second, the occurrences of candidate entities
 in past articles in the same categories
 in order to find semantic coherences.
 
-\subsection{Named Entity Disambiguation Using Disambiguation Dictionaries}
+\subsection[Named Entity Disambiguation Using Dictionaries]{Named Entity Disambiguation Using Semantic Disambiguation Dictionaries}
 
 In~\cite{nguyen2008namedentity},
-Nguyen \emph{et~al.}\ show how disambiguation dictionaries
+Nguyen \emph{et~al.}\ show how semantic disambiguation dictionaries
 can be used to disambiguate named entities
 using Wikipedia disambiguation pages.
 For a~set of named entity candidates, all disambiguations are ranked
@@ -393,7 +393,7 @@ In consequence, we treat entities and concepts the same.
 Overall, AlchemyAPI results are very accurate
 and in the majority of cases well interlinked
 with members of the LOD cloud,
-among others with DBpedia~\cite{auer2007dbpedia},
+among others with DBpedia~\cite{auer2007dbpedia,lehmann2013dbpedia},
 OpenCyc~\cite{lenat1995cyc},
 and Freebase~\cite{bollacker2008freebase,markoff2007freebase}.
 AlchemyAPI also provides links to other data sources, however,
@@ -954,7 +954,11 @@ less verbose provenance descriptions.
 While it is always easier to propose a~specialized vocabulary
 that does one task well, broader reuse and acceptance
 can be gained by reusing existing vocabularies.
+Our ultimate goal is to make provenance annotations
+lightweight enough that their undoubted benefits
+outweigh the additional data payload overhead.
 
+\clearpage
 \section*{Chapter Notes}
 This chapter is partly based on the following publications.
 %\cite{steiner2011addingmeaning,steiner2013addingmeaning,van2013named}.
