@@ -3,9 +3,9 @@
 
 % the code below specifies where the figures are stored
 \ifpdf
-    \graphicspath{{7_media_item_deduplication/figures/PNG/}{7_media_item_deduplication/figures/PDF/}{7_media_item_deduplication/figures/}}
+    \graphicspath{{8_media_item_deduplication/figures/PNG/}{8_media_item_deduplication/figures/PDF/}{8_media_item_deduplication/figures/}}
 \else
-    \graphicspath{{7_media_item_deduplication/figures/EPS/}{7_media_item_deduplication/figures/}}
+    \graphicspath{{8_media_item_deduplication/figures/EPS/}{8_media_item_deduplication/figures/}}
 \fi
 
 \section{Introduction}
@@ -517,7 +517,7 @@ histograms = {}
 faces = {}
 §\textbf{for}§ item §\textbf{in}§ mediaItems
   faces[item] = getFaces(item)
-  
+
   histograms[item] = {}
   §\textbf{for}§ tile §\textbf{in}§ item
     histograms[item][tile] = getHistogram(tile)
@@ -876,7 +876,7 @@ As the YouTube-generated poster frames were similar enough
 and even if the other video metadata like title and description
 were different, we were able to effectively deduplicate the videos
 with the described work-around approach.
-We note that this approach works reasonably well 
+We note that this approach works reasonably well
 as online videos are still relatively short,
 also given that YouTube per default has an (increasable)
 limit of 15 minutes per video.%
@@ -1218,7 +1218,7 @@ for the music video \emph{Everybody} is represented by Quote~1.
     Neither the left, nor the right media item contain detected faces.''}
   \item[Clustering Dissent] (Quote~2). \textit{``The two media items
     are near-duplicates. Out of overall 100 tiles,
-    41 from the minimum required 41 tiles were similar enough to be clustered.    
+    41 from the minimum required 41 tiles were similar enough to be clustered.
     However, 26 tiles were not considered, as they are either too bright
     or too dark, which is a~common source of clustering issues.
     Neither the left, nor the right media item contain detected faces.''}
@@ -1411,7 +1411,7 @@ This chapter is partly based on the following publications.
 %\cite{steiner2013nearduplicate,steiner2014clustering}.
 
 \begin{itemize}
-  \interlinepenalty10000 
+  \interlinepenalty10000
   \item \onlyfullcite{steiner2013nearduplicate}.
   \item \onlyfullcite{steiner2014clustering}.
 \end{itemize}
