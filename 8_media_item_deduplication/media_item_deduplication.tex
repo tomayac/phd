@@ -181,7 +181,7 @@ to express features in the time dimension explicitly.
 Yi \emph{et~al.}\ have proposed motion histograms~\cite{yi2005motionhistogram},
 where the motion content of a~video at pixel level is represented
 as a~Pixel Change Ratio Map (PCRM), which captures the motion intensity,
-spatial location, and size of moving objects in a~video sequence.
+spatial location, and size of moving objects in a~video.
 
 \paragraph{Image \emph{and} Video Deduplication and Clustering:}
 
@@ -959,8 +959,8 @@ that is not part of the interval.
 If only a~single value is present, it corresponds to the begin time,
 except for when it is preceded by a~comma,
 which indicates the end time.
-The temporal dimension is specified as Normal Play Time
-(NPT,~\cite{schulzrinne1998realtime}).
+The temporal dimension is specified in the Normal Play Time
+(NPT,~\cite{schulzrinne1998realtime}) format.
 
 The \emph{spatial dimension} selects an area of pixels from media items.
 In the current version of the specification,
@@ -1124,9 +1124,8 @@ as well as the number of not considered tiles
 (according to $\textit{bw\_tolerance}$), which implies fulfillment of \textbf{Cond.~3}
 and potentially impacts \textbf{Cond.~1} in form of
 the $\textit{effective\_tiles\_threshold}$.
-For instance, the low-level debug output for the media items
-from the running example of the \emph{Backstreet Boys} media items
-for the music video \emph{Everybody} reads as follows.
+For instance, consider the low-level debug output for the media items
+from the running example of the \emph{Backstreet Boys} media items.
 
 \begin{verbatim}
 - Similarity threshold: 15 (Cond. 1)
@@ -1138,17 +1137,14 @@ for the music video \emph{Everybody} reads as follows.
 - Effective tiles threshold: 45 (Cond. 3)
 \end{verbatim}
 
+\subsection{From Debug Output to Story}
+\label{sec:from-debug-output-to-story}
+
 While this low-level debug output is sufficient to respond
 to the polar question (yes/no question) whether media items
 are clustered at all or not, it does not help with
 the non-polar \emph{why} question
 (the linguistic term for this type of questions is \emph{wh–question}).
-In the following subsection, we show how
-this low-level debug output can be lifted.
-
-\subsection{From Debug Output to Story}
-\label{sec:from-debug-output-to-story}
-
 In order for human raters to get answers to the question on
 \emph{why} media items are clustered, we need to lift the low-level debug output
 to a~high-level natural language story for
@@ -1156,7 +1152,7 @@ the previously defined debug scenarios \textit{Clustering Consent},
 \textit{Clustering Dissent}, and \textit{Non-Clustering Dissent}.
 This results in a~natural language generation task,
 whose three stages according to Reiter's and Dale's
-architecture~\cite{reiter2000building} will be detailed in the following paragraphs.
+architecture~\cite{reiter2000building} will be detailed below.
 
 \subsubsection{Generating Natural Language}
 \label{sec:text-to-speech-espeak}
