@@ -1911,8 +1911,8 @@
                 (columnSize + margin);
             var width = isBig ? columnSize * 2 + margin : columnSize;
             var height = isBig ? columnSize * 2 + margin : columnSize;
-            elem.style.width = width;
-            elem.style.height = height;
+            elem.style.width = width + 'px';
+            elem.style.height = height + 'px';
             var mediaItem = elem.firstChild.firstChild;
             var posterUrl = mediaItem.dataset.posterurl;
             if (isBig) {
@@ -1926,11 +1926,11 @@
             var aspectRatio = mediaItemWidth / mediaItemHeight;
             var min = Math.min(mediaItemHeight, mediaItemWidth);
             if (min === mediaItemWidth) {
-              mediaItem.style.width = width;
-              mediaItem.style.height = width / aspectRatio;
+              mediaItem.style.width = width + 'px';
+              mediaItem.style.height = (width / aspectRatio)  + 'px';
             } else {
-              mediaItem.style.height = height;
-              mediaItem.style.width = height * aspectRatio;
+              mediaItem.style.height = height + 'px';
+              mediaItem.style.width = (height * aspectRatio) + 'px';
             }
           };
 
