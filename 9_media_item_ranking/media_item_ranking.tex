@@ -245,15 +245,7 @@ a~set of media clusters that match a~given query.
 In the ranking formula, we consider several well-defined ranking criteria
 that were detailed in~\cite{steiner2012definingaesthetic},
 namely visual, audial, textual, temporal, social, and aesthetic.
-For a~given set of media item clusters, a~ranking is calculated as shown in the formula below.
-
-\begin{gather}\label{eq:rankingformula}
-  \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
-  \gamma \times \mathit{comments} + \delta \times \mathit{views} + \nonumber\\
-  \epsilon \times \mathit{clusterSize} + \zeta \times \mathit{recency} +
-  \eta \times \mathit{quality}
-\end{gather}
-
+For a~given set of media item clusters, a~ranking is calculated as shown in the following formula.
 The factors $ \mathit{likes}, \mathit{shares}, \mathit{comments},$ and $ \mathit{views} $
 stem from the individual media items as described in \autoref{sec:social-interactions-abstraction-layer}
 and \autoref{sec:merging-social-interactions}.
@@ -265,6 +257,14 @@ the value of recency is 8, for two days it is 4, for three days it is 2,
 and for each day more, the value is 1.
 The factor $ \mathit{quality} $ is a~representation of the
 presence of faces and a~media item's photo or video quality.
+
+\begin{gather}\label{eq:rankingformula}
+  \alpha \times \mathit{likes} + \beta \times \mathit{shares} +
+  \gamma \times \mathit{comments} + \delta \times \mathit{views} + \nonumber \\
+  \epsilon \times \mathit{clusterSize} + \zeta \times \mathit{recency} +
+  \eta \times \mathit{quality}
+\end{gather}
+
 Empirically optimized default values
 that can be fine-tuned for a~concrete media item set
 were determined as follows:
@@ -499,6 +499,14 @@ videos that only made sense when seen in motion.
   \label{table:top-10-mos}
 \end{table}
 
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=1.0\linewidth]{social-media-illustrator.png}
+  \caption[Media item ranking in our application with adjustable weight factors]
+  {Media item ranking in our application with adjustable weight factors for the ranking formula}
+  \label{fig:social-media-illustrator}
+\end{figure}
+
 \section{Conclusions}
 
 In this chapter, we have detailed criteria
@@ -532,14 +540,6 @@ to work well for the majority of cases.
 \autoref{fig:social-media-illustrator} shows a~screenshot of this application
 that effectively helps users see the media items needles first
 and the haystack last.
-
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=1.0\linewidth]{social-media-illustrator.png}
-  \caption[Media item ranking in our application with adjustable weight factors]
-  {Media item ranking in our application with adjustable weight factors for the ranking formula}
-  \label{fig:social-media-illustrator}
-\end{figure}
 
 \clearpage
 \section*{Chapter Notes}
