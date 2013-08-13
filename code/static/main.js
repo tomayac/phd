@@ -1979,6 +1979,7 @@
             if (smallImages.length) {
               column = getMinColumn();
               addColumnElem(column * 2, smallImages[0], false);
+              heights[column] += 1;
             }
           };
 
