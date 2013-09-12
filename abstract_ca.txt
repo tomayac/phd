@@ -14,17 +14,18 @@ En situacions més complexes, com la recuperació de tots els elements multimèd
 
 (iv) Les aportacions
 
-En el context d'aquesta tesi, s'han desenvolupat i avaluat una nova aplicació interactiva i mètodes relacionats per l'element d'enriquiment dels mitjans de comunicació, aprofitant les xarxes socials, la utilització de la web de les dades, les tècniques conegudes de Recuperació d'Imatges basat en contingut (CBIR) i vídeo basat en contingut Recuperació (CBVR) i de gra fi element multimèdia esquemes de direccionament, com Fragments de Mitjans URI per proporcionar una solució escalable en temps real i proper a adonar-se de la situació del resum d'esdeveniments i compilació element multimèdia esmentada.
+En el context d'aquesta tesi, s'han desenvolupat i avaluat una nova aplicació interactiva i mètodes relacionats amb l'enriquiment d'elements multimèdia, aprofitant les xarxes socials, la utilització de la web de dades, les tècniques conegudes de consulta d'imatges mitjançant exemple (CBIR) i consulta de vídeos mitjançant exemple (CBVR) i d'esquemes de direccionament d'elements multimèdia detallats, com identificador de fragments d'elements multimèdia per proporcionar una solució escalable i en temps real  per realitzar la situaciò esmentada anterioment de resum d'esdeveniments i compilació d'elements multimèdia.
 
 (v) Metodologia
 
-En qualsevol cas, amb el títol de determinat esdeveniment (s), (possiblement vaga) lloc de l'esdeveniment (s), i (arbitràriament de gra fi) Data de l'esdeveniment (s), el nostre enfocament es pot dividir en els següents sis passos.
+Per qualsevol esdeveniment amb el títol, el lloc (possiblement inexacte) i la data (arbitràriament concreta) donades (també poden ser múltiples), el nostre enfocament es pot dividir en els següents sis passos.
 
-1) A través de la recerca textual APIs (Interfícies de Programació d'Aplicacions) de les diferents xarxes socials, es recupera una llista de potencialment microposts esdeveniments rellevants que o bé contenen elements multimèdia directament o que proporcionen enllaços a articles sobre el tema de mitjans de comunicació externa plataformes d'allotjament.
+1) A través de les APIs (Interfícies de Programació d'Aplicacions) textuals de búsqueda  de les diferents xarxes socials, es recupera una llista de microposts que són potencialment rellevants pels esdeveniments o bé que  contenen directament elements multimèdia o que proporcionen enllaços a 
+elements multimèdia en plataformes externes.
 
-2) L'ús d'eines de Processament de Llenguatge Natural de tercers (NLP), reconeixem i eliminar l'ambigüitat de les entitats nomenades en microposts a predeterminar la seva rellevància.
+2) Utilitzant eines de Processament de Llenguatge Natural (NLP) de tercers, reconeixem i eliminem l'ambigüitat dels noms de les entitats en microposts per predeterminar la seva rellevància.
 
-3) Extraiem les dades dels elements de comunicació binaris de les xarxes socials o mitjans element plataformes de hosting i relacionar-lo amb els microposts originàries.
+3) Extraiem les dades binaries dels elements multimèdia de les xarxes socials o de plataformes d'elements multimèdia i ho relacionem amb els microposts originals.
 
 4) Ús de CBIR i tècniques CBVR, primer deduplicar elements multimèdia exactes duplicats i gairebé duplicats i després els mitjans de comunicació de clúster articles similars.
 
