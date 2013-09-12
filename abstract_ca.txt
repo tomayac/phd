@@ -27,8 +27,8 @@ elements multimèdia en plataformes externes.
 
 3) Extraiem les dades binaries dels elements multimèdia de les xarxes socials o de plataformes d'elements multimèdia i ho relacionem amb els microposts originals.
 
-4) Ús de CBIR i tècniques CBVR, primer deduplicar elements multimèdia exactes duplicats i gairebé duplicats i després els mitjans de comunicació de clúster articles similars.
+4) Utilitzant tècniques CBIR i CBVR, primerament destriarem les duplicacions amb els duplicats exactes i els quasi-exactes dels elements multimèdia  i després els agruparem segons les seves similituds.
 
-5) Ens situem la llista de deduplicació i agrupada dels elements multimèdia i els seus microposts relacionats d'acord amb criteris de classificació ben definits.
+5) Fem un rànquing de la llista destriada i agrupada dels elements multimèdia i els seus microposts relacionats segons els criteris ben definits.
 
-6) Per tal de generar galeries de mitjans interactius i personalitzables per l'usuari que visualment i audially resumir l'esdeveniment en qüestió, compilem els articles més $ n $ mitjans qualificació i microposts en estèticament agradable i funcional maneres.
+6) Per generar galeries interactives i personalitzables d'elements multimèdia que resumeixen visualment i auditivament els esdeveniments en qüestió, compilem els n-èssims millors elements multimèdia i microposts de manera estètica i funcional.
