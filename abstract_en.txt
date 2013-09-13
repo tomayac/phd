@@ -1,3 +1,5 @@
+Enriching Unstructured Media Content About Events to Enable Semi-Automated Summaries, Compilations, and Improved Search by Leveraging Social Networks
+
 (i) Mobile devices and social networks are omnipresent
 
 Mobile devices such as smartphones, tablets, or digital cameras together with social networks enable people to create, share, and consume enormous amounts of media items like videos or photos both on the road or at home. Such mobile devices—by pure definition—accompany their owners almost wherever they may go. In consequence, mobile devices are omnipresent at all sorts of events to capture noteworthy moments. Exemplary events can be keynote speeches at conferences, music concerts in stadiums, or even natural catastrophes like earthquakes that affect whole areas or countries. At such events—given a stable network connection—part of the event-related media items are published on social networks both as the event happens or afterwards, once a stable network connection has been established again.
@@ -28,4 +30,4 @@ For any event with given event title(s), (potentially vague) event location(s), 
 
 5) We rank the deduplicated and clustered list of media items and their related microposts according to well-defined ranking criteria.
 
-6) In order to generate interactive and user-customizable media galleries that visually and audially summarize the event in question, we compile the top-$n$ ranked media items and microposts in aesthetically pleasing and functional ways.
+6) In order to generate interactive and user-customizable media galleries that visually and audially summarize the event in question, we compile the top-n ranked media items and microposts in aesthetically pleasing and functional ways.
