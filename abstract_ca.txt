@@ -1,12 +1,12 @@
-Enriquiment del contingut desestructurat dels elements multimèdia sobre esdeveniments, per permetre resums semi-automàtics, compilacions i búsquedes millorades aprofitant les xarxes socials
+Enriquiment del contingut desestructurat dels elements multimèdia sobre esdeveniments, per permetre resums semi-automàtics, compilacions i cerques millorades aprofitant les xarxes socials
 
 (i) Els dispositius mòbils i les xarxes socials són omnipresents
 
-Els dispositius mòbils com els telèfons intel·ligents, les tauletes o les càmeres digitals, juntament amb les xarxes socials, permeten als usuaris crear, compartir i consumir enormes quantitats d'elements multimèdia com vídeos o fotos, tant en mobilitat com a casa. Aquests dispositius mòbils—per pura definició—acompanyen als seus propietaris independentment d'on estiguin. En conseqüència, els dispositius mòbils són omnipresents en tot tipus d'esdeveniments per capturar els moments notables. Alguns exemples poden ser discursos en conferències, concerts de música als estadis o fins i tot catàstrofes naturals com els terratrèmols que afecten zones o països sencers. En aquests esdeveniments—sempre que hi hagi una xarxa estable—será posible publicar a les xarxes socials una part dels elements multimèdia instantàniament o posteriorment, quan l'esdeveniment en qüestió s'hagi acabat o es tingui novament connexió a la xarxa.
+Els dispositius mòbils com els telèfons intel·ligents, les tauletes o les càmeres digitals, juntament amb les xarxes socials, permeten als usuaris crear, compartir i consumir enormes quantitats d'elements multimèdia com vídeos o fotos, tant en mobilitat com a casa. Aquests dispositius mòbils—per pura definició—acompanyen als seus propietaris independentment d'on estiguin. En conseqüència, els dispositius mòbils són omnipresents en tot tipus d'esdeveniments per capturar els moments notables. Alguns exemples poden ser discursos en conferències, concerts de música als estadis o fins i tot catàstrofes naturals com els terratrèmols que afecten zones o països sencers. En aquests esdeveniments—sempre que hi hagi una xarxa estable—serà posible publicar a les xarxes socials una part dels elements multimèdia instantàniament o posteriorment, quan l'esdeveniment en qüestió s'hagi acabat o es tingui novament connexió a la xarxa.
 
 (ii) Trobar elements multimèdia representatius per a un esdeveniment és complicat
 
-Les operacions de búsqueda d'elements multimèdia més habituals com, per exemple, buscar el videoclip oficial per un cert disc d'èxit en una plataforma online de vídeo, en el cas més senzill, es pot realitzar basant-se en metadades inexactes creades per l'home, o en altres tècniques més detallades d'anàlisi de contingut com reconeixement óptic de caràcters, reconeixement automàtic de veu, o ditada acústica. En canvi, en situacions més complexes, com la recuperació de tots els elements multimèdia (o només els més representatius) que s'han creat en un fet determinat, amb l'objectiu de crear resums d'esdeveniments o compilacions d'elements multimèdia que cobreixen un esdeveniment determinat, és difícil de realitzar o quasi impossible de dur a terme a gran escala. Com a resultat, el principal tema de recerca de la present tesi es pot formular de la següent manera.
+Les operacions de cerca d'elements multimèdia més habituals com, per exemple, buscar el videoclip oficial per un cert disc d'èxit en una plataforma online de vídeo, en el cas més senzill, es pot realitzar basant-se en metadades potencialment inexactes creades manualment, o en altres tècniques més avançades d'anàlisi de contingut com reconeixement òptic de caràcters, reconeixement automàtic de veu, o empremta digital acústica. En canvi, situacions més complexes, com la recuperació de tots els elements multimèdia (o només els més representatius) que s'han creat en un esdeveniment determinat, amb l'objectiu de crear resums o compilacions d'elements multimèdia que cobreixen un esdeveniment determinat, són difícils de realitzar o quasi impossibles de dur a terme a gran escala. Com a resultat, el principal tema de recerca de la present tesi es pot formular de la següent manera.
 
 (iii) Problema d'investigació
 
@@ -14,20 +14,20 @@ Les operacions de búsqueda d'elements multimèdia més habituals com, per exemp
 
 (iv) Aportacions
 
-En el context d'aquesta tesi, s'ha desenvolupat i avaluat una nova aplicació interactiva i altres mètodes relacionats amb l'enriquiment d'elements multimèdia, aprofitant les xarxes socials, utilitzant la web de dades, les tècniques conegudes de consulta d'imatges mitjançant exemple (CBIR) i consulta de vídeos mitjançant exemple (CBVR), i d'esquemes de direccionament d'elements multimèdia detallats, com l'identificador de fragments d'elements multimèdia per proporcionar una solució escalable i en temps real per realitzar la situaciò esmentada anterioment de resum d'esdeveniments i compilació d'elements multimèdia.
+En el context d'aquesta tesi, s'ha desenvolupat i avaluat una nova aplicació interactiva i altres mètodes relacionats amb l'enriquiment d'elements multimèdia, aprofitant les xarxes socials, utilitzant la web de dades, les tècniques conegudes de consulta d'imatges mitjançant exemple (CBIR) i consulta de vídeos mitjançant exemple (CBVR), i d'esquemes de direccionament d'elements multimèdia detallats, com l'identificador de fragments d'elements multimèdia per proporcionar una solució escalable i en temps real a la situació esmentada anterioment de resum d'esdeveniments i compilació d'elements multimèdia.
 
 (v) Metodologia
 
-Per qualsevol esdeveniment amb el títol, el lloc (possiblement inexacte) i la data (arbitràriament concreta) donades (també poden ser múltiples), el nostre enfocament es pot dividir en els següents sis passos.
+Per qualsevol esdeveniment amb el títol, el lloc (possiblement inexacte) i la data (arbitràriament concreta) donades (també poden ser múltiples), el nostre enfocament es pot dividir en els següents sis passos:
 
-1) A través de les APIs (Interfícies de Programació d'Aplicacions) textuals de búsqueda de les diferents xarxes socials, recuperem una llista de microposts que són potencialment rellevants pels esdeveniments o bé que contenen directament elements multimèdia o que proporcionen enllaços a elements multimèdia en plataformes externes.
+1) A través de les APIs (Interfícies de Programació d'Aplicacions) textuals de cerca de les diferents xarxes socials, recuperem una llista de microposts que són potencialment rellevants pels esdeveniments o bé que contenen directament elements multimèdia o que proporcionen enllaços a elements multimèdia de plataformes externes.
 
 2) Utilitzant eines de Processament de Llenguatge Natural (NLP) de tercers, reconeixem i eliminem l'ambigüitat dels noms de les entitats en microposts per predeterminar la seva rellevància.
 
-3) Extraiem les dades binaries dels elements multimèdia de les xarxes socials o de plataformes d'elements multimèdia i ho relacionem amb els microposts originals.
+3) Extraiem les dades binàries dels elements multimèdia de les xarxes socials o de plataformes d'elements multimèdia i ho relacionem amb els microposts originals.
 
 4) Utilitzant tècniques CBIR i CBVR, primerament destriarem les duplicacions amb els duplicats exactes i els quasi-exactes dels elements multimèdia i després els agruparem segons les seves similituds.
 
 5) Fem un rànquing de la llista destriada i agrupada dels elements multimèdia i els seus microposts relacionats segons criteris ben definits.
 
-6) Per generar galeries interactives i personalitzables d'elements multimèdia que resumeixen visualment i auditivament els esdeveniments en qüestió, compilem els n-èssims millors elements multimèdia i microposts de manera estètica i funcional.
+6) Per generar galeries interactives i personalitzables d'elements multimèdia que resumeixen visualment i auditivament els esdeveniments en qüestió, compilem els n millors elements multimèdia i microposts de manera estètica i funcional.
