@@ -64,7 +64,14 @@
       window.addEventListener('resize', resizeTabsDiv, false);
       resizeTabsDiv();
 
-      var downloadMediaGallery = document.getElementById('downloadMediaGallery');
+      var interactiveMediaGallery =
+          document.getElementById('interactiveMediaGallery');
+      interactiveMediaGallery.addEventListener('click', function() {
+        illustrator.translateMicroposts();
+      });
+
+      var downloadMediaGallery =
+          document.getElementById('downloadMediaGallery');
       downloadMediaGallery.addEventListener('click', function() {
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
@@ -2081,7 +2088,6 @@
         left: Math.min(left, mediaGallery.clientWidth) / 2,
         top: Math.min(top, mediaGallery.clientHeight) / 2
       };
-      illustrator.translateMicroposts();
     },
     translateMicroposts: function() {
       if (illustrator.clusters[0].translations) {
@@ -2211,7 +2217,7 @@
         return false;
       }
 
-      illustrator.showStatusMessage('Preparing speak message "' + message + '"');
+      illustrator.showStatusMessage('Preparing speech message "' + message + '"');
 
       var url = illustrator.SPEECH_SERVER + encodeURIComponent(message);
       var handleXhrError = function(url) {
