@@ -1104,6 +1104,7 @@
       }
     },
     calculateDistances: function() {
+      var imgs =  Object.keys(illustrator.mediaItems).length;
       illustrator.showStatusMessage('Calculating distances');
 
       var keys = Object.keys(illustrator.mediaItems);
