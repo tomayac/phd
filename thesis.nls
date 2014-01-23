@@ -39,7 +39,9 @@
     \nompageref{xx}
   \item [{FP7}]\begingroup 7\superscript{th} Framework Programme for Research and Technological Development\nomeqref {0}
     \nompageref{xx}
-  \null \vspace{15em}
+    \vfill
+    \columnbreak
+    \null\vspace{13.2em}
   \item [{HD}]\begingroup High Definition\nomeqref {0}\nompageref{xx}
   \item [{HTML}]\begingroup Hypertext Markup Language\nomeqref {0}
     \nompageref{xx}
