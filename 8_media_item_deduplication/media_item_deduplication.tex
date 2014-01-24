@@ -811,6 +811,133 @@ that let the user interactively preview clustering changes.
 As noted before, a~screenshot of the application
 is available online at the URL \url{http://twitpic.com/c02qfs/full} (accessed July 15, 2013).
 
+\subsection{Algorithm Performance Analysis}
+\label{sec:performance-eval}
+
+As our application is meant to be used interactively on the Web,
+a~high, real-time performance of the clustering algorithm is crucial.
+We have thoroughly evaluated its performance on our public dataset
+of 379~media items for the
+\emph{Victoria's Secret Fashion Show~2012} event 
+and 949~media items for the 
+\emph{Grammy Awards Nominations~2013} event.
+
+\subsubsection{Processing Speed Considerations}
+
+The results for the combined diverse 
+set of 1,328~media items are as follows.
+
+\begin{itemize}
+\item[--]\textbf{Face Detection:} the task of detecting faces
+took on average 325~ms per media item.
+
+\item[--]\textbf{Histogram Calculation:} the task of calculating
+100 tile histograms ($10$ rows $\cdot$ $10$ columns $= 100$ tiles) 
+took on average 7~ms per media item.
+
+\item[--]\textbf{Distance Calculation:} the task of calculating 
+the distances from each media item to all others
+took on average 2~ms per media item.
+\end{itemize}
+
+In consequence, the overall average processing time
+per media item was roughly $1/3$~of a~second,
+resulting in less than 8~minutes processing time
+for all 1,328~media items.
+We have compared our algorithm that is based on
+the \emph{low-level} feature of tile histograms
+combined with the \emph{high-level} feature of face detection
+to the three state-of-the-art feature detection algorithms
+SIFT~\cite{lowe1999sift}, ASIFT~\cite{yu2011asift},
+and SURF~\cite{bay2006surf}.
+A~concrete example of all four algorithms applied to the same
+two near-duplicate media items from \autoref{fig:snowden-compare},
+which are common, highly representative social media items
+of type photo and video from recent history,
+can be seen in \autoref{fig:snowden}.
+We especially highlight the differences in runtime.
+Compared to SIFT, our algorithm runs about 15~times faster,
+compared to Affine-SIFT, about 23~times faster,
+and finally compared to SURF, still about 3~times faster.
+We also note that our algorithm is implemented as interpreted
+JavaScript in the context of a~Web browser
+using the \texttt{canvas} element,
+whereas SIFT, Affine-SIFT, and SURF are implemented as
+compiled, native C~and C++~applications.
+
+\subsubsection{Algorithm Accuracy Considerations}
+
+The focus of SIFT and ASIFT is on \emph{local} image features,
+where the feature descriptor is invariant to uniform scaling,
+orientation, and partially invariant to affine distortion and
+illumination changes.
+SURF~\cite{bay2006surf}, which stands for
+Speeded Up Robust Features, is a~speed-optimized
+high-performance scale- and rotation-invariant interest point
+detector and descriptor.
+Considering the number of matching features in \autoref{fig:snowden} with 38 matching features for our approach
+against 5~for SURF, 11~for SIFT, and 200~for ASIFT,
+our algorithm performs well
+compared to the more advanced feature detection algorithms,
+especially considering the fast execution time.
+This also applies in the general case with other media items
+and is mainly due to the observed reasons for
+duplicate and near-duplicate content on social networks
+(\autoref{sec:reasons-for-near-duplicate}),
+where orientation-invariance
+does not play a~central role.
+Given our concrete context of social networks,
+the trade-off of lost accuracy regarding
+orientation-invariance against faster performance
+is justified by the enormous processing speed gains.
+The algorithm still maintains scale-invariance
+to the necessary extent,
+which can be seen in \autoref{fig:zoomed}.
+SIFT, ASIFT, and SURF operate on a~black-and-white representation
+of the media item in question,
+whereas our algorithm, apart from face detection,
+works with color histograms.
+By taking color features into account,
+our algorithm is invariant to illumination changes,
+which is well visible in \autoref{fig:lightingconditions}.
+At the same time, maximum visual diversity is assured,
+which is as an important aesthetic feature
+of media galleries~\cite{steiner2012definingaesthetic}.
+ 
+\begin{figure}[t!]
+  \centering
+  \subfloat[Photo]{
+    \includegraphics[width=0.3\linewidth]{snowden2.eps}
+  }
+  \hspace{0.2em}
+  \subfloat[Video keyframe]{
+    \includegraphics[width=0.3\linewidth]{snowden1.eps}
+  }
+  \caption{Two near-duplicate media items (photo and video)}
+  \label{fig:snowden-compare}
+\end{figure}
+
+\begin{figure}[t!]
+  \centering
+  \subfloat[Tile histograms with face detection (334~ms runtime; 38~matches)]{
+    \includegraphics[width=0.35\linewidth]{snowden_histo.eps}
+  }
+  \hspace{0.2em}
+  \subfloat[Original SIFT (5.03~sec runtime; 11~matches)]{
+    \includegraphics[width=0.35\linewidth]{snowden_sift.eps}
+  }
+  \hspace{0.2em}
+  \subfloat[Affine-SIFT (7.83~sec runtime; 200~matches)]{
+    \includegraphics[width=0.35\linewidth]{snowden_asift.eps}
+  }
+  \hspace{0.2em}
+  \subfloat[SURF (1.21~sec runtime; 5~matches)]{
+    \includegraphics[width=0.35\linewidth]{snowden_surf.eps}
+  }  
+  \caption{Our approach compared to the state-of-the art feature detection algorithms SIFT, Affine-SIFT, and SURF}
+  \label{fig:snowden}
+\end{figure}
+
 \section{Video Deduplication}
 
 In the previous section, we have introduced

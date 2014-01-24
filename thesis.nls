@@ -1,159 +1,159 @@
-\begin{thenomenclature}
+\begin{thenomenclature} 
 
  \nomgroup{A}
 
   \item [{API}]\begingroup Application Programming Interface\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{ASCII}]\begingroup American Standard Code for Information Interchange\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{BBC}]\begingroup British Broadcasting Corporation\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{BPEL}]\begingroup Business Process Execution Language\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{BPEL4WS}]\begingroup Business Process Execution Language for Web Services\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CBIR}]\begingroup Content-based Image Retrieval\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CBVR}]\begingroup Content-based Video Retrieval\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CEO}]\begingroup Chief Executive Officer\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CERN}]\begingroup European Organization for Nuclear Research\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CES}]\begingroup Consumer Electronics Show\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CPU}]\begingroup Central Processing Unit\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{CSS}]\begingroup Cascading Style Sheets\nomeqref {0}
-    \nompageref{xx}
-  \item [{CURIE}]\begingroup Compact URI\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{CURIE}]\begingroup Compact URI\nomeqref {0}\nompageref{xii}
   \item [{DAWG}]\begingroup Data Access Working Group\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{DOM}]\begingroup Document Object Model\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{ERT WG}]\begingroup Evaluation and Repair Tools Working Group\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{Exif}]\begingroup Exchangeable image file format\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{FOAF}]\begingroup Friend of a friend\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{FP7}]\begingroup 7\superscript{th} Framework Programme for Research and Technological Development\nomeqref {0}
-    \nompageref{xx}
-    \vfill
-    \columnbreak
-    \null\vspace{13.2em}
-  \item [{HD}]\begingroup High Definition\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{HD}]\begingroup High Definition\nomeqref {0}\nompageref{xii}
   \item [{HTML}]\begingroup Hypertext Markup Language\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{HTTP}]\begingroup Hypertext Transfer Protocol\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{ICT}]\begingroup Information and Communications Technology\nomeqref {0}
-    \nompageref{xx}
-  \item [{IP}]\begingroup Internet Protocol\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{IP}]\begingroup Internet Protocol\nomeqref {0}
+		\nompageref{xii}
   \item [{IRC}]\begingroup Internet Relay Chat\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{ISO}]\begingroup International Organization for Standardization\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{IT}]\begingroup Information Technology\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{JSON}]\begingroup JavaScript Object Notation\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{LOD}]\begingroup Linking Open Data\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{LOVS}]\begingroup Loose Order, Varying Sizes\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{MOS}]\begingroup Mean Opinion Score\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{NEE}]\begingroup Named Entity Extraction\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{NER}]\begingroup Named Entity Recognition\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{NERD}]\begingroup Named Entity Recognition and Disambiguation\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{NLP}]\begingroup Natural Language Processing\nomeqref {0}
-    \nompageref{xx}
-  \item [{NPT}]\begingroup Normal Play Time\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{NPT}]\begingroup Normal Play Time\nomeqref {0}
+		\nompageref{xii}
   \item [{OCR}]\begingroup Optical Character Recognition\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{OWL}]\begingroup Web Ontology Language\nomeqref {0}
-    \nompageref{xx}
-  \item [{PC}]\begingroup Personal Computer\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{PC}]\begingroup Personal Computer\nomeqref {0}
+		\nompageref{xii}
   \item [{PCRM}]\begingroup Pixel Change Ratio Map\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{PIPA}]\begingroup Preventing Real Online Threats to Economic Creativity and Theft of Intellectual Property Act\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{POS}]\begingroup Part-of-Speech (tagging)\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{RAM}]\begingroup Random Access Memory\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{RDF}]\begingroup Resource Description Framework\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{RDFa}]\begingroup Resource Description Framework in Attributes\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{REST}]\begingroup Representational State Transfer\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{RFC}]\begingroup Request for comment\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{RSS}]\begingroup Really Simple Syndication\nomeqref {0}
-    \nompageref{xx}
-  \item [{RT}]\begingroup ReTweet\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{RT}]\begingroup ReTweet\nomeqref {0}\nompageref{xii}
   \item [{SD}]\begingroup Standard Definition\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SERP}]\begingroup Search Engine Results Page\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SHA}]\begingroup Secure hash algorithm\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SIFT}]\begingroup Scale Invariant Feature Transform\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SIFT}]\begingroup Scale-Invariant Feature Transform\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SNS}]\begingroup Social Network Site\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SNS}]\begingroup Social Network(ing) Site\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SOAP}]\begingroup Simple Object Access Protocol\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SOES}]\begingroup Strict Order, Equal Sizes\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SOPA}]\begingroup Stop Online Piracy Act\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{SPARQL}]\begingroup SPARQL Protocol and RDF Query Language\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{STReP}]\begingroup Specific Targeted Research Projects\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{TED}]\begingroup Technology, Entertainment, Design\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{tf-idf}]\begingroup Term frequency-inverse document frequency\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{Turtle}]\begingroup Terse RDF Triple Language\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{UDDI}]\begingroup Universal Description, Discovery and Integration\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{URI}]\begingroup Unique Resource Identifier\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{URL}]\begingroup Unique Resource Locator\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{US-ASCII}]\begingroup American Standard Code for Information Interchange\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{UTC}]\begingroup Universal Time Coordinated\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{UTF-8}]\begingroup 8-bit Unicode Transformation Format\nomeqref {0}
-    \nompageref{xx}
-  \item [{W3}]\begingroup World Wide Web\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{W3}]\begingroup World Wide Web\nomeqref {0}\nompageref{xii}
   \item [{W3C}]\begingroup World Wide Web Consortium\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{WAI}]\begingroup Web Accessibility Initiative\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{WSDL}]\begingroup Web Services Description Language\nomeqref {0}
-    \nompageref{xx}
-  \item [{WWW}]\begingroup World Wide Web\nomeqref {0}\nompageref{xx}
+		\nompageref{xii}
+  \item [{WWW}]\begingroup World Wide Web\nomeqref {0}\nompageref{xii}
   \item [{XFN}]\begingroup XHTML Friends Network\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{XHTML}]\begingroup Extensible Hypertext Markup Language\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{XML}]\begingroup Extensible Markup Language\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
   \item [{XOXO}]\begingroup eXtensible Open XHTML Outlines\nomeqref {0}
-    \nompageref{xx}
+		\nompageref{xii}
 
 \end{thenomenclature}
