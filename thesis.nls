@@ -100,8 +100,6 @@
 		\nompageref{xx}
   \item [{SHA}]\begingroup Secure hash algorithm\nomeqref {0}
 		\nompageref{xx}
-  \item [{SIFT}]\begingroup Scale Invariant Feature Transform\nomeqref {0}
-		\nompageref{xx}
   \item [{SIFT}]\begingroup Scale-Invariant Feature Transform\nomeqref {0}
 		\nompageref{xx}
   \item [{SNS}]\begingroup Social Network Site\nomeqref {0}
@@ -117,6 +115,8 @@
   \item [{SPARQL}]\begingroup SPARQL Protocol and RDF Query Language\nomeqref {0}
 		\nompageref{xx}
   \item [{STReP}]\begingroup Specific Targeted Research Projects\nomeqref {0}
+		\nompageref{xx}
+  \item [{SURF}]\begingroup Speeded Up Robust Features\nomeqref {0}
 		\nompageref{xx}
   \item [{TED}]\begingroup Technology, Entertainment, Design\nomeqref {0}
 		\nompageref{xx}
