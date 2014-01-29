@@ -142,25 +142,23 @@ media items and microposts in an aesthetic way
 
 \section{Related Work}
 
+In this section, we provide a~brief
+non-exhaustive meta overview of related work
+for the task of summarizing events
+based on social network multimedia data, namely videos and photos.
+More detailed studies of the particular states-of-the-art
+for each relevant subtask can be found in the upcoming chapters.
+
 In recent years, social media has made rapid strides
 from a~smiled-at phenomenon toward
-becoming a~source of breaking news to be taken seriously
-that probably has gone mainstream for the first time
+becoming a~source of breaking news that is to be taken seriously
+and that probably has gone mainstream for the first time
 with J\=anis Kr\=ums' tweet on the US Airways Flight 1549 plane crash.
 At the very moment of the crash, Kr\=ums was a~regular passenger on
 a~ferry and happened to witness the crash and
 posted a~widely shared photo on the media hosting platform Twitpic,
 distributed via the social network Twitter
 that can be seen in \autoref{fig:plane-hudson}.
-
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[height=6cm]{plane_hudson_river.jpg}
-  \caption[Tweet by J\=anis Kr\=ums]
-    {Tweet by J\=anis Kr\=ums (@jkrums, \url{https://twitter.com/jkrums/status/1121915133}): ``http://twitpic.com/135xa -- There's a plane in the Hudson. I'm on the ferry going to pick up the people. Crazy.''}
-  \label{fig:plane-hudson}
-\end{figure}
-
 As a~result of the growing importance of social media,
 common news media like TV~stations and (online) newspapers,
 but also news agencies themselves,
@@ -182,24 +180,67 @@ to represent the feeling of the whole population).
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=\linewidth]{wahlschau}
+  \includegraphics[height=6cm]{plane_hudson_river.jpg}
+  \caption[Tweet by J\=anis Kr\=ums]
+    {Tweet by J\=anis Kr\=ums (@jkrums, \url{https://twitter.com/jkrums/status/1121915133}): ``http://twitpic.com/135xa -- There's a plane in the Hudson. I'm on the ferry going to pick up the people. Crazy.''}
+  \label{fig:plane-hudson}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.95\linewidth]{wahlschau}
   \caption[Social media visualization for the elections to the German Bundestag]
     {Social media visualization for the elections to the German Bundestag (\url{http://wahlschau.tagesschau.flyp.tv/})}
   \label{fig:wahlschau}
 \end{figure}
 
 Examples of such manual social media curation tools are FlypSite,%
-\footnote{\url{http://www.flyp.tv/}},
+\footnote{\url{http://www.flyp.tv/}}
 a~tool that facilitates the creation of embeddable
-second screen applications or TV social media widgets, Storify,%
+second screen applications or TV social media widgets,
+Storify~\cite{fincham2011storify,atasoy2011storify},%
 \footnote{\url{http://storify.com/}}
 a~social network service that lets the user create stories
 or timelines using social media, and Storyful,%
 \footnote{\url{http://storyful.com/}}
 a~news agency specializing in verifying and distributing
 user-generated content relating to news events
-from social networking services.
+from social networks.
+More automated approaches for content identification exist,
+for example, \cite{liu2011events} and \cite{liu2011socialmedia}
+by Liu \emph{et~al.}\ who combine semantic inference
+and visual analysis to automatically find media items
+that illustrate events, or \cite{becker2010eventidentification}
+and \cite{becker2012plannedevents} by Becker \emph{et~al.}\
+who focus on identifying media items related to events
+by learning similarity metrics and identifying search terms.
+These approaches do not help with the tasks of
+ranking~\cite{liu2009learningtorank}
+deduplicating~\cite{yang2009nearduplicate}
+and representing the event-related content
+esthetically%
+~\cite{sandhaus2011photobook,obrador2012photoaesthetics}.
+Event archiving services such as Eventifier%
+\footnote{\url{http://eventifier.co/}} 
+do a~great job at storing all the social media content around
+entire events, however, do not rank the information.
+Closest to our approach is Seen%
+\footnote{\url{http://seen.co/}}
+an engine that aggregates, organizes, and ranks media
+and collects information on topics trending in social media.
+Seen does not create interactive visualizations,
+whereas with our approach we create
+speech-enabled media item compilations.
+Finally, there is MediaFinder~\cite{troncy2013mediafinder},%
+\footnote{\url{http://mediafinder.eurecom.fr/}}
+which uses a~fork of our media item collector
+and which specializes in clustering media items
+based on named entities.
 
+As we will motivate throughout the thesis,
+there is definitely a~need for tools that make sense of events,
+that organize them into clusters, that summarize them,
+and that let users quickly grasp what happened.
 
 \section{Contributions}
 
