@@ -247,3 +247,9 @@ input.number {
   border: solid 1px #ccc;
   white-space: normal;
 }
+
+A.about {
+  color: red;
+  position:absolute;
+  right: 2em;
+}
