@@ -2,8 +2,8 @@ var querystring = require('querystring');
 var request = require('request');
 var jsdom = require('jsdom');
 var pos = require('pos');
+var URL = require('url');
 var Step = require('./step.js');
-var Uri = require('./uris.js');
 var twitter = require('ntwitter');
 
 var GLOBAL_config = {
@@ -132,8 +132,8 @@ var mediaFinder = {
           (url.indexOf('https://www.youtube.com') === 0) ||
           (url.indexOf('http://youtu.be') === 0)) {
         try {
-          var urlObj = new Uri(url);
-          var path = urlObj.heirpart().path();
+          var urlObj = URL.parse(url);
+          var path = urlObj.path;
           var pathComponents = path.split(/\//gi);
           var videoId;
           if (pathComponents[1] === 'v') {
@@ -143,7 +143,7 @@ var mediaFinder = {
           } else if (pathComponents[1] === 'watch') {
             // URL of "watch" type:
             // http://www.youtube.com/watch?v=EVBsypHzF3U
-            var query = urlObj.querystring();
+            var query = urlObj.search;
             query.substring(1).split(/&/gi).forEach(function(param) {
               var keyValue = param.split(/\=/g);
               if (keyValue[0] === 'v') {
@@ -964,7 +964,7 @@ var mediaFinder = {
                 }
                 for (var j = 0, len2 = item.entities.urls.length; j < len2; j++) {
                   var url = item.entities.urls[j].expanded_url;
-                  var host = new Uri(url).heirpart().authority().host();
+                  var host = URL.parse(url).host;
                   if (GLOBAL_config.MEDIA_PLATFORMS.indexOf(host) !== -1) {
                     numberOfUrls++;
                     var timestamp = Date.parse(item.created_at);
