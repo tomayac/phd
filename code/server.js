@@ -10,7 +10,6 @@ app.use(express.bodyParser({
 var server = http.createServer(app);
 global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
-var Uri = require('./uris.js');
 var mediaFinder = require('./mediafinder.js');
 var translator = require('./translate.js');
 var speak = require('./speak.js');
