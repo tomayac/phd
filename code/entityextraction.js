@@ -1,3 +1,5 @@
+'use strict';
+
 var DEBUG = false;
 var querystring = require('querystring');
 var http = require('http');
@@ -314,11 +316,13 @@ var entityExtractor = {
                 response2 += chunk;
               });
               res2.on('end', function() {
+                var results2;
                 try {
                   results2 = JSON.parse(response2);
                 } catch(e) {
                   sendResults(pendingRequests, entities, currentService);
                 }
+                var results1;
                 try {
                   results1 = JSON.parse(response1);
                 } catch(e) {
@@ -448,7 +452,7 @@ var entityExtractor = {
 
     function sendResults(pendingRequests, entities, service) {
       if (!pendingRequests) {
-        callback(entities);
+        return callback(entities);
       } else {
         pendingRequests[service] = entities;
       }

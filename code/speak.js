@@ -1,3 +1,5 @@
+'use strict';
+
 var speakjs = require('node-speak');
 var speak = {
   say: function say(words, callback) {

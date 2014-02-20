@@ -1,3 +1,5 @@
+'use strict';
+
 var CLIENT_ID = 'socialmediaillustrator';
 var CLIENT_SECRET = 'MX20IfikwigQxBaZuCyrNKEKq18XF/TXZ9D7cqN3oGI=';
 

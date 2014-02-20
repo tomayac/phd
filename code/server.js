@@ -1,3 +1,5 @@
+'use strict';
+
 var request = require('request');
 var express = require('express');
 var fs = require('fs');
@@ -19,10 +21,6 @@ var GLOBAL_config = {
   DEBUG: true
 };
 
-// start static serving
-// and set default route to index.html
-app.use(express.static(__dirname + '/static'));
-
 app.configure('development', function() {
   app.use(express.errorHandler({
     dumpExceptions: true,
@@ -34,7 +32,12 @@ app.configure('production', function() {
   app.use(express.errorHandler());
 });
 
+// start static serving
+// and set default route to index.html
+app.use(express.static(__dirname + '/static'));
+
 app.get('/', function(req, res) {
+console.log('function 1')
   res.sendfile(__dirname + '/index.html');
 });
 
@@ -105,8 +108,10 @@ function proxy(req, res, next) {
   io.sockets.emit('proxy', {
     url: url
   });
+  res.setHeaders = {
+    'Cache-Control': 'max-age=7200, must-revalidate'
+  };
   try {
-    res.setHeader('Cache-Control', 'max-age=7200, must-revalidate');
     request.get(url).pipe(res);
   } catch(e) {
     res.statusCode = 404;
@@ -115,9 +120,10 @@ function proxy(req, res, next) {
   /*
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      res.setHeader('Content-Length', response.headers['content-length']);
-      res.setHeader('Content-Type', response.headers['content-type']);
-
+      res.setHeaders = {
+        'Content-Length': response.headers['content-length'],
+        'Content-Type': response.headers['content-type']
+      };
       var data = '';
       response.on('data', function(chunk) {
         data += chunk;
@@ -141,9 +147,11 @@ function extractEntities(req, res, next) {
   var service = pathname.replace(path, '$1');
   var text = decodeURIComponent(pathname.replace(path, '$2'));
   entityExtractor.extract(service, text, function(json) {
-    res.setHeader('Content-Type', 'application/json; charset=UTF-8');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+    res.setHeaders = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'X-Requested-With'
+    };
     if (req.query.callback) {
       res.send(req.query.callback + '(' + JSON.stringify(json) + ')');
     } else {
@@ -160,9 +168,11 @@ function search(req, res, next) {
   if (GLOBAL_config.DEBUG) console.log('Search request for ' + query);
   var userAgent = req.headers['user-agent'];
   mediaFinder.search(service, query, userAgent, function(json) {
-    res.setHeader('Content-Type', 'application/json; charset=UTF-8');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+    res.setHeaders = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'X-Requested-With'
+    };
     if (req.query.callback) {
       res.send(req.query.callback + '(' + JSON.stringify(json) + ')');
     } else {
@@ -178,9 +188,11 @@ function speech(req, res, next) {
   if (GLOBAL_config.DEBUG) console.log('Speech request for ' + words);
   speak.say(words, function(src) {
     if (src) {
-      res.setHeader('Content-Type', 'application/json; charset=UTF-8');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+      res.setHeaders = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'X-Requested-With'
+      };
       res.send(JSON.stringify({base64: src}));
     } else {
       res.statusCode = 404;
