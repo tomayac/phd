@@ -37,7 +37,6 @@ app.configure('production', function() {
 app.use(express.static(__dirname + '/static'));
 
 app.get('/', function(req, res) {
-console.log('function 1')
   res.sendfile(__dirname + '/index.html');
 });
 
