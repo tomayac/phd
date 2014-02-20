@@ -130,7 +130,7 @@ var entityExtractor = {
       },
       zemanta: function(pendingRequests) {
         var currentService = 'zemanta';
-        var license = '4eqem8kyjzvkz8d2ken3xprb';
+        var license = process.env.ZEMANTA_LICENSE;
         var params = {
           method: 'zemanta.suggest_markup',
           api_key:  license,
@@ -193,7 +193,7 @@ var entityExtractor = {
       },
       opencalais: function(pendingRequests) {
         var currentService = 'opencalais';
-        var license = 'xxqm6vznsj42scny2tk5dvrv';
+        var license = process.env.OPENCALAIS_LICENSE;
         var paramsXml =
             '<c:params ' +
                 'xmlns:c="http://s.opencalais.com/1/pred/" '+
@@ -274,7 +274,7 @@ var entityExtractor = {
       },
       alchemyapi: function(pendingRequests) {
         var currentService = 'alchemyapi';
-        var license = '6075eba18cf6fedc3ad522703b22fac10c4440a7';
+        var license = process.env.ALCHEMYAPI_LICENSE;
         var params = {
             apikey:  license,
             text:  text,

@@ -1,7 +1,7 @@
 'use strict';
 
-var CLIENT_ID = 'socialmediaillustrator';
-var CLIENT_SECRET = 'MX20IfikwigQxBaZuCyrNKEKq18XF/TXZ9D7cqN3oGI=';
+var CLIENT_ID = process.env.BING_CLIENT_ID;
+var CLIENT_SECRET = process.env.BING_CLIENT_SECRET;
 
 /**
  * Translates an array of texts in arbitrary languages to a target language.

@@ -14,19 +14,21 @@ var GLOBAL_config = {
   PART_OF_SPEECH: false,
   NAMED_ENTITY_EXTRACTION: false,
   USE_GOOGLE_RESEARCH_API: false,
-  MOBYPICTURE_KEY: 'TGoRMvQMAzWL2e9t',
-  FLICKR_SECRET: 'a4a150addb7d59f1',
-  FLICKR_KEY: 'b0f2a04baa5dd667fb181701408db162',
-  YFROG_KEY: '89ABGHIX5300cc8f06b447103e19a201c7599962',
-  INSTAGRAM_KEY: '47dcb5ea3b5b4c7595ee25081caca1bb',
-  INSTAGRAM_SECRET: '8579591.f59def8.8ca970406d154bc1904da1b1d7cab559',
-  GOOGLE_KEY: 'AIzaSyC5GxhDFxBHTKCLNMYtYm6o1tiagi65Ufc',
-  GOOGLE_RESEARCH_API_KEY: 'DQAAAMcAAAAcGiug619uBnQa2Joxo2vPo2Bup-s062p1fLvLpRM9Mc7IdRUeJ-YZUv9BcuXgAdWcg1uu5YrIRLvzA_eojgOmpGF6wF3Bsd5pYAczmtTeNcpgzdWI5otAToWwPkSuRRulDUqAUZdnCXwjuR8XTobYVLNNmO-sqVeXIwaT593vH2eDGycOoYyeDEji0jmPTXkvqV9_T20u7Zb5jWcl2b-Kz5B6n2OuKSIZjRU_8bqKzasAQD5r9ycFY5uWTQPyUA3lFRqdgS0tTDPpFL9-bXFP',
-  IMGUR_KEY: '9b7d0e62bfaacc04db0b719c998d225e',
-  TWITTER_CONSUMER_KEY: '6qjXspcrt3j7BmXqbCzjQ',
-  TWITTER_CONSUMER_SECRET: 'NOHRonZUDzz9CxQysNE2MByaZU8Sg9n7DG3gG1VS1o',
-  TWITTER_ACCESS_TOKEN_KEY: '14697496-wCkjgHciqZzcylUJgEALRdSLIyg52IqNaI0Qw5iY',
-  TWITTER_ACCESS_TOKEN_SECRET: 'kZEapR3HG75mQS6SnEvuxfzsHwcAF8X6cRSGuolMTM8',
+  MOBYPICTURE_KEY: process.env.MOBYPICTURE_KEY,
+  FLICKR_SECRET: process.env.FLICKR_SECRET,
+  FLICKR_KEY: process.env.FLICKR_KEY,
+  YFROG_KEY: process.env.YFROG_KEY,
+  INSTAGRAM_KEY: process.env.INSTAGRAM_KEY,
+  INSTAGRAM_SECRET: process.env.INSTAGRAM_SECRET,
+  GOOGLE_KEY: process.env.GOOGLE_KEY,
+  GOOGLE_RESEARCH_API_KEY: process.env.GOOGLE_RESEARCH_API_KEY,
+  IMGUR_KEY: process.env.IMGUR_KEY,
+  TWITTER_CONSUMER_KEY: process.env.TWITTER_CONSUMER_KEY,
+  TWITTER_CONSUMER_SECRET: process.env.TWITTER_CONSUMER_SECRET,
+  TWITTER_ACCESS_TOKEN_KEY: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  TWITTER_ACCESS_TOKEN_SECRET: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
   HEADERS: {
     "Accept": "application/json, text/javascript, */*",
     "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
@@ -789,7 +791,9 @@ var mediaFinder = {
         var params = {
           q: query,
           limit: 100,
-          fields: 'comments,type,created_time,name,caption,description,source,picture,id,from,likes,shares'
+          fields: 'comments,type,created_time,name,caption,description,source,picture,id,from,likes,shares',
+          access_token: GLOBAL_config.FACEBOOK_APP_ID + '|' +
+              GLOBAL_config.FACEBOOK_APP_SECRET
         };
         params = querystring.stringify(params);
         var options = {
