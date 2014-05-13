@@ -7,9 +7,10 @@ var http = require('http');
 var jsdom = require('jsdom');
 var app = express();
 app.use(express.bodyParser({
-  maxFieldsSize: '100 * 1024 * 1024 * 1024 '
+  maxFieldsSize: '100 * 1024 * 1024 * 1024'
 }));
 var server = http.createServer(app);
+/* global io:false */
 global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
 var mediaFinder = require('./mediafinder.js');
@@ -107,36 +108,15 @@ function proxy(req, res, next) {
   io.sockets.emit('proxy', {
     url: url
   });
-  res.setHeaders = {
+  res.set({
     'Cache-Control': 'max-age=7200, must-revalidate'
-  };
+  });
   try {
     request.get(url).pipe(res);
   } catch(e) {
     res.statusCode = 404;
     res.send('Error 404 File not found.');
   }
-  /*
-  request(url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      res.setHeaders = {
-        'Content-Length': response.headers['content-length'],
-        'Content-Type': response.headers['content-type']
-      };
-      var data = '';
-      response.on('data', function(chunk) {
-        data += chunk;
-      });
-
-      response.on('close', function() {
-        res.send(data);
-      });
-    } else {
-      res.statusCode = 404;
-      res.send('Error 404. File not found.');
-    }
-  });
-  */
 }
 
 function extractEntities(req, res, next) {
@@ -146,11 +126,11 @@ function extractEntities(req, res, next) {
   var service = pathname.replace(path, '$1');
   var text = decodeURIComponent(pathname.replace(path, '$2'));
   entityExtractor.extract(service, text, function(json) {
-    res.setHeaders = {
+    res.set({
       'Content-Type': 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'X-Requested-With'
-    };
+    });
     if (req.query.callback) {
       res.send(req.query.callback + '(' + JSON.stringify(json) + ')');
     } else {
@@ -165,13 +145,13 @@ function search(req, res, next) {
   var service = pathname.replace(path, '$1');
   var query = decodeURIComponent(pathname.replace(path, '$2'));
   if (GLOBAL_config.DEBUG) console.log('Search request for ' + query);
-  var userAgent = req.headers['user-agent'];
+  var userAgent = req.get('user-agent');
   mediaFinder.search(service, query, userAgent, function(json) {
-    res.setHeaders = {
+    res.set({
       'Content-Type': 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'X-Requested-With'
-    };
+    });
     if (req.query.callback) {
       res.send(req.query.callback + '(' + JSON.stringify(json) + ')');
     } else {
@@ -187,11 +167,11 @@ function speech(req, res, next) {
   if (GLOBAL_config.DEBUG) console.log('Speech request for ' + words);
   speak.say(words, function(src) {
     if (src) {
-      res.setHeaders = {
+      res.set({
         'Content-Type': 'application/json; charset=UTF-8',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'X-Requested-With'
-      };
+      });
       res.send(JSON.stringify({base64: src}));
     } else {
       res.statusCode = 404;
@@ -206,4 +186,4 @@ io.sockets.on('connection', function(socket) {
 
 var port = process.env.PORT || 8001;
 server.listen(port);
-console.log('node.JS running on ' + port);
+console.log('Social Media Illustrator running on ' + port);

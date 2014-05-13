@@ -64,7 +64,7 @@ var entityExtractor = {
       }
       entities2 = entities2.concat(entities);
       return entities2;
-    }
+    };
 
     // object with all service names
     var services = {
@@ -247,10 +247,10 @@ var entityExtractor = {
                 continue;
               } else {
                 var entity = response[key];
-                if (entity['_typeGroup'] === 'entities') {
-                  var name = entity['categoryName'] ?
-                      entity['categoryName'] :
-                      entity['name'];
+                if (entity._typeGroup === 'entities') {
+                  var name = entity.categoryName ?
+                      entity.categoryName :
+                      entity.name;
                   entities.push({
                     name: name,
                     relevance: parseFloat(entity.relevance),
@@ -373,7 +373,7 @@ var entityExtractor = {
                   var disambiguated = entity.disambiguated;
                   var keys = typeof(disambiguated) === 'object' ?
                       Object.keys(disambiguated) : [];
-                  for (j = 0, len2 = keys.length; j < len2; j++) {
+                  for (var j = 0, len2 = keys.length; j < len2; j++) {
                     var key = keys[j];
                     if ((key === 'name') ||
                         (key === 'subType') ||
@@ -420,7 +420,7 @@ var entityExtractor = {
     if (service === 'combined') {
       var serviceNames = typeof(services) === 'object' ?
           Object.keys(services) : [];
-      var pendingRequests = {}
+      var pendingRequests = {};
       serviceNames.forEach(function(serviceName) {
         pendingRequests[serviceName] = false;
         services[serviceName](pendingRequests);

@@ -1,5 +1,7 @@
 'use strict';
 
+/* jshint browser:true */
+/* global io, ccv, humaneDate, mediaFragments, async, Histogram */
 (function() {
   var illustrator = {
     // constants
@@ -60,8 +62,9 @@
       if (illustrator.DEBUG) console.log('Initializing app');
 
       var resizeTabsDiv = function() {
-        var tab = document.getElementById('tabs');
-        tab.style.minHeight = (window.innerHeight - tabs.offsetTop - 10) + 'px';
+        var tabs = document.getElementById('tabs');
+        tabs.style.minHeight =
+            (window.innerHeight - tabs.offsetTop - 10) + 'px';
       };
       window.addEventListener('resize', resizeTabsDiv, false);
       resizeTabsDiv();
@@ -236,7 +239,7 @@
             (e.target.nodeName.toLowerCase() !== 'video') &&
             (e.target.nodeName.toLowerCase() !== 'span')) {
           return;
-        };
+        }
         var img = e.target.parentNode.querySelector('img, video');
         var close = img.parentNode.parentNode.querySelector('span.close');
         close.style.display = 'block';
@@ -250,7 +253,7 @@
             (e.target.nodeName.toLowerCase() !== 'video') &&
             (e.target.nodeName.toLowerCase() !== 'span')) {
           return;
-        };
+        }
         var img = e.target.parentNode.querySelector('img, video');
         var close = img.parentNode.parentNode.querySelector('span.close');
         close.style.display = 'none';
@@ -271,7 +274,7 @@
         var cascading = true;
         if (close.parentNode.parentNode.classList.contains('cluster')) {
           cascading = false;
-        };
+        }
         illustrator.deleteMediaItem(posterUrl, cascading);
       };
 
@@ -419,6 +422,13 @@
         }
         // prepare the zoom animation and center the media item
         div.style.zIndex = illustrator.mediaGalleryZIndex++;
+        // needed for the CSS transition to trigger
+        var preAnimationLeft =
+            (div.offsetLeft - div.style.marginLeft.replace('px', '')) + 'px';
+        var preAnimationTop =
+            (div.offsetTop - div.style.marginTop.replace('px', '')) + 'px';
+        div.style.left = preAnimationLeft;
+        div.style.top = preAnimationTop;
         var scaleFactor = '2.0';
         if (div.classList.contains('big')) {
           scaleFactor = '1.5';
@@ -426,18 +436,20 @@
         div.style['-webkit-transform'] = 'scale(' + scaleFactor + ')';
         div.style.transform = 'scale(' + scaleFactor + ')';
         // needed for the CSS transition to trigger
-        getComputedStyle(div).left;
-        div.style.left = illustrator.mediaGalleryCenter.left - div.offsetLeft -
-            (div.clientWidth / 2);
-        div.style.top = illustrator.mediaGalleryCenter.top - div.offsetTop -
-            (div.clientHeight / 2) + mediaGallery.scrollTop;
+        var postAnimationLeft = (illustrator.mediaGalleryCenter.left -
+            div.offsetLeft - (div.clientWidth / 2)) + 'px';
+        var postAnimationTop = (illustrator.mediaGalleryCenter.top -
+            div.offsetTop - (div.clientHeight / 2) + mediaGallery.scrollTop) +
+            'px';
+        div.style.left = postAnimationLeft;
+        div.style.top = postAnimationTop;
         // blur all other media items
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
         for (var i = 0, len = mediaItems.length; i < len; i++) {
           if (mediaItems[i] !== div) {
             mediaItems[i].style['-webkit-filter'] =
                 'blur(10px) grayscale(100%)';
-            mediaItems[i].style['filter'] = 'blur(10px) grayscale(100%)';
+            mediaItems[i].style.filter = 'blur(10px) grayscale(100%)';
           }
         }
       };
@@ -447,19 +459,17 @@
         if (div.classList.contains('clone')) {
           return;
         }
-        // needed for the CSS transition to trigger
-        getComputedStyle(div).left;
         // scale down the media item again and put it back to its space
         div.style['-webkit-transform'] = 'scale(1.0)';
         div.style.transform = 'scale(1.0)';
-        div.style.left = null;
-        div.style.top = null;
+        div.style.left = 'auto';
+        div.style.top = 'auto';
         // unblur all other media items
         var mediaItems = mediaGallery.querySelectorAll('.mediaItem');
         for (var i = 0, len = mediaItems.length; i < len; i++) {
           if (mediaItems[i] !== div) {
             mediaItems[i].style['-webkit-filter'] = null;
-            mediaItems[i].style['filter'] = null;
+            mediaItems[i].style.filter = null;
           }
         }
         // remove the clone, but only when the scale down animation has finished
@@ -497,7 +507,7 @@
       });
 
       var muteVideosButton = document.getElementById('muteAllVideos');
-      muteAllVideos.addEventListener('click', function(e) {
+      muteVideosButton.addEventListener('click', function(e) {
         var videos = document.querySelectorAll('video');
         for (var i = 0, len = videos.length; i < len; i++) {
           var video = videos[i];
@@ -1006,6 +1016,7 @@
       };
 
       var detectFaces = function(img, width, height) {
+        /* global cascade */
         var comp = ccv.detect_objects({
           canvas: ccv.grayscale(ccv.pre(img, width, height)),
           cascade: cascade,
@@ -1117,14 +1128,17 @@
         illustrator.mediaItems[keys[i]].distances = {};
       }
 
+      var rFactor;
+      var gFactor;
+      var bFactor;
       if (illustrator.accountForLuminance) {
-        var rFactor = 0.3;
-        var gFactor = 0.59;
-        var bFactor = 0.11;
+        rFactor = 0.3;
+        gFactor = 0.59;
+        bFactor = 0.11;
       } else {
-        var rFactor = 1;
-        var gFactor = 1;
-        var bFactor = 1;
+        rFactor = 1;
+        gFactor = 1;
+        bFactor = 1;
       }
 
       var blackTolerance = illustrator.bwTolerance;
@@ -1249,13 +1263,16 @@
         var outer = keys[i];
         keys[i] = false;
         var distanceToOuter = {};
+        var similarTiles;
+        var minimumRequired;
+        var nulls;
         for (var j = 0; j < len; j++) {
           if (j === i) {
             continue;
           }
           var inner = keys[j];
-          var similarTiles = 0;
-          var nulls = 0;
+          similarTiles = 0;
+          nulls = 0;
           var distance = illustrator.mediaItems[outer].distances[inner];
           for (var k in distance) {
             if (distance[k] !== null) {
@@ -1276,7 +1293,6 @@
               }
             }
           }
-          var minimumRequired;
           var similarTilesWithoutNulls = illustrator.similarTiles - nulls;
           if (similarTilesWithoutNulls >= minimumSimilarTiles) {
             minimumRequired = similarTilesWithoutNulls;
@@ -1658,7 +1674,7 @@
             } else if (ageInDays <= 2) {
               return 4;
             } else if (ageInDays <= 3) {
-              return 2
+              return 2;
             } else {
               return 1;
             }
@@ -1810,10 +1826,12 @@
           var calculateSizes = function(images) {
             var size = illustrator.mediaGalleryWidth;
             var n = 0;
+            var slice;
+            var h;
             w: while (images.length > 0) {
               for (var i = 1; i < images.length + 1; ++i) {
-                var slice = images.slice(0, i);
-                var h = getHeight(slice, size);
+                slice = images.slice(0, i);
+                h = getHeight(slice, size);
                 if (h < illustrator.mediaItemHeight) {
                   setHeight(slice, h);
                   n++;
@@ -1949,9 +1967,10 @@
             createColumns(nColumns);
 
             var smallImages = [];
+            var column;
             for (var i = 0, len = images.length; i < len; ++i) {
               var image = images[i];
-              var column = getMinColumn();
+              column = getMinColumn();
               var wasBigElseRandom;
               if (opt_resizeOnly) {
                 var posterUrl = image.firstChild.firstChild.dataset.posterurl;
@@ -2133,7 +2152,7 @@
           for (var i = 0, len1 = illustrator.clusters.length; i < len1; i++) {
             var micropostCandidates = illustrator.clusters[i].translations;
             var minLength = Infinity;
-            var shortestMicropost = undefined;
+            var shortestMicropost;
             for (var j = 0, len2 = micropostCandidates.length; j < len2; j++) {
               var micropostLength = micropostCandidates[j].length;
               if (micropostLength < minLength) {
@@ -2155,7 +2174,7 @@
       };
       xhr.onerror = function(e) {
         console.log('Translation error: ' + e);
-      }
+      };
       xhr.send(formData);
     },
     extractEntities: function() {

@@ -52,7 +52,9 @@ POSTagger.prototype.tag = function(words){
             ss = this.lexicon[words[i].toLowerCase()];
         if (!ss && words[i].length == 1) 
             ret[i] = words[i] + "^";
-        if (!ss) 
+        // We need to catch scenarios where we pass things on the prototype
+        // that aren't in the lexicon: "constructor" breaks this otherwise
+        if (!ss || typeof ss === "function") 
             ret[i] = "NN";
         else 
             ret[i] = ss[0];

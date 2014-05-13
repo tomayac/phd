@@ -1,5 +1,6 @@
 'use strict';
 
+/* jshint browser:true */
 var Histogram = (function(window) {
   return {
     getHistogram: function(
@@ -11,8 +12,8 @@ var Histogram = (function(window) {
       var returnValues = opt_values || false;
       // Core bits adapted from
       // https://github.com/jseidelin/pixastic/blob/master/actions/histogram.js
+      var values = [];
       if (returnValues) {
-        var values = [];
         for (var i = 0; i < 256; i++) {
           values[i] = 0;
         }

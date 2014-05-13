@@ -84,7 +84,7 @@ var mediaFinder = {
      * Objects/Date#Example:_ISO_8601_formatted_dates
      */
     function getIsoDateString(d) {
-     function pad(n) { return n < 10 ? '0' + n : n }
+     function pad(n) { return n < 10 ? '0' + n : n; }
      d = new Date(d);
      return d.getUTCFullYear() + '-' +
           pad(d.getUTCMonth() + 1) + '-' +
@@ -670,6 +670,7 @@ var mediaFinder = {
      */
     function collectResults(json, service, pendingRequests) {
       if (GLOBAL_config.DEBUG) console.log('collectResults for ' + service);
+      /* global io:false */
       io.sockets.emit('mediaResults', {
         service: service
       });
@@ -1370,7 +1371,7 @@ var mediaFinder = {
         };
         params = querystring.stringify(params);
         var options = {
-          url: 'http://api.flickr.com/services/rest/?' + params,
+          url: 'https://api.flickr.com/services/rest/?' + params,
           headers: GLOBAL_config.HEADERS
         };
         if (GLOBAL_config.DEBUG) console.log(currentService + ' ' + options.url);
@@ -1395,7 +1396,7 @@ var mediaFinder = {
                       };
                       params = querystring.stringify(params);
                       var options = {
-                        url: 'http://api.flickr.com/services/rest/?' + params,
+                        url: 'https://api.flickr.com/services/rest/?' + params,
                         headers: GLOBAL_config.HEADERS
                       };
                       var cb = group();
@@ -1422,7 +1423,7 @@ var mediaFinder = {
                           };
                           params = querystring.stringify(params);
                           var options = {
-                            url: 'http://api.flickr.com/services/rest/?' + params,
+                            url: 'https://api.flickr.com/services/rest/?' + params,
                             headers: GLOBAL_config.HEADERS
                           };
                           request.get(options, function(err, res2, body) {
@@ -1466,7 +1467,7 @@ var mediaFinder = {
                                 };
                                 params = querystring.stringify(params);
                                 var options = {
-                                  url: 'http://api.flickr.com/services/rest/?' + params,
+                                  url: 'https://api.flickr.com/services/rest/?' + params,
                                   headers: GLOBAL_config.HEADERS
                                 };
                                 request.get(options, function(err, res2, body) {
@@ -1475,12 +1476,12 @@ var mediaFinder = {
                                     results.push({
                                       mediaUrl: mediaUrl,
                                       posterUrl: posterUrl,
-                                      micropostUrl: 'http://www.flickr.com/photos/' +
+                                      micropostUrl: 'https://www.flickr.com/photos/' +
                                           photo2.owner.nsid + '/' + photo2.id + '/',
                                       micropost: cleanMicropost(photo2.title._content +
                                           '. ' + photo2.description._content +
                                           tags.join(', ')),
-                                      userProfileUrl: 'http://www.flickr.com/photos/' +
+                                      userProfileUrl: 'https://www.flickr.com/photos/' +
                                           photo2.owner.nsid + '/',
                                       type: (videoSearch ? 'video' : 'photo'),
                                       timestamp: timestamp,
@@ -1744,8 +1745,8 @@ var mediaFinder = {
                 });
               }
               results.sort(function (a, b) {
-                return
-                    (a.socialInteractions.shares - b.socialInteractions.shares);
+                return (a.socialInteractions.shares -
+                    b.socialInteractions.shares);
               });
               collectResults(results, currentService, pendingRequests);
             } else {
