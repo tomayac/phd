@@ -1,0 +1,6 @@
+{
+  "node": true,
+  "shadow": true,
+  "newcap": false,
+  "loopfunc": true
+}
