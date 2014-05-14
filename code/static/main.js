@@ -845,7 +845,8 @@
       if (illustrator.DEBUG) console.log('Initializing WebSockets');
 
       illustrator.socket.on('proxy', function(data) {
-        illustrator.showStatusMessage('Proxying file ' + decodeURIComponent(data.url.replace(illustrator.PROXY_SERVER, '')));
+        illustrator.showStatusMessage('Proxying file ' +
+            decodeURIComponent(data.url.replace(illustrator.PROXY_SERVER, '')));
       });
 
       illustrator.socket.on('mediaResults', function(data) {
@@ -1194,7 +1195,8 @@
       illustrator.filterForMinMaxAgeAndVisibility();
     },
     filterForMinMaxAgeAndVisibility: function() {
-      illustrator.showStatusMessage('Filtering media items for maximum age and visibility');
+      illustrator.showStatusMessage(
+          'Filtering media items for maximum age and visibility');
       var now = Date.now();
       for (var key in illustrator.mediaItems) {
         var mediaItem = illustrator.mediaItems[key];
@@ -1491,7 +1493,8 @@
           (similarTiles === overall ?
               'exact duplicates.' : 'near-duplicates.'), callback);
         } else {
-          illustrator.prepareSpeak('The two media items are different.', callback);
+          illustrator.prepareSpeak('The two media items are different.',
+              callback);
         }
       };
 
@@ -1529,7 +1532,8 @@
               'percent of all tiles.', callback);
           } else {
             illustrator.prepareSpeak('Out of overall ' + overall + ' tiles, ' +
-                'not a single one was similar enough to be clustered.', callback);
+                'not a single one was similar enough to be clustered.',
+                callback);
           }
       };
 
@@ -2162,10 +2166,17 @@
             (function(clusterIndex) {
               illustrator.prepareSpeak(shortestMicropost, function(err,
                   speechId) {
-                illustrator.showStatusMessage('Speech ready for cluster ' + clusterIndex);
+                illustrator.showStatusMessage('Speech ready for cluster ' +
+                    clusterIndex);
                 illustrator.clusters[clusterIndex].speechId = speechId;
               });
             })(i);
+          }
+          var mediaGallery = document.getElementById('mediaGallery');
+          var firstMediaItem =
+              mediaGallery.querySelector('.mediaItem:not(.clone)');
+          if (firstMediaItem) {
+            firstMediaItem.focus();
           }
           illustrator.extractEntities();
         } catch(e) {
@@ -2227,74 +2238,91 @@
       }
     },
     removeAllAudio: function() {
-      var audios = document.querySelectorAll('audio');
-      for (var i = 0, len = audios.length; i < len; i++) {
-        var audio = audios[i];
-        audio.parentNode.removeChild(audio);
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+      } else {
+        var audios = document.querySelectorAll('audio');
+        for (var i = 0, len = audios.length; i < len; i++) {
+          var audio = audios[i];
+          audio.parentNode.removeChild(audio);
+        }
       }
     },
     prepareSpeak: function(message, opt_callback) {
       if (!message) {
         return false;
       }
-
-      illustrator.showStatusMessage('Preparing speech message "' + message + '"');
-
-      var url = illustrator.SPEECH_SERVER + encodeURIComponent(message);
-      var handleXhrError = function(url) {
-        illustrator.showStatusMessage('Error while trying to load ' + url);
-      };
       var speechTextId = Date.now() + '_' + Math.random();
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-            try {
-              var speech = JSON.parse(xhr.responseText);
-              illustrator.speechTexts[speechTextId] = {
-                base64: speech.base64,
-                message: message
-              };
-              if (opt_callback) {
-                opt_callback(null, speechTextId);
+      if ('speechSynthesis' in window) {
+        illustrator.speechTexts[speechTextId] = {
+          audio: new SpeechSynthesisUtterance(message),
+          message: message
+        };
+        opt_callback(null, speechTextId);
+      } else {
+        illustrator.showStatusMessage('Preparing speech message "' + message +
+            '"');
+
+        var url = illustrator.SPEECH_SERVER + encodeURIComponent(message);
+        var handleXhrError = function(url) {
+          illustrator.showStatusMessage('Error while trying to load ' + url);
+        };
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              try {
+                var speech = JSON.parse(xhr.responseText);
+                illustrator.speechTexts[speechTextId] = {
+                  audio: speech.base64,
+                  message: message
+                };
+                if (opt_callback) {
+                  opt_callback(null, speechTextId);
+                }
+              } catch(e) {
+                if (illustrator.DEBUG) console.log(e);
+                handleXhrError(url);
+                opt_callback(e, null);
               }
-            } catch(e) {
-              if (illustrator.DEBUG) console.log(e);
+            } else {
               handleXhrError(url);
-              opt_callback(e, null);
+              opt_callback('Error loading ' + url, null);
             }
-          } else {
-            handleXhrError(url);
-            opt_callback('Error loading ' + url, null);
           }
-        }
-      };
-      xhr.onerror = function() {
-        handleXhrError(url);
-      };
-      xhr.open("GET", url, true);
-      xhr.send(null);
-      return false;
+        };
+        xhr.onerror = function() {
+          handleXhrError(url);
+        };
+        xhr.open("GET", url, true);
+        xhr.send(null);
+        return false;
+      }
     },
     speak: function(speechTextId, opt_callback) {
       if (!illustrator.speechTexts[speechTextId]) {
         return false;
       }
 
-      illustrator.showStatusMessage('Saying "' + illustrator.speechTexts[speechTextId].message + '"');
-
-      var audio = document.createElement('audio');
-      audio.src = illustrator.speechTexts[speechTextId].base64;
-      audio.addEventListener('ended', function() {
-        if (audio) {
-          audio.parentNode.removeChild(audio);
-        }
-        if (opt_callback) {
-          opt_callback(illustrator.speechTexts[speechTextId].message);
-        }
-      });
-      document.body.appendChild(audio);
-      audio.play();
+      illustrator.showStatusMessage('Saying "' +
+          illustrator.speechTexts[speechTextId].message + '"');
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        speechSynthesis.speak(illustrator.speechTexts[speechTextId].audio);
+      } else {
+        var audio = document.createElement('audio');
+        audio.src = illustrator.speechTexts[speechTextId].audio;
+        audio.addEventListener('ended', function() {
+          if (audio) {
+            audio.parentNode.removeChild(audio);
+          }
+          if (opt_callback) {
+            opt_callback(illustrator.speechTexts[speechTextId].message);
+          }
+        });
+        document.body.appendChild(audio);
+        audio.play();
+      }
     }
   };
 

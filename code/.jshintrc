@@ -2,5 +2,6 @@
   "node": true,
   "shadow": true,
   "newcap": false,
-  "loopfunc": true
+  "loopfunc": true,
+  "maxlen": 80
 }

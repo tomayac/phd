@@ -6,9 +6,9 @@ var http = require('http');
 
 var entityExtractor = {
   extract: function(service, text, callback) {
-        /**
-     * Merges two entity arrays based on URIs, calculates relevance averages, and
-     * maintains provenance information
+    /**
+     * Merges two entity arrays based on URIs, calculates relevance averages,
+     * and maintains provenance information
      */
     var mergeEntities = function(entities1, entities2) {
       if (!entities1 && !entities2) {
@@ -105,8 +105,8 @@ var entityExtractor = {
               var uris = {};
               for (var i = 0, len = response.Resources.length; i < len; i++) {
                 var entity = response.Resources[i];
-                // the value of entity['@URI'] is not unique, but we only need it
-                // once, we simply don't care about the other occurrences
+                // the value of entity['@URI'] is not unique, but we only need
+                // it once, we simply don't care about the other occurrences
                 var currentUri = entity['@URI'];
                 if (!uris[currentUri]) {
                   uris[currentUri] = true;
@@ -240,7 +240,8 @@ var entityExtractor = {
                 sendResults(pendingRequests, entities, currentService);
               }
             }
-            var keys = typeof(response) === 'object' ? Object.keys(response) : [];
+            var keys = typeof(response) === 'object' ?
+                Object.keys(response) : [];
             for (var i = 0, len = keys.length; i < len; i++) {
               var key = keys[i];
               if (key === 'doc') {
@@ -364,7 +365,8 @@ var entityExtractor = {
                   }
                 }
                 var entities2 = [];
-                for (var i = 0, len1 = results1.entities.length; i < len1; i++) {
+                var len1 = results1.entities.length;
+                for (var i = 0; i < len1; i++) {
                   var entity = results1.entities[i];
                   var uris = [];
                   if (!entity.hasOwnProperty('disambiguated')) {

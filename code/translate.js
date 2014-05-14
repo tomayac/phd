@@ -18,17 +18,23 @@ var CLIENT_SECRET = process.env.BING_CLIENT_SECRET;
  */
 var translator = {
   multiTranslate: function multiTranslate(texts, toLanguage, callback) {
+    if (!Array.isArray(texts)) {
+      texts = [texts];
+    }
     // sanity checks to be within the API limits as published here
     // http://msdn.microsoft.com/en-us/library/ff512422.aspx
     var textsLength = texts.length;
     if (textsLength > 2000) {
-      console.log('Warning: translation maximum of 2,000 individual texts exceeded.');
+      console.log(
+          'Warning: translation maximum of 2,000 individual texts exceeded.');
       texts = texts.slice(0, 2000);
     }
     for (var i = 0; i < textsLength; i++) {
       texts[i] = decodeURIComponent(texts[i]).replace(/"/g, '\\"');
       if (texts[i].length > 10000) {
-        console.log('Warning: maximum text length of 10,000 characters exceeded at index ' + i + '.');
+        console.log(
+            'Warning: maximum text length of 10,000 characters exceeded at ' +
+            'index ' + i + '.');
         texts[i] = texts[i].substring(0, 10000);
       }
       if (texts[i].trim().length === 0) {
@@ -71,6 +77,12 @@ var translator = {
             for (var j = 0; j < length; j++) {
               var index = languageOrderedTexts[toLanguage][j].index;
               translations[index] = languageOrderedTexts[toLanguage][j].text;
+            }
+            if (finishedLanguages === languagesToGo) {
+              callback(null, {
+                texts: texts,
+                translations: translations
+              });
             }
             continue;
           }
