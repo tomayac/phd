@@ -8,7 +8,7 @@
     "mstranslator": "~0.1.6",
     "natural": "~0.1.27",
     "node-speak": "~0.0.2",
-    "ntwitter": "~0.5.0",
+    "node-twitter": "~0.5.1",
     "pos": "~0.1.5",
     "request": "~2.21.0",
     "socket.io": "~0.9.16",
