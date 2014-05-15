@@ -6,17 +6,7 @@ var request = require('request');
 var BASE_URL = 'https://translate.google.com/translate_a/t?client=t';
 
 function translate(text, fromLanguage, toLanguage, callback) {
-  var options = {/*
-    headers: {
-      'accept': '',
-      'accept-encoding': 'gzip,deflate,sdch',
-      'accept-language': 'en-US,en;q=0.8,de;q=0.6',
-      'origin': 'https://translate.google.com',
-      'referer': 'https://translate.google.com/?vi=c',
-      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) ' +
-          'AppleWebKit/537.36 (KHTML, like Gecko) ' +
-          'Chrome/34.0.1847.131 Safari/537.36'
-    },*/
+  var options = {
     form: {
       q: text
     },
@@ -25,7 +15,7 @@ function translate(text, fromLanguage, toLanguage, callback) {
   };
   request.post(options, function(error, response, body) {
     if (error || response.statusCode !== 200) {
-      return callback(err || response.statusCode);
+      return callback(error || response.statusCode);
     }
     try {
       var array = eval(body);
@@ -37,7 +27,7 @@ function translate(text, fromLanguage, toLanguage, callback) {
   });
 }
 
-function translateTexts(texts, fromLanguage, toLanguage, callback) {
+function translateTexts(texts, fromLanguage, toLanguage, mainCallback) {
   var functions = [];
   texts.forEach(function(text, i) {
     functions[i] = function(callback) {
@@ -48,9 +38,9 @@ function translateTexts(texts, fromLanguage, toLanguage, callback) {
     functions,
     function(err, results) {
       if (err) {
-        callback(err);
+        return mainCallback(err);
       }
-      callback(null, results);
+      mainCallback(null, results);
     }
   );
 }

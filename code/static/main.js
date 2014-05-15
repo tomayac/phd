@@ -873,6 +873,7 @@
       illustrator.mediaGalleryZIndex = 1;
       illustrator.mediaGalleryBigItems = {};
       illustrator.speechTexts = {};
+      illustrator.removeAllAudio();
     },
 
     showStatusMessage: function(message) {
@@ -2137,7 +2138,7 @@
       formData.append('toLanguage', 'en');
       formData.append('fromLanguage', 'auto');
       microposts.forEach(function(micropost) {
-        formData.append('texts', encodeURIComponent(micropost));
+        formData.append('texts', micropost);
       });
       var xhr = new XMLHttpRequest();
       xhr.open('POST', illustrator.TRANSLATION_SERVER, true);
