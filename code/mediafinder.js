@@ -99,6 +99,7 @@ var mediaFinder = {
      * Core bits adapted from https://github.com/endlesshack/youtube-video
      */
     function cleanVideoUrl(url, callback) {
+
       var decodeQueryString = function(queryString) {
         var key, keyValPair, keyValPairs, r, val, _i, _len;
         r = {};
@@ -131,34 +132,37 @@ var mediaFinder = {
         return sources;
       };
 
+      // Possible URL patterns
+      // http://www.youtube.com/v/WnszesKUXp8
+      // http://www.youtube.com/watch?v=EVBsypHzF3U
+      // http://www.youtube.com/watch?v=-qzRe325AQU&feature=youtube_gdata_player
+      // http://youtu.be/EVBsypHzF3U
+      var extractYouTubeVideoId = function(url) {
+        var urlObj = URL.parse(url);
+        var pathComponents = urlObj.pathname.split(/\//g);
+        var videoId;
+        if (pathComponents[1] === 'v') {
+          videoId = pathComponents[2];
+        } else if (pathComponents[1] === 'watch') {
+          var query = urlObj.query;
+          query.split(/&/g).forEach(function(param) {
+            var keyValue = param.split(/=/);
+            if (keyValue[0] === 'v') {
+              videoId = keyValue[1];
+            }
+          });
+        } else {
+          videoId = pathComponents[1];
+        }
+        return videoId;
+      };
+
       // if is YouTube URL
       if ((url.indexOf('http://www.youtube.com') === 0) ||
           (url.indexOf('https://www.youtube.com') === 0) ||
           (url.indexOf('http://youtu.be') === 0)) {
         try {
-          var urlObj = URL.parse(url);
-          var path = urlObj.path;
-          var pathComponents = path.split(/\//gi);
-          var videoId;
-          if (pathComponents[1] === 'v') {
-            // URL of 'v' type:
-            // http://www.youtube.com/v/WnszesKUXp8
-            videoId = pathComponents[2];
-          } else if (pathComponents[1] === 'watch') {
-            // URL of "watch" type:
-            // http://www.youtube.com/watch?v=EVBsypHzF3U
-            var query = urlObj.search;
-            query.substring(1).split(/&/gi).forEach(function(param) {
-              var keyValue = param.split(/\=/g);
-              if (keyValue[0] === 'v') {
-                videoId = keyValue[1];
-              }
-            });
-          } else if (!pathComponents[0] && pathComponents[1]) {
-            // URL of shortened type:
-            // http://youtu.be/EVBsypHzF3U
-            videoId = pathComponents[1];
-          }
+          var videoId = extractYouTubeVideoId(url);
           // Translate to HTML5 video URL, try at least
           var options = {
             headers: {
@@ -722,7 +726,8 @@ var mediaFinder = {
           try {
             body = JSON.parse(body);
             if (body.items && Array.isArray(body.items)) {
-              body.items.forEach(function(item) {
+              var itemsLength = body.items.length;
+              body.items.forEach(function(item, processedItems) {
                 // only treat posts, notes, and shares, no check-ins
                 if (((item.verb === 'share') || (item.verb === 'post') || (item.verb === 'note')) &&
                     (item.object.attachments) &&
@@ -732,6 +737,7 @@ var mediaFinder = {
                     if ((attachment.objectType !== 'photo') &&
                         (attachment.objectType !== 'video') &&
                         (attachment.objectType !== 'article')) {
+                      processedItems++;
                       return;
                     }
                     // the micropost can consist of different parts, dependent on
@@ -753,7 +759,8 @@ var mediaFinder = {
                         mediaUrl = attachment.fullImage.url;
                       }
                       cleanVideoUrl(mediaUrl, function(cleanedMediaUrl) {
-                        if (cleanedMediaUrl && cleanedMediaUrl !== mediaUrl) {
+                        processedItems++;
+                        if (cleanedMediaUrl) {
                           results.push({
                             mediaUrl: cleanedMediaUrl,
                             posterUrl: attachment.image.url,
@@ -772,12 +779,18 @@ var mediaFinder = {
                             }
                           });
                         }
+                        if (processedItems === itemsLength) {
+                          collectResults(results, currentService, pendingRequests);
+                        }
                       });
+                    } else {
+                      processedItems++;
                     }
                   });
+                } else {
+                  processedItems++;
                 }
               });
-              collectResults(results, currentService, pendingRequests);
             } else {
               collectResults(results, currentService, pendingRequests);
             }
@@ -907,8 +920,6 @@ var mediaFinder = {
               include_entities: true,
             },
             function(err, body) {
-console.log(err)
-console.log(body)
           try {
             var results = [];
             if ((body.statuses) && (body.statuses.length)) {
