@@ -391,6 +391,7 @@
       }, true /* This is important, else, the event never fires */);
 
       mediaGallery.addEventListener('blur', function(e) {
+        illustrator.removeAllAudio();
         if (e.target.classList.contains('mediaItem')) {
           var mediaItem = e.target;
           var img = mediaItem.querySelector('img, video');
@@ -2102,6 +2103,9 @@
       }
       for (var i = 0, len = mediaItems.length; i < len; i++) {
         var mediaItem = mediaItems[i];
+        if (i === 0) {
+          document.activeElement = mediaItem;
+        }
         // just look at the media items in the first row
         if (mediaItem.offsetLeft + mediaItem.offsetWidth > left) {
           left = mediaItem.offsetLeft + mediaItem.offsetWidth;
