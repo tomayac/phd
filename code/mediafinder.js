@@ -738,6 +738,9 @@ var mediaFinder = {
                         (attachment.objectType !== 'video') &&
                         (attachment.objectType !== 'article')) {
                       processedItems++;
+                      if (processedItems === itemsLength) {
+                        collectResults(results, currentService, pendingRequests);
+                      }
                       return;
                     }
                     // the micropost can consist of different parts, dependent on
@@ -785,10 +788,16 @@ var mediaFinder = {
                       });
                     } else {
                       processedItems++;
+                      if (processedItems === itemsLength) {
+                        collectResults(results, currentService, pendingRequests);
+                      }
                     }
                   });
                 } else {
                   processedItems++;
+                  if (processedItems === itemsLength) {
+                    collectResults(results, currentService, pendingRequests);
+                  }
                 }
               });
             } else {

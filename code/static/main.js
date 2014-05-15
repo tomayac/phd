@@ -2135,6 +2135,7 @@
       }
       var formData = new FormData();
       formData.append('toLanguage', 'en');
+      formData.append('fromLanguage', 'auto');
       microposts.forEach(function(micropost) {
         formData.append('texts', encodeURIComponent(micropost));
       });
@@ -2144,13 +2145,18 @@
         try {
           var response = JSON.parse(xhr.responseText);
           // map translations to their particular clusters
-          for (var i = 0, len = response.translations.length; i < len; i++) {
+          for (var i = 0, len = response.length; i < len; i++) {
             var index = clusterIndexes[i];
             if (!illustrator.clusters[index].translations) {
               illustrator.clusters[index].translations = [];
             }
-            illustrator.clusters[index].translations.push(
-                response.translations[i]);
+            var text;
+            try {
+              text = decodeURIComponent(response[i]);
+            } catch(e) {
+              text = unescape(response[i]);
+            }
+            illustrator.clusters[index].translations.push(text);
           }
           // select shortest translation for speech output
           for (var i = 0, len1 = illustrator.clusters.length; i < len1; i++) {

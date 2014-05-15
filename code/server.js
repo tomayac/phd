@@ -14,7 +14,7 @@ var server = http.createServer(app);
 global.io = require('socket.io').listen(server);
 var Step = require('./step.js');
 var mediaFinder = require('./mediafinder.js');
-var translator = require('./translate.js');
+var translator = require('./google_translate.js');
 var speak = require('./speak.js');
 var entityExtractor = require('./entityextraction.js');
 
@@ -58,7 +58,9 @@ function translate(req, res, next) {
   if (req.body.toLanguage && req.body.texts) {
     var texts = req.body.texts;
     var toLanguage = req.body.toLanguage;
-    translator.multiTranslate(texts, toLanguage, function(err, results) {
+    var fromLanguage = req.body.fromLanguage;
+    translator.translateTexts(texts, fromLanguage, toLanguage,
+        function(err, results) {
       if (err) {
         res.statusCode = 400;
         res.send('Error 400 Bad Request.\n\n' + err);
