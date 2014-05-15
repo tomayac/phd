@@ -528,7 +528,7 @@
       mediaGallerySize.max = 100;
       mediaGallerySize.value = parseInt(illustrator.mediaGallerySize, 10);
       mediaGallerySizeLabel.innerHTML = illustrator.mediaGallerySize;
-      mediaGallerySize.addEventListener('change', function() {
+      mediaGallerySize.addEventListener('input', function() {
         mediaGallerySizeLabel.innerHTML = mediaGallerySize.value;
       });
       mediaGallerySize.addEventListener('mouseup', function() {
@@ -543,7 +543,7 @@
       mediaGalleryWidth.max = 2000;
       mediaGalleryWidth.value = illustrator.mediaGalleryWidth;
       mediaGalleryWidthLabel.innerHTML = illustrator.mediaGalleryWidth;
-      mediaGalleryWidth.addEventListener('change', function() {
+      mediaGalleryWidth.addEventListener('input', function() {
         mediaGalleryWidthLabel.innerHTML = mediaGalleryWidth.value;
       });
       mediaGalleryWidth.addEventListener('mouseup', function() {
@@ -558,7 +558,7 @@
       mediaItemHeight.max = 500;
       mediaItemHeight.value = illustrator.mediaItemHeight;
       mediaItemHeightLabel.innerHTML = illustrator.mediaItemHeight;
-      mediaItemHeight.addEventListener('change', function() {
+      mediaItemHeight.addEventListener('input', function() {
         mediaItemHeightLabel.innerHTML = mediaItemHeight.value;
       });
       mediaItemHeight.addEventListener('mouseup', function() {
@@ -581,7 +581,7 @@
       maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
           parseInt(maxAge.value, 10))));
 
-      minAge.addEventListener('change', function() {
+      minAge.addEventListener('input', function() {
         minAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
             parseInt(minAge.value, 10))));
         if (parseInt(minAge.value, 10) >= parseInt(maxAge.value, 10)) {
@@ -591,7 +591,7 @@
         }
       });
 
-      maxAge.addEventListener('change', function() {
+      maxAge.addEventListener('input', function() {
         maxAgeLabel.innerHTML = humaneDate(new Date((Date.now() -
             parseInt(maxAge.value, 10))));
         if (parseInt(maxAge.value, 10) <= parseInt(minAge.value, 10)) {
@@ -615,7 +615,7 @@
       threshold.value = illustrator.threshold;
       var thresholdLabel = document.getElementById('thresholdLabel');
       thresholdLabel.innerHTML = threshold.value;
-      threshold.addEventListener('change', function() {
+      threshold.addEventListener('input', function() {
         thresholdLabel.innerHTML = threshold.value;
       });
       threshold.addEventListener('mouseup', function() {
@@ -631,7 +631,7 @@
       var similarTilesLabel =
           document.getElementById('similarTilesLabel');
       similarTilesLabel.innerHTML = similarTiles.value;
-      similarTiles.addEventListener('change', function() {
+      similarTiles.addEventListener('input', function() {
         similarTilesLabel.innerHTML = similarTiles.value;
       });
       similarTiles.addEventListener('mouseup', function() {
@@ -646,7 +646,7 @@
       var bwToleranceLabel =
           document.getElementById('bwToleranceLabel');
       bwToleranceLabel.innerHTML = bwTolerance.value;
-      bwTolerance.addEventListener('change', function() {
+      bwTolerance.addEventListener('input', function() {
         bwToleranceLabel.innerHTML = bwTolerance.value;
       });
       bwTolerance.addEventListener('mouseup', function() {
@@ -660,7 +660,7 @@
       rows.min = 1;
       var rowsLabel = document.getElementById('rowsLabel');
       rowsLabel.innerHTML = rows.value;
-      rows.addEventListener('change', function() {
+      rows.addEventListener('input', function() {
         rowsLabel.innerHTML = rows.value;
       });
 
@@ -670,7 +670,7 @@
       cols.min = 1;
       var colsLabel = document.getElementById('colsLabel');
       colsLabel.innerHTML = cols.value;
-      cols.addEventListener('change', function() {
+      cols.addEventListener('input', function() {
         colsLabel.innerHTML = cols.value;
       });
 
@@ -2315,7 +2315,13 @@
           illustrator.speechTexts[speechTextId].message + '"');
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
-        speechSynthesis.speak(illustrator.speechTexts[speechTextId].audio);
+        var utterance = illustrator.speechTexts[speechTextId].audio;
+        utterance.addEventListener('end', function() {
+          if (opt_callback) {
+            opt_callback(illustrator.speechTexts[speechTextId].message);
+          }
+        });
+        speechSynthesis.speak(utterance);
       } else {
         var audio = document.createElement('audio');
         audio.src = illustrator.speechTexts[speechTextId].audio;
