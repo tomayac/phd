@@ -1585,8 +1585,10 @@
               }
               illustrator.speak(results.four, function(message) {
                 // delete cached speech data
-                for (var speechTextId in results) {
-                  delete illustrator.speechTexts[results[speechTextId]];
+                if (!('speechSynthesis' in window)) {
+                  for (var speechTextId in results) {
+                    delete illustrator.speechTexts[results[speechTextId]];
+                  }
                 }
               });
             });
