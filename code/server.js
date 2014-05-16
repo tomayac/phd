@@ -17,6 +17,8 @@ var mediaFinder = require('./mediafinder.js');
 var translator = require('./google_translate.js');
 var speak = require('./speak.js');
 var entityExtractor = require('./entityextraction.js');
+var env = require('node-env-file');
+env(__dirname + '/.env');
 
 var GLOBAL_config = {
   DEBUG: true

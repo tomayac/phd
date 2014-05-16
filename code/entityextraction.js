@@ -3,6 +3,8 @@
 var DEBUG = false;
 var querystring = require('querystring');
 var http = require('http');
+var env = require('node-env-file');
+env(__dirname + '/.env');
 
 var entityExtractor = {
   extract: function(service, text, callback) {
