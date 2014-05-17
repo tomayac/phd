@@ -1549,7 +1549,7 @@
               'either too bright or too dark, which ' +
               'is a common source of clustering issues.', callback);
         } else {
-          callback();
+          callback(null, false);
         }
       };
 
@@ -1564,12 +1564,18 @@
       function(err, results) {
         var matchingTiles = document.querySelectorAll('.matchingTile');
         var nullTiles = document.querySelectorAll('.checkerbordTile');
-        illustrator.speak(results.one, function(message) {
-          // highlight matching tiles
-          for (var i = 0, len = matchingTiles.length; i < len; i++) {
-            matchingTiles[i].classList.add('highlightTile');
-          }
-          illustrator.speak(results.two, function(message) {
+        async.series([
+          function(callback) {
+            illustrator.speak(results.one, callback);
+          },
+          function(callback) {
+            // highlight matching tiles
+            for (var i = 0, len = matchingTiles.length; i < len; i++) {
+              matchingTiles[i].classList.add('highlightTile');
+            }
+            illustrator.speak(results.two, callback);
+          },
+          function(callback) {
             // unhighlight matching tiles
             for (var i = 0, len = matchingTiles.length; i < len; i++) {
               matchingTiles[i].classList.remove('highlightTile');
@@ -1578,21 +1584,23 @@
             for (var i = 0, len = nullTiles.length; i < len; i++) {
               nullTiles[i].classList.add('highlightTile');
             }
-            illustrator.speak(results.three, function(message) {
-              // unhighlight null-tiles
-              for (var i = 0, len = nullTiles.length; i < len; i++) {
-                nullTiles[i].classList.remove('highlightTile');
-              }
-              illustrator.speak(results.four, function(message) {
-                // delete cached speech data
-                if (!('speechSynthesis' in window)) {
-                  for (var speechTextId in results) {
-                    delete illustrator.speechTexts[results[speechTextId]];
-                  }
-                }
-              });
-            });
-          });
+            illustrator.speak(results.three, callback);
+          },
+          function(callback) {
+            // unhighlight null-tiles
+            for (var i = 0, len = nullTiles.length; i < len; i++) {
+              nullTiles[i].classList.remove('highlightTile');
+            }
+            illustrator.speak(results.four, callback);
+          }
+        ],
+        function(err, results) {
+          // delete cached speech data
+          if (!('speechSynthesis' in window)) {
+            for (var speechTextId in results) {
+              delete illustrator.speechTexts[results[speechTextId]];
+            }
+          }
         });
       });
     },
@@ -2317,14 +2325,14 @@
         return false;
       }
 
-      illustrator.showStatusMessage('Saying "' +
-          illustrator.speechTexts[speechTextId].message + '"');
+      var message = illustrator.speechTexts[speechTextId].message;
+      illustrator.showStatusMessage('Saying "' + message + '"');
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         var utterance = illustrator.speechTexts[speechTextId].audio;
         utterance.addEventListener('end', function() {
           if (opt_callback) {
-            opt_callback(illustrator.speechTexts[speechTextId].message);
+            return opt_callback(null, message);
           }
         });
         speechSynthesis.speak(utterance);
@@ -2336,7 +2344,7 @@
             audio.parentNode.removeChild(audio);
           }
           if (opt_callback) {
-            opt_callback(illustrator.speechTexts[speechTextId].message);
+            opt_callback(null, illustrator.speechTexts[speechTextId].message);
           }
         });
         document.body.appendChild(audio);
