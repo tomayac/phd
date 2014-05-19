@@ -51,8 +51,8 @@ Thomas Steiner <tomac@google.com>
         slides.appendChild(slide);
       };
 
-      for (var i = 0; i < 37; i++) {
-        if ((i === 20) || (i === 24) || (i === 28) || (i === 29) || (i === 30)) {
+      for (var i = 1; i < 37; i++) {
+        if ((i === 20) || (i === 24) || (i === 25) || (i === 28) || (i === 29) || (i === 30)) {
           var slide = document.createElement('slide');
           slide.classList.add('no_background');
           var iframe = document.createElement('iframe');
@@ -61,6 +61,13 @@ Thomas Steiner <tomac@google.com>
             iframe.src = 'http://tomayac.com/youpr0n/';
           } else if (i === 24) {
             iframe.src = 'http://social-media-illustrator.herokuapp.com/';
+          } else if (i === 25) {
+            iframe.width = '853';
+            iframe.height = '480';
+            iframe.src = 'http://www.youtube-nocookie.com/embed/' +
+                'zB1krlrCddY?rel=0&autoplay=1';
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allowfullscreen', 'allowfullscreen');
           } else if (i === 28) {
             iframe.src = 'http://wikipedia-edits.herokuapp.com/';
           } else if (i === 29) {
@@ -68,8 +75,8 @@ Thomas Steiner <tomac@google.com>
           } else if (i === 30) {
             iframe.width = '853';
             iframe.height = '480';
-            iframe.src = 'http://www.youtube-nocookie.com/embed/01RgxtQmUhs?rel=0' +
-                '&autoplay=1';
+            iframe.src = 'http://www.youtube-nocookie.com/embed/' +
+                '01RgxtQmUhs?rel=0&autoplay=1';
             iframe.setAttribute('frameborder', '0');
             iframe.setAttribute('allowfullscreen', 'allowfullscreen');
           }
