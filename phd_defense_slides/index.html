@@ -1,0 +1,88 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2013-slides
+
+Patched to work with dynamically generated slides by:
+Thomas Steiner <tomac@google.com>
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Enriching Unstructured Media Content About Events to Enable Semi-Automated Summaries, Compilations, and Improved Search by Leveraging Social Networks</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--This one seems to work all the time, but really small on ipad-->
+    <!--<meta name="viewport" content="initial-scale=0.4">-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" media="all" href="css/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="css/phone.css">
+    <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+
+    <style>
+      slides > slide {background-color: white;}
+      iframe {
+        width: 1066px;
+        height: 800px;
+        margin-top: -50px;
+        margin-left: -60px;
+        border: none;
+      }
+    </style>
+    <script>var SLIDE_CONFIG = {settings: {}};</script>
+  </head>
+  <body style="opacity: 1;">
+    <slides class="layout-widescreen"></slides>
+    <script>
+      var slides = document.querySelector('slides');
+
+      var appendSlide = function(slide) {
+        var slide = document.createElement('slide');
+        slide.classList.add('no_background');
+        var iframe = document.createElement('iframe');
+        iframe.src = 'svg/Thomas Steiner—PhD Thesis Defense—Viva ' +
+            'Voce—Dissertation (http---bit.ly-TomsPhD) (' + i + ').svg';
+        slide.appendChild(iframe);
+        slides.appendChild(slide);
+      };
+
+      for (var i = 0; i < 37; i++) {
+        if ((i === 20) || (i === 24) || (i === 28) || (i === 29) || (i === 30)) {
+          var slide = document.createElement('slide');
+          slide.classList.add('no_background');
+          var iframe = document.createElement('iframe');
+          iframe.setAttribute('style', 'margin-top:0px !important;');
+          if (i === 20) {
+            iframe.src = 'http://tomayac.com/youpr0n/';
+          } else if (i === 24) {
+            iframe.src = 'http://social-media-illustrator.herokuapp.com/';
+          } else if (i === 28) {
+            iframe.src = 'http://wikipedia-edits.herokuapp.com/';
+          } else if (i === 29) {
+            iframe.src = 'http://wikipedia-live-monitor.herokuapp.com/';
+          } else if (i === 30) {
+            iframe.width = '853';
+            iframe.height = '480';
+            iframe.src = 'http://www.youtube-nocookie.com/embed/01RgxtQmUhs?rel=0' +
+                '&autoplay=1';
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allowfullscreen', 'allowfullscreen');
+          }
+          slide.appendChild(iframe);
+          slides.appendChild(slide);
+        }
+        appendSlide(i);
+      }
+    </script>
+    <script src="js/modernizr.custom.45394.js"></script>
+    <script src="js/prettify.js"></script>
+    <script src="js/hammer.js"></script>
+    <script src="js/slide-controller.js"></script>
+    <script src="js/slide-deck.js"></script>
+  </body>
+</html>
