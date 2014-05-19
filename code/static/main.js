@@ -263,19 +263,28 @@
       };
 
       var click = function(e) {
-        if ((e.target.nodeName.toLowerCase() !== 'span') &&
+        // The compare button stores the currently selected item
+        if (e.target.nodeName.toLowerCase() === 'button') {
+          var img = e.target.parentNode.parentNode.querySelector('.photo');
+          return compareMediaItems(img);
+        // Do nothing when neither close button nor compare button are clicked
+        } else if ((e.target.nodeName.toLowerCase() !== 'span') &&
             (!e.target.classList.contains('close'))) {
           return;
+        // The close button removes the currently selected item and, if need be,
+        // triggers recalculation of clusters if the cluster representative
+        // was removed
+        } else {
+          var close = e.target;
+          var img = close.parentNode.querySelector(
+              'img.photo, video.photo, img.gallery, video.gallery');
+          var posterUrl = img.dataset.posterurl;
+          var cascading = true;
+          if (close.parentNode.parentNode.classList.contains('cluster')) {
+            cascading = false;
+          }
+          return illustrator.deleteMediaItem(posterUrl, cascading);
         }
-        var close = e.target;
-        var img = close.parentNode.querySelector(
-            'img.photo, video.photo, img.gallery, video.gallery');
-        var posterUrl = img.dataset.posterurl;
-        var cascading = true;
-        if (close.parentNode.parentNode.classList.contains('cluster')) {
-          cascading = false;
-        }
-        illustrator.deleteMediaItem(posterUrl, cascading);
       };
 
       var mediaItemClusters = document.getElementById('mediaItemClusters');
@@ -286,22 +295,26 @@
             (e.target.classList.contains('photo'))) {
           e.preventDefault();
           var img = e.target;
-          if (!image1) {
-            image1 = img;
-          } else if (!image2 && (img !== image1)) {
-            image2 = img;
-          }
-          if (image1 && image2) {
-            var posterUrl1 = image1.dataset.posterurl;
-            var posterUrl2 = image2.dataset.posterurl;
-            if ((posterUrl1 && posterUrl2) && (posterUrl1 !== posterUrl2)) {
-              image1 = null;
-              image2 = null;
-              illustrator.clusterMediaItems(posterUrl1, posterUrl2);
-            }
-          }
+          compareMediaItems(img);
         }
       });
+
+      var compareMediaItems = function(img) {
+        if (!image1) {
+          image1 = img;
+        } else if (!image2 && (img !== image1)) {
+          image2 = img;
+        }
+        if (image1 && image2) {
+          var posterUrl1 = image1.dataset.posterurl;
+          var posterUrl2 = image2.dataset.posterurl;
+          if ((posterUrl1 && posterUrl2) && (posterUrl1 !== posterUrl2)) {
+            image1 = null;
+            image2 = null;
+            illustrator.clusterMediaItems(posterUrl1, posterUrl2);
+          }
+        }
+      };
 
       mediaItemClusters.addEventListener('mouseover', function(e) {
         if ((e.target.nodeName.toLowerCase() === 'img') &&
@@ -1785,7 +1798,7 @@
               '<span class="close">X</span>' +
               '<div class="micropost" style="width:' + micropostWidth + '">' +
                 mediaItem.micropost.plainText +
-                '<hr/>' +
+                '<hr/><button>Compare</button><hr/>' +
                 'Age: ' + humaneDate(new Date(mediaItem.timestamp)) +
                     ' ago<br/>' +
                 'Likes: ' + mediaItem.socialInteractions.likes + '<br/>' +
