@@ -1,0 +1,9 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "code/package.json"
+      ]
+    }
+  }
+}
