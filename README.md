@@ -1,3 +1,6 @@
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/tomayac/phd.svg)](https://greenkeeper.io/)
+
 **About:**
 
 This Git repository holds the contents of Thomas Steiner's PhD thesis.
